@@ -1,0 +1,58 @@
+/**
+ *
+ * Copyright 2005 (C) The LiveTribe Group. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.livetribe.snmp.mib.ast;
+
+
+/**
+ * @version $Revision: 1.1 $ $Date: 2005/01/26 04:05:03 $
+ */
+public class ValueAssignment
+{
+    private ValueReference valueReference;
+    private Type type;
+    private Value value;
+
+    public ValueReference getValueReference()
+    {
+        return valueReference;
+    }
+
+    public void setValueReference( ValueReference valueReference )
+    {
+        this.valueReference = valueReference;
+    }
+
+    public Type getType()
+    {
+        return type;
+    }
+
+    public void setType( Type type )
+    {
+        this.type = type;
+    }
+
+    public Value getValue()
+    {
+        return value;
+    }
+
+    public void setValue( Value value )
+    {
+        this.value = value;
+    }
+}

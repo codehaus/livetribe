@@ -1,0 +1,16 @@
+package $package;
+
+import org.apache.snickers.as1.runtime.*;
+
+public class $class extends Type
+{
+#foreach( $field in $fieldList )
+    int $field.getName();
+#end
+
+    public $class() { }
+    
+    public $class($class other)
+    {
+    }
+}
