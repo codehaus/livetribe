@@ -90,7 +90,10 @@
   </repositories>
    
   <modules>
+    <module>livetribe-jmx</module>
+    <module>livetribe-net</module>
     <module>livetribe-snmp</module>
+    <module>livetribe-swf</module>
   </modules> 
 
   <licenses>
