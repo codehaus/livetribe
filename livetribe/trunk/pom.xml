@@ -90,8 +90,8 @@
   </repositories>
    
   <modules>
+    <module>livetribe-util</module>
     <module>livetribe-jmx</module>
-    <module>livetribe-net</module>
     <module>livetribe-snmp</module>
     <module>livetribe-swf</module>
   </modules> 
@@ -138,6 +138,12 @@
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
         <version>1.0.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.livetribe</groupId>
+        <artifactId>livetribe-util</artifactId>
+        <version>${version}</version>
       </dependency>
 
       <dependency>

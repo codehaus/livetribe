@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "livetribe_net", "..\livetribe_net\livetribe_net.vcproj", "{447FC3F2-4390-44CD-9095-F26691009C1C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "livetribe_net_ACE", "..\livetribe_net_ACE\livetribe_net_ACE.vcproj", "{447FC3F2-4390-44CD-9095-F26691009C1C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{447FC3F2-4390-44CD-9095-F26691009C1C} = {447FC3F2-4390-44CD-9095-F26691009C1C}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Debug.ActiveCfg = Debug|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Debug.Build.0 = Debug|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Release.ActiveCfg = Release|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Release.Build.0 = Release|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Debug.ActiveCfg = Debug|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Debug.Build.0 = Debug|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Release.ActiveCfg = Release|Win32
+		{447FC3F2-4390-44CD-9095-F26691009C1C}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
