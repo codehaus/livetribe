@@ -128,12 +128,13 @@ public class MBeanUtils
         for ( int i = 0; i < descriptors.length; i++ )
         {
             PropertyDescriptor descriptor = descriptors[i];
+            boolean hasReadMethod = descriptor.getReadMethod() != null;
             result[i] = new MBeanAttributeInfo( descriptor.getName(),
                                                 descriptor.getPropertyType().toString(),
                                                 descriptor.getPropertyType() + " " + descriptor.getName(),
-                                                descriptor.getReadMethod() == null,
-                                                descriptor.getWriteMethod() == null,
-                                                descriptor.getReadMethod().getName().startsWith( "is" ) );
+                                                hasReadMethod,
+                                                descriptor.getWriteMethod() != null,
+                                                hasReadMethod && descriptor.getReadMethod().getName().startsWith( "is" ) );
         }
 
         return result;
@@ -188,6 +189,27 @@ public class MBeanUtils
         return result;
     }
 
+    public static String capitalize(String name) {
+	if (name == null || name.length() == 0) {
+	    return name;
+	}
+	char chars[] = name.toCharArray();
+	chars[0] = Character.toUpperCase(chars[0]);
+	return new String(chars);
+    }
+
+    public static String decapitalize(String name) {
+	if (name == null || name.length() == 0) {
+	    return name;
+	}
+	if (name.length() > 1 && Character.isUpperCase(name.charAt(1)) &&
+			Character.isUpperCase(name.charAt(0))){
+	    return name;
+	}
+	char chars[] = name.toCharArray();
+	chars[0] = Character.toLowerCase(chars[0]);
+	return new String(chars);
+    }
     private static class CacheItem
     {
         public MBeanAttributeInfo[] attributes;

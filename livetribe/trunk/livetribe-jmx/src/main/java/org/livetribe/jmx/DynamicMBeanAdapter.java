@@ -64,7 +64,7 @@ public class DynamicMBeanAdapter implements DynamicMBean, NotificationEmitter
             if ( attributeInfo.isReadable() && attributeInfo.getName().equals( attributeName ) )
             {
                 String prefix = attributeInfo.isIs() ? "is" : "get";
-                String methodName = prefix + attributeName;
+                String methodName = prefix + MBeanUtils.capitalize( attributeName );
                 return invokeMethod( methodName, null, null );
             }
         }
@@ -80,8 +80,9 @@ public class DynamicMBeanAdapter implements DynamicMBean, NotificationEmitter
             MBeanAttributeInfo attributeInfo = attributes[i];
             if ( attributeInfo.isWritable() && attributeInfo.getName().equals( attributeName ) )
             {
-                String methodName = "set" + attributeName;
+                String methodName = "set" + MBeanUtils.capitalize( attributeName );
                 invokeMethod( methodName, new String[]{attributeInfo.getType()}, new Object[]{attribute.getValue()} );
+                return;
             }
         }
         throw new AttributeNotFoundException( attributeName );
@@ -199,7 +200,8 @@ public class DynamicMBeanAdapter implements DynamicMBean, NotificationEmitter
                 for ( int j = 0; j < parameters.length; ++j )
                 {
                     Class parameter = parameters[j];
-                    result &= parameter.getName().equals( signature[j] );
+                    String[] tokens = signature[j].split(" ");
+                    result &= parameter.getName().equals( tokens[tokens.length-1] );
                 }
                 return result;
             }
