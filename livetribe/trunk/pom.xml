@@ -7,7 +7,7 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <description>LiveTribe parent</description>
-  <url>http://maven.apache.org</url>
+  <url>http://www.livetribe.org</url>
 
 
   <issueManagement>
@@ -29,16 +29,28 @@
   
   <mailingLists>
     <mailingList>
+      <name>LiveTribe Announcement List</name>
+      <subscribe>announce-subscribe@livetribe.org</subscribe>
+      <unsubscribe>announce-unsubscribe@livetribe.org</unsubscribe>
+      <archive>http://archive.livetribe.org/announce</archive>
+    </mailingList>
+    <mailingList>
       <name>LiveTribe User List</name>
-      <subscribe>users-subscribe@livetribe.org</subscribe>
-      <unsubscribe>users-unsubscribe@livetribe.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=users@maven.apache.org</archive>
+      <subscribe>user-subscribe@livetribe.org</subscribe>
+      <unsubscribe>user-unsubscribe@livetribe.org</unsubscribe>
+      <archive>http://archive.livetribe.org/user</archive>
     </mailingList>
     <mailingList>
       <name>LiveTribe Developer List</name>
       <subscribe>dev-subscribe@livetribe.org</subscribe>
       <unsubscribe>dev-unsubscribe@livetribe.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=dev@maven.apache.org</archive>
+      <archive>http://archive.livetribe.org/dev</archive>
+    </mailingList>
+    <mailingList>
+      <name>LiveTribe SCM List</name>
+      <subscribe>scm-subscribe@livetribe.org</subscribe>
+      <unsubscribe>scm-unsubscribe@livetribe.org</unsubscribe>
+      <archive>http://archive.livetribe.org/scm</archive>
     </mailingList>
   </mailingLists>
 
