@@ -72,30 +72,6 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-      <id>codehaus</id>
-      <name>Codehaus Repository</name>
-      <url>http://dist.codehaus.org</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>ibiblio</id>
-      <name>Ibiblio Repository</name>
-      <url>http://www.ibiblio.org/maven</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <id>apache</id>
-      <name>Apche Repository</name>
-      <url>http://cvs.apache.org/repository</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
       <id>central</id>
       <name>Maven Repository Switchboard</name>
       <url>http://repo1.maven.org/maven2</url>
@@ -107,6 +83,15 @@
       <id>snapshots</id>
       <name>Maven SNAPSHOT Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>DARUMA</id>
+      <name>DARUMA Repository</name>
+      <url>file:/C:/Documents and Settings/adc/.maven/repository</url>
+      <layout>legacy</layout>
     </repository>
   </repositories>
    
@@ -159,6 +144,7 @@
     <module>livetribe-jmx</module>
     <module>livetribe-snmp</module>
     <module>livetribe-swf</module>
+    <module>livetribe-totem</module>
   </modules> 
 
   <licenses>
@@ -193,6 +179,18 @@
         <version>2.7.2</version>
       </dependency>
    
+      <dependency>
+        <groupId>activeio</groupId>
+        <artifactId>activeio</artifactId>
+        <version>2.2-SNAPSHOT</version>
+      </dependency>
+   
+      <dependency>
+        <groupId>backport-util-concurrent</groupId>
+        <artifactId>backport-util-concurrent</artifactId>
+        <version>2.0_01_pd</version>
+      </dependency>
+
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
@@ -274,7 +272,7 @@
     </snapshotRepository>
     <site>
       <id>livetribe-website</id>
-      <url>scpexe://lrepo.livetribe.org/home/projects/livetribe/public_html/maven/</url>
+      <url>scpexe://repo.livetribe.org/home/projects/livetribe/public_html/maven/</url>
     </site>
   </distributionManagement>
 
