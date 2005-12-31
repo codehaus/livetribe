@@ -32,7 +32,10 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import javax.management.MBeanAttributeInfo;
 import javax.management.MBeanConstructorInfo;
+import javax.management.MBeanNotificationInfo;
 import javax.management.MBeanOperationInfo;
+import javax.management.MBeanInfo;
+import javax.management.ObjectName;
 
 
 /**
@@ -41,6 +44,20 @@ import javax.management.MBeanOperationInfo;
 public class MBeanUtils
 {
     private final static Map beanInfoCache = Collections.synchronizedMap(new WeakHashMap());
+
+    private MBeanUtils() { }
+
+    public final static MBeanInfo createMBeanInfo(Object bean, String description) {
+        return createMBeanInfo(bean.getClass(), description);
+    }
+
+    public final static MBeanInfo createMBeanInfo(Class beanClass, String description) {
+        MBeanAttributeInfo[] attributes = MBeanUtils.getMBeanAttributeInfo(beanClass);
+        MBeanConstructorInfo[] constructors = MBeanUtils.getMBeanConstructorInfo(beanClass);
+        MBeanOperationInfo[] operations = MBeanUtils.getMBeanOperationInfo(beanClass);
+
+        return new MBeanInfo(beanClass.getName(), description, attributes, constructors, operations, null);
+    }
 
     public final static MBeanAttributeInfo[] getMBeanAttributeInfo(Object bean)
     {
@@ -114,6 +131,7 @@ public class MBeanUtils
             ci.attributes = getAttributes(bi);
             ci.constructors = getConstructors(beanClass);
             ci.operations = getOperations(bi);
+            ci.notifications = getNotifications(bi);
 
             beanInfoCache.put(beanClass, ci);
         }
@@ -189,6 +207,21 @@ public class MBeanUtils
         return result;
     }
 
+    private static MBeanNotificationInfo[] getNotifications(BeanInfo bi)
+    {
+        EventSetDescriptor[] eventDesc = bi.getEventSetDescriptors();
+        for (int i = 0; i < eventDesc.length; i++)
+        {
+        }
+
+        MBeanNotificationInfo[] result = new MBeanNotificationInfo[0];
+        for (int i = 0; i < result.length; i++)
+        {
+        }
+
+        return result;
+    }
+
     public final static String capitalize(String name)
     {
         if (name == null || name.length() == 0)
@@ -221,5 +254,6 @@ public class MBeanUtils
         public MBeanAttributeInfo[] attributes;
         public MBeanConstructorInfo[] constructors;
         public MBeanOperationInfo[] operations;
+        public MBeanNotificationInfo[] notifications;
     }
 }

@@ -24,6 +24,11 @@
       <artifactId>mx4j-jmx</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>mx4j</groupId>
+      <artifactId>mx4j</artifactId>
+    </dependency>
+
   </dependencies>
 
   <reporting>

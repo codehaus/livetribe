@@ -84,15 +84,6 @@
       <name>Maven SNAPSHOT Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
     </repository>
-    <repository>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>DARUMA</id>
-      <name>DARUMA Repository</name>
-      <url>file:/C:/Documents and Settings/adc/.maven/repository</url>
-      <layout>legacy</layout>
-    </repository>
   </repositories>
    
   <pluginRepositories>
@@ -144,7 +135,6 @@
     <module>livetribe-jmx</module>
     <module>livetribe-snmp</module>
     <module>livetribe-swf</module>
-    <module>livetribe-totem</module>
   </modules> 
 
   <licenses>
@@ -226,12 +216,17 @@
         <groupId>mx4j</groupId>
         <artifactId>mx4j</artifactId>
         <version>3.0.1</version>
-        <scope>runtime</scope>
       </dependency>
 
       <dependency>
         <groupId>mx4j</groupId>
         <artifactId>mx4j-jmx</artifactId>
+        <version>3.0.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>mx4j</groupId>
+        <artifactId>mx4j-remote</artifactId>
         <version>3.0.1</version>
       </dependency>
 
