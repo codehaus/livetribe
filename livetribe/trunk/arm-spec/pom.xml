@@ -4,8 +4,16 @@
   <groupId>org.opengroup</groupId>
   <artifactId>ARM_4_0</artifactId>
   <version>1.0</version>
-  <name>ARM 4.0 :: Java Language Binding</name>
   <packaging>jar</packaging>
+  <name>ARM 4.0 :: Java Language Binding</name>
+  <description>ARM 4.0 Java Language Binding</description>
+  <url>http://www.opengroup.org</url>
+  
+  <scm>
+    <connection>scm:svn:https://svn.codehaus.org/livetribe/livetribe/</connection>
+    <developerConnection>scm:svn:svn+ssh://${maven.username}@svn.codehaus.org/home/projects/livetribe/scm/livetribe/</developerConnection>
+    <url>http://svn.livetribe.codehaus.org/livetribe/</url>
+  </scm>
 
   <reporting>
     <plugins>
