@@ -23,7 +23,6 @@ import javax.management.MBeanRegistrationException;
 import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
 import javax.management.ObjectName;
-import javax.management.MalformedObjectNameException;
 
 import junit.framework.TestCase;
 
@@ -37,24 +36,14 @@ import org.livetribe.jmx.MBeanUtils;
 public class MBeanUtilsTest extends TestCase
 {
     MBeanServer mbeanServer = MBeanServerFactory.newMBeanServer();
-    ObjectName objectName;
-
-    {
-        try
-        {
-            objectName = ObjectName.getInstance(":type=JMXService");
-        }
-        catch (MalformedObjectNameException doNothing)
-        {
-        }
-    }
 
     public void testPOJO() throws Exception
     {
+        ObjectName objectName = ObjectName.getInstance(":type=JMXService");
         try
         {
-            mbeanServer.registerMBean(new DynamicMBeanAdapter(new TestPOJO(32, new Integer(64), false),
-                                                              MBeanUtils.createMBeanInfo(TestPOJO.class, "TestPOJO")),
+            mbeanServer.registerMBean(new DynamicMBeanAdapter(new MockPOJO(32, new Integer(64), false),
+                                                              MBeanUtils.createMBeanInfo(MockPOJO.class, "TestPOJO")),
                                       objectName);
 
             assertTrue(mbeanServer.isRegistered(objectName));

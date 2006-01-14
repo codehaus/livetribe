@@ -1,0 +1,24 @@
+<project>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opengroup</groupId>
+  <artifactId>ARM_4_0</artifactId>
+  <version>1.0</version>
+  <name>ARM 4.0 :: Java Language Binding</name>
+  <packaging>jar</packaging>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

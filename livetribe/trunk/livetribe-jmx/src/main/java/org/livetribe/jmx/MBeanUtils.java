@@ -32,10 +32,10 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import javax.management.MBeanAttributeInfo;
 import javax.management.MBeanConstructorInfo;
+import javax.management.MBeanInfo;
 import javax.management.MBeanNotificationInfo;
 import javax.management.MBeanOperationInfo;
-import javax.management.MBeanInfo;
-import javax.management.ObjectName;
+import javax.management.Notification;
 
 
 /**
@@ -45,18 +45,23 @@ public class MBeanUtils
 {
     private final static Map beanInfoCache = Collections.synchronizedMap(new WeakHashMap());
 
-    private MBeanUtils() { }
+    private MBeanUtils()
+    {
+    }
 
-    public final static MBeanInfo createMBeanInfo(Object bean, String description) {
+    public final static MBeanInfo createMBeanInfo(Object bean, String description)
+    {
         return createMBeanInfo(bean.getClass(), description);
     }
 
-    public final static MBeanInfo createMBeanInfo(Class beanClass, String description) {
+    public final static MBeanInfo createMBeanInfo(Class beanClass, String description)
+    {
         MBeanAttributeInfo[] attributes = MBeanUtils.getMBeanAttributeInfo(beanClass);
         MBeanConstructorInfo[] constructors = MBeanUtils.getMBeanConstructorInfo(beanClass);
         MBeanOperationInfo[] operations = MBeanUtils.getMBeanOperationInfo(beanClass);
+        MBeanNotificationInfo[] notifications = MBeanUtils.getMBeanNotificationInfo(beanClass);
 
-        return new MBeanInfo(beanClass.getName(), description, attributes, constructors, operations, null);
+        return new MBeanInfo(beanClass.getName(), description, attributes, constructors, operations, notifications);
     }
 
     public final static MBeanAttributeInfo[] getMBeanAttributeInfo(Object bean)
@@ -111,6 +116,21 @@ public class MBeanUtils
         try
         {
             result = getBeanInfo(beanClass).operations;
+        }
+        catch (IntrospectionException doNothing)
+        {
+        }
+
+        return result;
+    }
+
+    public final static MBeanNotificationInfo[] getMBeanNotificationInfo(Class beanClass)
+    {
+        MBeanNotificationInfo[] result = new MBeanNotificationInfo[0];
+
+        try
+        {
+            result = getBeanInfo(beanClass).notifications;
         }
         catch (IntrospectionException doNothing)
         {
@@ -209,14 +229,19 @@ public class MBeanUtils
 
     private static MBeanNotificationInfo[] getNotifications(BeanInfo bi)
     {
-        EventSetDescriptor[] eventDesc = bi.getEventSetDescriptors();
-        for (int i = 0; i < eventDesc.length; i++)
+        EventSetDescriptor[] eventDescs = bi.getEventSetDescriptors();
+        MBeanNotificationInfo[] result = new MBeanNotificationInfo[eventDescs.length];
+        for (int i = 0; i < eventDescs.length; i++)
         {
-        }
+            EventSetDescriptor eventDesc = eventDescs[i];
+            String className = eventDesc.getListenerType().getName();
+            Method listenerMethods[]= eventDesc.getListenerMethods();
+            String notifsType[] = new String[listenerMethods.length];
 
-        MBeanNotificationInfo[] result = new MBeanNotificationInfo[0];
-        for (int i = 0; i < result.length; i++)
-        {
+            for (int j=0; j<notifsType.length; j++) {
+                notifsType[j] = listenerMethods[j].getParameterTypes()[0].getName();
+            }
+            result[i] = new MBeanNotificationInfo(notifsType, Notification.class.getName(), className);
         }
 
         return result;

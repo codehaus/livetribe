@@ -1,0 +1,38 @@
+<project>
+
+  <parent>
+    <groupId>org.livetribe</groupId>
+    <artifactId>livetribe-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.livetribe</groupId>
+  <artifactId>livetribe-httpclient</artifactId>
+  <name>LiveTribe :: HTTP Client</name>
+  <packaging>jar</packaging>
+
+  <dependencies>
+  
+    <dependency>
+      <groupId>backport-util-concurrent</groupId>
+      <artifactId>backport-util-concurrent</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
+</project>

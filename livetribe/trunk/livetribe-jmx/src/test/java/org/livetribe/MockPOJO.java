@@ -25,18 +25,19 @@ import java.util.List;
 /**
  * @version $Revision: $ $Date: $
  */
-public class TestPOJO
+public class MockPOJO
 {
-    private List listeners = new ArrayList();
+    private List tstListeners = new ArrayList();
+    private List propListeners = new ArrayList();
     private int attr1;
     private Integer attr2;
     private boolean dog;
 
-    public TestPOJO()
+    public MockPOJO()
     {
     }
 
-    public TestPOJO(int attr1, Integer attr2, boolean dog)
+    public MockPOJO(int attr1, Integer attr2, boolean dog)
     {
         this.attr1 = attr1;
         this.attr2 = attr2;
@@ -83,30 +84,57 @@ public class TestPOJO
         if (!"FOO".equals(bar)) throw new IllegalArgumentException("Only FOO is accepted");
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener)
+    public void addMockListener(MockListener listener)
     {
-        listeners.add(listener);
+        tstListeners.add(listener);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener listener)
+    public void removeMockListener(MockListener listener)
     {
-        listeners.remove(listener);
+        tstListeners.remove(listener);
     }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propListeners.add(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propListeners.remove(listener);
+    }
+
 
     public void firePropertyChange()
     {
         Long oldValue = new Long(System.currentTimeMillis());
         Long newValue = new Long(oldValue.longValue() - 1L);
         PropertyChangeEvent event = new PropertyChangeEvent(this, "property", oldValue, newValue);
-        for (int i = 0; i < listeners.size(); i++)
+        for (int i = 0; i < tstListeners.size(); i++)
         {
-            PropertyChangeListener listener = (PropertyChangeListener) listeners.get(i);
+            MockListener listener = (MockListener) tstListeners.get(i);
             listener.propertyChange(event);
         }
     }
 
-    public List getPropertyChangeListeners()
+    public void fireInternalChange()
     {
-        return listeners;
+        for (int i = 0; i < tstListeners.size(); i++)
+        {
+            MockListener listener = (MockListener) tstListeners.get(i);
+            listener.testChange(new MockEvent(this));
+        }
+    }
+
+    public void fireBigChange()
+    {
+        for (int i = 0; i < tstListeners.size(); i++)
+        {
+            MockListener listener = (MockListener) tstListeners.get(i);
+            listener.bigChange(123, "This is a big change");
+        }
+    }
+
+    public List getTestListeners()
+    {
+        return tstListeners;
     }
 }

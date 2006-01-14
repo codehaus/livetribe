@@ -143,6 +143,7 @@
     <module>livetribe-snmp</module>
     <module>livetribe-swf</module>
     <module>livetribe-jsr223</module>
+    <module>arm-spec</module>
   </modules> 
 
   <licenses>
