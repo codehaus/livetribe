@@ -58,12 +58,17 @@
     <developer>
       <id>maguro</id>
       <name>Alan D. Cabrera</name>
-      <organization>LiveTribe</organization>
-      <roles>
-        <role>Architect</role>
-        <role>Release Manager</role>
-      </roles>
       <timezone>-8</timezone>
+    </developer>
+    <developer>
+      <id>hogstrom</id>
+      <name>Matt Hogstrom</name>
+      <timezone>-5</timezone>
+    </developer>
+    <developer>
+      <id>simone</id>
+      <name>Simone Bordet</name>
+      <timezone>1</timezone>
     </developer>
   </developers>
 
