@@ -29,4 +29,21 @@
     </plugins>
   </reporting>
 
+  <distributionManagement>
+    <repository>
+      <id>livetribe-repo</id>
+      <name>LiveTribe Central Repository</name>
+      <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2</url>
+    </repository>
+    <snapshotRepository>
+      <id>livetribe-snapshots</id>
+      <name>LiveTribe Central Development Repository</name>
+      <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2-snapshot</url>
+    </snapshotRepository>
+    <site>
+      <id>livetribe-website</id>
+      <url>scpexe://repo.livetribe.org/home/projects/livetribe/public_html/maven/</url>
+    </site>
+  </distributionManagement>
+
 </project>
