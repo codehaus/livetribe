@@ -46,7 +46,7 @@ import javax.management.remote.MBeanServerForwarder;
 import org.livetribe.jmx.util.I18NJMX;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class I18NServerForwarder implements MBeanServerForwarder
 {

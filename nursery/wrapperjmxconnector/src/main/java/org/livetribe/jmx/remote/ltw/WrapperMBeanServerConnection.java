@@ -25,7 +25,7 @@ import javax.security.auth.Subject;
 import org.livetribe.jmx.remote.MBeanServerConnectionForwarder;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class WrapperMBeanServerConnection implements InvocationHandler
 {

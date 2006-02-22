@@ -25,7 +25,7 @@ import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class WrapperConnectorServer extends JMXConnectorServer
 {

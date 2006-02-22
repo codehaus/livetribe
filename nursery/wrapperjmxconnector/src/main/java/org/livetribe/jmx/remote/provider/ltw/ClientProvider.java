@@ -25,7 +25,7 @@ import javax.management.remote.JMXServiceURL;
 import org.livetribe.jmx.remote.ltw.WrapperConnector;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class ClientProvider implements JMXConnectorProvider
 {

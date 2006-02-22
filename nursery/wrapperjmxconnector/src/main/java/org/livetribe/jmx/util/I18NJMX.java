@@ -20,7 +20,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class I18NJMX
 {

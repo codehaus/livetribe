@@ -29,7 +29,7 @@ import javax.management.remote.JMXServiceURL;
 import javax.security.auth.Subject;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class WrapperConnector implements JMXConnector
 {

@@ -19,7 +19,7 @@ import javax.management.MBeanServerConnection;
 import javax.security.auth.Subject;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public interface MBeanServerConnectionForwarder extends MBeanServerConnection
 {

@@ -30,7 +30,8 @@ import org.livetribe.jmx.remote.ltw.WrapperConnectorServer;
  * <pre>
  * service:jmx:ltw:///&lt;config.xml&gt;/&lt;wrapped protocol://host:port/path&gt;
  * </pre>
- * $Rev$ $Date$
+ *
+ * @version $Revision$ $Date$
  */
 public class ServerProvider implements JMXConnectorServerProvider
 {

@@ -44,7 +44,7 @@ import org.livetribe.jmx.remote.MBeanServerConnectionForwarder;
 import org.livetribe.jmx.util.I18NJMX;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class I18NClientForwarder implements MBeanServerConnectionForwarder
 {

@@ -27,7 +27,7 @@ import java.util.Map;
 import javax.management.remote.JMXServiceURL;
 
 /**
- * $Rev$ $Date$
+ * @version $Revision$ $Date$
  */
 public class WrapperConnectorUtils
 {
