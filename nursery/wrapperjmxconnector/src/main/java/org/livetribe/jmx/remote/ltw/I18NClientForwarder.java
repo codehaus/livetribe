@@ -218,7 +218,7 @@ public class I18NClientForwarder implements MBeanServerConnectionForwarder
         }
         catch (MalformedObjectNameException x)
         {
-            throw new IllegalArgumentException(x);
+            throw (IllegalArgumentException)new IllegalArgumentException().initCause(x);
         }
     }
 }

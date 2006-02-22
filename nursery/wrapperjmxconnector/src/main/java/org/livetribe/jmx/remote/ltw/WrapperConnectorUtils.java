@@ -52,7 +52,7 @@ public class WrapperConnectorUtils
 
     public static JMXServiceURL wrap(JMXServiceURL wrapped, JMXServiceURL unwrapped) throws MalformedURLException
     {
-        StringBuilder builder = new StringBuilder();
+        StringBuffer builder = new StringBuffer();
         builder.append("service:jmx:");
         builder.append(wrapped.getProtocol()).append(":///");
         String config = parseConfigurationResource(wrapped);
