@@ -55,32 +55,44 @@ public class WrapperConnectorServerTest extends TestCase
         JMXConnectorServer connectorServer = JMXConnectorServerFactory.newJMXConnectorServer(jmxServiceURL, serverEnv, mbeanServer);
         connectorServer.start();
 
-        System.out.println("connectorServer.getAddress() = " + connectorServer.getAddress());
+        JMXConnector connector = null;
+        try
+        {
+            Map clientEnv = new HashMap();
+            clientEnv.put(JMXConnectorFactory.PROTOCOL_PROVIDER_PACKAGES, "org.livetribe.jmx.remote.provider");
+            connector = JMXConnectorFactory.connect(connectorServer.getAddress(), clientEnv);
+            MBeanServerConnection connection = connector.getMBeanServerConnection();
+            I18NMBean mbean = (I18NMBean)MBeanServerInvocationHandler.newProxyInstance(connection, mbeanName, I18NMBean.class, false);
 
-        Map clientEnv = new HashMap();
-        clientEnv.put(JMXConnectorFactory.PROTOCOL_PROVIDER_PACKAGES, "org.livetribe.jmx.remote.provider");
-        JMXConnector connector = JMXConnectorFactory.connect(connectorServer.getAddress(), clientEnv);
-        MBeanServerConnection connection = connector.getMBeanServerConnection();
-        I18NMBean mbean = (I18NMBean)MBeanServerInvocationHandler.newProxyInstance(connection, mbeanName, I18NMBean.class, false);
+            // No Locale from the client
+            String result = mbean.getTranslated();
+            assertEquals(I18N.WELCOME_EN, result);
 
-        // No Locale from the client
-        String result = mbean.getTranslated();
-        assertEquals(I18N.WELCOME_EN, result);
+            // Set Locale from the client
+            I18NJMX.setLocale(Locale.ITALIAN);
+            result = mbean.getTranslated();
+            assertEquals(I18N.WELCOME_IT, result);
 
-        // Set Locale from the client
-        I18NJMX.setLocale(Locale.ITALIAN);
-        result = mbean.getTranslated();
-        assertEquals(I18N.WELCOME_IT, result);
+            // Set unsupported locale from the client
+            I18NJMX.setLocale(Locale.GERMAN);
+            result = mbean.getTranslated();
+            assertEquals(I18N.WELCOME_EN, result);
 
-        // Reset Locale
-        I18NJMX.setLocale(null);
-        result = mbean.getTranslated();
-        assertEquals(I18N.WELCOME_EN, result);
+            // Reset Locale
+            I18NJMX.setLocale(null);
+            result = mbean.getTranslated();
+            assertEquals(I18N.WELCOME_EN, result);
 
-        // Translate on client side
-        I18NJMX.setLocale(I18NJMX.CLIENT);
-        result = mbean.getTranslated();
-        assertEquals(I18N.WELCOME_KEY, result);
+            // Translate on client side
+            I18NJMX.setLocale(I18NJMX.CLIENT);
+            result = mbean.getTranslated();
+            assertEquals(I18N.WELCOME_KEY, result);
+        }
+        finally
+        {
+            if (connector != null) connector.close();
+            connectorServer.stop();
+        }
     }
 
     public static interface I18NMBean
@@ -96,11 +108,11 @@ public class WrapperConnectorServerTest extends TestCase
 
         public String getTranslated()
         {
-            return I18NJMX.translate(WELCOME_KEY, WELCOME_EN, ItalianBundle.class.getName());
+            return I18NJMX.translate(WELCOME_KEY, WELCOME_EN, "org.livetribe.jmx.remote.ltw.WrapperConnectorServerTest$Bundle");
         }
     }
 
-    public static class ItalianBundle extends ListResourceBundle
+    public static class Bundle_it extends ListResourceBundle
     {
         protected Object[][] getContents()
         {
