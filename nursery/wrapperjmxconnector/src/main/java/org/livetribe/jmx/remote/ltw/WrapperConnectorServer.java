@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 the original author or authors
+ * Copyright 2006 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
 /**
- * $Rev$
+ * $Rev$ $Date$
  */
 public class WrapperConnectorServer extends JMXConnectorServer
 {
@@ -45,7 +45,7 @@ public class WrapperConnectorServer extends JMXConnectorServer
     public void start() throws IOException
     {
         List forwarders = getForwarders(address, environment, getClass().getClassLoader());
-        Object proxy = Proxy.newProxyInstance(MBeanServer.class.getClassLoader(), new Class[] {MBeanServer.class}, new WrapperMBeanServerForwarder(getMBeanServer(), forwarders));
+        Object proxy = Proxy.newProxyInstance(MBeanServer.class.getClassLoader(), new Class[]{MBeanServer.class}, new WrapperMBeanServerForwarder(getMBeanServer(), forwarders));
         MBeanServer mbeanServer = (MBeanServer)proxy;
 
         JMXServiceURL wrappedServiceURL = WrapperConnectorUtils.unwrap(address);

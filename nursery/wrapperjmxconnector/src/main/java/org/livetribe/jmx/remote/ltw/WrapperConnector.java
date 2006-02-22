@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 the original author or authors
+ * Copyright 2006 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import javax.management.remote.JMXServiceURL;
 import javax.security.auth.Subject;
 
 /**
- * $Rev$
+ * $Rev$ $Date$
  */
 public class WrapperConnector implements JMXConnector
 {
@@ -64,7 +64,8 @@ public class WrapperConnector implements JMXConnector
 
     public MBeanServerConnection getMBeanServerConnection(Subject delegationSubject) throws IOException
     {
-        if (wrappedJMXConnector == null) throw new IOException("Could not retrieve MBeanServerConnection, this connector is not connected");
+        if (wrappedJMXConnector == null)
+            throw new IOException("Could not retrieve MBeanServerConnection, this connector is not connected");
         MBeanServerConnection wrapped = wrappedJMXConnector.getMBeanServerConnection(delegationSubject);
         WrapperMBeanServerConnection proxyHandler = new WrapperMBeanServerConnection(wrapped, delegationSubject, connections);
         Object proxy = Proxy.newProxyInstance(MBeanServerConnection.class.getClassLoader(), new Class[]{MBeanServerConnection.class}, proxyHandler);
@@ -78,7 +79,8 @@ public class WrapperConnector implements JMXConnector
 
     public void addConnectionNotificationListener(NotificationListener listener, NotificationFilter filter, Object handback)
     {
-        if (wrappedJMXConnector != null) wrappedJMXConnector.addConnectionNotificationListener(listener, filter, handback);
+        if (wrappedJMXConnector != null)
+            wrappedJMXConnector.addConnectionNotificationListener(listener, filter, handback);
     }
 
     public void removeConnectionNotificationListener(NotificationListener listener) throws ListenerNotFoundException
@@ -88,12 +90,14 @@ public class WrapperConnector implements JMXConnector
 
     public void removeConnectionNotificationListener(NotificationListener listener, NotificationFilter filter, Object handback) throws ListenerNotFoundException
     {
-        if (wrappedJMXConnector != null) wrappedJMXConnector.removeConnectionNotificationListener(listener, filter, handback);
+        if (wrappedJMXConnector != null)
+            wrappedJMXConnector.removeConnectionNotificationListener(listener, filter, handback);
     }
 
     public String getConnectionId() throws IOException
     {
-        if (wrappedJMXConnector == null) throw new IOException("Could not retrieve connection id, this connector is not connected");
+        if (wrappedJMXConnector == null)
+            throw new IOException("Could not retrieve connection id, this connector is not connected");
         return wrappedJMXConnector.getConnectionId();
     }
 }

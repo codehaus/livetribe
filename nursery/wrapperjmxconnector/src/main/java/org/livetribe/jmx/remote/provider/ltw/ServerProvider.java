@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 the original author or authors
+ * Copyright 2006 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,14 +30,15 @@ import org.livetribe.jmx.remote.ltw.WrapperConnectorServer;
  * <pre>
  * service:jmx:ltw:///&lt;config.xml&gt;/&lt;wrapped protocol://host:port/path&gt;
  * </pre>
- * $Rev$
+ * $Rev$ $Date$
  */
 public class ServerProvider implements JMXConnectorServerProvider
 {
     public JMXConnectorServer newJMXConnectorServer(JMXServiceURL serviceURL, Map environment, MBeanServer mbeanServer) throws IOException
     {
         String protocol = serviceURL.getProtocol();
-        if (!"ltw".equals(protocol)) throw new MalformedURLException("Wrong protocol " + protocol + " for provider " + this);
+        if (!"ltw".equals(protocol))
+            throw new MalformedURLException("Wrong protocol " + protocol + " for provider " + this);
         return new WrapperConnectorServer(serviceURL, environment, mbeanServer);
     }
 }

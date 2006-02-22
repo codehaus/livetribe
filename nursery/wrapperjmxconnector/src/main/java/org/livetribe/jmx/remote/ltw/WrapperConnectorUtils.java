@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 the original author or authors
+ * Copyright 2006 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import java.util.Map;
 import javax.management.remote.JMXServiceURL;
 
 /**
- * $Rev$
+ * $Rev$ $Date$
  */
 public class WrapperConnectorUtils
 {
@@ -44,7 +44,8 @@ public class WrapperConnectorUtils
         int index = originalPath.indexOf(configResource);
 
         String wrappedPath = originalPath.substring(index + configResource.length() + 1);
-        if (wrappedPath.length() == 0) throw new MalformedURLException("Missing wrapped connector URL in JMXServiceURL: " + jmxServiceURL);
+        if (wrappedPath.length() == 0)
+            throw new MalformedURLException("Missing wrapped connector URL in JMXServiceURL: " + jmxServiceURL);
 
         return new JMXServiceURL("service:jmx:" + wrappedPath);
     }
@@ -80,12 +81,14 @@ public class WrapperConnectorUtils
     private static String parseConfigurationResource(JMXServiceURL jmxServiceURL) throws MalformedURLException
     {
         String urlPath = jmxServiceURL.getURLPath();
-        if (urlPath == null || urlPath.length() == 0) throw new MalformedURLException("Missing path in JMXServiceURL " + jmxServiceURL);
+        if (urlPath == null || urlPath.length() == 0)
+            throw new MalformedURLException("Missing path in JMXServiceURL " + jmxServiceURL);
 
         String path = urlPath;
         if (urlPath.startsWith("/")) path = urlPath.substring(1);
         int endOfConfig = path.indexOf("/");
-        if (endOfConfig < 0) throw new MalformedURLException("Incomplete path '" + urlPath + "' in JMXServiceURL: " + jmxServiceURL);
+        if (endOfConfig < 0)
+            throw new MalformedURLException("Incomplete path '" + urlPath + "' in JMXServiceURL: " + jmxServiceURL);
 
         return path.substring(0, endOfConfig).trim();
     }
