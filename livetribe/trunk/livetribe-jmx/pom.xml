@@ -1,48 +1,55 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
+    <parent>
+        <groupId>org.livetribe</groupId>
+        <artifactId>livetribe</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
     <groupId>org.livetribe</groupId>
-    <artifactId>livetribe-root</artifactId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
+    <artifactId>livetribe-jmx</artifactId>
+    <name>LiveTribe :: JMX</name>
+    <packaging>jar</packaging>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.livetribe</groupId>
-  <artifactId>livetribe-jmx</artifactId>
-  <name>LiveTribe :: JMX</name>
-  <packaging>jar</packaging>
-
-  <dependencies>
-  
-    <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>mx4j</groupId>
-      <artifactId>mx4j-jmx</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>mx4j</groupId>
-      <artifactId>mx4j</artifactId>
-    </dependency>
-
-  </dependencies>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-pmd-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
+    <dependencies>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mx4j</groupId>
+            <artifactId>mx4j-jmx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mx4j</groupId>
+            <artifactId>mx4j</artifactId>
+        </dependency>
+    </dependencies>
+    <!--
+        <dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </dependencyManagement>
+    -->
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>
