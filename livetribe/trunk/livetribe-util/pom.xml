@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.livetribe.util</groupId>
+    <groupId>org.livetribe</groupId>
     <artifactId>livetribe-util</artifactId>
     <name>LiveTribe :: Utilities</name>
     <version>1.0-SNAPSHOT</version>

@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.livetribe.webconsole</groupId>
+    <groupId>org.livetribe</groupId>
     <artifactId>livetribe-webconsole</artifactId>
     <name>LiveTribe :: Web Console</name>
     <version>1.0-SNAPSHOT</version>
