@@ -84,5 +84,4 @@ public class LTProxyFactoryTest extends TestCase
     static class MockFactory extends LTAbstractFactoryBase
     {
     }
-
 }
