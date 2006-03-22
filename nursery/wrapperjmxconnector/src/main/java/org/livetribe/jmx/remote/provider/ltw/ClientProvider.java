@@ -34,6 +34,7 @@ public class ClientProvider implements JMXConnectorProvider
         String protocol = serviceURL.getProtocol();
         if (!"ltw".equals(protocol))
             throw new MalformedURLException("Wrong protocol " + protocol + " for provider " + this);
+
         return new WrapperConnector(serviceURL, environment);
     }
 }

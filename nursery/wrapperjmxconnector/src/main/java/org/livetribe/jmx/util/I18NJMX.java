@@ -19,6 +19,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.livetribe.jmx.JMXPermission;
+
 /**
  * @version $Revision$ $Date$
  */
@@ -28,6 +30,8 @@ public class I18NJMX
     public static final Locale CLIENT = new Locale("client");
 
     private static final ThreadLocal locale = new ThreadLocal();
+    private static final JMXPermission SET_LOCALE = new JMXPermission("setLocale");
+
 
     private I18NJMX()
     {
@@ -46,6 +50,9 @@ public class I18NJMX
 
     public static void setLocale(Locale l)
     {
+        SecurityManager sm = System.getSecurityManager();
+        if (sm != null) sm.checkPermission(SET_LOCALE);
+
         locale.set(l);
     }
 
@@ -61,13 +68,13 @@ public class I18NJMX
 
     public static String translate(String key, String defaultValue, String bundleBaseName)
     {
-        Locale l = getLocale();
-        if (l == null)
+        Locale locale = getLocale();
+        if (locale == null)
         {
             // No support for translation
             return defaultValue == null ? key : defaultValue;
         }
-        else if (CLIENT.equals(l))
+        else if (CLIENT.equals(locale))
         {
             // Translation is done on client side
             return key;
@@ -79,10 +86,10 @@ public class I18NJMX
             {
                 try
                 {
-                    ResourceBundle bundle = ResourceBundle.getBundle(bundleBaseName, l);
+                    ResourceBundle bundle = ResourceBundle.getBundle(bundleBaseName, locale);
                     return bundle.getString(key);
                 }
-                catch (MissingResourceException x)
+                catch (MissingResourceException mre)
                 {
                     // TODO: log that bundle or key is not found
                 }

@@ -48,7 +48,7 @@ public class WrapperConnectorServerTest extends TestCase
 
         MBeanServer mbeanServer = MBeanServerFactory.createMBeanServer();
 
-        ObjectName mbeanName = ObjectName.getInstance(":Type=I18N");
+        ObjectName mbeanName = ObjectName.getInstance(":Test=MBean");
         mbeanServer.registerMBean(new I18N(), mbeanName);
 
         JMXServiceURL jmxServiceURL = new JMXServiceURL("service:jmx:ltw:////rmi:///");
