@@ -31,6 +31,7 @@ import org.opengroup.arm40.transaction.ArmInterface;
 import org.livetribe.arm.ArmRuntimeException;
 import org.livetribe.arm.LTAbstractObjectBase;
 
+
 /**
  * @version $Revision: $ $Date: $
  */
@@ -73,7 +74,9 @@ public class LTProxyFactory
 
                     ArmErrorCallback callback = base.getFactory().getCallback();
                     if (callback != null)
+                    {
                         callback.errorCodeSet((ArmInterface) object, method.getDeclaringClass().getName(), method.getName());
+                    }
                 }
                 else
                 {

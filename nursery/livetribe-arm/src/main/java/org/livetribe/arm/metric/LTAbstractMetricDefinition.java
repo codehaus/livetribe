@@ -19,9 +19,9 @@ package org.livetribe.arm.metric;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 
-import org.livetribe.arm.LTAbstractBase;
-import org.livetribe.arm.LTAbstractObjectBase;
 import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.LTAbstractObjectBase;
+
 
 /**
  * @version $Revision: $ $Date: $
