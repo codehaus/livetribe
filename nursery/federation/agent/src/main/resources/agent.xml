@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:lt="http://livetribe.org/schemas/agent/1.0">
+
+    <lt:configuration id="config" />
+
+    <lt:agents>
+        <lt:agent>
+            <lt:serviceAgent>
+                <lt:scopes>
+                    <array>
+                        <item>agent</item>
+                    </array>
+                </lt:scopes>
+            </lt:serviceAgent>
+            <property name="configuration" value="#config" />
+        </lt:agent>
+    </lt:agents>
+
+</beans>
