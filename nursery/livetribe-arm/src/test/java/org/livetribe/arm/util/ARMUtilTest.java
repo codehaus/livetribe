@@ -17,9 +17,10 @@
 package org.livetribe.arm.util;
 
 import junit.framework.TestCase;
-import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.metric.ArmMetricFactory;
 import org.opengroup.arm40.tranreport.ArmTranReportFactory;
+import org.opengroup.arm40.transaction.ArmTransactionFactory;
+
 
 /**
  * @version $Revision: $ $Date: $

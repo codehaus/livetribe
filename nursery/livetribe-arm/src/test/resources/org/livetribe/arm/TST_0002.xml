@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:jmx="http://xbean.apache.org/schemas/jmx">
+
+    <bean id="advisor" class="org.livetribe.arm.xbean.FactoryAdvisorDelete">
+    </bean>
+
+
+    <bean id="pf" class="org.livetribe.arm.xbean.LTProxyFactory">
+        <property name="advisor">
+            <ref local="advisor"/>
+        </property>
+    </bean>
+
+    <bean id="proxyInterceptor" class="org.livetribe.arm.xbean.ProxyFactoryAdvice">
+        <property name="proxyFactory">
+            <ref local="pf"/>
+        </property>
+    </bean>
+
+    <bean id="factory" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <value>org.livetribe.arm.xbean.Factory</value>
+        </property>
+        <property name="target">
+            <bean class="org.livetribe.arm.xbean.FactoryBean">
+                <property name="name" value="Honda"/>
+            </bean>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>proxyInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="automobiles" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <value>org.livetribe.arm.xbean.Automobile</value>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>proxyInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>
