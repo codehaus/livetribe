@@ -16,17 +16,17 @@
  */
 package com.acme.arm.transaction;
 
-import org.opengroup.arm40.transaction.ArmApplicationDefinition;
-import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmApplication;
+import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmCorrelator;
+import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
-import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
-import org.opengroup.arm40.transaction.ArmUser;
-import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransaction;
+import org.opengroup.arm40.transaction.ArmTransactionDefinition;
+import org.opengroup.arm40.transaction.ArmTransactionFactory;
+import org.opengroup.arm40.transaction.ArmUser;
 
 
 /**
