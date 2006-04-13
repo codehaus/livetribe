@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmTranReportWithMetrics;
@@ -24,23 +24,20 @@ import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractObjectBase;
+import org.livetribe.arm.LTAbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTranReportWithMetrics extends LTAbstractObjectBase implements ArmTranReportWithMetrics
+class LTTranReportWithMetrics extends LTAbstractObject implements ArmTranReportWithMetrics
 {
     private final ArmApplication app;
     private final ArmTransactionWithMetricsDefinition definition;
     private final ArmMetricGroup group;
 
-    public LTTranReportWithMetrics(LTAbstractFactoryBase factory, ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
+    public LTTranReportWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
     {
-        super(factory);
-
         this.app = app;
         this.definition = definition;
         this.group = group;

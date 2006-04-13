@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricCounterFloat32Definition;
+import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
-
-import org.livetribe.arm.LTAbstractFactoryBase;
 
 
 /**
@@ -27,8 +26,8 @@ import org.livetribe.arm.LTAbstractFactoryBase;
  */
 class LTMetricCounterFloat32Definition extends LTAbstractMetricDefinition implements ArmMetricCounterFloat32Definition
 {
-    LTMetricCounterFloat32Definition(LTAbstractFactoryBase factory, String name, String units, short usage, ArmID id)
+    LTMetricCounterFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        super(factory, name, units, usage, id);
+        super(appDef, name, units, usage, id);
     }
 }

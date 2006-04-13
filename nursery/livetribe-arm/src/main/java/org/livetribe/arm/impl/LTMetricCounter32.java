@@ -14,13 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricCounter32;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
-
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractMetricBase;
 
 
 /**
@@ -30,9 +27,9 @@ class LTMetricCounter32 extends LTAbstractMetricBase implements ArmMetricCounter
 {
     private int metric;
 
-    public LTMetricCounter32(LTAbstractFactoryBase factory, ArmMetricDefinition definition)
+    LTMetricCounter32(ArmMetricDefinition definition)
     {
-        super(factory, definition);
+        super(definition);
     }
 
     public int get()

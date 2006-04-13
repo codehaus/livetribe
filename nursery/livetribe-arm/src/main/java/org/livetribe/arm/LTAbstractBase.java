@@ -37,7 +37,7 @@ public abstract class LTAbstractBase implements ArmInterface
     public int setErrorCode(int errorCode)
     {
         this.errorCode = errorCode;
-        return errorCode;
+        return 0;
     }
 
     public String getErrorMessage(int i)

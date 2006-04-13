@@ -18,22 +18,24 @@ package org.livetribe.arm;
 
 import org.opengroup.arm40.transaction.ArmErrorCallback;
 
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
+
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTAbstractFactoryBase extends LTAbstractBase
+public abstract class LTAbstractFactoryBase extends LTAbstractBase implements GeneralErrorCodes
 {
-    private ArmErrorCallback callback;
+    private static ArmErrorCallback callback;
 
     public boolean setErrorCallback(ArmErrorCallback callback)
     {
-        this.callback = callback;
+        LTAbstractFactoryBase.callback = callback;
 
         return true;
     }
 
-    public ArmErrorCallback getCallback()
+    public static ArmErrorCallback getCallback()
     {
         return callback;
     }

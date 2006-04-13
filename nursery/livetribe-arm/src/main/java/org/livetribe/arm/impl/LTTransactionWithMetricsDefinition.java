@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
@@ -22,14 +22,13 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractObjectBase;
+import org.livetribe.arm.LTAbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionWithMetricsDefinition extends LTAbstractObjectBase implements ArmTransactionWithMetricsDefinition
+class LTTransactionWithMetricsDefinition extends LTAbstractObject implements ArmTransactionWithMetricsDefinition
 {
     private final ArmApplicationDefinition app;
     private final String name;
@@ -37,10 +36,8 @@ class LTTransactionWithMetricsDefinition extends LTAbstractObjectBase implements
     private final ArmMetricGroupDefinition definition;
     private final ArmID id;
 
-    public LTTransactionWithMetricsDefinition(LTAbstractFactoryBase factory, ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition definition, ArmID id)
+    public LTTransactionWithMetricsDefinition(ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition definition, ArmID id)
     {
-        super(factory);
-
         this.app = app;
         this.name = name;
         this.identityProperties = identityProperties;

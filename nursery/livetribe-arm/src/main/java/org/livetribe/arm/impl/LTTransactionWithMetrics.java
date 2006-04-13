@@ -14,46 +14,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
-import org.opengroup.arm40.metric.ArmTranReportWithMetrics;
-import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroup;
+import org.opengroup.arm40.metric.ArmTransactionWithMetrics;
+import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.LTAbstractObjectBase;
-import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.LTAbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionWithMetrics extends LTAbstractObjectBase implements ArmTranReportWithMetrics
+class LTTransactionWithMetrics extends LTAbstractObject implements ArmTransactionWithMetrics
 {
     private final ArmApplication app;
     private final ArmTransactionWithMetricsDefinition definition;
     private final ArmMetricGroup group;
 
-    public LTTransactionWithMetrics(LTAbstractFactoryBase factory, ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
+    public LTTransactionWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
     {
-        super(factory);
-
         this.app = app;
         this.definition = definition;
         this.group = group;
     }
 
-    public ArmCorrelator generateCorrelator()
+    public ArmTransactionWithMetricsDefinition getTransactionWithMetricsDefinition()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return definition;
+    }
+
+    public ArmMetricGroup getMetricGroup()
+    {
+        return group;
+    }
+
+    public int bindThread()
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public long blocked()
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
     public ArmApplication getApplication()
     {
-        return app;
+        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
     public String getContextURIValue()
@@ -76,11 +88,6 @@ class LTTransactionWithMetrics extends LTAbstractObjectBase implements ArmTranRe
         return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public long getResponseTime()
-    {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
-    }
-
     public int getStatus()
     {
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
@@ -96,22 +103,17 @@ class LTTransactionWithMetrics extends LTAbstractObjectBase implements ArmTranRe
         return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public int report(int status, long respTime)
+    public boolean isTraceRequested()
+    {
+        return false;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int reset()
     {
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public int report(int status, long respTime, long stopTime)
-    {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public int report(int status, long respTime, String diagnosticDetail)
-    {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public int report(int status, long respTime, long stopTime, String diagnosticDetail)
+    public int setArrivalTime()
     {
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
@@ -126,7 +128,7 @@ class LTTransactionWithMetrics extends LTAbstractObjectBase implements ArmTranRe
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public int setParentCorrelator(ArmCorrelator parent)
+    public int setTraceRequested(boolean traceState)
     {
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
@@ -136,13 +138,48 @@ class LTTransactionWithMetrics extends LTAbstractObjectBase implements ArmTranRe
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public ArmTransactionWithMetricsDefinition getTransactionWithMetricsDefinition()
+    public int start()
     {
-        return definition;
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public ArmMetricGroup getMetricGroup()
+    public int start(byte[] parentCorr)
     {
-        return group;
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int start(byte[] parentCorr, int offset)
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int start(ArmCorrelator parentCorr)
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int stop(int status)
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int stop(int status, String diagnosticDetail)
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int unbindThread()
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int unblocked(long blockHandle)
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int update()
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 }

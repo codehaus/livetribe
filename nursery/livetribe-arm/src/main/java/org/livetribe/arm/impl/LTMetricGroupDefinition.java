@@ -14,26 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractObjectBase;
+import org.livetribe.arm.LTAbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGroupDefinition extends LTAbstractObjectBase implements ArmMetricGroupDefinition
+class LTMetricGroupDefinition extends LTAbstractObject implements ArmMetricGroupDefinition
 {
     private final ArmMetricDefinition[] definitions;
 
-    public LTMetricGroupDefinition(LTAbstractFactoryBase factory, ArmMetricDefinition[] definitions)
+    public LTMetricGroupDefinition(ArmMetricDefinition[] definitions)
     {
-        super(factory);
-
         this.definitions = definitions;
     }
 

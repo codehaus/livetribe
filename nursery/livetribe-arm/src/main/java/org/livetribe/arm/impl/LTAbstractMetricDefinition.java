@@ -14,33 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.metric;
+package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricDefinition;
+import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractObjectBase;
+import org.livetribe.arm.LTAbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTAbstractMetricDefinition extends LTAbstractObjectBase implements ArmMetricDefinition
+abstract class LTAbstractMetricDefinition extends LTAbstractObject implements ArmMetricDefinition, LTMetricDefinition
 {
+    private final ArmApplicationDefinition appDef;
     private final String name;
     private final String units;
     private final short usage;
     private final ArmID id;
 
-    LTAbstractMetricDefinition(LTAbstractFactoryBase factory, String name, String units, short usage, ArmID id)
+    LTAbstractMetricDefinition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        super(factory);
-
+        this.appDef = appDef;
         this.name = name;
         this.units = units;
         this.usage = usage;
         this.id = id;
+    }
+
+    public ArmApplicationDefinition getAppDef()
+    {
+        return appDef;
     }
 
     public String getName()
