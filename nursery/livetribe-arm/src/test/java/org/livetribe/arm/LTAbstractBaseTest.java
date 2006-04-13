@@ -30,12 +30,11 @@ public class LTAbstractBaseTest extends TestCase
 
     public void testI18N()
     {
-        MockFactory factory = new MockFactory();
-        Mock object = new Mock(factory);
+        Mock object = new Mock();
 
         Locale.setDefault(new Locale("en", "US", "test"));
 
-        object.setErrorCode(I18nConstants.TEST_CODES);
+        object.setErrorCode(I18NConstants.TEST_CODES);
 
         assertEquals("Test Message", object.getErrorMessage(object.getErrorCode()));
     }
@@ -50,15 +49,15 @@ public class LTAbstractBaseTest extends TestCase
         Locale.setDefault(saved);
     }
 
-    static class Mock extends LTAbstractObjectBase
+    static class Mock extends LTAbstractObject
     {
-        Mock(LTAbstractFactoryBase factory)
-        {
-            super(factory);
-        }
     }
 
     static class MockFactory extends LTAbstractFactoryBase
     {
+        protected String getFactoryInterfaceName()
+        {
+            return "org.opengroup.arm40.mock.ArmMockFactory";
+        }
     }
 }
