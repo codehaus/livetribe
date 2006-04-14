@@ -18,6 +18,7 @@ package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
+import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
@@ -28,6 +29,7 @@ import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
 import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
 /**
@@ -35,14 +37,19 @@ import org.livetribe.arm.LTAbstractFactoryBase;
  */
 public class LTTransactionFactoryImpl extends LTAbstractFactoryBase implements ArmTransactionFactory, TransactionErrorCodes
 {
-    public ArmApplication newArmApplication(ArmApplicationDefinition definition, String group, String instance, String[] contextValues)
+    public ArmApplication newArmApplication(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        appDef = ArmAPIUtil.checkRequired(appDef);
+        group = ArmAPIUtil.checkOptional255(group);
+        instance = ArmAPIUtil.checkOptional255(instance);
+        contextValues = ArmAPIUtil.checkOptional(appDef, contextValues);
+
+        return new LTApplication(appDef, group, instance, contextValues);
     }
 
     public ArmApplicationDefinition newArmApplicationDefinition(String name, ArmIdentityProperties identityProperties, ArmID id)
     {
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         identityProperties = ArmAPIUtil.checkOptional(identityProperties);
         id = ArmAPIUtil.checkOptional(id);
 
@@ -51,46 +58,131 @@ public class LTTransactionFactoryImpl extends LTAbstractFactoryBase implements A
 
     public ArmCorrelator newArmCorrelator(byte[] corrBytes)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return newArmCorrelator(corrBytes, 0);
     }
 
     public ArmCorrelator newArmCorrelator(byte[] corrBytes, int offset)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (corrBytes == null || corrBytes.length < offset + 4)
+        {
+            offset = 0;
+
+            corrBytes = new byte[4];
+            corrBytes[1] = 4;
+
+            StaticArmAPIMonitor.error(TOKEN_TOO_SHORT);
+        }
+
+        int length = corrBytes[offset] << 8 | corrBytes[offset + 1];
+
+        if (corrBytes.length < offset + length || length > ArmConstants.CORR_MAX_LENGTH)
+        {
+            length = 0;
+            StaticArmAPIMonitor.error(TOKEN_TOO_LONG);
+        }
+
+        byte[] cleanBytes = new byte[length];
+        System.arraycopy(corrBytes, offset, cleanBytes, 0, length);
+
+        return new LTCorrelator(cleanBytes);
     }
 
     public ArmID newArmID(byte[] idBytes)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return newArmID(idBytes, 0);
     }
 
     public ArmID newArmID(byte[] idBytes, int offset)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (idBytes == null)
+        {
+            offset = 0;
+            idBytes = new byte[0];
+
+            StaticArmAPIMonitor.error(ID_NULL);
+        }
+
+        if (idBytes.length < offset + 16) StaticArmAPIMonitor.warning(ID_TOO_SHORT);
+
+        int length = Math.min(idBytes.length - offset, 16);
+
+        byte[] cleanBytes = new byte[length];
+        System.arraycopy(idBytes, offset, cleanBytes, 0, length);
+
+        return new LTID(cleanBytes);
     }
 
     public ArmIdentityProperties newArmIdentityProperties(String[] identityNames, String[] identityValues, String[] contextNames)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        String[] cleanIdNames = ArmAPIUtil.cleanIdProps(identityNames);
+        String[] cleanIdValues = ArmAPIUtil.cleanIdProps(identityValues);
+        String[] cleanCtxNames = ArmAPIUtil.cleanIdProps(contextNames);
+
+        for (int i = 0; i < 20; i++)
+        {
+            if (cleanIdNames[i] == null || cleanIdNames[i].length() == 0)
+            {
+                cleanIdNames[i] = null;
+                cleanIdValues[i] = null;
+            }
+            else if (cleanIdValues[i] == null || cleanIdValues[i].length() == 0)
+            {
+                cleanIdNames[i] = null;
+                cleanIdValues[i] = null;
+            }
+        }
+
+        return new LTIdentityProperties(cleanIdNames, cleanIdValues, cleanCtxNames);
     }
 
     public ArmIdentityPropertiesTransaction newArmIdentityPropertiesTransaction(String[] identityNames, String[] identityValues, String[] contextNames, String uriValue)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        String[] cleanIdNames = ArmAPIUtil.cleanIdProps(identityNames);
+        String[] cleanIdValues = ArmAPIUtil.cleanIdProps(identityValues);
+        String[] cleanCtxNames = ArmAPIUtil.cleanIdProps(contextNames);
+
+        for (int i = 0; i < 20; i++)
+        {
+            if (cleanIdNames[i] == null || cleanIdNames[i].length() == 0)
+            {
+                cleanIdNames[i] = null;
+                cleanIdValues[i] = null;
+            }
+            else if (cleanIdValues[i] == null || cleanIdValues[i].length() == 0)
+            {
+                cleanIdNames[i] = null;
+                cleanIdValues[i] = null;
+            }
+        }
+
+        if (uriValue != null && uriValue.length() > 4096) StaticArmAPIMonitor.warning(URI_TOO_LONG);
+
+        return new LTIdentityPropertiesTransaction(cleanIdNames, cleanIdValues, cleanCtxNames, uriValue);
     }
 
     public ArmTransaction newArmTransaction(ArmApplication app, ArmTransactionDefinition definition)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        app = ArmAPIUtil.checkRequired(app);
+        definition = ArmAPIUtil.checkRequired(definition);
+
+        return new LTTransaction(app, definition);
     }
 
     public ArmTransactionDefinition newArmTransactionDefinition(ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmID id)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        app = ArmAPIUtil.checkRequired(app);
+        name = ArmAPIUtil.checkRequiredName(name);
+        identityProperties = ArmAPIUtil.checkOptional(identityProperties);
+        id = ArmAPIUtil.checkOptional(id);
+
+        return new LTTransactionDefinition(app, name, identityProperties, id);
     }
 
     public ArmUser newArmUser(String name, ArmID id)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        name = ArmAPIUtil.checkRequiredName(name);
+        id = ArmAPIUtil.checkOptional(id);
+
+        return new LTUser(name, id);
     }
 }

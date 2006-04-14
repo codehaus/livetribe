@@ -19,8 +19,8 @@ package org.livetribe.arm.impl;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 
-import org.livetribe.arm.LTAbstractObject;
 import org.livetribe.arm.GeneralErrorCodes;
+import org.livetribe.arm.LTAbstractObject;
 
 
 /**

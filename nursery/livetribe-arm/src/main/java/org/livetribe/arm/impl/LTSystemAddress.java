@@ -16,30 +16,37 @@
  */
 package org.livetribe.arm.impl;
 
-import org.opengroup.arm40.metric.ArmMetricDefinition;
-import org.opengroup.arm40.metric.ArmMetricGauge32;
+import org.opengroup.arm40.tranreport.ArmSystemAddress;
+import org.opengroup.arm40.transaction.ArmID;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGauge32 extends LTAbstractMetricBase implements ArmMetricGauge32
+public class LTSystemAddress extends LTToken implements ArmSystemAddress
 {
-    private int metric;
+    private final short format;
+    private final ArmID id;
 
-    LTMetricGauge32(ArmMetricDefinition definition)
+    public LTSystemAddress(byte[] idBytes, short format, ArmID id)
     {
-        super(definition);
+        super(idBytes);
+        this.format = format;
+        this.id = id;
     }
 
-    public int get()
+    public byte[] getAddress()
     {
-        return metric;
+        return getBytes();
     }
 
-    public int set(int value)
+    public short getFormat()
     {
-        metric = value;
-        return 0;
+        return format;
+    }
+
+    public ArmID getID()
+    {
+        return id;
     }
 }

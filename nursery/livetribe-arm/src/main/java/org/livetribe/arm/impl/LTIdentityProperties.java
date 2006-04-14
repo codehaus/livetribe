@@ -32,28 +32,9 @@ class LTIdentityProperties extends LTAbstractObject implements ArmIdentityProper
 
     LTIdentityProperties(String[] identityNames, String[] identityValues, String[] contextNames)
     {
-        this.identityNames = new String[20];
-        System.arraycopy(identityNames, 0, this.identityNames, 0, Math.min(20, identityNames.length));
-
-        this.identityValues = new String[20];
-        System.arraycopy(identityValues, 0, this.identityValues, 0, Math.min(20, identityValues.length));
-
-        this.contextNames = new String[20];
-        System.arraycopy(contextNames, 0, this.contextNames, 0, Math.min(20, contextNames.length));
-
-        for (int i = 0; i < 20; i++)
-        {
-            if (this.identityNames[i] == null || this.identityNames[i].length() == 0)
-            {
-                this.identityNames[i] = null;
-                this.identityValues[i] = null;
-            }
-            else if (this.identityValues[i] == null || this.identityValues[i].length() == 0)
-            {
-                this.identityNames[i] = null;
-                this.identityValues[i] = null;
-            }
-        }
+        this.identityNames = identityNames;
+        this.identityValues = identityValues;
+        this.contextNames = contextNames;
     }
 
     public String getIdentityName(int i)

@@ -18,8 +18,6 @@ package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
-
 
 /**
  * @version $Revision: $ $Date: $
@@ -28,7 +26,7 @@ class LTIdentityPropertiesTransaction extends LTIdentityProperties implements Ar
 {
     private final String uri;
 
-    LTIdentityPropertiesTransaction(LTAbstractFactoryBase factory, String[] identityNames, String[] identityValues, String[] contextNames, String uri)
+    LTIdentityPropertiesTransaction(String[] identityNames, String[] identityValues, String[] contextNames, String uri)
     {
         super(identityNames, identityValues, contextNames);
 

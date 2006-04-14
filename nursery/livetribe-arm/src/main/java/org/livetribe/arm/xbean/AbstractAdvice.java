@@ -16,7 +16,8 @@ public abstract class AbstractAdvice implements MethodInterceptor
     private static final Integer SUCCESS = new Integer(GeneralErrorCodes.SUCCESS);
     private static final String INIT = new String("INIT");
     private static final String CLEARED = new String("CLEARED");
-    private static final ThreadLocal status = new ThreadLocal(){
+    private static final ThreadLocal status = new ThreadLocal()
+    {
         protected Object initialValue()
         {
             return INIT;

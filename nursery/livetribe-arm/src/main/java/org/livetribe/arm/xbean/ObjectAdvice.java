@@ -38,11 +38,14 @@ public class ObjectAdvice extends AbstractAdvice
         try
         {
             StaticArmAPIMonitor.begin(target);
-            if (invocation.getMethod().getDeclaringClass() != ArmInterface.class) target.setErrorCode(GeneralErrorCodes.SUCCESS);
+            if (invocation.getMethod().getDeclaringClass() != ArmInterface.class)
+            {
+                target.setErrorCode(GeneralErrorCodes.SUCCESS);
+            }
 
             rval = invocation.proceed();
 
-            if (((LTObject)target).isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+            if (((LTObject) target).isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
         catch (Throwable t)
         {

@@ -10,6 +10,7 @@ import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
 import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
 /**
@@ -17,28 +18,56 @@ import org.livetribe.arm.LTAbstractFactoryBase;
  */
 public class LTTranReportFactoryImpl extends LTAbstractFactoryBase implements ArmTranReportFactory, TranReportErrorCodes
 {
-    public ArmApplicationRemote newArmApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
+    public ArmApplicationRemote newArmApplicationRemote(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        appDef = ArmAPIUtil.checkRequired(appDef);
+        group = ArmAPIUtil.checkOptional255(group);
+        instance = ArmAPIUtil.checkOptional255(instance);
+        contextValues = ArmAPIUtil.checkOptional(appDef, contextValues);
+        systemAddress = ArmAPIUtil.checkOptional(systemAddress);
+
+        return new LTApplicationRemote(appDef, group, instance, contextValues, systemAddress);
     }
 
     public ArmSystemAddress newArmSystemAddress(short format, byte[] addressBytes, ArmID id)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return newArmSystemAddress(format, addressBytes, 0, id);
     }
 
     public ArmSystemAddress newArmSystemAddress(short format, byte[] addressBytes, int offset, ArmID id)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return newArmSystemAddress(format, addressBytes, 0, addressBytes.length, id);
     }
 
     public ArmSystemAddress newArmSystemAddress(short format, byte[] addressBytes, int offset, int length, ArmID id)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (format == 0) StaticArmAPIMonitor.error(FORMAT_ZERO);
+        id = ArmAPIUtil.checkOptional(id);
+
+        if (addressBytes == null)
+        {
+            addressBytes = new byte[0];
+            offset = 0;
+            length = 0;
+
+            StaticArmAPIMonitor.error(ADDRESS_NULL);
+        }
+
+        if (addressBytes.length < offset + length) StaticArmAPIMonitor.error(ADDR_TOO_SHORT);
+
+        length = Math.min(addressBytes.length - offset, length);
+
+        byte[] cleanBytes = new byte[length];
+        System.arraycopy(addressBytes, offset, cleanBytes, 0, length);
+
+        return new LTSystemAddress(cleanBytes, format, id);
     }
 
-    public ArmTranReport newArmTranReport(ArmApplication app, ArmTransactionDefinition definition)
+    public ArmTranReport newArmTranReport(ArmApplication app, ArmTransactionDefinition appTranDef)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        app = ArmAPIUtil.checkRequired(app);
+        appTranDef = ArmAPIUtil.checkRequired(appTranDef);
+
+        return new LTTranReport(app, appTranDef);
     }
 }

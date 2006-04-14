@@ -26,4 +26,6 @@ public interface GeneralErrorCodes extends I18NConstants
     public static final int USING_INVALID_OBJECT = GENERAL_CODES + 1;
     public static final int NAME_NULL_OR_EMPTY = GENERAL_CODES + 2;
     public static final int NAME_LENGTH_LARGE = GENERAL_CODES + 3;
+    public static final int GROUP_LENGTH_LARGE = GENERAL_CODES + 4;
+    public static final int CTX_VAL_ARRAY_LONG = GENERAL_CODES + 5;
 }

@@ -60,7 +60,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricCounter32Definition newArmMetricCounter32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricCounter32Definition(appDef, name, units, usage, id);
@@ -69,7 +69,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricCounter64Definition newArmMetricCounter64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricCounter64Definition(appDef, name, units, usage, id);
@@ -78,7 +78,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricCounterFloat32Definition newArmMetricCounterFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricCounterFloat32Definition(appDef, name, units, usage, id);
@@ -87,7 +87,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricGauge32Definition newArmMetricGauge32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricGauge32Definition(appDef, name, units, usage, id);
@@ -96,7 +96,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricGauge64Definition newArmMetricGauge64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricGauge64Definition(appDef, name, units, usage, id);
@@ -105,7 +105,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricGaugeFloat32Definition newArmMetricGaugeFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricGaugeFloat32Definition(appDef, name, units, usage, id);
@@ -114,7 +114,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricNumericId32Definition newArmMetricNumericId32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricNumericId32Definition(appDef, name, units, usage, id);
@@ -123,7 +123,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricNumericId64Definition newArmMetricNumericId64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricNumericId64Definition(appDef, name, units, usage, id);
@@ -132,7 +132,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmMetricString32Definition newArmMetricString32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         id = ArmAPIUtil.checkOptional(id);
 
         return new LTMetricString32Definition(appDef, name, units, usage, id);
@@ -150,14 +150,14 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
 
         for (int i = 0; i < 6; i++)
         {
-            if (cleanDefinitions[i] != null && (cleanDefinitions[i] instanceof ArmMetricString32Definition || ((LTObject)cleanDefinitions[i]).isBad()))
+            if (cleanDefinitions[i] != null && (cleanDefinitions[i] instanceof ArmMetricString32Definition || ((LTObject) cleanDefinitions[i]).isBad()))
             {
                 StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
                 break;
             }
         }
 
-        if (cleanDefinitions[6] != null && !(cleanDefinitions[6] instanceof ArmMetricString32Definition|| ((LTObject)cleanDefinitions[6]).isBad()))
+        if (cleanDefinitions[6] != null && !(cleanDefinitions[6] instanceof ArmMetricString32Definition || ((LTObject) cleanDefinitions[6]).isBad()))
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
         }
@@ -168,7 +168,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
     public ArmTransactionWithMetricsDefinition newArmTransactionWithMetricsDefinition(ArmApplicationDefinition appDef, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition definition, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequired(name);
+        name = ArmAPIUtil.checkRequiredName(name);
         identityProperties = ArmAPIUtil.checkOptional(identityProperties);
         definition = ArmAPIUtil.checkOptional(definition);
         id = ArmAPIUtil.checkOptional(id);
@@ -233,13 +233,13 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
 
         for (int i = 0; i < 6; i++)
         {
-            if (cleanMetrics[i] != null && (cleanMetrics[i] instanceof ArmMetricString32 || ((LTObject)cleanMetrics[i]).isBad()))
+            if (cleanMetrics[i] != null && (cleanMetrics[i] instanceof ArmMetricString32 || ((LTObject) cleanMetrics[i]).isBad()))
             {
                 StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
             }
         }
 
-        if (cleanMetrics[6] != null && !(cleanMetrics[6] instanceof ArmMetricString32 || ((LTObject)cleanMetrics[6]).isBad()))
+        if (cleanMetrics[6] != null && !(cleanMetrics[6] instanceof ArmMetricString32 || ((LTObject) cleanMetrics[6]).isBad()))
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
         }

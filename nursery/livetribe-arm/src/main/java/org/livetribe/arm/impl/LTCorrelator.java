@@ -16,30 +16,34 @@
  */
 package org.livetribe.arm.impl;
 
-import org.opengroup.arm40.metric.ArmMetricDefinition;
-import org.opengroup.arm40.metric.ArmMetricGauge32;
+import org.opengroup.arm40.transaction.ArmCorrelator;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGauge32 extends LTAbstractMetricBase implements ArmMetricGauge32
+class LTCorrelator extends LTToken implements ArmCorrelator
 {
-    private int metric;
+    private final boolean agentTrace;
+    private final boolean applicationTrace;
 
-    LTMetricGauge32(ArmMetricDefinition definition)
+    LTCorrelator(byte[] id)
     {
-        super(definition);
+        super(id);
+
+        assert id.length >= 4;
+
+        this.agentTrace = (id[3] & 0x40) != 0;
+        this.applicationTrace = (id[3] & 0x20) != 0;
     }
 
-    public int get()
+    public boolean isAgentTrace()
     {
-        return metric;
+        return agentTrace;
     }
 
-    public int set(int value)
+    public boolean isApplicationTrace()
     {
-        metric = value;
-        return 0;
+        return applicationTrace;
     }
 }

@@ -8,5 +8,7 @@ import org.livetribe.arm.GeneralErrorCodes;
  */
 public interface TranReportErrorCodes extends GeneralErrorCodes
 {
-    public static final int APPLICATION_DEFINIITON_NULL = TRANREPORT_CODES + 0;
+    public static final int ADDRESS_NULL = TRANREPORT_CODES + 0;
+    public static final int ADDR_TOO_SHORT = TRANREPORT_CODES + 1;
+    public static final int FORMAT_ZERO = TRANREPORT_CODES + 2;
 }

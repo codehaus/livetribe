@@ -16,30 +16,26 @@
  */
 package org.livetribe.arm.impl;
 
-import org.opengroup.arm40.metric.ArmMetricDefinition;
-import org.opengroup.arm40.metric.ArmMetricGauge32;
+import org.opengroup.arm40.tranreport.ArmApplicationRemote;
+import org.opengroup.arm40.tranreport.ArmSystemAddress;
+import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGauge32 extends LTAbstractMetricBase implements ArmMetricGauge32
+public class LTApplicationRemote extends LTApplication implements ArmApplicationRemote
 {
-    private int metric;
+    private final ArmSystemAddress systemAddress;
 
-    LTMetricGauge32(ArmMetricDefinition definition)
+    public LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
-        super(definition);
+        super(definition, group, instance, contextValues);
+        this.systemAddress = systemAddress;
     }
 
-    public int get()
+    public ArmSystemAddress getSystemAddress()
     {
-        return metric;
-    }
-
-    public int set(int value)
-    {
-        metric = value;
-        return 0;
+        return systemAddress;
     }
 }

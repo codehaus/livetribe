@@ -16,8 +16,10 @@
  */
 package org.livetribe.arm.impl;
 
+import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
-import org.opengroup.arm40.transaction.ArmUser;
+import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
+import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
 import org.livetribe.arm.LTAbstractObject;
 
@@ -25,24 +27,38 @@ import org.livetribe.arm.LTAbstractObject;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTUser extends LTAbstractObject implements ArmUser
+class LTTransactionDefinition extends LTAbstractObject implements ArmTransactionDefinition
 {
+    private final ArmApplicationDefinition appDef;
     private final String name;
+    private final ArmIdentityPropertiesTransaction idPropsTransaction;
     private final ArmID id;
 
-    LTUser(String name, ArmID id)
+    LTTransactionDefinition(ArmApplicationDefinition appDef, String name, ArmIdentityPropertiesTransaction idPropsTransaction, ArmID id)
     {
+        this.appDef = appDef;
         this.name = name;
+        this.idPropsTransaction = idPropsTransaction;
         this.id = id;
     }
 
-    public String getName()
+    public ArmApplicationDefinition getApplicationDefinition()
     {
-        return name;
+        return appDef;
     }
 
     public ArmID getID()
     {
         return id;
+    }
+
+    public ArmIdentityPropertiesTransaction getIdentityProperties()
+    {
+        return idPropsTransaction;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 }

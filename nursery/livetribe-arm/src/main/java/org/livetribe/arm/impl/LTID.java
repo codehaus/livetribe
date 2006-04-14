@@ -22,9 +22,9 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
- class LTID extends LTToken implements ArmID
+class LTID extends LTToken implements ArmID
 {
-     LTID(byte[] id)
+    LTID(byte[] id)
     {
         super(id);
     }

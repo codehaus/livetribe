@@ -16,8 +16,8 @@
  */
 package org.livetribe.arm.xbean;
 
-import java.util.Set;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.springframework.aop.Advisor;
 
@@ -35,7 +35,8 @@ public class ProxyFactory extends org.springframework.aop.framework.ProxyFactory
     public void addInterfaces(Set interfaces)
     {
         Iterator iter = interfaces.iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext())
+        {
             addInterface((Class) iter.next());
         }
     }
@@ -43,7 +44,8 @@ public class ProxyFactory extends org.springframework.aop.framework.ProxyFactory
     public void removeInterfaces(Set interfaces)
     {
         Iterator iter = interfaces.iterator();
-        while (iter.hasNext()){
+        while (iter.hasNext())
+        {
             removeInterface((Class) iter.next());
         }
     }

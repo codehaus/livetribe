@@ -22,14 +22,15 @@ import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
+import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
-import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
+import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
+import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
 import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.LTAbstractObject;
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
@@ -47,6 +48,8 @@ class ArmAPIUtil implements GeneralErrorCodes
     public static final LTAbstractMetricBase BAD_METRIC;
     public static final LTAbstractMetricBase[] BAD_METRICS;
     public static final LTMetricGroup BAD_METRIC_GROUP;
+    public static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
+    public static final LTTransactionDefinition BAD_TRANS_DEF;
 
     static
     {
@@ -113,9 +116,35 @@ class ArmAPIUtil implements GeneralErrorCodes
                 return true;
             }
         };
+
+        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction(null, null, null, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public boolean isValid()
+            {
+                return false;
+            }
+        };
+
+        BAD_TRANS_DEF = new LTTransactionDefinition(BAD_APP_DEF, "", BAD_ID_PROPS_TRANS, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public boolean isValid()
+            {
+                return false;
+            }
+        };
     }
 
-    static String checkRequired(String name)
+    static String checkRequiredName(String name)
     {
         if (name == null || name.length() == 0)
         {
@@ -126,7 +155,6 @@ class ArmAPIUtil implements GeneralErrorCodes
         if (name.length() > 127)
         {
             StaticArmAPIMonitor.warning(GeneralErrorCodes.NAME_LENGTH_LARGE);
-            name = name.substring(0, 126);
         }
 
         return name;
@@ -175,6 +203,21 @@ class ArmAPIUtil implements GeneralErrorCodes
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
         return (ArmApplication) base;
+    }
+
+    static ArmTransactionDefinition checkRequired(ArmTransactionDefinition definition)
+    {
+        LTObject base = (LTObject) definition;
+        if (base == null)
+        {
+            StaticArmAPIMonitor.error(TransactionErrorCodes.TRANS_DEF_NULL);
+            base = BAD_TRANS_DEF;
+        }
+        else
+        {
+            if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        }
+        return (ArmTransactionDefinition) base;
     }
 
     static ArmTransactionWithMetricsDefinition checkRequired(ArmTransactionWithMetricsDefinition definition)
@@ -233,5 +276,59 @@ class ArmAPIUtil implements GeneralErrorCodes
         LTObject base = (LTObject) metricGroupDef;
         if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         return metricGroupDef;
+    }
+
+    static String checkOptional255(String name)
+    {
+        if (name != null && name.length() > 255)
+        {
+            StaticArmAPIMonitor.warning(GeneralErrorCodes.GROUP_LENGTH_LARGE);
+        }
+        return name;
+    }
+
+    static String[] checkOptional(ArmApplicationDefinition appDef, String[] contextValues)
+    {
+        if (contextValues == null) contextValues = new String[0];
+
+        if (contextValues.length > 20) StaticArmAPIMonitor.warning(GeneralErrorCodes.CTX_VAL_ARRAY_LONG);
+
+        String[] cleanValues = new String[20];
+
+        ArmIdentityProperties props = appDef.getIdentityProperties();
+        if (props != null)
+        {
+            System.arraycopy(contextValues, 0, cleanValues, 0, Math.min(contextValues.length, 20));
+
+            for (int i = 0; i < 20; i++)
+            {
+                if (props.getContextName(i) == null) cleanValues[i] = null;
+            }
+        }
+
+        return cleanValues;
+    }
+
+    static ArmSystemAddress checkOptional(ArmSystemAddress systemAddress)
+    {
+        LTObject base = (LTObject) systemAddress;
+        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        return systemAddress;
+    }
+
+    static String[] cleanIdProps(String[] idProps)
+    {
+        String[] cleanProps = new String[20];
+        System.arraycopy(idProps, 0, cleanProps, 0, Math.min(20, idProps.length));
+
+        for (int i = 0; i < 20; i++)
+        {
+            if (cleanProps[i] != null && cleanProps[i].length() > 127)
+            {
+                StaticArmAPIMonitor.warning(TransactionErrorCodes.ID_PROP_TOO_LONG);
+            }
+        }
+
+        return cleanProps;
     }
 }

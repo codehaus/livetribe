@@ -18,8 +18,6 @@ package org.livetribe.arm;
 
 import org.opengroup.arm40.transaction.ArmErrorCallback;
 
-import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
-
 
 /**
  * @version $Revision: $ $Date: $
