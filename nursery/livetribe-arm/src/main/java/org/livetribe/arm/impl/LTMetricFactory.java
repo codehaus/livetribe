@@ -176,4 +176,14 @@ public class LTMetricFactory extends LTFacadeFactoryBase implements ArmMetricFac
     {
         return factoryProxy.newArmTransactionWithMetrics(app, definition, group);
     }
+
+    public int getErrorCode()
+    {
+        return factoryProxy.getErrorCode();
+    }
+
+    public int setErrorCode(int errorCode)
+    {
+        return factoryProxy.setErrorCode(errorCode);
+    }
 }

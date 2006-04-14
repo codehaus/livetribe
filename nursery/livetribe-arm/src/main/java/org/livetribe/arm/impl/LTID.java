@@ -14,14 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.impl;
+
+import org.opengroup.arm40.transaction.ArmID;
 
 
 /**
- * This interfaces serves as a tag for invalid objects.
- *
  * @version $Revision: $ $Date: $
  */
-public interface LTInvalidObject
+ class LTID extends LTToken implements ArmID
 {
+     LTID(byte[] id)
+    {
+        super(id);
+    }
 }
