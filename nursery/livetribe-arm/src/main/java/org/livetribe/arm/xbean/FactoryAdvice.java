@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmInterface;
@@ -31,7 +30,6 @@ import org.livetribe.arm.GeneralErrorCodes;
 import org.livetribe.arm.LTAbstractFactoryBase;
 import org.livetribe.arm.LTAbstractObject;
 import org.livetribe.arm.LTObject;
-import org.livetribe.arm.util.ArmAPIMonitor;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 import org.livetribe.util.WeakHashSet;
 
@@ -70,16 +68,19 @@ public class FactoryAdvice extends AbstractAdvice
             if (rval instanceof ArmInterface)
             {
                 Set interfaces = collectInterfaces(rval.getClass());
-                try
+                synchronized (proxyFactory)
                 {
-                    proxyFactory.addInterfaces(interfaces);
-                    proxyFactory.setTarget(rval);
+                    try
+                    {
+                        proxyFactory.addInterfaces(interfaces);
+                        proxyFactory.setTarget(rval);
 
-                    rval = proxyFactory.getProxy();
-                }
-                finally
-                {
-                    proxyFactory.removeInterfaces(interfaces);
+                        rval = proxyFactory.getProxy();
+                    }
+                    finally
+                    {
+                        proxyFactory.removeInterfaces(interfaces);
+                    }
                 }
             }
         }
