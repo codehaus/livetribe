@@ -41,7 +41,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)bad).isBad());
+        assertTrue(((LTObject) bad).isBad());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);
@@ -59,7 +59,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)bad).isBad());
+        assertTrue(((LTObject) bad).isBad());
         assertSame(app, ((LTMetricDefinition) bad).getAppDef());
 
         bad.getID();
@@ -88,7 +88,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         assertEquals("newArmMetricCounter32Definition", result[0]);
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)bad).isBad());
+        assertTrue(((LTObject) bad).isBad());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);
@@ -107,15 +107,12 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         assertEquals("getUsage", result[0]);
     }
 
-    //TODO: uncomment
-    public void XtestNewArmMetricGroupDefinition()
+    public void testNewArmMetricGroupDefinition()
     {
-        ArmMetricGroupDefinition def = factory.newArmMetricGroupDefinition(null);
+        ArmMetricGroupDefinition bad = factory.newArmMetricGroupDefinition(null);
 
-        assertTrue(def.getErrorCode() == 0);
+        assertTrue(bad.getErrorCode() == 0);
         assertTrue(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)def).isBad());
-
 
         final String[] result = new String[1];
         factory.setErrorCallback(new ArmErrorCallback()
@@ -128,38 +125,38 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
         ArmMetricDefinition[] definitions = new ArmMetricDefinition[7];
 
-        definitions[0] = null;// new LTMetricString32Definition();
+        definitions[0] = new LTMetricString32Definition(null, null, null, (short) 0, null);
 
-        def = factory.newArmMetricGroupDefinition(definitions);
+        bad = factory.newArmMetricGroupDefinition(definitions);
 
         assertEquals("newArmMetricGroupDefinition", result[0]);
-        assertFalse(def.getErrorCode() == 0);
+        assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)def).isBad());
+        assertTrue(((LTObject) bad).isBad());
 
-        def.getMetricDefinition(0);
-        assertFalse(def.getErrorCode() == 0);
+        bad.getMetricDefinition(0);
+        assertFalse(bad.getErrorCode() == 0);
         assertEquals("getMetricDefinition", result[0]);
 
-        definitions[0] = null;// new LTMetricCounter32Definition();
+        definitions[0] = new LTMetricCounter32Definition(null, null, null, (short) 0, null);
 
-        def = factory.newArmMetricGroupDefinition(definitions);
+        ArmMetricGroupDefinition good = factory.newArmMetricGroupDefinition(definitions);
 
-        assertTrue(def.getErrorCode() == 0);
+        assertTrue(good.getErrorCode() == 0);
         assertTrue(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)def).isBad());
+        assertFalse(((LTObject) bad).isBad());
 
-        definitions[6] =null;// new LTMetricCounter32Definition();
+        definitions[6] = new LTMetricCounter32Definition(null, null, null, (short) 0, null);
 
-        def = factory.newArmMetricGroupDefinition(definitions);
+        bad = factory.newArmMetricGroupDefinition(definitions);
 
         assertEquals("newArmMetricGroupDefinition", result[0]);
-        assertFalse(def.getErrorCode() == 0);
+        assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject)def).isBad());
+        assertTrue(((LTObject) bad).isBad());
 
-        def.getMetricDefinition(0);
-        assertFalse(def.getErrorCode() == 0);
+        bad.getMetricDefinition(0);
+        assertFalse(bad.getErrorCode() == 0);
         assertEquals("getMetricDefinition", result[0]);
     }
 

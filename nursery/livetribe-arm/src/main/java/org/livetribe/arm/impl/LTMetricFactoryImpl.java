@@ -150,14 +150,14 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
 
         for (int i = 0; i < 6; i++)
         {
-            if (cleanDefinitions[i] != null && (cleanDefinitions[i] instanceof ArmMetricString32Definition || ((LTObject)cleanDefinitions[6]).isBad()))
+            if (cleanDefinitions[i] != null && (cleanDefinitions[i] instanceof ArmMetricString32Definition || ((LTObject)cleanDefinitions[i]).isBad()))
             {
                 StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
                 break;
             }
         }
 
-        if ((cleanDefinitions[6] != null && !(cleanDefinitions[6] instanceof ArmMetricString32Definition) || ((LTObject)cleanDefinitions[6]).isBad()))
+        if (cleanDefinitions[6] != null && !(cleanDefinitions[6] instanceof ArmMetricString32Definition|| ((LTObject)cleanDefinitions[6]).isBad()))
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
         }
@@ -233,13 +233,13 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
 
         for (int i = 0; i < 6; i++)
         {
-            if ((cleanMetrics[i] != null && (cleanMetrics[i] instanceof ArmMetricString32) || ((LTObject)cleanMetrics[i]).isBad()))
+            if (cleanMetrics[i] != null && (cleanMetrics[i] instanceof ArmMetricString32 || ((LTObject)cleanMetrics[i]).isBad()))
             {
                 StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
             }
         }
 
-        if ((cleanMetrics[6] != null && !(cleanMetrics[6] instanceof ArmMetricString32) || ((LTObject)cleanMetrics[6]).isBad()))
+        if (cleanMetrics[6] != null && !(cleanMetrics[6] instanceof ArmMetricString32 || ((LTObject)cleanMetrics[6]).isBad()))
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
         }
