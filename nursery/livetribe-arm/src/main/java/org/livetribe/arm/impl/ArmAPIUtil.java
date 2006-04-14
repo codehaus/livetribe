@@ -30,6 +30,7 @@ import org.opengroup.arm40.transaction.ArmIdentityProperties;
 
 import org.livetribe.arm.GeneralErrorCodes;
 import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
@@ -133,7 +134,7 @@ class ArmAPIUtil implements GeneralErrorCodes
 
     static ArmApplicationDefinition checkRequired(ArmApplicationDefinition appDef)
     {
-        LTApplicationDefinition base = (LTApplicationDefinition) appDef;
+        LTObject base = (LTObject) appDef;
         if (base == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.APPLICATION_DEFINIITON_NULL);
@@ -143,12 +144,12 @@ class ArmAPIUtil implements GeneralErrorCodes
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return base;
+        return (ArmApplicationDefinition) base;
     }
 
     static ArmMetricDefinition checkRequired(ArmMetricDefinition metricDef)
     {
-        LTAbstractMetricDefinition base = (LTAbstractMetricDefinition) metricDef;
+        LTObject base = (LTObject) metricDef;
         if (base == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_DEFINIITON_NULL);
@@ -158,12 +159,12 @@ class ArmAPIUtil implements GeneralErrorCodes
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return base;
+        return (ArmMetricDefinition) base;
     }
 
     static ArmApplication checkRequired(ArmApplication app)
     {
-        LTApplication base = (LTApplication) app;
+        LTObject base = (LTObject) app;
         if (app == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.APPLICATION_NULL);
@@ -173,12 +174,12 @@ class ArmAPIUtil implements GeneralErrorCodes
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return base;
+        return (ArmApplication) base;
     }
 
     static ArmTransactionWithMetricsDefinition checkRequired(ArmTransactionWithMetricsDefinition definition)
     {
-        LTTransactionWithMetricsDefinition base = (LTTransactionWithMetricsDefinition) definition;
+        LTObject base = (LTObject) definition;
         if (definition == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.TRN_W_METRICS_DEFINITION_NULL);
@@ -188,12 +189,12 @@ class ArmAPIUtil implements GeneralErrorCodes
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return base;
+        return (ArmTransactionWithMetricsDefinition) base;
     }
 
     static ArmMetricGroup checkRequired(ArmMetricGroup group)
     {
-        LTMetricGroup base = (LTMetricGroup) group;
+        LTObject base = (LTObject) group;
         if (group == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GROUP_NULL);
@@ -203,33 +204,33 @@ class ArmAPIUtil implements GeneralErrorCodes
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return base;
+        return (ArmMetricGroup) base;
     }
 
     static ArmID checkOptional(ArmID id)
     {
-        LTAbstractObject base = (LTAbstractObject) id;
+        LTObject base = (LTObject) id;
         if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         return id;
     }
 
     static ArmIdentityProperties checkOptional(ArmIdentityProperties id)
     {
-        LTAbstractObject base = (LTAbstractObject) id;
+        LTObject base = (LTObject) id;
         if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         return id;
     }
 
     static ArmIdentityPropertiesTransaction checkOptional(ArmIdentityPropertiesTransaction id)
     {
-        LTAbstractObject base = (LTAbstractObject) id;
+        LTObject base = (LTObject) id;
         if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         return id;
     }
 
     static ArmMetricGroupDefinition checkOptional(ArmMetricGroupDefinition metricGroupDef)
     {
-        LTAbstractObject base = (LTAbstractObject) metricGroupDef;
+        LTObject base = (LTObject) metricGroupDef;
         if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         return metricGroupDef;
     }

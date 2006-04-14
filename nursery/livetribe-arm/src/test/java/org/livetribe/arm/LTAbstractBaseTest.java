@@ -55,9 +55,5 @@ public class LTAbstractBaseTest extends TestCase
 
     static class MockFactory extends LTAbstractFactoryBase
     {
-        protected String getFactoryInterfaceName()
-        {
-            return "org.opengroup.arm40.mock.ArmMockFactory";
-        }
     }
 }
