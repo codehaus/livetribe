@@ -337,7 +337,7 @@ class ArmAPIUtil implements GeneralErrorCodes
         return cleanProps;
     }
 
-    static ArmCorrelator newArmCorrelator()
+    static ArmCorrelator newArmCorrelator(boolean trace)
     {
         byte[] b = Factory.getUuidGen().uuidgen();
         int length = b.length + 4;
@@ -345,6 +345,7 @@ class ArmAPIUtil implements GeneralErrorCodes
 
         cleanBytes[0] = (byte) (length >> 8);
         cleanBytes[1] = (byte) (length);
+        if (trace)cleanBytes[3] |= 0xC0;
 
         System.arraycopy(b, 0, cleanBytes, 4, b.length);
 

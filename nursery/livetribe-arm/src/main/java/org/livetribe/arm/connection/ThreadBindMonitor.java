@@ -16,23 +16,13 @@
  */
 package org.livetribe.arm.connection;
 
-import org.opengroup.arm40.transaction.ArmUser;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface Connection
+public interface ThreadBindMonitor
 {
-    public void start(byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI);
+    public void bind();
 
-    public void update(byte[] correlator);
-
-    public void block(byte[] correlator, long handle);
-
-    public void unblocked(byte[] correlator, long handle);
-
-    public void stop(byte[] correlator, long end, int status, String message);
-
-    public void reset(byte[] correlator);
+    public void unbind();
 }

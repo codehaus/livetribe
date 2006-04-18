@@ -14,53 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.util;
+package org.livetribe.arm.connection;
 
-import org.opengroup.arm40.transaction.ArmInterface;
+import org.livetribe.arm.util.ArmAPIMonitor;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public final class StaticArmAPIMonitor
+public final class StaticThreadBindMonitor
 {
-    private static final ArmAPIMonitorBroadcaster apiMonitor = new ArmAPIMonitorBroadcaster();
+    private static final ThreadBindMonitorBroadcaster threadMonitor = new ThreadBindMonitorBroadcaster();
 
-    private StaticArmAPIMonitor()
+    private StaticThreadBindMonitor()
     {
     }
 
-    public static void addArmAPIMonitor(ArmAPIMonitor monitor)
+    public static void addThreadMonitor(ThreadBindMonitor monitor)
     {
         if (monitor == null) throw new NullPointerException("monitor is null");
-        apiMonitor.addArmAPIMonitor(monitor);
+        threadMonitor.addThreadMonitor(monitor);
     }
 
-    public static void removeArmAPIMonitor(ArmAPIMonitor monitor)
+    public static void removeThredaMonitor(ThreadBindMonitor monitor)
     {
         if (monitor == null) throw new NullPointerException("monitor is null");
-        apiMonitor.removeArmAPIMonitor(monitor);
+        threadMonitor.removeThredaMonitor(monitor);
     }
 
-    public static void begin(ArmInterface factory)
+    public static void bind()
     {
-        apiMonitor.begin(factory);
+        threadMonitor.bind();
     }
 
-    public static int warning(int code)
+    public static void unbind()
     {
-        apiMonitor.warning(code);
-        return code;
-    }
-
-    public static int error(int code)
-    {
-        apiMonitor.error(code);
-        return code;
-    }
-
-    public static void end()
-    {
-        apiMonitor.end();
+        threadMonitor.unbind();
     }
 }

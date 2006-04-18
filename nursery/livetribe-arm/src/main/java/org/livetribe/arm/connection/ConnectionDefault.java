@@ -16,6 +16,8 @@
  */
 package org.livetribe.arm.connection;
 
+import org.opengroup.arm40.transaction.ArmUser;
+
 
 /**
  * @version $Revision: $ $Date: $
@@ -23,6 +25,11 @@ package org.livetribe.arm.connection;
 public class ConnectionDefault implements Connection
 {
     public void start(byte[] correlator, long start, byte[] parent)
+    {
+        //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void start(byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
     {
         //TODO: change body of implemented methods use File | Settings | File Templates.
     }
@@ -37,7 +44,7 @@ public class ConnectionDefault implements Connection
         //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void unblock(byte[] correlator, long handle)
+    public void unblocked(byte[] correlator, long handle)
     {
         //TODO: change body of implemented methods use File | Settings | File Templates.
     }
