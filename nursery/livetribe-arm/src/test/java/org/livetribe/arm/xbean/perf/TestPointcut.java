@@ -14,15 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.xbean.perf;
+
+import java.lang.reflect.Method;
+
+import org.springframework.aop.support.StaticMethodMatcherPointcut;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTObject
+public class TestPointcut extends StaticMethodMatcherPointcut
 {
-    public boolean isBad();
+    public boolean matches(Method method, Class cls)
+    {
+        return ("advised".equals(method.getName()));
+    }
 
-    public void setBad(boolean bad);
 }

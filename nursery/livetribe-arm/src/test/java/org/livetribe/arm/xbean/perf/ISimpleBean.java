@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.xbean.perf;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTObject
+public interface ISimpleBean
 {
-    public boolean isBad();
+    public void advised();
 
-    public void setBad(boolean bad);
+    public void unadvised();
 }

@@ -16,13 +16,15 @@
  */
 package org.livetribe.arm.impl;
 
-import org.opengroup.arm40.metric.ArmMetricDefinition;
+import org.opengroup.arm40.metric.ArmMetric;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTMetric
+public interface LTMetric extends ArmMetric
 {
-    public ArmMetricDefinition getDefinition();
+    public boolean isValid();
+
+    public int setValid(boolean valid);
 }

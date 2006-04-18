@@ -14,15 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.xbean.perf;
+
+import java.lang.reflect.Method;
+
+import org.springframework.aop.MethodBeforeAdvice;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTObject
+public class NoOpBeforeAdvice implements MethodBeforeAdvice
 {
-    public boolean isBad();
-
-    public void setBad(boolean bad);
+    public void before(Method method, Object[] args, Object target) throws Throwable
+    {
+        // no-op
+    }
 }

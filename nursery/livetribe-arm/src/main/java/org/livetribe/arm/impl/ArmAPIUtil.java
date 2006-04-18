@@ -25,11 +25,14 @@ import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
 import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
+import org.opengroup.arm40.transaction.ArmConstants;
+import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
+import org.livetribe.arm.Factory;
 import org.livetribe.arm.GeneralErrorCodes;
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
@@ -318,6 +321,8 @@ class ArmAPIUtil implements GeneralErrorCodes
 
     static String[] cleanIdProps(String[] idProps)
     {
+        if (idProps == null) idProps = new String[0];
+
         String[] cleanProps = new String[20];
         System.arraycopy(idProps, 0, cleanProps, 0, Math.min(20, idProps.length));
 
@@ -331,4 +336,50 @@ class ArmAPIUtil implements GeneralErrorCodes
 
         return cleanProps;
     }
+
+    static ArmCorrelator newArmCorrelator()
+    {
+        byte[] b = Factory.getUuidGen().uuidgen();
+        int length = b.length + 4;
+        byte[] cleanBytes = new byte[length];
+
+        cleanBytes[0] = (byte) (length >> 8);
+        cleanBytes[1] = (byte) (length);
+
+        System.arraycopy(b, 0, cleanBytes, 4, b.length);
+
+        return new LTCorrelator(cleanBytes);
+    }
+
+    static ArmCorrelator newArmCorrelator(byte[] corrBytes)
+    {
+        return newArmCorrelator(corrBytes, 0);
+    }
+
+    static ArmCorrelator newArmCorrelator(byte[] corrBytes, int offset)
+    {
+        if (corrBytes == null || corrBytes.length < offset + 4)
+        {
+            offset = 0;
+
+            corrBytes = new byte[4];
+            corrBytes[1] = 4;
+
+            StaticArmAPIMonitor.error(TransactionErrorCodes.TOKEN_TOO_SHORT);
+        }
+
+        int length = corrBytes[offset] << 8 | corrBytes[offset + 1];
+
+        if (corrBytes.length < offset + length || length > ArmConstants.CORR_MAX_LENGTH)
+        {
+            length = 0;
+            StaticArmAPIMonitor.error(TransactionErrorCodes.TOKEN_TOO_LONG);
+        }
+
+        byte[] cleanBytes = new byte[length];
+        System.arraycopy(corrBytes, offset, cleanBytes, 0, length);
+
+        return new LTCorrelator(cleanBytes);
+    }
+
 }

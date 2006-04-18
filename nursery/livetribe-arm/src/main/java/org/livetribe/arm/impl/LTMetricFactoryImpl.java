@@ -223,9 +223,9 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
 
     public synchronized ArmMetricGroup newArmMetricGroup(ArmMetricGroupDefinition groupDefinition, ArmMetric[] metrics)
     {
-        if (metrics == null) metrics = new ArmMetric[0];
+        if (metrics == null) metrics = new LTAbstractMetricBase[0];
 
-        LTAbstractMetricBase[] cleanMetrics = new LTAbstractMetricBase[7];
+        LTMetric[] cleanMetrics = new LTMetric[7];
 
         System.arraycopy(metrics, 0, cleanMetrics, 0, Math.min(metrics.length, 7));
 

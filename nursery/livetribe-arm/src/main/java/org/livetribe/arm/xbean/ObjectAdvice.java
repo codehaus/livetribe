@@ -16,65 +16,30 @@
  */
 package org.livetribe.arm.xbean;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.opengroup.arm40.transaction.ArmErrorCallback;
-import org.opengroup.arm40.transaction.ArmInterface;
 
 import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class ObjectAdvice extends AbstractAdvice
+public class ObjectAdvice implements MethodInterceptor
 {
     public Object invoke(MethodInvocation invocation) throws Throwable
     {
-        ArmInterface target = (ArmInterface) invocation.getThis();
         Object rval = null;
         try
         {
-            StaticArmAPIMonitor.begin(target);
-            if (invocation.getMethod().getDeclaringClass() != ArmInterface.class)
-            {
-                target.setErrorCode(GeneralErrorCodes.SUCCESS);
-            }
-
             rval = invocation.proceed();
-
-            if (((LTObject) target).isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
         catch (Throwable t)
         {
             StaticArmAPIMonitor.error(GeneralErrorCodes.UNEXPECTED_ERROR);
         }
-        finally
-        {
-            if (invocation.getMethod().getDeclaringClass() != ArmInterface.class && isError())
-            {
-                target.setErrorCode(getErrorCode());
 
-                ArmErrorCallback callback = LTAbstractFactoryBase.getCallback();
-                if (callback != null)
-                {
-                    try
-                    {
-                        callback.errorCodeSet(target,
-                                              invocation.getMethod().getDeclaringClass().getName(),
-                                              invocation.getMethod().getName());
-                    }
-                    catch (Throwable ignore)
-                    {
-                        // We're notifying the client, they should be nice to us...
-                    }
-                }
-            }
-
-            StaticArmAPIMonitor.end();
-        }
         return rval;
     }
 }

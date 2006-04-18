@@ -18,7 +18,6 @@ package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
-import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
@@ -63,28 +62,7 @@ public class LTTransactionFactoryImpl extends LTAbstractFactoryBase implements A
 
     public ArmCorrelator newArmCorrelator(byte[] corrBytes, int offset)
     {
-        if (corrBytes == null || corrBytes.length < offset + 4)
-        {
-            offset = 0;
-
-            corrBytes = new byte[4];
-            corrBytes[1] = 4;
-
-            StaticArmAPIMonitor.error(TOKEN_TOO_SHORT);
-        }
-
-        int length = corrBytes[offset] << 8 | corrBytes[offset + 1];
-
-        if (corrBytes.length < offset + length || length > ArmConstants.CORR_MAX_LENGTH)
-        {
-            length = 0;
-            StaticArmAPIMonitor.error(TOKEN_TOO_LONG);
-        }
-
-        byte[] cleanBytes = new byte[length];
-        System.arraycopy(corrBytes, offset, cleanBytes, 0, length);
-
-        return new LTCorrelator(cleanBytes);
+        return ArmAPIUtil.newArmCorrelator(corrBytes, offset);
     }
 
     public ArmID newArmID(byte[] idBytes)

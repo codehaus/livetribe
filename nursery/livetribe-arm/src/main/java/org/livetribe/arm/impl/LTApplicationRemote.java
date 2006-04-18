@@ -24,11 +24,11 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTApplicationRemote extends LTApplication implements ArmApplicationRemote
+class LTApplicationRemote extends LTApplication implements ArmApplicationRemote
 {
     private final ArmSystemAddress systemAddress;
 
-    public LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
+    LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
         super(definition, group, instance, contextValues);
         this.systemAddress = systemAddress;

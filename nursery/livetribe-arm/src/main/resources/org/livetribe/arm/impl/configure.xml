@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
+    <bean id="armAPIMonitorAdvisor" class="org.livetribe.arm.xbean.ArmAPIMonitorAdvisor"/>
+    <bean id="errorCheckingAdvisor" class="org.livetribe.arm.xbean.ErrorCheckingAdvisor"/>
+    <bean id="invalidObjectAdvisor" class="org.livetribe.arm.xbean.InvalidObjectAdvisor"/>
     <bean id="objectAdvisor" class="org.livetribe.arm.xbean.ObjectAdvisor"/>
 
     <bean id="proxyFactory" class="org.livetribe.arm.xbean.ProxyFactory">
-        <property name="advisor">
-            <ref local="objectAdvisor"/>
+        <property name="advisors">
+            <list>
+                <ref local="armAPIMonitorAdvisor"/>
+                <ref local="errorCheckingAdvisor"/>
+                <ref local="invalidObjectAdvisor"/>
+                <ref local="objectAdvisor"/>
+            </list>
         </property>
     </bean>
 
-    <bean id="factoryInterceptor" class="org.livetribe.arm.xbean.FactoryAdvice">
+    <bean id="factoryAdvisor" class="org.livetribe.arm.xbean.FactoryAdvisor">
         <property name="proxyFactory">
             <ref local="proxyFactory"/>
         </property>
@@ -24,7 +32,9 @@
         </property>
         <property name="interceptorNames">
             <list>
-                <value>factoryInterceptor</value>
+                <value>armAPIMonitorAdvisor</value>
+                <value>errorCheckingAdvisor</value>
+                <value>factoryAdvisor</value>
             </list>
         </property>
     </bean>
@@ -38,7 +48,9 @@
         </property>
         <property name="interceptorNames">
             <list>
-                <value>factoryInterceptor</value>
+                <value>armAPIMonitorAdvisor</value>
+                <value>errorCheckingAdvisor</value>
+                <value>factoryAdvisor</value>
             </list>
         </property>
     </bean>
@@ -52,7 +64,9 @@
         </property>
         <property name="interceptorNames">
             <list>
-                <value>factoryInterceptor</value>
+                <value>armAPIMonitorAdvisor</value>
+                <value>errorCheckingAdvisor</value>
+                <value>factoryAdvisor</value>
             </list>
         </property>
     </bean>

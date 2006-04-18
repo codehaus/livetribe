@@ -29,9 +29,9 @@ import org.livetribe.arm.LTAbstractObject;
 class LTMetricGroup extends LTAbstractObject implements ArmMetricGroup
 {
     private final ArmMetricGroupDefinition groupDefinition;
-    private final LTAbstractMetricBase[] metrics;
+    private final LTMetric[] metrics;
 
-    public LTMetricGroup(ArmMetricGroupDefinition groupDefinition, LTAbstractMetricBase[] metrics)
+    public LTMetricGroup(ArmMetricGroupDefinition groupDefinition, LTMetric[] metrics)
     {
         this.groupDefinition = groupDefinition;
         this.metrics = metrics;

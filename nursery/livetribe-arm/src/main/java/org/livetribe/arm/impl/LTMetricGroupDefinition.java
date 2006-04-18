@@ -29,7 +29,7 @@ class LTMetricGroupDefinition extends LTAbstractObject implements ArmMetricGroup
 {
     private final ArmMetricDefinition[] definitions;
 
-    public LTMetricGroupDefinition(ArmMetricDefinition[] definitions)
+    LTMetricGroupDefinition(ArmMetricDefinition[] definitions)
     {
         this.definitions = definitions;
     }

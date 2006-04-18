@@ -14,15 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.opengroup.arm40;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTObject
+public class AtmCustomer
 {
-    public boolean isBad();
+    public int no;
+    public String name;
+    public int pin;
+    public double balance;
+    public String currency;
 
-    public void setBad(boolean bad);
+    public AtmCustomer(int no, String name, int pin, double balance, String currency)
+    {
+        this.no = no;
+        this.name = name;
+        this.pin = pin;
+        this.balance = balance;
+        this.currency = currency;
+    }
+
 }

@@ -14,15 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.connection;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTObject
+public interface Connection
 {
-    public boolean isBad();
+    public void start(byte[] correlator, long start, byte[] parent);
 
-    public void setBad(boolean bad);
+    public void update(byte[] correlator);
+
+    public void block(byte[] correlator, long handle);
+
+    public void unblock(byte[] correlator, long handle);
+
+    public void stop(byte[] correlator, long end, int status, String message);
+
+    public void reset(byte[] correlator);
 }

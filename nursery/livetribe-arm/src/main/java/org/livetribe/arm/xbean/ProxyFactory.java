@@ -32,6 +32,14 @@ public class ProxyFactory extends org.springframework.aop.framework.ProxyFactory
         addAdvisor(advisor);
     }
 
+    public void setAdvisors(Advisor[] advisors)
+    {
+        for (int i = 0; i < advisors.length; i++)
+        {
+            addAdvisor(advisors[i]);
+        }
+    }
+
     public void addInterfaces(Set interfaces)
     {
         Iterator iter = interfaces.iterator();

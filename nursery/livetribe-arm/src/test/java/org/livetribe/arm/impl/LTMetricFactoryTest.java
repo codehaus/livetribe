@@ -144,7 +144,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
         assertTrue(good.getErrorCode() == 0);
         assertTrue(factory.getErrorCode() == 0);
-        assertFalse(((LTObject) bad).isBad());
+        assertFalse(((LTObject) good).isBad());
 
         definitions[6] = new LTMetricCounter32Definition(null, null, null, (short) 0, null);
 

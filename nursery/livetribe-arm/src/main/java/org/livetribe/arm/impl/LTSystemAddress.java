@@ -23,12 +23,12 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTSystemAddress extends LTToken implements ArmSystemAddress
+class LTSystemAddress extends LTToken implements ArmSystemAddress
 {
     private final short format;
     private final ArmID id;
 
-    public LTSystemAddress(byte[] idBytes, short format, ArmID id)
+    LTSystemAddress(byte[] idBytes, short format, ArmID id)
     {
         super(idBytes);
         this.format = format;

@@ -14,15 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.xbean.perf;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public interface LTObject
+public class SimpleBean implements ISimpleBean
 {
-    public boolean isBad();
 
-    public void setBad(boolean bad);
+    private long dummy = 0;
+
+    public void advised()
+    {
+        dummy = System.currentTimeMillis();
+    }
+
+    public void unadvised()
+    {
+        dummy = System.currentTimeMillis();
+    }
 }

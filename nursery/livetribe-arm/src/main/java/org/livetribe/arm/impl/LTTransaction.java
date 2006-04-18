@@ -16,13 +16,18 @@
  */
 package org.livetribe.arm.impl;
 
+import java.util.Arrays;
+
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
+import org.livetribe.arm.Factory;
+import org.livetribe.arm.GeneralErrorCodes;
 import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.connection.Connection;
 
 
 /**
@@ -32,6 +37,13 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 {
     private final ArmApplication application;
     private final ArmTransactionDefinition definition;
+    private final Connection connection = Factory.getConnection();
+    private ArmCorrelator parentCorrelator = ArmAPIUtil.newArmCorrelator(null);
+    private ArmCorrelator correlator = ArmAPIUtil.newArmCorrelator(null);
+    private long start = 0;
+    private long blocked = 0;
+    private String contextURI;
+    private String[] contextValue = new String[20];
 
     LTTransaction(ArmApplication application, ArmTransactionDefinition definition)
     {
@@ -41,22 +53,31 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
     public int bindThread()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public long blocked()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        long handle;
+
+        synchronized (this)
+        {
+            handle = blocked++;
+        }
+
+        connection.block(correlator.getBytes(), handle);
+
+        return handle;
     }
 
     public ArmApplication getApplication()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return application;
     }
 
     public String getContextURIValue()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return contextURI;
     }
 
     public String getContextValue(int index)
@@ -66,12 +87,13 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
     public ArmCorrelator getCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (correlator == null) correlator = ArmAPIUtil.newArmCorrelator();
+        return correlator;
     }
 
     public ArmCorrelator getParentCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return parentCorrelator;
     }
 
     public int getStatus()
@@ -81,7 +103,7 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
     public ArmTransactionDefinition getDefinition()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return definition;
     }
 
     public ArmUser getUser()
@@ -96,17 +118,25 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
     public int reset()
     {
+        connection.reset(correlator.getBytes());
+
+        clear();
+
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
     public int setArrivalTime()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        start = System.currentTimeMillis();
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setContextURIValue(String value)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        contextURI = value;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setContextValue(int index, String value)
@@ -126,46 +156,68 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
     public int start()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return start((byte[]) null);
     }
 
     public int start(byte[] parentCorr)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return start(parentCorr, 0);
     }
 
     public int start(byte[] parentCorr, int offset)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return start(ArmAPIUtil.newArmCorrelator(parentCorr, offset));
     }
 
-    public int start(ArmCorrelator parentCorr)
+    public int start(ArmCorrelator parent)
     {
+        correlator = ArmAPIUtil.newArmCorrelator();
+        if (start == 0) start = System.currentTimeMillis();
+        parentCorrelator = parent;
+
+        connection.start(correlator.getBytes(), start, parent.getBytes());
+
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
     public int stop(int status)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return stop(status, null);
     }
 
     public int stop(int status, String diagnosticDetail)
     {
+        long end = System.currentTimeMillis();
+
+        connection.stop(correlator.getBytes(), end, status, diagnosticDetail);
+
+        clear();
+
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
     public int unbindThread()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return GeneralErrorCodes.SUCCESS;
     }
 
-    public int unblocked(long blockHandle)
+    public int unblocked(long handle)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        connection.block(correlator.getBytes(), handle);
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int update()
     {
+        connection.update(correlator.getBytes());
+
         return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    protected void clear()
+    {
+        start = 0;
+        Arrays.fill(contextValue, null);
     }
 }

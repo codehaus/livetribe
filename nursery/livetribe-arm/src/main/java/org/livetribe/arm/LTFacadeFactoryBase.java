@@ -1,5 +1,7 @@
 package org.livetribe.arm;
 
+import org.springframework.context.ApplicationContext;
+
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 
 
@@ -8,7 +10,7 @@ import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
  */
 public abstract class LTFacadeFactoryBase extends LTAbstractFactoryBase
 {
-    private final ClassPathXmlApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     public LTFacadeFactoryBase()
     {
@@ -17,7 +19,7 @@ public abstract class LTFacadeFactoryBase extends LTAbstractFactoryBase
         applicationContext = new ClassPathXmlApplicationContext(configLocation);
     }
 
-    protected ClassPathXmlApplicationContext getApplicationContext()
+    protected ApplicationContext getApplicationContext()
     {
         return applicationContext;
     }

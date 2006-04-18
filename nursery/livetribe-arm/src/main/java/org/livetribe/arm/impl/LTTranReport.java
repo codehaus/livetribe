@@ -28,12 +28,12 @@ import org.livetribe.arm.LTAbstractObject;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTTranReport extends LTAbstractObject implements ArmTranReport
+class LTTranReport extends LTAbstractObject implements ArmTranReport
 {
     private final ArmApplication app;
     private final ArmTransactionDefinition appTranDef;
 
-    public LTTranReport(ArmApplication app, ArmTransactionDefinition appTranDef)
+    LTTranReport(ArmApplication app, ArmTransactionDefinition appTranDef)
     {
         this.app = app;
         this.appTranDef = appTranDef;

@@ -21,15 +21,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmInterface;
-import org.springframework.aop.framework.Advised;
 
 import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractObject;
-import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 import org.livetribe.util.WeakHashSet;
 
@@ -37,7 +33,7 @@ import org.livetribe.util.WeakHashSet;
 /**
  * @version $Revision: $ $Date: $
  */
-public class FactoryAdvice extends AbstractAdvice
+public class FactoryAdvice implements MethodInterceptor
 {
     private ProxyFactory proxyFactory;
 
@@ -53,75 +49,36 @@ public class FactoryAdvice extends AbstractAdvice
 
     public Object invoke(MethodInvocation invocation) throws Throwable
     {
-        ArmInterface target = (ArmInterface) invocation.getThis();
         Object rval = null;
         try
         {
-            StaticArmAPIMonitor.begin(target);
-            if (invocation.getMethod().getDeclaringClass() != ArmInterface.class)
-            {
-                target.setErrorCode(GeneralErrorCodes.SUCCESS);
-            }
-
             rval = invocation.proceed();
 
             if (rval instanceof ArmInterface)
             {
                 Set interfaces = collectInterfaces(rval.getClass());
-                synchronized (proxyFactory)
-                {
-                    try
-                    {
-                        proxyFactory.addInterfaces(interfaces);
-                        proxyFactory.setTarget(rval);
+//                synchronized (proxyFactory)
+//                {
+//                    try
+//                    {
+                ProxyFactory pf = new ProxyFactory();
 
-                        rval = proxyFactory.getProxy();
-                    }
-                    finally
-                    {
-                        proxyFactory.removeInterfaces(interfaces);
-                    }
-                }
+                pf.setAdvisors(proxyFactory.getAdvisors());
+                pf.addInterfaces(interfaces);
+                pf.setTarget(rval);
+
+                rval = pf.getProxy();
+//                    }
+//                    finally
+//                    {
+//                        proxyFactory.removeInterfaces(interfaces);
+//                    }
+//                }
             }
         }
         catch (Throwable t)
         {
             StaticArmAPIMonitor.error(GeneralErrorCodes.UNEXPECTED_ERROR);
-        }
-        finally
-        {
-            if (invocation.getMethod().getDeclaringClass() != ArmInterface.class && isError())
-            {
-                int code = getErrorCode();
-                Object result = null;
-
-                if (rval instanceof LTObject)
-                {
-                    result = ((Advised) rval).getTargetSource().getTarget();
-                    ((LTAbstractObject) result).setBad(true);
-                    ((LTAbstractObject) result).setErrorCode(code);
-                }
-
-
-                target.setErrorCode(code);
-
-                ArmErrorCallback callback = LTAbstractFactoryBase.getCallback();
-                if (callback != null)
-                {
-                    try
-                    {
-                        callback.errorCodeSet(target,
-                                              invocation.getMethod().getDeclaringClass().getName(),
-                                              invocation.getMethod().getName());
-                    }
-                    catch (Throwable ignore)
-                    {
-                        // We're notifying the client, they should be nice to us...
-                    }
-                }
-            }
-
-            StaticArmAPIMonitor.end();
         }
         return rval;
     }
