@@ -117,12 +117,7 @@
         <module>livetribe-util</module>
         <module>livetribe-webconsole</module>
         <module>livetribe-jmx</module>
-        <!--<module>livetribe-net</module>-->
-        <!--<module>livetribe-httpclient</module>-->
         <module>livetribe-slp</module>
-        <module>livetribe-snmp</module>
-        <module>livetribe-swf</module>
-        <module>livetribe-jsr223</module>
         <module>arm-spec</module>
     </modules>
 
