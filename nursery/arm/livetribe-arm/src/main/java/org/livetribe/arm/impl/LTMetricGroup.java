@@ -20,13 +20,13 @@ import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGroup extends LTAbstractObject implements ArmMetricGroup
+class LTMetricGroup extends AbstractObject implements ArmMetricGroup
 {
     private final ArmMetricGroupDefinition groupDefinition;
     private final LTMetric[] metrics;

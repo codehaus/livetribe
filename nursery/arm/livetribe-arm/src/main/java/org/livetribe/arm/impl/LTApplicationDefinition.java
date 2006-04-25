@@ -20,14 +20,17 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractIdentifiableObject;
+import org.livetribe.arm.KnitPoint;
+import org.livetribe.arm.connection.Connection;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTApplicationDefinition extends LTAbstractObject implements ArmApplicationDefinition
+class LTApplicationDefinition extends AbstractIdentifiableObject implements ArmApplicationDefinition
 {
+    private final Connection connection = KnitPoint.getConnection();
     private final String name;
     private final LTIdentityProperties identityProperties;
     private final ArmID id;
@@ -37,6 +40,13 @@ class LTApplicationDefinition extends LTAbstractObject implements ArmApplication
         this.name = name;
         this.identityProperties = (LTIdentityProperties) identityProperties;
         this.id = id;
+
+        connection.introduceApplicationDefinition(getObjectId(),
+                                                  name,
+                                                  ArmAPIUtil.extractIdNames(identityProperties),
+                                                  ArmAPIUtil.extractIdValues(identityProperties),
+                                                  ArmAPIUtil.extractCtxNames(identityProperties),
+                                                  ArmAPIUtil.extractArmId(id));
     }
 
     public void destroy()

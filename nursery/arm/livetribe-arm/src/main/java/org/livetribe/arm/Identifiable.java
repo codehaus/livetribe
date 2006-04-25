@@ -16,35 +16,10 @@
  */
 package org.livetribe.arm;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import org.opengroup.arm40.transaction.ArmInterface;
-
-
 /**
  * @version $Revision: $ $Date: $
  */
-public abstract class LTAbstractBase implements ArmInterface
+public interface Identifiable
 {
-    private int errorCode;
-
-    public int getErrorCode()
-    {
-        return errorCode;
-    }
-
-    public int setErrorCode(int errorCode)
-    {
-        this.errorCode = errorCode;
-        return 0;
-    }
-
-    public String getErrorMessage(int i)
-    {
-        Locale locale = Locale.getDefault();
-        ResourceBundle bundle = ResourceBundle.getBundle("org.livetribe.arm.LiveTribe", locale);
-
-        return bundle.getString("error_" + Integer.toHexString(i).toUpperCase());
-    }
+    public byte[] getObjectId();
 }

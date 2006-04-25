@@ -19,6 +19,7 @@ package org.livetribe.arm;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 import org.opengroup.arm40.metric.ArmMetricFactory;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
@@ -27,8 +28,6 @@ import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.springframework.context.ApplicationContext;
-
-import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 
 import org.livetribe.arm.util.ARMUtil;
 

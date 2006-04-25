@@ -20,13 +20,13 @@ import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-abstract class LTAbstractMetricDefinition extends LTAbstractObject implements ArmMetricDefinition, LTMetricDefinition
+abstract class AbstractMetricDefinition extends AbstractObject implements ArmMetricDefinition, LTMetricDefinition
 {
     private final ArmApplicationDefinition appDef;
     private final String name;
@@ -34,7 +34,7 @@ abstract class LTAbstractMetricDefinition extends LTAbstractObject implements Ar
     private final short usage;
     private final ArmID id;
 
-    LTAbstractMetricDefinition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
+    AbstractMetricDefinition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         this.appDef = appDef;
         this.name = name;

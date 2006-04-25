@@ -24,7 +24,7 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricCounterFloat32Definition extends LTAbstractMetricDefinition implements ArmMetricCounterFloat32Definition
+class LTMetricCounterFloat32Definition extends AbstractMetricDefinition implements ArmMetricCounterFloat32Definition
 {
     LTMetricCounterFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {

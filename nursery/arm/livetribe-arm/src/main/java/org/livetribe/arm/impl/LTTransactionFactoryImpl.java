@@ -27,14 +27,14 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.AbstractFactoryBase;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTTransactionFactoryImpl extends LTAbstractFactoryBase implements ArmTransactionFactory, TransactionErrorCodes
+public class LTTransactionFactoryImpl extends AbstractFactoryBase implements ArmTransactionFactory, TransactionErrorCodes
 {
     public ArmApplication newArmApplication(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues)
     {

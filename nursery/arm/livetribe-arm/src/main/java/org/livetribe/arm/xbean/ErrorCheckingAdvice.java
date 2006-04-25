@@ -8,9 +8,9 @@ import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmInterface;
 import org.springframework.aop.framework.Advised;
 
+import org.livetribe.arm.AbstractFactoryBase;
+import org.livetribe.arm.AbstractObject;
 import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.LTAbstractFactoryBase;
-import org.livetribe.arm.LTAbstractObject;
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.ArmAPIMonitor;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
@@ -48,13 +48,13 @@ public class ErrorCheckingAdvice implements MethodInterceptor
                 target.setErrorCode(errorCode);
                 if (isError() && rval instanceof LTObject)
                 {
-                    LTAbstractObject result = (LTAbstractObject) (rval instanceof Advised ? ((Advised) rval).getTargetSource().getTarget() : rval);
+                    AbstractObject result = (AbstractObject) (rval instanceof Advised ? ((Advised) rval).getTargetSource().getTarget() : rval);
 
                     result.setBad(true);
                     result.setErrorCode(errorCode);
                 }
 
-                ArmErrorCallback callback = LTAbstractFactoryBase.getCallback();
+                ArmErrorCallback callback = AbstractFactoryBase.getCallback();
                 if (callback != null)
                 {
                     try

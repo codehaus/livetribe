@@ -24,48 +24,51 @@ import org.opengroup.arm40.transaction.ArmUser;
  */
 public class ConnectionDefault implements Connection
 {
-    public void start(byte[] correlator, long start, byte[] parent)
+    public void introduceApplicationDefinition(byte[] appDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, byte[] id)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void start(byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
+    public void introduceApplication(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void update(byte[] correlator)
+    public void introduceApplicationRemote(byte[] appId, byte[] systemAddress)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void block(byte[] correlator, long handle)
+    public void introduceTransactionDefinition(byte[] transDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, String uri, byte[] id)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void unblocked(byte[] correlator, long handle)
+    public void introduceApplicationRemote(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues, byte[] systemAddress)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void update()
+    public void associateTransaction(byte[] transId, byte [] appId, byte [] transDefId)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void stop(byte[] correlator, long end, int status, String message)
+    public void start(byte[] transId, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void reset(byte[] correlator)
+    public void update(byte[] transId, byte[] correlator)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void reset()
+    public void block(byte[] transId, byte[] correlator, long handle)
     {
-        //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void unblocked(byte[] transId, byte[] correlator, long handle)
+    {
+    }
+
+    public void stop(byte[] transId, byte[] correlator, long end, int status, String message)
+    {
+    }
+
+    public void reset(byte[] transId, byte[] correlator)
+    {
     }
 }

@@ -1,5 +1,7 @@
 package org.livetribe.arm.xbean;
 
+import java.util.List;
+
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 
@@ -17,13 +19,13 @@ public class FactoryAdvisor extends DefaultPointcutAdvisor
         factoryAdvice = (FactoryAdvice) getAdvice();
     }
 
-    public ProxyFactory getProxyFactory()
+    public List getAdvisors()
     {
-        return factoryAdvice.getProxyFactory();
+        return factoryAdvice.getAdvisors();
     }
 
-    public void setProxyFactory(ProxyFactory factory)
+    public void setAdvisors(List advisors)
     {
-        factoryAdvice.setProxyFactory(factory);
+        factoryAdvice.setAdvisors(advisors);
     }
 }

@@ -47,7 +47,7 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.AbstractFactoryBase;
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
@@ -55,7 +55,7 @@ import org.livetribe.arm.util.StaticArmAPIMonitor;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMetricFactory, MetricErrorCodes
+public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetricFactory, MetricErrorCodes
 {
     public ArmMetricCounter32Definition newArmMetricCounter32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
@@ -223,7 +223,7 @@ public class LTMetricFactoryImpl extends LTAbstractFactoryBase implements ArmMet
 
     public synchronized ArmMetricGroup newArmMetricGroup(ArmMetricGroupDefinition groupDefinition, ArmMetric[] metrics)
     {
-        if (metrics == null) metrics = new LTAbstractMetricBase[0];
+        if (metrics == null) metrics = new AbstractMetricBase[0];
 
         LTMetric[] cleanMetrics = new LTMetric[7];
 

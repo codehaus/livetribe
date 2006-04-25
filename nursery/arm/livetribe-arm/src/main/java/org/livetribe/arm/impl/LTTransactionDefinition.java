@@ -21,14 +21,17 @@ import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractIdentifiableObject;
+import org.livetribe.arm.KnitPoint;
+import org.livetribe.arm.connection.Connection;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionDefinition extends LTAbstractObject implements ArmTransactionDefinition
+class LTTransactionDefinition extends AbstractIdentifiableObject implements ArmTransactionDefinition
 {
+    private final Connection connection = KnitPoint.getConnection();
     private final ArmApplicationDefinition appDef;
     private final String name;
     private final ArmIdentityPropertiesTransaction idPropsTransaction;
@@ -40,6 +43,14 @@ class LTTransactionDefinition extends LTAbstractObject implements ArmTransaction
         this.name = name;
         this.idPropsTransaction = idPropsTransaction;
         this.id = id;
+
+        connection.introduceTransactionDefinition(getObjectId(),
+                                                  name,
+                                                  ArmAPIUtil.extractIdNames(idPropsTransaction),
+                                                  ArmAPIUtil.extractIdValues(idPropsTransaction),
+                                                  ArmAPIUtil.extractCtxNames(idPropsTransaction),
+                                                  ArmAPIUtil.extractURI(idPropsTransaction),
+                                                  ArmAPIUtil.extractArmId(id));
     }
 
     public ArmApplicationDefinition getApplicationDefinition()

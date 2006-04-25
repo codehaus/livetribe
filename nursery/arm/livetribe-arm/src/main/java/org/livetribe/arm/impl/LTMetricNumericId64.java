@@ -23,7 +23,7 @@ import org.opengroup.arm40.metric.ArmMetricNumericId64;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricNumericId64 extends LTAbstractMetricBase implements ArmMetricNumericId64
+class LTMetricNumericId64 extends AbstractMetricBase implements ArmMetricNumericId64
 {
     private long metric;
 

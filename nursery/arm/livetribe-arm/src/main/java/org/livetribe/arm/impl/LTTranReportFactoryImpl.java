@@ -9,14 +9,14 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
-import org.livetribe.arm.LTAbstractFactoryBase;
+import org.livetribe.arm.AbstractFactoryBase;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTTranReportFactoryImpl extends LTAbstractFactoryBase implements ArmTranReportFactory, TranReportErrorCodes
+public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmTranReportFactory, TranReportErrorCodes
 {
     public ArmApplicationRemote newArmApplicationRemote(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {

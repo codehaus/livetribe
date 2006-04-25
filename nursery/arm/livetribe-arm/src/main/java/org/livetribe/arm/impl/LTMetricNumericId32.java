@@ -23,7 +23,7 @@ import org.opengroup.arm40.metric.ArmMetricNumericId32;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricNumericId32 extends LTAbstractMetricBase implements ArmMetricNumericId32
+class LTMetricNumericId32 extends AbstractMetricBase implements ArmMetricNumericId32
 {
     private int metric;
 

@@ -23,9 +23,10 @@ import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.Factory;
+import org.livetribe.arm.AbstractIdentifiableObject;
 import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.Identifiable;
+import org.livetribe.arm.KnitPoint;
 import org.livetribe.arm.connection.Connection;
 import org.livetribe.arm.connection.StaticThreadBindMonitor;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
@@ -34,11 +35,11 @@ import org.livetribe.arm.util.StaticArmAPIMonitor;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransaction extends LTAbstractObject implements ArmTransaction
+class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 {
     private final ArmApplication application;
     private final ArmTransactionDefinition definition;
-    private final Connection connection = Factory.getConnection();
+    private final Connection connection = KnitPoint.getConnection();
     private ArmCorrelator parentCorrelator = null;
     private ArmCorrelator correlator = ArmAPIUtil.newArmCorrelator(null);
     private int status = ArmConstants.STATUS_INVALID;
@@ -57,6 +58,10 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
         this.definition = definition;
 
         this.state = STOPPED;
+
+        connection.associateTransaction(getObjectId(),
+                                        ((Identifiable) application).getObjectId(),
+                                        ((Identifiable) definition).getObjectId());
     }
 
     public int bindThread()
@@ -259,7 +264,13 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
             if (start == 0) start = System.currentTimeMillis();
             parentCorrelator = parent;
 
-            connection.start(correlator.getBytes(), start, (parent != null ? parent.getBytes() : null), user, contextValues, contextURI);
+            connection.start(getObjectId(),
+                             correlator.getBytes(),
+                             start,
+                             (parent != null ? parent.getBytes() : null),
+                             user,
+                             contextValues,
+                             contextURI);
 
             return STARTED;
         }
@@ -284,7 +295,7 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
         State reset()
         {
-            connection.reset(correlator.getBytes());
+            connection.reset(getObjectId(), correlator.getBytes());
             start = 0;
 
             unbindThread();
@@ -313,7 +324,7 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
         {
             long end = System.currentTimeMillis();
 
-            connection.stop(correlator.getBytes(), end, code, diagnosticDetail);
+            connection.stop(getObjectId(), correlator.getBytes(), end, code, diagnosticDetail);
 
             start = 0;
 
@@ -332,14 +343,14 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
 
         void update()
         {
-            connection.update(correlator.getBytes());
+            connection.update(getObjectId(), correlator.getBytes());
         }
 
         long blocked()
         {
             long handle = blocked++;
 
-            connection.block(correlator.getBytes(), handle);
+            connection.block(getObjectId(), correlator.getBytes(), handle);
 
             return handle;
         }
@@ -347,12 +358,12 @@ class LTTransaction extends LTAbstractObject implements ArmTransaction
         void unblocked(long handle)
         {
             blocked--;
-            connection.unblocked(correlator.getBytes(), handle);
+            connection.unblocked(getObjectId(), correlator.getBytes(), handle);
         }
 
         State reset()
         {
-            connection.reset(correlator.getBytes());
+            connection.reset(getObjectId(), correlator.getBytes());
 
             start = 0;
             blocked = 1;

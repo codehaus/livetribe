@@ -20,13 +20,13 @@ import java.util.Arrays;
 
 import org.opengroup.arm40.transaction.ArmToken;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTToken extends LTAbstractObject implements ArmToken
+class LTToken extends AbstractObject implements ArmToken
 {
     private final byte[] id;
     private transient int cachedHash = 0;

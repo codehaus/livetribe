@@ -27,13 +27,13 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.LTFacadeFactoryBase;
+import org.livetribe.arm.FacadeFactoryBase;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTTransactionFactory extends LTFacadeFactoryBase implements ArmTransactionFactory
+public class LTTransactionFactory extends FacadeFactoryBase implements ArmTransactionFactory
 {
     private final ArmTransactionFactory factoryProxy;
 

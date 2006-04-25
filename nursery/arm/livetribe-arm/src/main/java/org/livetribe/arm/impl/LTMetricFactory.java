@@ -47,13 +47,13 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.LTFacadeFactoryBase;
+import org.livetribe.arm.FacadeFactoryBase;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTMetricFactory extends LTFacadeFactoryBase implements ArmMetricFactory
+public class LTMetricFactory extends FacadeFactoryBase implements ArmMetricFactory
 {
     private final ArmMetricFactory factoryProxy;
 

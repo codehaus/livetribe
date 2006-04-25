@@ -24,7 +24,7 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricNumericId64Definition extends LTAbstractMetricDefinition implements ArmMetricNumericId64Definition
+class LTMetricNumericId64Definition extends AbstractMetricDefinition implements ArmMetricNumericId64Definition
 {
     LTMetricNumericId64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {

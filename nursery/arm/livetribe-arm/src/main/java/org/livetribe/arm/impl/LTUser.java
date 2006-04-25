@@ -19,13 +19,13 @@ package org.livetribe.arm.impl;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTUser extends LTAbstractObject implements ArmUser
+class LTUser extends AbstractObject implements ArmUser
 {
     private final String name;
     private final ArmID id;

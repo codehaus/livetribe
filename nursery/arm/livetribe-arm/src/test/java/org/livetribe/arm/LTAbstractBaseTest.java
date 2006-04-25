@@ -49,11 +49,11 @@ public class LTAbstractBaseTest extends TestCase
         Locale.setDefault(saved);
     }
 
-    static class Mock extends LTAbstractObject
+    static class Mock extends AbstractObject
     {
     }
 
-    static class MockFactory extends LTAbstractFactoryBase
+    static class MockFactory extends AbstractFactoryBase
     {
     }
 }

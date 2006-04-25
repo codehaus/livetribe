@@ -19,14 +19,18 @@ package org.livetribe.arm.impl;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractIdentifiableObject;
+import org.livetribe.arm.Identifiable;
+import org.livetribe.arm.KnitPoint;
+import org.livetribe.arm.connection.Connection;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTApplication extends LTAbstractObject implements ArmApplication
+class LTApplication extends AbstractIdentifiableObject implements ArmApplication
 {
+    private final Connection connection = KnitPoint.getConnection();
     private final ArmApplicationDefinition definition;
     private final String group;
     private final String instance;
@@ -38,6 +42,10 @@ class LTApplication extends LTAbstractObject implements ArmApplication
         this.group = group;
         this.instance = instance;
         this.contextValues = contextValues;
+
+        connection.introduceApplication(getObjectId(),
+                                        ((Identifiable) definition).getObjectId(),
+                                        group, instance, contextValues);
     }
 
     public int end()

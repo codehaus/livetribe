@@ -24,13 +24,13 @@ import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractIdentifiableObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionWithMetrics extends LTAbstractObject implements ArmTransactionWithMetrics
+class LTTransactionWithMetrics extends AbstractIdentifiableObject implements ArmTransactionWithMetrics
 {
     private final ArmApplication app;
     private final ArmTransactionWithMetricsDefinition definition;

@@ -3,7 +3,7 @@ package org.livetribe.arm;
 /**
  * @version $Revision: $ $Date: $
  */
-public abstract class LTAbstractObject extends LTAbstractBase implements LTObject
+public abstract class AbstractObject extends AbstractBase implements LTObject
 {
     private boolean bad = false;
 

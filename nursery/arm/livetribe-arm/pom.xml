@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.livetribe</groupId>
-        <artifactId>livetribe</artifactId>
+        <groupId>org.livetribe.arm</groupId>
+        <artifactId>livetribe-temproot</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -47,43 +47,28 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.livetribe</groupId>
-            <artifactId>livetribe-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>backport-util-concurrent</groupId>
             <artifactId>backport-util-concurrent</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.opengroup</groupId>
-            <artifactId>ARM_4_0</artifactId>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.xbean</groupId>
             <artifactId>xbean-spring</artifactId>
-            <version>2.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>commons-pool</groupId>
-            <artifactId>commons-pool</artifactId>
-            <version>1.3</version>
+            <groupId>org.livetribe</groupId>
+            <artifactId>livetribe-util</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>commons-pool</groupId>
-            <artifactId>commons-pool</artifactId>
-            <version>1.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.1_3</version>
+            <groupId>org.opengroup</groupId>
+            <artifactId>ARM_4_0</artifactId>
         </dependency>
 
     </dependencies>

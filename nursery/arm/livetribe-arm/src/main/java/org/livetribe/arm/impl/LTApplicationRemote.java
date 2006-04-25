@@ -20,18 +20,24 @@ import org.opengroup.arm40.tranreport.ArmApplicationRemote;
 import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 
+import org.livetribe.arm.KnitPoint;
+import org.livetribe.arm.connection.Connection;
+
 
 /**
  * @version $Revision: $ $Date: $
  */
 class LTApplicationRemote extends LTApplication implements ArmApplicationRemote
 {
+    private final Connection connection = KnitPoint.getConnection();
     private final ArmSystemAddress systemAddress;
 
     LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
         super(definition, group, instance, contextValues);
         this.systemAddress = systemAddress;
+
+        connection.introduceApplicationRemote(getObjectId(), ArmAPIUtil.extractArmSystemAddress(systemAddress));
     }
 
     public ArmSystemAddress getSystemAddress()

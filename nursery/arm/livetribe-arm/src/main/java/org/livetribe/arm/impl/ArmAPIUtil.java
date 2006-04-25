@@ -32,8 +32,8 @@ import org.opengroup.arm40.transaction.ArmIdentityProperties;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
-import org.livetribe.arm.Factory;
 import org.livetribe.arm.GeneralErrorCodes;
+import org.livetribe.arm.KnitPoint;
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
@@ -41,15 +41,15 @@ import org.livetribe.arm.util.StaticArmAPIMonitor;
 /**
  * @version $Revision: $ $Date: $
  */
-class ArmAPIUtil implements GeneralErrorCodes
+public class ArmAPIUtil implements GeneralErrorCodes
 {
     public static final LTApplicationDefinition BAD_APP_DEF;
-    public static final LTAbstractMetricDefinition BAD_METRIC_DEF;
+    public static final AbstractMetricDefinition BAD_METRIC_DEF;
     public static final LTApplication BAD_APP;
     public static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
     public static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
-    public static final LTAbstractMetricBase BAD_METRIC;
-    public static final LTAbstractMetricBase[] BAD_METRICS;
+    public static final AbstractMetricBase BAD_METRIC;
+    public static final AbstractMetricBase[] BAD_METRICS;
     public static final LTMetricGroup BAD_METRIC_GROUP;
     public static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
     public static final LTTransactionDefinition BAD_TRANS_DEF;
@@ -64,7 +64,7 @@ class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC_DEF = new LTAbstractMetricDefinition(BAD_APP_DEF, "", null, (short) 0, null)
+        BAD_METRIC_DEF = new AbstractMetricDefinition(BAD_APP_DEF, "", null, (short) 0, null)
         {
             public boolean isBad()
             {
@@ -96,7 +96,7 @@ class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC = new LTAbstractMetricBase(BAD_METRIC_DEF)
+        BAD_METRIC = new AbstractMetricBase(BAD_METRIC_DEF)
         {
             public boolean isBad()
             {
@@ -109,7 +109,7 @@ class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRICS = new LTAbstractMetricBase[7];
+        BAD_METRICS = new AbstractMetricBase[7];
         Arrays.fill(BAD_METRICS, BAD_METRIC);
 
         BAD_METRIC_GROUP = new LTMetricGroup(BAD_METRIC_GRP_DEF, BAD_METRICS)
@@ -120,7 +120,7 @@ class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction(null, null, null, null)
+        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction(cleanIdProps(null), cleanIdProps(null), cleanIdProps(null), null)
         {
             public boolean isBad()
             {
@@ -337,15 +337,15 @@ class ArmAPIUtil implements GeneralErrorCodes
         return cleanProps;
     }
 
-    static ArmCorrelator newArmCorrelator(boolean trace)
+    public static ArmCorrelator newArmCorrelator(boolean trace)
     {
-        byte[] b = Factory.getUuidGen().uuidgen();
+        byte[] b = KnitPoint.getUuidGen().uuidgen();
         int length = b.length + 4;
         byte[] cleanBytes = new byte[length];
 
         cleanBytes[0] = (byte) (length >> 8);
         cleanBytes[1] = (byte) (length);
-        if (trace)cleanBytes[3] |= 0xC0;
+        if (trace) cleanBytes[3] |= 0xC0;
 
         System.arraycopy(b, 0, cleanBytes, 4, b.length);
 
@@ -383,4 +383,51 @@ class ArmAPIUtil implements GeneralErrorCodes
         return new LTCorrelator(cleanBytes);
     }
 
+    static String[] extractIdNames(ArmIdentityProperties props)
+    {
+        if (props == null) return null;
+
+        String[] result = new String[20];
+
+        for (int i = 0; i < 20; i++) result[i] = props.getIdentityName(i);
+
+        return result;
+    }
+
+    static String[] extractIdValues(ArmIdentityProperties props)
+    {
+        if (props == null) return null;
+
+        String[] result = new String[20];
+
+        for (int i = 0; i < 20; i++) result[i] = props.getIdentityValue(i);
+
+        return result;
+    }
+
+    static String[] extractCtxNames(ArmIdentityProperties props)
+    {
+        if (props == null) return null;
+
+        String[] result = new String[20];
+
+        for (int i = 0; i < 20; i++) result[i] = props.getContextName(i);
+
+        return result;
+    }
+
+    static byte[] extractArmId(ArmID id)
+    {
+        return (id == null ? null : id.getBytes());
+    }
+
+    static byte[] extractArmSystemAddress(ArmSystemAddress addr)
+    {
+        return (addr == null ? null : addr.getBytes());
+    }
+
+    static String extractURI(ArmIdentityPropertiesTransaction props)
+    {
+        return (props == null ? null : props.getURIValue());
+    }
 }

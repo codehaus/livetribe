@@ -17,9 +17,8 @@
 package org.livetribe.arm.xbean;
 
 import junit.framework.TestCase;
-import org.opengroup.arm40.metric.ArmMetricFactory;
-
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
+import org.opengroup.arm40.metric.ArmMetricFactory;
 
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.impl.LTMetricFactory;
@@ -32,7 +31,7 @@ public class XBeanTest extends TestCase
 {
     public void test0001() throws Exception
     {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/livetribe/arm/impl/configure.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/org/livetribe/arm/impl/configure.xml");
         try
         {
             ArmMetricFactory factory = (ArmMetricFactory) context.getBean("metricFactory");
@@ -48,7 +47,7 @@ public class XBeanTest extends TestCase
         }
     }
 
-    public void XtestLTMetricFactory()
+    public void testLTMetricFactory()
     {
         LTMetricFactory factory = new LTMetricFactory();
 

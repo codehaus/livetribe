@@ -18,13 +18,13 @@ package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTIdentityProperties extends LTAbstractObject implements ArmIdentityProperties
+class LTIdentityProperties extends AbstractObject implements ArmIdentityProperties
 {
     private final String[] identityNames;
     private final String[] identityValues;

@@ -25,7 +25,7 @@ import org.livetribe.util.uuid.UUIDGenDefault;
 /**
  * @version $Revision: $ $Date: $
  */
-public class Factory
+public class KnitPoint
 {
     private static UUIDGen uuidGen;
     private static Connection connection;
@@ -38,7 +38,7 @@ public class Factory
 
     public void setStaticUuidGen(UUIDGen uuidGen)
     {
-        Factory.uuidGen = uuidGen;
+        KnitPoint.uuidGen = uuidGen;
     }
 
     public static Connection getConnection()
@@ -49,6 +49,6 @@ public class Factory
 
     public void setConnection(Connection connection)
     {
-        Factory.connection = connection;
+        KnitPoint.connection = connection;
     }
 }

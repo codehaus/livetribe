@@ -16,7 +16,9 @@
  */
 package org.livetribe.arm.xbean;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -24,6 +26,7 @@ import java.util.WeakHashMap;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.opengroup.arm40.transaction.ArmInterface;
+import org.springframework.aop.Advisor;
 
 import org.livetribe.arm.GeneralErrorCodes;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
@@ -35,16 +38,16 @@ import org.livetribe.util.WeakHashSet;
  */
 public class FactoryAdvice implements MethodInterceptor
 {
-    private ProxyFactory proxyFactory;
+    private Advisor[] advisors;
 
-    public ProxyFactory getProxyFactory()
+    public List getAdvisors()
     {
-        return proxyFactory;
+        return Arrays.asList(advisors);
     }
 
-    public void setProxyFactory(ProxyFactory proxyFactory)
+    public void setAdvisors(List advisors)
     {
-        this.proxyFactory = proxyFactory;
+        this.advisors = (Advisor[]) advisors.toArray(new Advisor[advisors.size()]);
     }
 
     public Object invoke(MethodInvocation invocation) throws Throwable
@@ -57,27 +60,18 @@ public class FactoryAdvice implements MethodInterceptor
             if (rval instanceof ArmInterface)
             {
                 Set interfaces = collectInterfaces(rval.getClass());
-//                synchronized (proxyFactory)
-//                {
-//                    try
-//                    {
                 ProxyFactory pf = new ProxyFactory();
 
-                pf.setAdvisors(proxyFactory.getAdvisors());
+                pf.setAdvisors(advisors);
                 pf.addInterfaces(interfaces);
                 pf.setTarget(rval);
 
                 rval = pf.getProxy();
-//                    }
-//                    finally
-//                    {
-//                        proxyFactory.removeInterfaces(interfaces);
-//                    }
-//                }
             }
         }
         catch (Throwable t)
         {
+            t.printStackTrace(System.err);
             StaticArmAPIMonitor.error(GeneralErrorCodes.UNEXPECTED_ERROR);
         }
         return rval;

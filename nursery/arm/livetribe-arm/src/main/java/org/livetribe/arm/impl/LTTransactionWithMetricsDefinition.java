@@ -22,13 +22,13 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.LTAbstractObject;
+import org.livetribe.arm.AbstractIdentifiableObject;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionWithMetricsDefinition extends LTAbstractObject implements ArmTransactionWithMetricsDefinition
+class LTTransactionWithMetricsDefinition extends AbstractIdentifiableObject implements ArmTransactionWithMetricsDefinition
 {
     private final ArmApplicationDefinition app;
     private final String name;

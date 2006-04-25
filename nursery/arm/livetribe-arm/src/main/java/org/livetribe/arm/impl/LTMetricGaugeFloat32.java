@@ -23,7 +23,7 @@ import org.opengroup.arm40.metric.ArmMetricGaugeFloat32;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGaugeFloat32 extends LTAbstractMetricBase implements ArmMetricGaugeFloat32
+class LTMetricGaugeFloat32 extends AbstractMetricBase implements ArmMetricGaugeFloat32
 {
     private float metric;
 

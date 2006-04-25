@@ -3,7 +3,7 @@
 
     <bean id="debugInterceptor" class="org.livetribe.arm.xbean.FactoryAdviceDelete"/>
 
-    <bean id="factory" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <bean id="knitPoint" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="proxyInterfaces">
             <value>org.livetribe.arm.xbean.Factory</value>
         </property>

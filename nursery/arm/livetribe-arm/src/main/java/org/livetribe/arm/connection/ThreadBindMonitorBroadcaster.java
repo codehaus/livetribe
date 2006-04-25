@@ -26,16 +26,16 @@ import edu.emory.mathcs.backport.java.util.concurrent.CopyOnWriteArrayList;
  */
 public class ThreadBindMonitorBroadcaster implements ThreadBindMonitor
 {
-    private final CopyOnWriteArrayList threadiMonitors = new CopyOnWriteArrayList();
+    private final CopyOnWriteArrayList threadMonitors = new CopyOnWriteArrayList();
 
     public void addThreadMonitor(ThreadBindMonitor monitor)
     {
-        threadiMonitors.addIfAbsent(monitor);
+        threadMonitors.addIfAbsent(monitor);
     }
 
     public void removeThredaMonitor(ThreadBindMonitor monitor)
     {
-        threadiMonitors.remove(monitor);
+        threadMonitors.remove(monitor);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ThreadBindMonitorBroadcaster implements ThreadBindMonitor
      */
     public void bind()
     {
-        for (Iterator iterator = threadiMonitors.iterator(); iterator.hasNext();)
+        for (Iterator iterator = threadMonitors.iterator(); iterator.hasNext();)
         {
             ThreadBindMonitor monitor = (ThreadBindMonitor) iterator.next();
             try
@@ -62,7 +62,7 @@ public class ThreadBindMonitorBroadcaster implements ThreadBindMonitor
      */
     public void unbind()
     {
-        for (Iterator iterator = threadiMonitors.iterator(); iterator.hasNext();)
+        for (Iterator iterator = threadMonitors.iterator(); iterator.hasNext();)
         {
             ThreadBindMonitor monitor = (ThreadBindMonitor) iterator.next();
             try

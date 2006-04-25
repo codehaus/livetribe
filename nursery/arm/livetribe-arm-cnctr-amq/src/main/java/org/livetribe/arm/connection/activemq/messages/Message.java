@@ -14,27 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm;
+package org.livetribe.arm.connection.activemq.messages;
 
-import org.opengroup.arm40.transaction.ArmErrorCallback;
-
+import java.io.Serializable;
 
 /**
  * @version $Revision: $ $Date: $
  */
-public abstract class LTAbstractFactoryBase extends LTAbstractBase implements GeneralErrorCodes
+public interface Message extends Serializable
 {
-    private static ArmErrorCallback callback;
-
-    public boolean setErrorCallback(ArmErrorCallback callback)
-    {
-        LTAbstractFactoryBase.callback = callback;
-
-        return true;
-    }
-
-    public static ArmErrorCallback getCallback()
-    {
-        return callback;
-    }
 }

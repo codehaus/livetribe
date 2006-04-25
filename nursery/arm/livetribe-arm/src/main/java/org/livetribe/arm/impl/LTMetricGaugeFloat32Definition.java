@@ -24,7 +24,7 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGaugeFloat32Definition extends LTAbstractMetricDefinition implements ArmMetricGaugeFloat32Definition
+class LTMetricGaugeFloat32Definition extends AbstractMetricDefinition implements ArmMetricGaugeFloat32Definition
 {
     LTMetricGaugeFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
