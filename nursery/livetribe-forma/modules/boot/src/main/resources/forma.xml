@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="terminator" class="org.livetribe.forma.boot.ShutDown" singleton="true" />
+    <bean id="starter" class="org.livetribe.forma.boot.Starter" singleton="true" init-method="start" destroy-method="stop" />
+
+    <bean id="classLoader" class="org.livetribe.forma.boot.PluginClassLoader" singleton="true" />
+
+    <bean id="pluginsLoader" class="org.livetribe.forma.boot.PluginsLoader" singleton="true"
+          init-method="start" destroy-method="stop">
+        <property name="pluginsDirectory" value="plugins" />
+        <property name="pluginClassLoader"><ref local="classLoader" /></property>
+    </bean>
+
+</beans>
