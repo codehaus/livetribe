@@ -15,8 +15,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                   <source>1.5</source>
-                   <target>1.5</target>
+                    <source>1.5</source>
+                    <target>1.5</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -39,4 +39,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>livetribe-repo</id>
+            <name>LiveTribe Central Repository</name>
+            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2</url>
+        </repository>
+        <snapshotRepository>
+            <id>livetribe-snapshots</id>
+            <name>LiveTribe Central Development Repository</name>
+            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
