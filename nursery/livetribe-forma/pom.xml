@@ -36,6 +36,11 @@
         <name>Livetribe Repository</name>
         <url>http://repo.livetribe.org/maven2</url>
       </repository>
+      <repository>
+        <id>livetribe-snapshots</id>
+        <name>Livetribe Repository</name>
+        <url>http://repo.livetribe.org/maven2-snapshot</url>
+      </repository>
     </repositories>
     
     <dependencies>
