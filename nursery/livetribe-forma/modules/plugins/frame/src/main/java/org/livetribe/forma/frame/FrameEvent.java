@@ -17,8 +17,6 @@ package org.livetribe.forma.frame;
 
 import java.util.EventObject;
 
-import org.livetribe.forma.frame.widget.Frame;
-
 /**
  * @version $Rev$ $Date$
  */
@@ -29,8 +27,8 @@ public class FrameEvent extends EventObject
         super(source);
     }
 
-    public Frame getFrame()
+    public IFrame getFrame()
     {
-        return (Frame)getSource();
+        return (IFrame)getSource();
     }
 }

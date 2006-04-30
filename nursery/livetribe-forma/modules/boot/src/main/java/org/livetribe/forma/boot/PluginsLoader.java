@@ -50,6 +50,7 @@ public class PluginsLoader implements ApplicationContextAware
     private File pluginsDirectory;
     private FileSystemXmlApplicationContext applicationContext;
     private PluginClassLoader pluginClassLoader;
+    private IPluginRegistry pluginRegistry;
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
     {
@@ -64,6 +65,11 @@ public class PluginsLoader implements ApplicationContextAware
     public void setPluginClassLoader(PluginClassLoader classLoader)
     {
         this.pluginClassLoader = classLoader;
+    }
+
+    public void setPluginRegistry(IPluginRegistry pluginRegistry)
+    {
+        this.pluginRegistry = pluginRegistry;
     }
 
     public void start() throws Exception
@@ -124,7 +130,7 @@ public class PluginsLoader implements ApplicationContextAware
                         }
                     }
 
-                    pluginClassLoader.addPluginInfo(info);
+                    pluginRegistry.addPluginInfo(info);
                 }
                 else
                 {

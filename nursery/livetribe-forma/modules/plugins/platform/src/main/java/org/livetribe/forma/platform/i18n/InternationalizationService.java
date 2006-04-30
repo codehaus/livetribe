@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.action;
+package org.livetribe.forma.platform.i18n;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-
-import org.livetribe.forma.frame.IFrame;
-import org.livetribe.forma.frame.IFrameService;
-import org.livetribe.ioc.Inject;
+import java.util.Locale;
 
 /**
  * @version $Rev$ $Date$
  */
-public class CloseFrameAction extends AbstractAction
+public class InternationalizationService
 {
-    private IFrameService frameService;
+    private ClassLoader classLoader;
 
-    @Inject
-    public void setFrameService(IFrameService frameService)
+    public void setClassLoader(ClassLoader classLoader)
     {
-        this.frameService = frameService;
+        this.classLoader = classLoader;
     }
 
-    public void actionPerformed(ActionEvent e)
+    public Bundle getBundle(Class clazz)
     {
-        IFrame frame = frameService.getCurrentFrame();
-        frameService.closeFrame(frame);
+        return getBundle(clazz.getName());
+    }
+
+    public Bundle getBundle(String bundleName)
+    {
+        return getBundle(bundleName, Locale.getDefault());
+    }
+
+    public Bundle getBundle(String bundleName, Locale locale)
+    {
+        return new Bundle(bundleName, locale, classLoader);
     }
 }

@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame;
+package org.livetribe.forma.boot;
 
-import org.springframework.context.ApplicationEvent;
+import java.net.URL;
 
 /**
  * @version $Rev$ $Date$
  */
-public class ServiceEvent extends ApplicationEvent
+public interface IPluginInfo
 {
-    public ServiceEvent(Object obj)
-    {
-        super(obj);
-    }
+    public byte[] getClassBytes(String className) throws ClassNotFoundException;
+
+    public URL getResource(String resource);
 }

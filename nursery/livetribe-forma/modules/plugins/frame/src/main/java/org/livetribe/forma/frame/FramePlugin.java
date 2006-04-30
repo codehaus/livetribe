@@ -20,28 +20,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 
+import org.livetribe.forma.platform.threading.IThreadingService;
+
 /**
  * @version $Rev$ $Date$
  */
 public class FramePlugin
 {
     private final Logger logger = Logger.getLogger(getClass().getName());
-    private FrameService frameService;
-    private ThreadService threadService;
+    private IFrameService frameService;
+    private IThreadingService threadingService;
 
-    public void setFrameService(FrameService frameService)
+    public void setFrameService(IFrameService frameService)
     {
         this.frameService = frameService;
     }
 
-    public void setThreadService(ThreadService threadService)
+    public void setThreadingService(IThreadingService threadService)
     {
-        this.threadService = threadService;
+        this.threadingService = threadService;
     }
 
     public void start() throws Exception
     {
-        threadService.postToEventQueue(new Runnable()
+        threadingService.postToEventQueue(new Runnable()
         {
             public void run()
             {
@@ -69,9 +71,11 @@ public class FramePlugin
 
     public void stop()
     {
+        // Nothing to do. The plugin starts the GUI, and application shutdown
+        // can only be requested by the user.
     }
 
-    protected void setLookAndFeel(String lafClassName)
+    private void setLookAndFeel(String lafClassName)
     {
         try
         {

@@ -18,31 +18,33 @@ package org.livetribe.forma.frame;
 import java.awt.EventQueue;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 
-import org.livetribe.forma.frame.i18n.I18NService;
 import org.livetribe.forma.frame.widget.Frame;
+import org.livetribe.forma.platform.i18n.InternationalizationService;
 import org.livetribe.ioc.IOCService;
 
 /**
  * @version $Rev$ $Date$
  */
-public class FrameService
+public class FrameService implements IFrameServiceSpi
 {
     private final Logger logger = Logger.getLogger(getClass().getName());
-    private I18NService translator;
+    private InternationalizationService translator;
     private IOCService iocService;
     private Object terminator;
-    private List<Frame> frames = new ArrayList<Frame>();
-    private Frame currentFrame;
+    private Set<IFrameSpi> frames = new HashSet<IFrameSpi>();
+    private IFrameSpi currentFrame;
     private List<FrameListener> listeners = new ArrayList<FrameListener>();
 
-    public void setTranslator(I18NService translator)
+    public void setTranslator(InternationalizationService i18nService)
     {
-        this.translator = translator;
+        this.translator = i18nService;
     }
 
     public void setIOCService(IOCService iocService)
@@ -66,10 +68,10 @@ public class FrameService
         listeners.remove(listener);
     }
 
-    private Frame newFrame()
+    private IFrameSpi newFrame()
     {
         assert EventQueue.isDispatchThread();
-        String title = translator.getI18N(Frame.class).get("application.title", frames.size() + 1);
+        String title = translator.getBundle(getClass()).get("application.title", frames.size() + 1);
         Frame frame = new Frame(title);
         frame.setJMenuBar(new JMenuBar());
         frames.add(frame);
@@ -77,37 +79,39 @@ public class FrameService
         return frame;
     }
 
-    public void openNewFrame()
+    public IFrame openNewFrame()
     {
         assert EventQueue.isDispatchThread();
-
-        Frame frame = newFrame();
+        IFrameSpi frame = newFrame();
         frame.display();
-
         notifyFrameOpened(frame);
+        return frame;
     }
 
-    private void notifyFrameOpened(Frame frame)
+    private void notifyFrameOpened(IFrameSpi frame)
     {
         FrameEvent event = new FrameEvent(frame);
         for (FrameListener listener : listeners) listener.frameOpened(event);
     }
 
-    private void notifyFrameClosed(Frame frame)
+    private void notifyFrameClosed(IFrameSpi frame)
     {
         FrameEvent event = new FrameEvent(frame);
         for (FrameListener listener : listeners) listener.frameClosed(event);
     }
 
-    public void closeFrame(Frame frame)
+    public void closeFrame(IFrame frame)
     {
         assert EventQueue.isDispatchThread();
-        assert frames.contains(frame);
-        close(frame);
+        // TODO: Nothing better than downcasting ?
+        assert frame instanceof IFrameSpi;
+        IFrameSpi f = (IFrameSpi)frame;
+        assert frames.contains(f);
+        close(f);
         if (frames.isEmpty()) shutdown();
     }
 
-    private void close(Frame frame)
+    private void close(IFrameSpi frame)
     {
         if (frames.size() == 1)
         {
@@ -124,14 +128,14 @@ public class FrameService
     public void shutdownApplication()
     {
         assert EventQueue.isDispatchThread();
-        boolean confirmed = getCurrentFrame().confirmClose();
+        boolean confirmed = currentFrame.confirmClose();
         if (!confirmed) return;
 
         // Copy frames to avoid ConcurrentModificationException
-        List<Frame> frameCopies = new ArrayList<Frame>(frames);
+        Set<IFrameSpi> frameCopies = new HashSet<IFrameSpi>(frames);
         frames.clear();
 
-        for (Frame frame : frameCopies) close(frame);
+        for (IFrameSpi frame : frameCopies) close(frame);
         shutdown();
     }
 
@@ -152,19 +156,19 @@ public class FrameService
         }
     }
 
-    public void setCurrentFrame(Frame frame)
+    public void setCurrentFrame(IFrameSpi frame)
     {
         assert EventQueue.isDispatchThread();
         this.currentFrame = frame;
     }
 
-    public Frame getCurrentFrame()
+    public IFrame getCurrentFrame()
     {
         assert EventQueue.isDispatchThread();
         return currentFrame;
     }
 
-    public List<Frame> getFrames()
+    public Set<IFrameSpi> getFrames()
     {
         assert EventQueue.isDispatchThread();
         return frames;

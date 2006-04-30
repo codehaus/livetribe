@@ -15,13 +15,10 @@
  */
 package org.livetribe.forma.console;
 
-import javax.swing.JLabel;
-
-import org.livetribe.forma.frame.FrameService;
-import org.livetribe.forma.frame.FrameListener;
 import org.livetribe.forma.frame.FrameEvent;
-import org.livetribe.forma.frame.widget.Frame;
-import org.livetribe.forma.frame.widget.DashBoard;
+import org.livetribe.forma.frame.FrameListener;
+import org.livetribe.forma.frame.FrameService;
+import org.livetribe.forma.frame.IFrame;
 
 /**
  * @version $Rev$ $Date$
@@ -46,10 +43,10 @@ public class ConsolePlugin
         frameService.removeFrameListener(frameListener);
     }
 
-    private void frameOpened(Frame frame)
+    private void frameOpened(IFrame frame)
     {
-        DashBoard dashBoard = frame.getDashBoard();
-        dashBoard.add(new JLabel("SIMON"));
+//        DashBoard dashBoard = frame.getDashBoard();
+//        dashBoard.add(new JLabel("SIMON"));
     }
 
     private class FrameEventListener implements FrameListener

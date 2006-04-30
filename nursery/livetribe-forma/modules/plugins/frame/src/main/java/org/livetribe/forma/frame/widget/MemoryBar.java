@@ -21,9 +21,9 @@ import java.awt.event.ActionEvent;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JProgressBar;
 
-import org.livetribe.forma.frame.ThreadService;
-import org.livetribe.forma.frame.i18n.I18N;
-import org.livetribe.forma.frame.i18n.I18NService;
+import org.livetribe.forma.platform.i18n.Bundle;
+import org.livetribe.forma.platform.i18n.InternationalizationService;
+import org.livetribe.forma.platform.threading.IThreadingService;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 
@@ -33,17 +33,17 @@ import org.livetribe.ioc.PostConstruct;
 public class MemoryBar extends JProgressBar implements Runnable, ActionListener
 {
     private static final int SHIFT_FOR_MEGA = 20;
-    private I18N bundle;
-    private ThreadService threadService;
+    private Bundle bundle;
+    private IThreadingService threadService;
 
     @Inject
-    public void setI18NService(I18NService i18nService)
+    public void setI18NService(InternationalizationService i18nService)
     {
-        bundle = i18nService.getI18N(getClass());
+        bundle = i18nService.getBundle(getClass());
     }
 
     @Inject
-    public void setThreadService(ThreadService threadService)
+    public void setThreadingService(IThreadingService threadService)
     {
         this.threadService = threadService;
     }

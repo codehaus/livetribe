@@ -13,31 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.action;
+package org.livetribe.forma.frame;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-
-import org.livetribe.forma.frame.IFrame;
-import org.livetribe.forma.frame.IFrameService;
-import org.livetribe.ioc.Inject;
+import java.util.Set;
 
 /**
  * @version $Rev$ $Date$
  */
-public class CloseFrameAction extends AbstractAction
+public interface IFrameServiceSpi extends IFrameService
 {
-    private IFrameService frameService;
+    public Set<IFrameSpi> getFrames();
 
-    @Inject
-    public void setFrameService(IFrameService frameService)
-    {
-        this.frameService = frameService;
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        IFrame frame = frameService.getCurrentFrame();
-        frameService.closeFrame(frame);
-    }
+    public void setCurrentFrame(IFrameSpi frame);
 }

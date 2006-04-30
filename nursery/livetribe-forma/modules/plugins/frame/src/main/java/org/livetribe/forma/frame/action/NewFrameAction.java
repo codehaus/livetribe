@@ -18,7 +18,7 @@ package org.livetribe.forma.frame.action;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
-import org.livetribe.forma.frame.FrameService;
+import org.livetribe.forma.frame.IFrameService;
 import org.livetribe.ioc.Inject;
 
 /**
@@ -26,10 +26,10 @@ import org.livetribe.ioc.Inject;
  */
 public class NewFrameAction extends AbstractAction
 {
-    private FrameService frameService;
+    private IFrameService frameService;
 
     @Inject
-    public void setFrameService(FrameService frameService)
+    public void setFrameService(IFrameService frameService)
     {
         this.frameService = frameService;
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma;
+package org.livetribe.forma.platform;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -26,7 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * @version $Rev$ $Date$
  */
-public class FormaIOCContainer implements ApplicationContextAware, IOCContainer
+public class FormaContainer implements ApplicationContextAware, IOCContainer
 {
     private ApplicationContext applicationContext;
 

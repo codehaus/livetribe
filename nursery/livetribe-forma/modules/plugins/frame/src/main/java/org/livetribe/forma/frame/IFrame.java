@@ -13,34 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.i18n;
+package org.livetribe.forma.frame;
 
-import java.util.Locale;
+import javax.swing.JMenuBar;
 
 /**
  * @version $Rev$ $Date$
  */
-public class I18NService
+public interface IFrame
 {
-    private ClassLoader classLoader;
-
-    public void setClassLoader(ClassLoader classLoader)
-    {
-        this.classLoader = classLoader;
-    }
-
-    public I18N getI18N(Class clazz)
-    {
-        return getI18N(clazz.getName());
-    }
-
-    public I18N getI18N(String bundleName)
-    {
-        return getI18N(bundleName, Locale.getDefault());
-    }
-
-    public I18N getI18N(String bundleName, Locale locale)
-    {
-        return new I18N(bundleName, locale, classLoader);
-    }
+    /**
+     * Returns the JMenuBar of this frame.
+     */
+    public JMenuBar getJMenuBar();
 }

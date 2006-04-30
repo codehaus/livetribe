@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.i18n;
+package org.livetribe.forma.platform.i18n;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -23,13 +23,13 @@ import java.text.MessageFormat;
 /**
  * @version $Rev$ $Date$
  */
-public class I18N
+public class Bundle
 {
     private final String bundleName;
     private final Locale locale;
     private final ClassLoader classLoader;
 
-    public I18N(String bundleName, Locale locale, ClassLoader classLoader)
+    public Bundle(String bundleName, Locale locale, ClassLoader classLoader)
     {
         this.bundleName = bundleName;
         this.locale = locale;

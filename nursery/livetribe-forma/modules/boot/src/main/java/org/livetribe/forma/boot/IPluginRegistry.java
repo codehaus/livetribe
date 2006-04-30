@@ -13,31 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.action;
+package org.livetribe.forma.boot;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-
-import org.livetribe.forma.frame.IFrame;
-import org.livetribe.forma.frame.IFrameService;
-import org.livetribe.ioc.Inject;
+import java.util.Set;
 
 /**
+ * A registry for plugins.
+ * @see PluginsLoader
  * @version $Rev$ $Date$
  */
-public class CloseFrameAction extends AbstractAction
+public interface IPluginRegistry
 {
-    private IFrameService frameService;
+    /**
+     * Adds a plugin to this registry
+     * @param pluginInfo The plugin information to be added
+     */
+    public void addPluginInfo(IPluginInfo pluginInfo);
 
-    @Inject
-    public void setFrameService(IFrameService frameService)
-    {
-        this.frameService = frameService;
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        IFrame frame = frameService.getCurrentFrame();
-        frameService.closeFrame(frame);
-    }
+    /**
+     * Returns a copy of the plugins contained in this registry.
+     */
+    public Set<IPluginInfo> getPluginInfos();
 }

@@ -15,20 +15,15 @@
  */
 package org.livetribe.forma.boot;
 
-import java.security.SecureClassLoader;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.List;
-import java.util.ArrayList;
 import java.net.URL;
+import java.security.SecureClassLoader;
 
 /**
  * @version $Rev$ $Date$
  */
 public class PluginClassLoader extends SecureClassLoader
 {
-    private final Lock lock = new ReentrantLock();
-    private final List<PluginInfo> pluginInfos = new ArrayList<PluginInfo>();
+    private IPluginRegistry pluginRegistry;
 
     public PluginClassLoader()
     {
@@ -40,17 +35,9 @@ public class PluginClassLoader extends SecureClassLoader
         super(parent);
     }
 
-    public void addPluginInfo(PluginInfo info)
+    public void setPluginRegistry(IPluginRegistry pluginRegistry)
     {
-        lock.lock();
-        try
-        {
-            pluginInfos.add(info);
-        }
-        finally
-        {
-            lock.unlock();
-        }
+        this.pluginRegistry = pluginRegistry;
     }
 
     @Override
@@ -78,24 +65,16 @@ public class PluginClassLoader extends SecureClassLoader
 
     private Class<?> findClassLocally(String name) throws ClassNotFoundException
     {
-        lock.lock();
-        try
+        for (IPluginInfo info : pluginRegistry.getPluginInfos())
         {
-            for (PluginInfo info : pluginInfos)
+            byte[] classBytes = info.getClassBytes(name);
+            if (classBytes != null)
             {
-                byte[] classBytes = info.getClassBytes(name);
-                if (classBytes != null)
-                {
-                    // TODO: handle codesource/protectiondomain
-                    return defineClass(name, classBytes, 0, classBytes.length);
-                }
+                // TODO: handle codesource/protectiondomain
+                return defineClass(name, classBytes, 0, classBytes.length);
             }
-            return null;
         }
-        finally
-        {
-            lock.unlock();
-        }
+        return null;
     }
 
     @Override
@@ -111,19 +90,11 @@ public class PluginClassLoader extends SecureClassLoader
 
     private URL findResourceLocally(String name)
     {
-        lock.lock();
-        try
+        for (IPluginInfo info : pluginRegistry.getPluginInfos())
         {
-            for (PluginInfo info : pluginInfos)
-            {
-                URL resource = info.getResource(name);
-                if (resource != null) return resource;
-            }
-            return null;
+            URL resource = info.getResource(name);
+            if (resource != null) return resource;
         }
-        finally
-        {
-            lock.unlock();
-        }
+        return null;
     }
 }

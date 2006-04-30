@@ -15,31 +15,33 @@
  */
 package org.livetribe.forma.frame;
 
+import org.livetribe.forma.platform.threading.IThreadingService;
+
 /**
  * @version $Rev$ $Date$
  */
 public class StatusBarService
 {
-    private FrameService frameService;
-    private ThreadService threadService;
+    private IFrameService frameService;
+    private IThreadingService threadingService;
 
-    public void setFrameService(FrameService frameService)
+    public void setFrameService(IFrameService frameService)
     {
         this.frameService = frameService;
     }
 
-    public void setThreadService(ThreadService threadService)
+    public void setThreadingService(IThreadingService threadingService)
     {
-        this.threadService = threadService;
+        this.threadingService = threadingService;
     }
 
     public void setText(final String text)
     {
-        threadService.postToEventQueue(new Runnable()
+        threadingService.postToEventQueue(new Runnable()
         {
             public void run()
             {
-                frameService.getCurrentFrame().setStatusText(text);
+//                frameService.getCurrentFrame().setStatusText(text);
             }
         });
     }

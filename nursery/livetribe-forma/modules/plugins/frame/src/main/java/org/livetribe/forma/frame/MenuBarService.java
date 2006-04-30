@@ -22,22 +22,21 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import org.livetribe.forma.frame.i18n.I18N;
-import org.livetribe.forma.frame.widget.Frame;
+import org.livetribe.forma.platform.i18n.Bundle;
 
 /**
  * @version $Rev$ $Date$
  */
-public class MenuBarService
+public class MenuBarService implements IMenuBarService
 {
-    private FrameService frameService;
+    private IFrameServiceSpi frameService;
 
-    public void setFrameService(FrameService frameService)
+    public void setFrameService(IFrameServiceSpi frameService)
     {
         this.frameService = frameService;
     }
 
-    public JMenu addMenu(JMenu parent, String menuKey, I18N bundle)
+    public JMenu addMenu(JMenu parent, String menuKey, Bundle bundle)
     {
         JMenu menu = new JMenu();
         prepareJMenuItem(menu, menuKey, bundle);
@@ -48,18 +47,18 @@ public class MenuBarService
         }
         else
         {
-            for (Frame frame : frameService.getFrames())
+            for (IFrameSpi frame : frameService.getFrames())
             {
                 if (getMenu(frame, menuKey) != null) continue;
                 frame.getJMenuBar().add(menu);
-                frame.validate();
+                frame.revalidate();
             }
         }
 
         return menu;
     }
 
-    public JMenuItem addMenuItem(JMenu menu, String menuItemKey, I18N bundle, ActionListener action)
+    public JMenuItem addMenuItem(JMenu menu, String menuItemKey, Bundle bundle, ActionListener action)
     {
         JMenuItem item = new JMenuItem();
         prepareJMenuItem(item, menuItemKey, bundle);
@@ -74,7 +73,7 @@ public class MenuBarService
         return item;
     }
 
-    private void prepareJMenuItem(JMenuItem item, String key, I18N bundle)
+    private void prepareJMenuItem(JMenuItem item, String key, Bundle bundle)
     {
         item.setName(key);
         item.setText(bundle.get(key + ".text"));
@@ -86,12 +85,12 @@ public class MenuBarService
         // TODO: handle icons
     }
 
-    public JMenu getMenu(Frame frame, String menuKey)
+    public JMenu getMenu(IFrame frame, String menuKey)
     {
         return (JMenu)findComponent(frame.getJMenuBar(), menuKey);
     }
 
-    public JMenuItem getMenuItem(Frame frame, String menuItemKey)
+    public JMenuItem getMenuItem(IFrame frame, String menuItemKey)
     {
         return (JMenuItem)findComponent(frame.getJMenuBar(), menuItemKey);
     }

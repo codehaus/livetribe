@@ -29,7 +29,7 @@ import java.util.jar.JarFile;
 /**
  * @version $Rev$ $Date$
  */
-public class PluginInfo
+public class PluginInfo implements IPluginInfo
 {
     private static final String CLASS_FILE_EXTENSION = ".class";
 

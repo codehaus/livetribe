@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 /**
  * @version $Rev$ $Date$
  */
-public class Starter
+public class StartUp
 {
     // Depth of the Marianas Trench: 10911 meters
     private static final int PORT = 10911;

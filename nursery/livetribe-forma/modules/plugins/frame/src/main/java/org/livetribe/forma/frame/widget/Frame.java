@@ -25,13 +25,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import org.livetribe.forma.frame.FrameService;
-import org.livetribe.forma.frame.MenuBarService;
+import org.livetribe.forma.frame.IFrameServiceSpi;
+import org.livetribe.forma.frame.IFrameSpi;
+import org.livetribe.forma.frame.IMenuBarService;
 import org.livetribe.forma.frame.action.CloseFrameAction;
 import org.livetribe.forma.frame.action.ExitApplicationAction;
 import org.livetribe.forma.frame.action.NewFrameAction;
-import org.livetribe.forma.frame.i18n.I18N;
-import org.livetribe.forma.frame.i18n.I18NService;
+import org.livetribe.forma.platform.i18n.Bundle;
+import org.livetribe.forma.platform.i18n.InternationalizationService;
 import org.livetribe.ioc.IOCService;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
@@ -39,11 +40,11 @@ import org.livetribe.ioc.PostConstruct;
 /**
  * @version $Rev$ $Date$
  */
-public class Frame extends JFrame
+public class Frame extends JFrame implements IFrameSpi
 {
-    private FrameService frameService;
-    private I18N bundle;
-    private MenuBarService menuBarService;
+    private IFrameServiceSpi frameService;
+    private Bundle bundle;
+    private IMenuBarService menuBarService;
     private IOCService iocService;
     private DashBoard dashBoard;
     private StatusBar statusBar;
@@ -54,19 +55,19 @@ public class Frame extends JFrame
     }
 
     @Inject
-    public void setFrameService(FrameService frameService)
+    public void setFrameService(IFrameServiceSpi frameService)
     {
         this.frameService = frameService;
     }
 
     @Inject
-    public void setI18NService(I18NService i18nService)
+    public void setI18NService(InternationalizationService i18nService)
     {
-        this.bundle = i18nService.getI18N(getClass());
+        this.bundle = i18nService.getBundle(getClass());
     }
 
     @Inject
-    public void setMenuBarService(MenuBarService menuBarService)
+    public void setMenuBarService(IMenuBarService menuBarService)
     {
         this.menuBarService = menuBarService;
     }
@@ -98,6 +99,11 @@ public class Frame extends JFrame
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+    public void revalidate()
+    {
+        validate();
+    }
+
     public void display()
     {
         setVisible(true);
@@ -125,35 +131,39 @@ public class Frame extends JFrame
 
     private void setupMenuBar()
     {
-        JMenu file = menuBarService.getMenu(this, "menubar.menu.file");
-        if (file == null) file = menuBarService.addMenu(null, "menubar.menu.file", bundle);
+        String fileKey = "menubar.menu.file";
+        JMenu file = menuBarService.getMenu(this, fileKey);
+        if (file == null) file = menuBarService.addMenu(null, fileKey, bundle);
 
-        JMenuItem newFrame = menuBarService.getMenuItem(this, "menubar.menu.file.menuitem.newframe");
+        String newFrameKey = "menubar.menu.file.menuitem.newframe";
+        JMenuItem newFrame = menuBarService.getMenuItem(this, newFrameKey);
         if (newFrame == null)
         {
             NewFrameAction action = new NewFrameAction();
             iocService.resolve(action);
-            menuBarService.addMenuItem(file, "menubar.menu.file.menuitem.newframe", bundle, action);
+            menuBarService.addMenuItem(file, newFrameKey, bundle, action);
         }
 
-        menuBarService.addMenuItemSeparator(file);
+        file.addSeparator();
 
-        JMenuItem close = menuBarService.getMenuItem(this, "menubar.menu.file.menuitem.close");
+        String closeFrameKey = "menubar.menu.file.menuitem.close";
+        JMenuItem close = menuBarService.getMenuItem(this, closeFrameKey);
         if (close == null)
         {
             CloseFrameAction action = new CloseFrameAction();
             iocService.resolve(action);
-            menuBarService.addMenuItem(file, "menubar.menu.file.menuitem.close", bundle, action);
+            menuBarService.addMenuItem(file, closeFrameKey, bundle, action);
         }
 
-        menuBarService.addMenuItemSeparator(file);
+        file.addSeparator();
 
-        JMenuItem exit = menuBarService.getMenuItem(this, "menubar.menu.file.menuitem.exit");
+        String exitKey = "menubar.menu.file.menuitem.exit";
+        JMenuItem exit = menuBarService.getMenuItem(this, exitKey);
         if (exit == null)
         {
             ExitApplicationAction action = new ExitApplicationAction();
             iocService.resolve(action);
-            menuBarService.addMenuItem(file, "menubar.menu.file.menuitem.exit", bundle, action);
+            menuBarService.addMenuItem(file, exitKey, bundle, action);
         }
     }
 

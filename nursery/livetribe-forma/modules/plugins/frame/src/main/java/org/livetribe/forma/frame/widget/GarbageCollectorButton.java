@@ -21,8 +21,8 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import org.livetribe.forma.frame.i18n.I18N;
-import org.livetribe.forma.frame.i18n.I18NService;
+import org.livetribe.forma.platform.i18n.InternationalizationService;
+import org.livetribe.forma.platform.i18n.Bundle;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 
@@ -31,12 +31,12 @@ import org.livetribe.ioc.PostConstruct;
  */
 public class GarbageCollectorButton extends JButton
 {
-    private I18N bundle;
+    private Bundle bundle;
 
     @Inject
-    public void setI18NService(I18NService i18nService)
+    public void setI18NService(InternationalizationService i18nService)
     {
-        bundle = i18nService.getI18N(getClass());
+        bundle = i18nService.getBundle(getClass());
     }
 
     @PostConstruct

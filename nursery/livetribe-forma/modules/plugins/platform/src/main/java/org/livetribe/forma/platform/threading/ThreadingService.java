@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame;
+package org.livetribe.forma.platform.threading;
 
 import java.awt.EventQueue;
 import java.util.concurrent.Executors;
@@ -31,7 +31,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 /**
  * @version $Rev$ $Date$
  */
-public class ThreadService implements ApplicationListener
+public class ThreadingService implements ApplicationListener, IThreadingService
 {
     private Logger logger = Logger.getLogger(getClass().getName());
     private List<Runnable> eventQueue = new ArrayList<Runnable>();
@@ -68,17 +68,6 @@ public class ThreadService implements ApplicationListener
         scheduler.scheduleWithFixedDelay(wrappedTask, delay, period, unit);
     }
 
-    /**
-     * Adds the given runnable as last event of the AWT event queue, returning immediately.
-     * <br />
-     * Depending on the fact that this service is started or not, the event is respectively
-     * added immediately to the AWT event queue via {@link EventQueue#invokeLater(Runnable)},
-     * or it is kept in a local queue.
-     * <br />
-     * When this service is started, events waiting in the local queue are moved to the AWT
-     * event queue.
-     * @param runnable The runnable to execute as AWT event.
-     */
     public void postToEventQueue(Runnable runnable)
     {
         if (started)

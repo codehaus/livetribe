@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="iocContainer" class="org.livetribe.forma.platform.FormaContainer" singleton="true">
+    </bean>
+
+    <bean id="iocService" class="org.livetribe.ioc.DefaultIOCService" singleton="true">
+        <property name="IOCContainer"><ref local="iocContainer" /></property>
+    </bean>
+
+    <bean id="i18n" class="org.livetribe.forma.platform.i18n.InternationalizationService" singleton="true">
+        <property name="classLoader"><ref local="classLoader" /></property>
+    </bean>
+
+    <bean id="threadingService" class="org.livetribe.forma.platform.threading.ThreadingService" singleton="true">
+    </bean>
+
+</beans>

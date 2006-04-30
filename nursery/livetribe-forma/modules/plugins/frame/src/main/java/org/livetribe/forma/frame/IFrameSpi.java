@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.action;
-
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-
-import org.livetribe.forma.frame.IFrame;
-import org.livetribe.forma.frame.IFrameService;
-import org.livetribe.ioc.Inject;
+package org.livetribe.forma.frame;
 
 /**
  * @version $Rev$ $Date$
  */
-public class CloseFrameAction extends AbstractAction
+public interface IFrameSpi extends IFrame
 {
-    private IFrameService frameService;
+    /**
+     * Revalidates this frame, that is, causes the frame to layout again its components.
+     * @see javax.swing.JFrame#validate()
+     */
+    public void revalidate();
 
-    @Inject
-    public void setFrameService(IFrameService frameService)
-    {
-        this.frameService = frameService;
-    }
+    public void display();
 
-    public void actionPerformed(ActionEvent e)
-    {
-        IFrame frame = frameService.getCurrentFrame();
-        frameService.closeFrame(frame);
-    }
+    public void undisplay();
+
+    public boolean confirmClose();
 }

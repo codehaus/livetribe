@@ -19,11 +19,11 @@
     </build>
 
     <dependencies>
-      <dependency>
-        <groupId>org.apache.xbean</groupId>
-        <artifactId>xbean-spring</artifactId>
-        <version>2.2</version>
-      </dependency>
+        <dependency>
+            <groupId>org.apache.xbean</groupId>
+            <artifactId>xbean-spring</artifactId>
+            <version>2.2</version>
+        </dependency>
     </dependencies>
 
 </project>
