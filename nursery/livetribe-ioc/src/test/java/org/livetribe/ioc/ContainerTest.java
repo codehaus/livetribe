@@ -24,18 +24,16 @@ import junit.framework.TestCase;
 /**
  * @version $Rev$ $Date$
  */
-public class IOCServiceTest extends TestCase
+public class ContainerTest extends TestCase
 {
-    private IOCService ioc;
+    private Container ioc;
 
     @Override
     protected void setUp() throws Exception
     {
-        TestIOCContainer container = new TestIOCContainer();
+        TestRegistry container = new TestRegistry();
         container.addService("srv", Service.class, new Service());
-
-        ioc = new DefaultIOCService();
-        ioc.setIOCContainer(container);
+        ioc = new DefaultContainer(container);
     }
 
     public void testNonInjectAnnotated()
@@ -66,7 +64,7 @@ public class IOCServiceTest extends TestCase
         assertTrue(target.postConstructed());
     }
 
-    private static class TestIOCContainer implements IOCContainer
+    private static class TestRegistry implements Registry
     {
         private final Map<String, ServiceInfo> services = new HashMap<String, ServiceInfo>();
 

@@ -24,11 +24,11 @@ import java.util.Set;
 /**
  * @version $Rev$ $Date$
  */
-public class DefaultIOCService implements IOCService
+public class DefaultContainer implements Container
 {
-    private IOCContainer container;
+    private final Registry container;
 
-    public void setIOCContainer(IOCContainer container)
+    public DefaultContainer(Registry container)
     {
         this.container = container;
     }

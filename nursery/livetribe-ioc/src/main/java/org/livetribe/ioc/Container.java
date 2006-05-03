@@ -18,9 +18,7 @@ package org.livetribe.ioc;
 /**
  * @version $Rev$ $Date$
  */
-public interface IOCService
+public interface Container
 {
-    public void setIOCContainer(IOCContainer container);
-
     public void resolve(Object target);
 }

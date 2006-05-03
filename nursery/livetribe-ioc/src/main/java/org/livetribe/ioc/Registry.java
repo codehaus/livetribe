@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * @version $Rev$ $Date$
  */
-public interface IOCContainer
+public interface Registry
 {
     public Set<String> getServiceNames();
 
