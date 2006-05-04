@@ -57,6 +57,21 @@ public class ContainerTest extends TestCase
         assertNotNull(target.getService());
     }
 
+    public void testInjectAnnotatedField()
+    {
+        InjectAnnotatedField target = new InjectAnnotatedField();
+        ioc.resolve(target);
+        assertNotNull(target.getService());
+    }
+
+    public void testOverrideAnnotated()
+    {
+        OverrideInjectAnnotated target = new OverrideInjectAnnotated();
+        ioc.resolve(target);
+        assertNotNull(target.getService());
+        assertEquals(1, target.count);
+    }
+
     public void testPostConstruct()
     {
         PostConstructAnnotated target = new PostConstructAnnotated();
@@ -152,6 +167,19 @@ public class ContainerTest extends TestCase
         }
     }
 
+    private static class OverrideInjectAnnotated extends InjectAnnotated
+    {
+        private int count = 0;
+
+        @Override
+        @Inject
+        public void setService(Service service)
+        {
+            ++count;
+            super.setService(service);
+        }
+    }
+
     private static class PostConstructAnnotated
     {
         private boolean postConstructed;
@@ -165,6 +193,17 @@ public class ContainerTest extends TestCase
         public boolean postConstructed()
         {
             return postConstructed;
+        }
+    }
+
+    private static class InjectAnnotatedField
+    {
+        @Inject
+        private Service service;
+
+        public Service getService()
+        {
+            return service;
         }
     }
 }

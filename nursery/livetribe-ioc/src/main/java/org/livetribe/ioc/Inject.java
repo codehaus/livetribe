@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  * @version $Rev$ $Date$
  */
 @Documented
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inject
 {
