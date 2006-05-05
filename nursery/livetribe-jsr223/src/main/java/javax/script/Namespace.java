@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * A mapping of key/value pairs, all of whose keys are Strings.
- *
+ * 
  * @version $Revision: $ $Date: $
  */
 public interface Namespace extends Map
