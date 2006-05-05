@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans>
-    <bean id="console" class="org.livetribe.forma.console.ConsolePlugin" singleton="true"
-            init-method="start" destroy-method="stop">
-        <property name="frameService"><ref local="frameService" /></property>
-    </bean>
-</beans>
