@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="org.livetribe.forma.platform" plugin-class="org.livetribe.forma.FormaPlugin">
+    <name>Forma Platform</name>
+</plugin>

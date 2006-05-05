@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="org.livetribe.forma.console" plugin-class="org.livetribe.forma.console.ConsolePlugin" bundle="Console">
+    <name bundleKey="plugin.console.name">Forma Console</name>
+
+    <dependencies>
+        <dependency>org.livetribe.forma.platform</dependency>
+        <dependency>org.livetribe.forma.frame</dependency>
+    </dependencies>
+
+    <extensions>
+
+        <extension id="org.livetribe.forma.action.actionManager"
+                   parser-class="org.livetribe.forma.ui.action.spi.ActionExtensionParser">
+            <actions>
+                <action id="action.console.slpScan" action-class="org.livetribe.forma.console.action.SLPNetworkScanAction">
+                    <text>SLP Network Scan</text>
+                </action>
+            </actions>
+        </extension>
+
+        <extension id="org.livetribe.forma.menubar.menubarManager"
+                   parser-class="org.livetribe.forma.ui.menubar.spi.MenubarExtensionParser">
+            <menubars>
+                <menubar id="org.livetribe.forma.menubar.mainMenubar">
+                    <menus>
+                        <menu id="menubar.menu.file">
+                            <sections>
+                                <section id="menubar.menu.file.section.new">
+                                    <items>
+                                        <menu id="menubar.menu.file.menu.networkScans">
+                                            <text>Network Scans</text>
+                                            <sections>
+                                                <section id="menubar.menu.file.menu.networkScans.section.scans">
+                                                    <items>
+                                                        <item id="menubar.menu.file.menu.networkScans.item.slpScan">
+                                                            <action refid="action.console.slpScan" />
+                                                        </item>
+                                                    </items>
+                                                </section>
+                                            </sections>
+                                        </menu>
+                                    </items>
+                                </section>
+                            </sections>
+                        </menu>
+                    </menus>
+                </menubar>
+            </menubars>
+        </extension>
+
+        <extension id="org.livetribe.forma.perspective.perspectiveManager"
+                   parser-class="org.livetribe.forma.ui.perspective.spi.PerspectiveExtensionParser">
+            <perspectives>
+                <perspective id="org.livetribe.forma.perspective.welcome" perspective-class="org.livetribe.forma.console.perspective.WelcomePerspective">
+                </perspective>
+            </perspectives>
+        </extension>
+
+    </extensions>
+
+</plugin>

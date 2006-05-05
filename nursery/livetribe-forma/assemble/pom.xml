@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.livetribe.nursery</groupId>
+    <artifactId>livetribe-forma</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.livetribe.nursery.forma</groupId>
+  <artifactId>assemble</artifactId>
+  <packaging>pom</packaging>
+  <version>${parent.version}</version>
+  <name>LiveTribe :: Forma :: Assemble</name>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+
+    <plugins>
+      <plugin>
+        <groupId>org.livetribe.nursery.forma</groupId>
+        <artifactId>maven-forma-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assemble-application</goal>
+            </goals>
+            <configuration>
+              <modules>
+                <module>org.livetribe.nursery.forma:boot</module>
+              </modules>
+              <plugins>
+                <plugin>org.livetribe.nursery.forma:platform</plugin>
+                <plugin>org.livetribe.nursery.forma:frame</plugin>
+                <plugin>org.livetribe.nursery.forma:console</plugin>
+              </plugins>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+  </build>
+
+</project>
