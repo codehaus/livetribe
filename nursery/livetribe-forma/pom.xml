@@ -34,12 +34,12 @@
       <repository>
         <id>livetribe-repo</id>
         <name>Livetribe Repository</name>
-        <url>http://repo.livetribe.org/maven2</url>
+        <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2</url>
       </repository>
       <repository>
         <id>livetribe-snapshots</id>
         <name>Livetribe Repository</name>
-        <url>http://repo.livetribe.org/maven2-snapshot</url>
+        <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2-snapshot</url>
       </repository>
     </repositories>
     
