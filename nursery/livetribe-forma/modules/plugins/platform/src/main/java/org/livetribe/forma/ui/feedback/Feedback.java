@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.frame.spi;
-
-import org.livetribe.forma.ui.frame.Frame;
-import org.livetribe.forma.ui.PartContainer;
+package org.livetribe.forma.ui.feedback;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface FrameSpi extends Frame, PartContainer
+public interface Feedback
 {
-    public void display();
-
-    public void undisplay();
-
-    public boolean confirmClose();
+    public void stop();
 }

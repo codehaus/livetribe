@@ -20,15 +20,16 @@ import java.util.Map;
 
 import org.livetribe.forma.ui.statusbar.StatusbarException;
 import org.livetribe.forma.ui.statusbar.StatusbarContainer;
+import org.livetribe.forma.ui.statusbar.StatusbarManager;
 
 /**
  * @version $Rev$ $Date$
  */
-public class DefaultStatusbarManager implements StatusbarManagerSpi
+public class DefaultStatusbarManager implements StatusbarManager
 {
     private Map<String, StatusbarInfo> statusbarInfos = new HashMap<String, StatusbarInfo>();
 
-    public void addStatusbarInfo(StatusbarInfo statusbarInfo)
+    public void spiAddStatusbarInfo(StatusbarInfo statusbarInfo)
     {
         String statusbarId = statusbarInfo.getStatusbarId();
         if (statusbarInfos.containsKey(statusbarId)) throw new StatusbarException("Duplicate statusbar id " + statusbarId);

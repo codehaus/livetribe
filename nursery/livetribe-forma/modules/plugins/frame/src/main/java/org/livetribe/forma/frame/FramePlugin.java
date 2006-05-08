@@ -30,6 +30,8 @@ import org.livetribe.forma.ui.frame.Frame;
  */
 public class FramePlugin implements org.livetribe.forma.Plugin
 {
+    public static final String ID = "org.livetribe.forma.frame";
+
     @Inject
     private FrameManager frameManager;
     private final Logger logger = Logger.getLogger(getClass().getName());

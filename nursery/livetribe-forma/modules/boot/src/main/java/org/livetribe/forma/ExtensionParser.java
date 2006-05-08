@@ -15,16 +15,16 @@
  */
 package org.livetribe.forma;
 
-import java.util.logging.Logger;
-import java.util.ResourceBundle;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.MissingResourceException;
-
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Element;
-import org.livetribe.forma.ExtensionInfo;
 
 /**
  * @version $Rev$ $Date$
@@ -62,6 +62,66 @@ public abstract class ExtensionParser
                     return bundleKey;
                 }
             }
+        }
+    }
+
+    public static String evaluateId(String id)
+    {
+        if (id == null) return null;
+        int lastDot = id.lastIndexOf('.');
+        if (lastDot > 0)
+        {
+            String className = id.substring(0, lastDot);
+            String fieldName = id.substring(lastDot + 1);
+            Class cls = loadClass(className);
+            if (cls != null)
+            {
+                Field field = getStaticStringField(cls, fieldName);
+                if (field != null)
+                {
+                    String fieldValue = getStaticStringValue(field);
+                    if (fieldValue != null) return fieldValue;
+                }
+            }
+        }
+        return id;
+    }
+
+    private static Class loadClass(String className)
+    {
+        try
+        {
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
+        }
+        catch (ClassNotFoundException x)
+        {
+            return null;
+        }
+    }
+
+    private static Field getStaticStringField(Class cls, String fieldName)
+    {
+        try
+        {
+            Field field = cls.getField(fieldName);
+            if (Modifier.isStatic(field.getModifiers()) && field.getType() == String.class) return field;
+            return null;
+        }
+        catch (NoSuchFieldException x)
+        {
+            return null;
+        }
+    }
+
+    private static String getStaticStringValue(Field field)
+    {
+        try
+        {
+            return (String)field.get(null);
+        }
+        catch (IllegalAccessException x)
+        {
+            return null;
         }
     }
 }

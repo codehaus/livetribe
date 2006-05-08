@@ -23,19 +23,21 @@ import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import org.livetribe.forma.ui.action.ActionException;
+import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class DefaultActionManager implements ActionManagerSpi
+public class DefaultActionManager implements ActionManager
 {
     @Inject
     private Container containerManager;
     private final Map<String, ActionInfo> actionInfos = new HashMap<String, ActionInfo>();
 
-    public void addActionInfo(ActionInfo actionInfo)
+    public void spiAddActionInfo(ActionInfo actionInfo)
     {
         String actionId = actionInfo.getActionId();
         if (actionInfos.containsKey(actionId)) throw new ActionException("Duplicate action id " + actionId);

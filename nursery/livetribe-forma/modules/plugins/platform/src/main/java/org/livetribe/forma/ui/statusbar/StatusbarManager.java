@@ -15,12 +15,17 @@
  */
 package org.livetribe.forma.ui.statusbar;
 
+import org.livetribe.forma.ui.statusbar.spi.StatusbarInfo;
+
 /**
  * @version $Rev$ $Date$
  */
 public interface StatusbarManager
 {
     public static final String ID = "org.livetribe.forma.statusbar.statusbarManager";
+    public static final String STATUSBAR_ID = "org.livetribe.forma.statusbar.mainStatusbar";
+
+    public void spiAddStatusbarInfo(StatusbarInfo statusbarInfo);
 
     public void installStatusBar(StatusbarContainer frame, String statusbarId);
 }

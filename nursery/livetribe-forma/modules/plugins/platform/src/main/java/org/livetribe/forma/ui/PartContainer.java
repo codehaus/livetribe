@@ -20,5 +20,5 @@ package org.livetribe.forma.ui;
  */
 public interface PartContainer
 {
-    public void display(Part part);
+    public void spiDisplay(Part part);
 }

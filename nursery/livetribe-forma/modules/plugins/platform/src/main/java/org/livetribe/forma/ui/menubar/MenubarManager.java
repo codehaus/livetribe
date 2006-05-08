@@ -15,12 +15,17 @@
  */
 package org.livetribe.forma.ui.menubar;
 
+import org.livetribe.forma.ui.menubar.spi.MenubarInfo;
+
 /**
  * @version $Rev$ $Date$
  */
 public interface MenubarManager
 {
     public static final String ID = "org.livetribe.forma.menubar.menubarManager";
+    public static final String MENUBAR_ID = "org.livetribe.forma.menubar.mainMenubar";
+
+    public void spiAddMenubarInfo(MenubarInfo menubarInfo);
 
     public void installMenuBar(MenubarContainer frame, String menubarId);
 }

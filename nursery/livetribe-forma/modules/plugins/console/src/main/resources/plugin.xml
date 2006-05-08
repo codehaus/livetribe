@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="org.livetribe.forma.console" plugin-class="org.livetribe.forma.console.ConsolePlugin" bundle="Console">
+<plugin id="org.livetribe.forma.console.ConsolePlugin.ID" plugin-class="org.livetribe.forma.console.ConsolePlugin"
+        bundle="Console">
     <name bundleKey="plugin.console.name">Forma Console</name>
 
     <dependencies>
-        <dependency>org.livetribe.forma.platform</dependency>
-        <dependency>org.livetribe.forma.frame</dependency>
+        <dependency>org.livetribe.forma.FormaPlugin.ID</dependency>
+        <dependency>org.livetribe.forma.frame.FramePlugin.ID</dependency>
     </dependencies>
 
     <extensions>
 
-        <extension id="org.livetribe.forma.action.actionManager"
+        <extension id="org.livetribe.forma.ui.action.ActionManager.ID"
                    parser-class="org.livetribe.forma.ui.action.spi.ActionExtensionParser">
             <actions>
-                <action id="action.console.slpScan" action-class="org.livetribe.forma.console.action.SLPNetworkScanAction">
-                    <text>SLP Network Scan</text>
+                <action id="org.livetribe.forma.console.action.SLPNetworkScanAction.ID"
+                        action-class="org.livetribe.forma.console.action.SLPNetworkScanAction">
+                    <text bundleKey="action.slp.scan.text">SLP Network Scan</text>
                 </action>
             </actions>
         </extension>
 
-        <extension id="org.livetribe.forma.menubar.menubarManager"
+        <extension id="org.livetribe.forma.ui.menubar.MenubarManager.ID"
                    parser-class="org.livetribe.forma.ui.menubar.spi.MenubarExtensionParser">
             <menubars>
-                <menubar id="org.livetribe.forma.menubar.mainMenubar">
+                <menubar id="org.livetribe.forma.ui.menubar.MenubarManager.MENUBAR_ID">
                     <menus>
                         <menu id="menubar.menu.file">
                             <sections>
@@ -33,7 +35,7 @@
                                                 <section id="menubar.menu.file.menu.networkScans.section.scans">
                                                     <items>
                                                         <item id="menubar.menu.file.menu.networkScans.item.slpScan">
-                                                            <action refid="action.console.slpScan" />
+                                                            <action refid="org.livetribe.forma.console.action.SLPNetworkScanAction.ID" />
                                                         </item>
                                                     </items>
                                                 </section>
@@ -48,12 +50,25 @@
             </menubars>
         </extension>
 
-        <extension id="org.livetribe.forma.perspective.perspectiveManager"
+        <extension id="org.livetribe.forma.ui.perspective.PerspectiveManager.ID"
                    parser-class="org.livetribe.forma.ui.perspective.spi.PerspectiveExtensionParser">
             <perspectives>
-                <perspective id="org.livetribe.forma.perspective.welcome" perspective-class="org.livetribe.forma.console.perspective.WelcomePerspective">
+                <perspective id="org.livetribe.forma.console.perspective.WelcomePerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.WelcomePerspective">
+                </perspective>
+                <perspective id="org.livetribe.forma.console.perspective.BrowserPerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.BrowserPerspective">
                 </perspective>
             </perspectives>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.browser.BrowserManager.ID"
+                   parser-class="org.livetribe.forma.ui.browser.spi.BrowserExtensionParser">
+            <browsers>
+                <browser id="org.livetribe.forma.console.browser.SLPNetworkBrowser.ID"
+                         browser-class="org.livetribe.forma.console.browser.SLPNetworkBrowser">
+                </browser>
+            </browsers>
         </extension>
 
     </extensions>

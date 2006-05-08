@@ -16,6 +16,7 @@
 package org.livetribe.forma.ui.perspective;
 
 import org.livetribe.forma.ui.PartContainer;
+import org.livetribe.forma.ui.perspective.spi.PerspectiveInfo;
 
 /**
  * @version $Rev$ $Date$
@@ -24,15 +25,19 @@ public interface PerspectiveManager
 {
     public static final String ID = "org.livetribe.forma.perspective.perspectiveManager";
 
+    public void spiAddPerspectiveInfo(PerspectiveInfo perspectiveInfo);
+
     public void setDefaultPerspectiveId(String perspectiveId);
 
     public String getDefaultPerspectiveId();
 
-    public Perspective displayNewPerspective(PartContainer frame, String perspectiveId);
+    public Perspective displayNewPerspective(PartContainer container, String perspectiveId);
 
     public void closePerspective(Perspective perspective);
 
     public void addPerspectiveListener(PerspectiveListener listener);
 
     public void removePerspectiveListener(PerspectiveListener listener);
+
+    public Perspective getPerspective(PartContainer container);
 }

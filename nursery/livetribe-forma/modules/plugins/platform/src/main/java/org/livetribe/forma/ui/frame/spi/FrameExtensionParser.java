@@ -42,12 +42,12 @@ public class FrameExtensionParser extends ExtensionParser
     {
         try
         {
-            FrameManagerSpi frameManager = managerRegistry.get(FrameManager.ID, FrameManagerSpi.class);
+            FrameManager frameManager = managerRegistry.get(FrameManager.ID, FrameManager.class);
             if (frameManager == null)
             {
                 frameManager = new DefaultFrameManager();
                 containerManager.resolve(frameManager);
-                managerRegistry.put(FrameManager.ID, FrameManagerSpi.class, frameManager);
+                managerRegistry.put(FrameManager.ID, FrameManager.class, frameManager);
             }
 
             XPath xpath = XPathFactory.newInstance().newXPath();
@@ -57,13 +57,13 @@ public class FrameExtensionParser extends ExtensionParser
                 Element frameElement = (Element)frames.item(i);
                 FrameInfo frameInfo = new FrameInfo();
 
-                String frameId = xpath.evaluate("@id", frameElement);
+                String frameId = evaluateId(xpath.evaluate("@id", frameElement));
                 frameInfo.setFrameId(frameId);
 
                 String frameClassName = xpath.evaluate("@frame-class", frameElement);
                 frameInfo.setFrameClassName(frameClassName);
 
-                frameManager.addFrameInfo(frameInfo);
+                frameManager.spiAddFrameInfo(frameInfo);
             }
         }
         catch (XPathExpressionException x)

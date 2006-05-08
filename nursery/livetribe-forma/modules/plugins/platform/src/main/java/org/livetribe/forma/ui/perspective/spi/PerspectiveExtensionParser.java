@@ -40,12 +40,12 @@ public class PerspectiveExtensionParser extends ExtensionParser
     {
         try
         {
-            PerspectiveManagerSpi perspectiveManager = managerRegistry.get(PerspectiveManager.ID, PerspectiveManagerSpi.class);
+            PerspectiveManager perspectiveManager = managerRegistry.get(PerspectiveManager.ID, PerspectiveManager.class);
             if (perspectiveManager == null)
             {
                 perspectiveManager = new DefaultPerspectiveManager();
                 containerManager.resolve(perspectiveManager);
-                managerRegistry.put(PerspectiveManager.ID, PerspectiveManagerSpi.class, perspectiveManager);
+                managerRegistry.put(PerspectiveManager.ID, PerspectiveManager.class, perspectiveManager);
             }
             XPath xpath = XPathFactory.newInstance().newXPath();
             NodeList perspectives = (NodeList)xpath.evaluate("perspectives/perspective", extensionElement, XPathConstants.NODESET);
@@ -54,7 +54,7 @@ public class PerspectiveExtensionParser extends ExtensionParser
                 Element perspectiveElement = (Element)perspectives.item(i);
                 PerspectiveInfo perspectiveInfo = new PerspectiveInfo();
 
-                String perspectiveId = xpath.evaluate("@id", perspectiveElement);
+                String perspectiveId = evaluateId(xpath.evaluate("@id", perspectiveElement));
                 if (perspectiveId == null) throw new PerspectiveException("Missing required attribute 'id' of element 'perspective' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                 perspectiveInfo.setPerspectiveId(perspectiveId);
 
@@ -62,7 +62,7 @@ public class PerspectiveExtensionParser extends ExtensionParser
                 if (perspectiveClassName == null) throw new PerspectiveException("Missing required attribute 'perspective-class' of element 'perspective' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                 perspectiveInfo.setPerspectiveClassName(perspectiveClassName);
 
-                perspectiveManager.addPerspectiveInfo(perspectiveInfo);
+                perspectiveManager.spiAddPerspectiveInfo(perspectiveInfo);
             }
         }
         catch (XPathExpressionException x)

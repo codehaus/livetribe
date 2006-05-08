@@ -23,7 +23,15 @@ import org.livetribe.forma.ui.perspective.AbstractPerspective;
  */
 public class BrowserPerspective extends AbstractPerspective
 {
-    public void display(Part part)
+    public static final String ID = "org.livetribe.forma.perspective.browser";
+
+    public String getPerspectiveId()
     {
+        return ID;
+    }
+
+    public void spiDisplay(Part part)
+    {
+        add(part.spiGetComponent());
     }
 }

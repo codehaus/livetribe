@@ -15,35 +15,54 @@
  */
 package org.livetribe.forma.console.browser;
 
-import java.awt.Component;
-import javax.swing.JPanel;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-import org.livetribe.forma.ui.browser.spi.BrowserSpi;
-import org.livetribe.forma.ui.PartContainer;
+import org.livetribe.forma.threading.ThreadingManager;
+import org.livetribe.forma.ui.browser.AbstractBrowser;
+import org.livetribe.forma.ui.feedback.Feedback;
+import org.livetribe.forma.ui.feedback.FeedbackManager;
+import org.livetribe.ioc.Container;
+import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
+import org.livetribe.slp.ServiceURL;
 
 /**
  * @version $Rev$ $Date$
  */
-public class SLPNetworkBrowser extends JPanel implements BrowserSpi
+public class SLPNetworkBrowser extends AbstractBrowser
 {
+    public static final String ID = "org.livetribe.forma.browser.network.slp";
+
+    @Inject private Container containerManager;
+    @Inject private FeedbackManager feedbackManager;
+    @Inject private ThreadingManager threadingManager;
+    private SLPNetworkController controller;
+
     @PostConstruct
     private void initComponents()
     {
-//        SLPNetworkController controller = new SLPNetworkController();
+        controller = new SLPNetworkController();
+        containerManager.resolve(controller);
     }
 
-    public Component getComponent()
+    public void spiOpen()
     {
-        return this;
-    }
-
-    public void displayIn(PartContainer partContainer)
-    {
-    }
-
-    public void open()
-    {
-//        controller.findServices("service:jmx");
+        Feedback feedback = feedbackManager.showWaitCursor(this);
+        try
+        {
+            Object result = threadingManager.executeSync(new Callable<List<ServiceURL>>()
+            {
+                public List<ServiceURL> call() throws Exception
+                {
+                    return controller.findServices("service:jmx");
+                }
+            });
+            System.out.println("result = " + result);
+        }
+        finally
+        {
+            feedback.stop();
+        }
     }
 }

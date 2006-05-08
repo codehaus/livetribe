@@ -15,9 +15,20 @@
  */
 package org.livetribe.forma.ui.browser.spi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.livetribe.forma.ui.PartContainer;
 import org.livetribe.forma.ui.browser.Browser;
+import org.livetribe.forma.ui.browser.BrowserException;
+import org.livetribe.forma.ui.browser.BrowserListener;
 import org.livetribe.forma.ui.browser.BrowserManager;
+import org.livetribe.forma.ui.browser.BrowserEvent;
+import org.livetribe.forma.ui.perspective.PerspectiveException;
+import org.livetribe.ioc.Container;
+import org.livetribe.ioc.Inject;
 
 
 /**
@@ -25,12 +36,57 @@ import org.livetribe.forma.ui.browser.BrowserManager;
  */
 public class DefaultBrowserManager implements BrowserManager
 {
+    @Inject private Container containerManager;
+    private Map<String, BrowserInfo> browserInfos = new HashMap<String, BrowserInfo>();
+    private final List<BrowserListener> listeners = new ArrayList<BrowserListener>();
+
+    public void spiAddBrowserInfo(BrowserInfo browserInfo)
+    {
+        String browserId = browserInfo.getBrowserId();
+        if (browserInfos.containsKey(browserId)) throw new PerspectiveException("Duplicate browser id " + browserId);
+        browserInfos.put(browserId, browserInfo);
+    }
+
+    public void addBrowserListener(BrowserListener listener)
+    {
+        listeners.add(listener);
+    }
+
+    public void removeBrowserListener(BrowserListener listener)
+    {
+        listeners.remove(listener);
+    }
+
     public Browser displayNewBrowser(PartContainer container, String browserId)
     {
-        BrowserSpi browser = null;
-        browser.displayIn(container);
-        browser.open();
-        // TODO: notify listeners
+        if (browserId == null) return null;
+        BrowserInfo browserInfo = browserInfos.get(browserId);
+        if (browserInfo == null) throw new BrowserException("No browser with id " + browserId + " is registered in the browser extensions");
+        String browserClassName = browserInfo.getBrowserClassName();
+        Browser browser = createBrowser(browserClassName);
+        browser.spiDisplayIn(container);
+        browser.spiOpen();
+        notifyBrowserOpened(browser);
         return browser;
+    }
+
+    private Browser createBrowser(String browserClassName)
+    {
+        try
+        {
+            Browser browser = (Browser)Thread.currentThread().getContextClassLoader().loadClass(browserClassName).newInstance();
+            containerManager.resolve(browser);
+            return browser;
+        }
+        catch (Exception x)
+        {
+            throw new BrowserException(x);
+        }
+    }
+
+    private void notifyBrowserOpened(Browser browser)
+    {
+        BrowserEvent event = new BrowserEvent(browser);
+        for (BrowserListener listener : listeners) listener.browserOpened(event);
     }
 }

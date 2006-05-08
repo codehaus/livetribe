@@ -26,6 +26,8 @@ import org.livetribe.ioc.Inject;
  */
 public class ExitApplicationAction implements ActionListener
 {
+    public static final String ID = "action.frame.exitApplication";
+    
     @Inject
     private FrameManager frameManager;
 

@@ -27,6 +27,8 @@ import org.livetribe.ioc.Inject;
  */
 public class CloseFrameAction implements ActionListener
 {
+    public static final String ID = "action.frame.closeFrame";
+    
     @Inject
     private FrameManager frameManager;
 

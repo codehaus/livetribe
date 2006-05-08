@@ -18,8 +18,12 @@ package org.livetribe.forma.console.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.livetribe.forma.console.browser.SLPNetworkBrowser;
+import org.livetribe.forma.console.perspective.BrowserPerspective;
+import org.livetribe.forma.ui.browser.BrowserManager;
 import org.livetribe.forma.ui.frame.Frame;
 import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.forma.ui.perspective.Perspective;
 import org.livetribe.forma.ui.perspective.PerspectiveManager;
 import org.livetribe.ioc.Inject;
 
@@ -28,21 +32,23 @@ import org.livetribe.ioc.Inject;
  */
 public class SLPNetworkScanAction implements ActionListener
 {
+    public static final String ID = "action.console.network.scan.slp";
+
     @Inject private FrameManager frameManager;
     @Inject private PerspectiveManager perspectiveManager;
-//    @Inject private BrowserManager browserManager;
+    @Inject private BrowserManager browserManager;
 
     public void actionPerformed(ActionEvent e)
     {
         Frame frame = frameManager.getCurrentFrame();
-//        Perspective perspective = perspectiveManager.getPerspective(frame);
-//        if (perspective == null) perspective = perspectiveManager.displayNewPerspective(frame, BrowserPerspective.ID);
-//        if (!BrowserPerspective.ID.equals(perspective.getPerspectiveId()))
-//        {
-//            perspectiveManager.closePerspective(perspective);
-//            perspective = perspectiveManager.displayNewPerspective(frame, BrowserPerspective.ID);
-//        }
-//
-//        browserManager.displayNewBrowser(perspective, SLPNetworkBrowser.ID);
+        Perspective perspective = perspectiveManager.getPerspective(frame);
+        if (perspective == null) perspective = perspectiveManager.displayNewPerspective(frame, BrowserPerspective.ID);
+        if (!BrowserPerspective.ID.equals(perspective.getPerspectiveId()))
+        {
+            perspectiveManager.closePerspective(perspective);
+            perspective = perspectiveManager.displayNewPerspective(frame, BrowserPerspective.ID);
+        }
+
+        browserManager.displayNewBrowser(perspective, SLPNetworkBrowser.ID);
     }
 }

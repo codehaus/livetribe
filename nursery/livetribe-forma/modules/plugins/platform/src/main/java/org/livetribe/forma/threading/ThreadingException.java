@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.browser;
-
-import org.livetribe.forma.ui.PartContainer;
-import org.livetribe.forma.ui.browser.spi.BrowserInfo;
+package org.livetribe.forma.threading;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface BrowserManager
+public class ThreadingException extends RuntimeException
 {
-    public static final String ID = "org.livetribe.forma.browser.browserManager";
+    public ThreadingException()
+    {
+    }
 
-    public void spiAddBrowserInfo(BrowserInfo browserInfo);
+    public ThreadingException(String message)
+    {
+        super(message);
+    }
 
-    public void addBrowserListener(BrowserListener listener);
+    public ThreadingException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 
-    public void removeBrowserListener(BrowserListener listener);
-
-    public Browser displayNewBrowser(PartContainer container, String browserId);
+    public ThreadingException(Throwable cause)
+    {
+        super(cause);
+    }
 }

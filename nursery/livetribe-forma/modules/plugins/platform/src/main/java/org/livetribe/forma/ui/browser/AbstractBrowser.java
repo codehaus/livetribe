@@ -13,15 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.browser.spi;
+package org.livetribe.forma.ui.browser;
 
-import org.livetribe.forma.ui.Part;
-import org.livetribe.forma.ui.browser.Browser;
+import java.awt.Component;
+import javax.swing.JPanel;
+
+import org.livetribe.forma.ui.PartContainer;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface BrowserSpi extends Browser, Part
+public abstract class AbstractBrowser extends JPanel implements Browser
 {
-    public void open();
+    private PartContainer container;
+
+    public Component spiGetComponent()
+    {
+        return this;
+    }
+
+    public void spiDisplayIn(PartContainer container)
+    {
+        this.container = container;
+        container.spiDisplay(this);
+    }
+
+    public void spiUndisplay()
+    {
+        if (container == null) return;
+        container.spiDisplay(null);
+        container = null;
+    }
 }

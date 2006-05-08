@@ -13,14 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.frame.spi;
-
-import org.livetribe.forma.ui.frame.FrameManager;
+package org.livetribe.forma.ui.browser.spi;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface FrameManagerSpi extends FrameManager
+public class BrowserInfo
 {
-    public void addFrameInfo(FrameInfo frameInfo);
+    private String browserId;
+    private String browserClassName;
+
+    public String getBrowserId()
+    {
+        return browserId;
+    }
+
+    public void setBrowserId(String browserId)
+    {
+        this.browserId = browserId;
+    }
+
+    public String getBrowserClassName()
+    {
+        return browserClassName;
+    }
+
+    public void setBrowserClassName(String browserClassName)
+    {
+        this.browserClassName = browserClassName;
+    }
 }

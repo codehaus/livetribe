@@ -15,10 +15,16 @@
  */
 package org.livetribe.forma.ui.action;
 
+import org.livetribe.forma.ui.action.spi.ActionInfo;
+
 /**
  * @version $Rev$ $Date$
  */
 public interface ActionManager
 {
     public static final String ID = "org.livetribe.forma.ui.action.actionManager";
+
+    public void spiAddActionInfo(ActionInfo actionInfo);
+
+    public Action getAction(String actionId);
 }

@@ -15,9 +15,13 @@
  */
 package org.livetribe.forma.ui.perspective;
 
+import org.livetribe.forma.ui.Part;
+import org.livetribe.forma.ui.PartContainer;
+
 /**
  * @version $Rev$ $Date$
  */
-public interface Perspective
+public interface Perspective extends Part, PartContainer
 {
+    public String getPerspectiveId();
 }

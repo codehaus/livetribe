@@ -40,12 +40,12 @@ public class StatusbarExtensionParser extends ExtensionParser
     {
         try
         {
-            StatusbarManagerSpi statusbarManager = managerRegistry.get(StatusbarManager.ID, StatusbarManagerSpi.class);
+            StatusbarManager statusbarManager = managerRegistry.get(StatusbarManager.ID, StatusbarManager.class);
             if (statusbarManager == null)
             {
                 statusbarManager = new DefaultStatusbarManager();
                 containerManager.resolve(statusbarManager);
-                managerRegistry.put(StatusbarManager.ID, StatusbarManagerSpi.class, statusbarManager);
+                managerRegistry.put(StatusbarManager.ID, StatusbarManager.class, statusbarManager);
             }
             XPath xpath = XPathFactory.newInstance().newXPath();
             NodeList statusbars = (NodeList)xpath.evaluate("statusbars/statusbar", extensionElement, XPathConstants.NODESET);
@@ -54,13 +54,13 @@ public class StatusbarExtensionParser extends ExtensionParser
                 Element statusbarElement = (Element)statusbars.item(i);
                 StatusbarInfo statusbarInfo = new StatusbarInfo();
 
-                String statusbarId = xpath.evaluate("@id", statusbarElement);
+                String statusbarId = evaluateId(xpath.evaluate("@id", statusbarElement));
                 if (statusbarId == null) throw new StatusbarException("Missing required attribute 'id' of element 'statusbar' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                 statusbarInfo.setStatusbarId(statusbarId);
 
                 // TODO: figure out the XML structure and parse it
 
-                statusbarManager.addStatusbarInfo(statusbarInfo);
+                statusbarManager.spiAddStatusbarInfo(statusbarInfo);
             }
         }
         catch (XPathExpressionException x)

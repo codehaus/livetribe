@@ -19,6 +19,8 @@ import org.livetribe.forma.i18n.DefaultInternationalizationManager;
 import org.livetribe.forma.i18n.InternationalizationManager;
 import org.livetribe.forma.threading.DefaultThreadingManager;
 import org.livetribe.forma.threading.ThreadingManager;
+import org.livetribe.forma.ui.feedback.FeedbackManager;
+import org.livetribe.forma.ui.feedback.spi.DefaultFeedbackManager;
 import org.livetribe.ioc.Inject;
 
 /**
@@ -26,6 +28,8 @@ import org.livetribe.ioc.Inject;
  */
 public class FormaPlugin extends org.livetribe.forma.AbstractPlugin
 {
+    public static final String ID = "org.livetribe.forma.platform";
+
     @Inject
     private ManagerRegistry managerRegistry;
 
@@ -34,11 +38,13 @@ public class FormaPlugin extends org.livetribe.forma.AbstractPlugin
     {
         managerRegistry.put("i18nManager", InternationalizationManager.class, new DefaultInternationalizationManager());
         managerRegistry.put("threadingManager", ThreadingManager.class, new DefaultThreadingManager());
+        managerRegistry.put("feedbackManager", FeedbackManager.class, new DefaultFeedbackManager());
     }
 
     @Override
     public void destroy()
     {
+        managerRegistry.remove("feedbackManager");
         managerRegistry.remove("threadingManager");
         managerRegistry.remove("i18nManager");
     }

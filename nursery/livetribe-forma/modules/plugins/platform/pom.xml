@@ -37,6 +37,11 @@
             <artifactId>boot</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>foxtrot</groupId>
+            <artifactId>foxtrot-core</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

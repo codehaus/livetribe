@@ -13,35 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.perspective;
+package org.livetribe.forma.ui.feedback.spi;
 
 import java.awt.Component;
-import javax.swing.JPanel;
+import java.awt.Cursor;
 
-import org.livetribe.forma.ui.PartContainer;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
+
+import org.livetribe.forma.ui.feedback.Feedback;
 
 /**
  * @version $Rev$ $Date$
  */
-public abstract class AbstractPerspective extends JPanel implements Perspective
+public class WaitCursorFeedback implements Feedback
 {
-    private PartContainer container;
+    private final Component glassPane;
 
-    public Component spiGetComponent()
+    public WaitCursorFeedback(Component component)
     {
-        return this;
+        JRootPane rootPane = SwingUtilities.getRootPane(component);
+        glassPane = rootPane.getGlassPane();
+        glassPane.setVisible(true);
+        glassPane.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
-    public void spiDisplayIn(PartContainer partContainer)
+    public void stop()
     {
-        this.container = partContainer;
-        partContainer.spiDisplay(this);
-    }
-
-    public void spiUndisplay()
-    {
-        if (container == null) return;
-        container.spiDisplay(null);
-        container = null;
+        glassPane.setCursor(Cursor.getDefaultCursor());
+        glassPane.setVisible(false);
     }
 }

@@ -149,7 +149,7 @@ public class PluginLoader
                 Element extensionElement = (Element)extensions.item(i);
                 ExtensionInfo extensionInfo = new ExtensionInfo(pluginInfo);
 
-                String extensionId = xpath.evaluate("@id", extensionElement);
+                String extensionId = ExtensionParser.evaluateId(xpath.evaluate("@id", extensionElement));
                 if (extensionId == null) throw new PluginException("Missing required attribute 'id' of element 'extension' in " + pluginConfig);
                 extensionInfo.setExtensionId(extensionId);
 

@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.action.spi;
+package org.livetribe.forma.ui.browser;
 
-import org.livetribe.forma.ui.action.ActionManager;
+import java.util.EventObject;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface ActionManagerSpi extends ActionManager
+public class BrowserEvent extends EventObject
 {
-    public void addActionInfo(ActionInfo actionInfo);
-
-    public Action getAction(String actionId);
+    public BrowserEvent(Object source)
+    {
+        super(source);
+    }
 }

@@ -23,22 +23,23 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.livetribe.forma.ui.menubar.MenubarException;
+import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.menubar.MenubarContainer;
-import org.livetribe.forma.ui.action.spi.ActionManagerSpi;
-import org.livetribe.forma.ui.action.spi.Action;
+import org.livetribe.forma.ui.menubar.MenubarException;
+import org.livetribe.forma.ui.menubar.MenubarManager;
 import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class DefaultMenubarManager implements MenubarManagerSpi
+public class DefaultMenubarManager implements MenubarManager
 {
     @Inject
-    private ActionManagerSpi actionManager;
+    private ActionManager actionManager;
     private final Map<String, MenubarInfo> menubarInfos = new HashMap<String, MenubarInfo>();
 
-    public void addMenubarInfo(MenubarInfo menubarInfo)
+    public void spiAddMenubarInfo(MenubarInfo menubarInfo)
     {
         String menubarId = menubarInfo.getMenubarId();
         MenubarInfo existing = menubarInfos.get(menubarId);

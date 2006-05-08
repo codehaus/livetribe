@@ -22,6 +22,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.livetribe.forma.ManagerRegistry;
+import org.livetribe.forma.ExtensionParser;
+import org.livetribe.forma.ExtensionInfo;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.action.ActionException;
 import org.livetribe.ioc.Container;
@@ -32,21 +34,21 @@ import org.w3c.dom.NodeList;
 /**
  * @version $Rev$ $Date$
  */
-public class ActionExtensionParser extends org.livetribe.forma.ExtensionParser
+public class ActionExtensionParser extends ExtensionParser
 {
     @Inject private Container containerManager;
     @Inject private ManagerRegistry managerRegistry;
 
-    public void parse(Element extensionElement, org.livetribe.forma.ExtensionInfo extensionInfo)
+    public void parse(Element extensionElement, ExtensionInfo extensionInfo)
     {
         try
         {
-            ActionManagerSpi actionManager = managerRegistry.get(ActionManager.ID, ActionManagerSpi.class);
+            ActionManager actionManager = managerRegistry.get(ActionManager.ID, ActionManager.class);
             if (actionManager == null)
             {
                 actionManager = new DefaultActionManager();
                 containerManager.resolve(actionManager);
-                managerRegistry.put(ActionManager.ID, ActionManagerSpi.class, actionManager);
+                managerRegistry.put(ActionManager.ID, ActionManager.class, actionManager);
             }
             ResourceBundle resourceBundle = extensionInfo.getPluginInfo().getResourceBundle();
             XPath xpath = XPathFactory.newInstance().newXPath();
@@ -56,7 +58,7 @@ public class ActionExtensionParser extends org.livetribe.forma.ExtensionParser
                 Element actionElement = (Element)actions.item(i);
                 ActionInfo actionInfo = new ActionInfo();
 
-                String actionId = xpath.evaluate("@id", actionElement);
+                String actionId = evaluateId(xpath.evaluate("@id", actionElement));
                 if (actionId == null) throw new ActionException("Missing required attribute 'id' of element 'action' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                 actionInfo.setActionId(actionId);
 
@@ -84,7 +86,7 @@ public class ActionExtensionParser extends org.livetribe.forma.ExtensionParser
                 String accelerator = evaluateI18nElement(acceleratorElement, resourceBundle);
                 actionInfo.setActionAccelerator(accelerator);
 
-                actionManager.addActionInfo(actionInfo);
+                actionManager.spiAddActionInfo(actionInfo);
             }
         }
         catch (XPathExpressionException x)

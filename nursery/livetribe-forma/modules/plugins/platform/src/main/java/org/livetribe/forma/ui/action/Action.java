@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.action.spi;
+package org.livetribe.forma.ui.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.EventQueue;
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
 
 /**
  * @version $Rev$ $Date$
@@ -45,5 +46,15 @@ public class Action extends AbstractAction
                 actionListener.actionPerformed(e);
             }
         });
+    }
+
+    public String getTooltip()
+    {
+        return (String)getValue(SHORT_DESCRIPTION);
+    }
+
+    public Icon getIcon()
+    {
+        return (Icon)getValue(SMALL_ICON);
     }
 }

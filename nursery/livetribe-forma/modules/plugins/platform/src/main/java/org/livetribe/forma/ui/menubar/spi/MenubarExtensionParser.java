@@ -45,12 +45,12 @@ public class MenubarExtensionParser extends ExtensionParser
     {
         try
         {
-            MenubarManagerSpi menubarManager = managerRegistry.get(MenubarManager.ID, MenubarManagerSpi.class);
+            MenubarManager menubarManager = managerRegistry.get(MenubarManager.ID, MenubarManager.class);
             if (menubarManager == null)
             {
                 menubarManager = new DefaultMenubarManager();
                 containerManager.resolve(menubarManager);
-                managerRegistry.put(MenubarManager.ID, MenubarManagerSpi.class, menubarManager);
+                managerRegistry.put(MenubarManager.ID, MenubarManager.class, menubarManager);
             }
             ResourceBundle resourceBundle = extensionInfo.getPluginInfo().getResourceBundle();
             XPath xpath = XPathFactory.newInstance().newXPath();
@@ -60,14 +60,14 @@ public class MenubarExtensionParser extends ExtensionParser
                 Element menubarElement = (Element)menubars.item(i);
                 MenubarInfo menubarInfo = new MenubarInfo();
 
-                String menubarId = xpath.evaluate("@id", menubarElement);
+                String menubarId = evaluateId(xpath.evaluate("@id", menubarElement));
                 if (menubarId == null) throw new MenubarException("Missing required attribute 'id' of element 'menubar' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                 menubarInfo.setMenubarId(menubarId);
 
                 NodeList menus = (NodeList)xpath.evaluate("menus/menu", menubarElement, XPathConstants.NODESET);
                 List<MenuInfo> menuInfos = parseMenus(extensionInfo, menus, resourceBundle);
                 for (MenuInfo menuInfo : menuInfos) menubarInfo.addMenuInfo(menuInfo);
-                menubarManager.addMenubarInfo(menubarInfo);
+                menubarManager.spiAddMenubarInfo(menubarInfo);
             }
         }
         catch (XPathExpressionException x)
@@ -85,7 +85,7 @@ public class MenubarExtensionParser extends ExtensionParser
             Element menuElement = (Element)menus.item(j);
             MenuInfo menuInfo = new MenuInfo();
 
-            String menuId = xpath.evaluate("@id", menuElement);
+            String menuId = evaluateId(xpath.evaluate("@id", menuElement));
             if (menuId == null) throw new MenubarException("Missing required attribute 'id' of element 'menu' in " + extensionInfo.getPluginInfo().getConfigurationFile());
             menuInfo.setMenuId(menuId);
 
@@ -103,7 +103,7 @@ public class MenubarExtensionParser extends ExtensionParser
                 Element sectionElement = (Element)sections.item(k);
                 MenuSectionInfo sectionInfo = new MenuSectionInfo();
 
-                String sectionId = xpath.evaluate("@id", sectionElement);
+                String sectionId = evaluateId(xpath.evaluate("@id", sectionElement));
                 if (sectionId == null) throw new MenubarException("Missing required attribute 'id' of element 'section' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                 sectionInfo.setMenuSectionId(sectionId);
 
@@ -113,12 +113,12 @@ public class MenubarExtensionParser extends ExtensionParser
                     Element itemElement = (Element)items.item(m);
                     MenuItemInfo itemInfo = new MenuItemInfo();
 
-                    String itemId = xpath.evaluate("@id", itemElement);
+                    String itemId = evaluateId(xpath.evaluate("@id", itemElement));
                     if (itemId == null) throw new MenubarException("Missing required attribute 'id' of element 'item' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                     itemInfo.setMenuItemId(itemId);
 
                     Element actionElement = (Element)xpath.evaluate("action", itemElement, XPathConstants.NODE);
-                    String actionId = xpath.evaluate("@refid", actionElement);
+                    String actionId = evaluateId(xpath.evaluate("@refid", actionElement));
                     if (actionId == null) throw new MenubarException("Missing required attribute 'refid' of element 'action' in " + extensionInfo.getPluginInfo().getConfigurationFile());
                     itemInfo.setActionId(actionId);
 

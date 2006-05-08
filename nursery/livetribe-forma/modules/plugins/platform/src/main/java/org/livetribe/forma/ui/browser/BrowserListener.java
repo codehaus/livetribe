@@ -15,21 +15,14 @@
  */
 package org.livetribe.forma.ui.browser;
 
-import org.livetribe.forma.ui.PartContainer;
-import org.livetribe.forma.ui.browser.spi.BrowserInfo;
+import java.util.EventListener;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface BrowserManager
+public interface BrowserListener extends EventListener
 {
-    public static final String ID = "org.livetribe.forma.browser.browserManager";
+    public void browserOpened(BrowserEvent event);
 
-    public void spiAddBrowserInfo(BrowserInfo browserInfo);
-
-    public void addBrowserListener(BrowserListener listener);
-
-    public void removeBrowserListener(BrowserListener listener);
-
-    public Browser displayNewBrowser(PartContainer container, String browserId);
+    public void browserClosed(BrowserEvent event);
 }

@@ -15,12 +15,18 @@
  */
 package org.livetribe.forma.ui.frame;
 
+import org.livetribe.forma.ui.PartContainer;
+
 /**
  * @version $Rev$ $Date$
  */
-public interface Frame
+public interface Frame extends PartContainer
 {
     public static final String ID = "org.livetribe.forma.frame.mainFrame";
-    public static final String MENUBAR_ID = "org.livetribe.forma.menubar.mainMenubar";
-    public static final String STATUSBAR_ID = "org.livetribe.forma.statusbar.mainStatusbar";
+
+    public void spiDisplay();
+
+    public void spiUndisplay();
+
+    public boolean spiConfirmClose();
 }

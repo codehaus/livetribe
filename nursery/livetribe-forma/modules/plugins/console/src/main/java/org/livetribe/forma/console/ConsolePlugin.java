@@ -25,6 +25,8 @@ import org.livetribe.ioc.Inject;
  */
 public class ConsolePlugin implements Plugin
 {
+    public static final String ID = "org.livetribe.forma.console";
+
     @Inject
     private PerspectiveManager perspectiveManager;
 

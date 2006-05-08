@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.browser;
+package org.livetribe.forma.ui.feedback;
 
-import org.livetribe.forma.ui.PartContainer;
-import org.livetribe.forma.ui.browser.spi.BrowserInfo;
+import java.awt.Component;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface BrowserManager
+public interface FeedbackManager
 {
-    public static final String ID = "org.livetribe.forma.browser.browserManager";
-
-    public void spiAddBrowserInfo(BrowserInfo browserInfo);
-
-    public void addBrowserListener(BrowserListener listener);
-
-    public void removeBrowserListener(BrowserListener listener);
-
-    public Browser displayNewBrowser(PartContainer container, String browserId);
+    public Feedback showWaitCursor(Component component);
 }

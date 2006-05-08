@@ -15,9 +15,12 @@
  */
 package org.livetribe.forma.ui.browser;
 
+import org.livetribe.forma.ui.Part;
+
 /**
  * @version $Rev$ $Date$
  */
-public interface Browser
+public interface Browser extends Part
 {
+    public void spiOpen();
 }

@@ -13,14 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.statusbar.spi;
-
-import org.livetribe.forma.ui.statusbar.StatusbarManager;
+package org.livetribe.forma.ui.browser;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface StatusbarManagerSpi extends StatusbarManager
+public class BrowserException extends RuntimeException
 {
-    public void addStatusbarInfo(StatusbarInfo statusbarInfo);
+    public BrowserException()
+    {
+    }
+
+    public BrowserException(String message)
+    {
+        super(message);
+    }
+
+    public BrowserException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public BrowserException(Throwable cause)
+    {
+        super(cause);
+    }
 }

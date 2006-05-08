@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.perspective.spi;
+package org.livetribe.forma.ui.feedback.spi;
 
-import org.livetribe.forma.ui.Part;
-import org.livetribe.forma.ui.PartContainer;
-import org.livetribe.forma.ui.perspective.Perspective;
+import java.awt.Component;
+
+import org.livetribe.forma.ui.feedback.Feedback;
+import org.livetribe.forma.ui.feedback.FeedbackManager;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface PerspectiveSpi extends Perspective, Part, PartContainer
+public class DefaultFeedbackManager implements FeedbackManager
 {
-    public void undisplay();
+    public Feedback showWaitCursor(Component component)
+    {
+        return new WaitCursorFeedback(component);
+    }
 }

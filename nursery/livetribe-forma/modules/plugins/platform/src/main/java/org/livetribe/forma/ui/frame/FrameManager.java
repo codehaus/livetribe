@@ -15,12 +15,16 @@
  */
 package org.livetribe.forma.ui.frame;
 
+import org.livetribe.forma.ui.frame.spi.FrameInfo;
+
 /**
  * @version $Rev$ $Date$
  */
 public interface FrameManager
 {
     public static final String ID = "org.livetribe.forma.frame.frameManager";
+
+    public void spiAddFrameInfo(FrameInfo frameInfo);
 
     public Frame displayNewFrame(String frameId);
 

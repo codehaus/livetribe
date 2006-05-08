@@ -15,10 +15,26 @@
  */
 package org.livetribe.forma.console.perspective;
 
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URL;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.livetribe.forma.i18n.Bundle;
+import org.livetribe.forma.i18n.InternationalizationManager;
 import org.livetribe.forma.ui.Part;
+import org.livetribe.forma.ui.action.ActionManager;
+import org.livetribe.forma.ui.action.Action;
 import org.livetribe.forma.ui.perspective.AbstractPerspective;
+import org.livetribe.forma.console.action.SLPNetworkScanAction;
+import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 
 /**
@@ -28,14 +44,55 @@ public class WelcomePerspective extends AbstractPerspective
 {
     public static final String ID = "org.livetribe.forma.perspective.welcome";
 
+    @Inject private ActionManager actionManager;
+    private Bundle bundle;
+
+    @Inject
+    public void setTranslator(InternationalizationManager translator)
+    {
+        this.bundle = translator.getBundle("Console", null);
+    }
+
     @PostConstruct
     private void initComponents()
     {
-        JLabel jLabel = new JLabel("WELCOME");
-        add(jLabel);
+        setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+
+        FormLayout layout = new FormLayout("pref, 5dlu, left:default", "pref");
+        setLayout(layout);
+
+        URL iconURL = getClass().getClassLoader().getResource(bundle.get("perspective.welcome.slp.scan.button.icon"));
+        Icon icon = null;
+        if (iconURL != null) icon = new ImageIcon(iconURL);
+        final JButton slpScanButton = new JButton(icon);
+        slpScanButton.setFocusPainted(false);
+        Action action = actionManager.getAction(SLPNetworkScanAction.ID);
+        slpScanButton.setToolTipText(action.getTooltip());
+        slpScanButton.addActionListener(action);
+
+        String slpScanText = bundle.get("perspective.welcome.slp.scan.label.text");
+        JLabel slpScanLabel = new JLabel(slpScanText);
+        slpScanLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        slpScanLabel.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                slpScanButton.doClick();
+            }
+        });
+
+        CellConstraints cc = new CellConstraints();
+        add(slpScanButton, cc.xy(1, 1));
+        add(slpScanLabel, cc.xy(3, 1));
     }
 
-    public void display(Part part)
+    public String getPerspectiveId()
+    {
+        return ID;
+    }
+
+    public void spiDisplay(Part part)
     {
         throw new AssertionError("This class does not support children components: " + getClass().getName());
     }

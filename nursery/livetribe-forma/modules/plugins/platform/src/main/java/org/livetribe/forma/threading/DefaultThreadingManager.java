@@ -16,9 +16,13 @@
 package org.livetribe.forma.threading;
 
 import java.awt.EventQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import foxtrot.Worker;
+import foxtrot.Job;
 
 /**
  * @version $Rev: 118 $ $Date$
@@ -43,5 +47,24 @@ public class DefaultThreadingManager implements ThreadingManager
     public void postToEventQueue(Runnable runnable)
     {
         EventQueue.invokeLater(runnable);
+    }
+
+    public <T> T executeSync(final Callable<T> callable)
+    {
+        Object result = Worker.post(new Job()
+        {
+            public Object run()
+            {
+                try
+                {
+                    return callable.call();
+                }
+                catch (Exception x)
+                {
+                    throw new ThreadingException(x);
+                }
+            }
+        });
+        return (T)result;
     }
 }

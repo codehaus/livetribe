@@ -22,7 +22,9 @@ import java.awt.Component;
  */
 public interface Part
 {
-    public Component getComponent();
+    public Component spiGetComponent();
 
-    public void displayIn(PartContainer partContainer);
+    public void spiDisplayIn(PartContainer partContainer);
+
+    public void spiUndisplay();
 }

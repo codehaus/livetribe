@@ -25,22 +25,23 @@ import org.livetribe.forma.ui.frame.Frame;
 import org.livetribe.forma.ui.frame.FrameListener;
 import org.livetribe.forma.ui.frame.FrameException;
 import org.livetribe.forma.ui.frame.FrameEvent;
+import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class DefaultFrameManager implements FrameManagerSpi
+public class DefaultFrameManager implements FrameManager
 {
     @Inject private Container containerManager;
     @Inject private ShutDownManager shutDownManager;
     private final Map<String, FrameInfo> frameInfos = new HashMap<String, FrameInfo>();
     private final List<FrameListener> listeners = new ArrayList<FrameListener>();
-    private final List<FrameSpi> frames = new ArrayList<FrameSpi>();
-    private FrameSpi currentFrame;
+    private final List<Frame> frames = new ArrayList<Frame>();
+    private Frame currentFrame;
 
-    public void addFrameInfo(FrameInfo frameInfo)
+    public void spiAddFrameInfo(FrameInfo frameInfo)
     {
         String frameId = frameInfo.getFrameId();
         if (frameInfos.containsKey(frameId)) throw new FrameException("Duplicate frame id " + frameId);
@@ -54,21 +55,18 @@ public class DefaultFrameManager implements FrameManagerSpi
             throw new FrameException("No frame with id " + frameId + " is registered in the frame extensions");
         String frameClassName = frameInfo.getFrameClassName();
 
-        // The steps involved in creating a frame: 1) new 2) display 3) notify.
-        // In future, we may want to expand these steps, for example adding a "restore" phase
-        // to restore window geometry, and this additional step will only impact FrameSpi
-        FrameSpi frame = createFrame(frameClassName);
+        Frame frame = createFrame(frameClassName);
         frames.add(frame);
-        frame.display();
+        frame.spiDisplay();
         notifyFrameOpened(frame);
         return frame;
     }
 
-    private FrameSpi createFrame(String frameClassName)
+    private Frame createFrame(String frameClassName)
     {
         try
         {
-            FrameSpi frame = (FrameSpi)Thread.currentThread().getContextClassLoader().loadClass(frameClassName).newInstance();
+            Frame frame = (Frame)Thread.currentThread().getContextClassLoader().loadClass(frameClassName).newInstance();
             containerManager.resolve(frame);
             return frame;
         }
@@ -88,13 +86,13 @@ public class DefaultFrameManager implements FrameManagerSpi
         listeners.remove(listener);
     }
 
-    private void notifyFrameOpened(FrameSpi frame)
+    private void notifyFrameOpened(Frame frame)
     {
         FrameEvent event = new FrameEvent(frame);
         for (FrameListener listener : listeners) listener.frameOpened(event);
     }
 
-    private void notifyFrameClosed(FrameSpi frame)
+    private void notifyFrameClosed(Frame frame)
     {
         FrameEvent event = new FrameEvent(frame);
         for (FrameListener listener : listeners) listener.frameClosed(event);
@@ -107,12 +105,11 @@ public class DefaultFrameManager implements FrameManagerSpi
 
     public void setCurrentFrame(Frame frame)
     {
-        this.currentFrame = (FrameSpi)frame;
+        this.currentFrame = frame;
     }
 
-    public void closeFrame(Frame f)
+    public void closeFrame(Frame frame)
     {
-        FrameSpi frame = (FrameSpi)f;
         assert frames.contains(frame);
         close(frame);
         if (frames.isEmpty()) shutdown();
@@ -120,27 +117,27 @@ public class DefaultFrameManager implements FrameManagerSpi
 
     public void shutdownApplication()
     {
-        boolean confirmed = currentFrame.confirmClose();
+        boolean confirmed = currentFrame.spiConfirmClose();
         if (!confirmed) return;
 
         // Copy frames to avoid ConcurrentModificationException
-        List<FrameSpi> frameCopies = new ArrayList<FrameSpi>(frames);
+        List<Frame> frameCopies = new ArrayList<Frame>(frames);
         frames.clear();
 
-        for (FrameSpi frame : frameCopies) close(frame);
+        for (Frame frame : frameCopies) close(frame);
         shutdown();
     }
 
-    private void close(FrameSpi frame)
+    private void close(Frame frame)
     {
         if (frames.size() == 1)
         {
             // The last frame, ask the user if really wants to close
-            boolean confirmed = frame.confirmClose();
+            boolean confirmed = frame.spiConfirmClose();
             if (!confirmed) return;
         }
 
-        frame.undisplay();
+        frame.spiUndisplay();
         frames.remove(frame);
         notifyFrameClosed(frame);
     }

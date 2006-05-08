@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.perspective.spi;
+package org.livetribe.forma.swing;
 
-import org.livetribe.forma.ui.perspective.PerspectiveManager;
+import javax.swing.JButton;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface PerspectiveManagerSpi extends PerspectiveManager
+public class ToolbarButton extends JButton
 {
-    public void addPerspectiveInfo(PerspectiveInfo perspectiveInfo);
+    public ToolbarButton()
+    {
+        setBorderPainted(false);
+        setFocusPainted(false);
+    }
 }

@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.menubar.spi;
-
-import org.livetribe.forma.ui.menubar.MenubarManager;
+package org.livetribe.forma.ui.perspective;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface MenubarManagerSpi extends MenubarManager
+public interface PerspectiveContainer
 {
-    public void addMenubarInfo(MenubarInfo menubarInfo);
+    public Perspective spiGetPerspective();
 }

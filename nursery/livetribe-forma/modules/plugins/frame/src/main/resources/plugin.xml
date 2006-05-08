@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="org.livetribe.forma.frame" plugin-class="org.livetribe.forma.frame.FramePlugin" bundle="Frame">
+<plugin id="org.livetribe.forma.frame.FramePlugin.ID" plugin-class="org.livetribe.forma.frame.FramePlugin" bundle="Frame">
     <name bundleKey="plugin.frame.name">Forma Frame</name>
 
     <dependencies>
-        <dependency>org.livetribe.forma.platform</dependency>
+        <dependency>org.livetribe.forma.FormaPlugin.ID</dependency>
     </dependencies>
 
     <extensions>
 
-        <extension id="org.livetribe.forma.frame.frameManager"
+        <extension id="org.livetribe.forma.ui.frame.FrameManager.ID"
                    parser-class="org.livetribe.forma.ui.frame.spi.FrameExtensionParser">
             <frames>
-                <frame id="org.livetribe.forma.frame.mainFrame"
+                <frame id="org.livetribe.forma.ui.frame.Frame.ID"
                        frame-class="org.livetribe.forma.ui.frame.spi.DefaultFrame" />
             </frames>
         </extension>
 
-        <extension id="org.livetribe.forma.action.actionManager"
+        <extension id="org.livetribe.forma.ui.action.ActionManager.ID"
                    parser-class="org.livetribe.forma.ui.action.spi.ActionExtensionParser">
             <actions>
-                <action id="action.frame.newFrame" action-class="org.livetribe.forma.frame.action.NewFrameAction">
+                <action id="org.livetribe.forma.frame.action.NewFrameAction.ID" action-class="org.livetribe.forma.frame.action.NewFrameAction">
                     <text bundleKey="">New Frame</text>
                     <tooltip>Opens a new frame</tooltip>
                     <!--<icon bundleKey="">images/new.png</icon>-->
                     <mnemonic bundleKey="">N</mnemonic>
                     <accelerator bundleKey="">ctrl N</accelerator>
                 </action>
-                <action id="action.frame.closeFrame" action-class="org.livetribe.forma.frame.action.CloseFrameAction">
+                <action id="org.livetribe.forma.frame.action.CloseFrameAction.ID" action-class="org.livetribe.forma.frame.action.CloseFrameAction">
                     <text bundleKey="">Close</text>
                 </action>
-                <action id="action.frame.exitApplication"
+                <action id="org.livetribe.forma.frame.action.ExitApplicationAction.ID"
                         action-class="org.livetribe.forma.frame.action.ExitApplicationAction">
                     <text bundleKey="">Exit</text>
                     <mnemonic bundleKey="">X</mnemonic>
@@ -38,10 +38,10 @@
             </actions>
         </extension>
 
-        <extension id="org.livetribe.forma.menubar.menubarManager"
+        <extension id="org.livetribe.forma.ui.menubar.MenubarManager.ID"
                    parser-class="org.livetribe.forma.ui.menubar.spi.MenubarExtensionParser">
             <menubars>
-                <menubar id="org.livetribe.forma.menubar.mainMenubar">
+                <menubar id="org.livetribe.forma.ui.menubar.MenubarManager.MENUBAR_ID">
                     <menus>
                         <menu id="menubar.menu.file">
                             <text>File</text>
@@ -50,17 +50,17 @@
                                 <section id="menubar.menu.file.section.new">
                                     <items>
                                         <item id="menubar.menu.file.item.newFrame">
-                                            <action refid="action.frame.newFrame" />
+                                            <action refid="org.livetribe.forma.frame.action.NewFrameAction.ID" />
                                         </item>
                                         <item id="menubar.menu.file.item.closeFrame">
-                                            <action refid="action.frame.closeFrame" />
+                                            <action refid="org.livetribe.forma.frame.action.CloseFrameAction.ID" />
                                         </item>
                                     </items>
                                 </section>
                                 <section id="menubar.menu.file.section.exit">
                                     <items>
                                         <item id="menubar.menu.file.item.exitApplication">
-                                            <action refid="action.frame.exitApplication" />
+                                            <action refid="org.livetribe.forma.frame.action.ExitApplicationAction.ID" />
                                         </item>
                                     </items>
                                 </section>
@@ -71,14 +71,14 @@
             </menubars>
         </extension>
 
-        <extension id="org.livetribe.forma.perspective.perspectiveManager"
+        <extension id="org.livetribe.forma.ui.perspective.PerspectiveManager.ID"
                    parser-class="org.livetribe.forma.ui.perspective.spi.PerspectiveExtensionParser">
         </extension>
 
-        <extension id="org.livetribe.forma.statusbar.statusbarManager"
+        <extension id="org.livetribe.forma.ui.statusbar.StatusbarManager.ID"
                    parser-class="org.livetribe.forma.ui.statusbar.spi.StatusbarExtensionParser">
             <statusbars>
-                <statusbar id="org.livetribe.forma.statusbar.mainStatusbar">
+                <statusbar id="org.livetribe.forma.ui.statusbar.StatusbarManager.STATUSBAR_ID">
 <!--
                     <sections>
                         <section id="text">
@@ -95,16 +95,11 @@
                 </statusbar>
             </statusbars>
         </extension>
-<!--
-        <extension id="org.livetribe.forma.browser.browserManager"
-                   parser-class="org.livetribe.forma.browser.spi.BrowserExtensionParser">
-            <browsers>
-                <browser id="" browser-class="">
 
-                </browser>
-            </browsers>
+        <extension id="org.livetribe.forma.ui.browser.BrowserManager.ID"
+                   parser-class="org.livetribe.forma.ui.browser.spi.BrowserExtensionParser">
         </extension>
-
+<!--
                 <extension>
                     <popupmenus>
                         <popupmenu>

@@ -27,6 +27,8 @@ import org.livetribe.forma.ui.frame.Frame;
  */
 public class NewFrameAction implements ActionListener
 {
+    public static final String ID = "action.frame.newFrame";
+
     @Inject
     private FrameManager frameManager;
 
