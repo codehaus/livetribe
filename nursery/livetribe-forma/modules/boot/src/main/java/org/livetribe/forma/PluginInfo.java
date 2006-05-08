@@ -24,7 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -43,8 +42,21 @@ public class PluginInfo
     private String pluginId;
     private String pluginClassName;
     private String pluginName;
-    private ResourceBundle resourceBundle;
+    private String resourceBundleName;
     private final Set<String> requiredPluginIds = new HashSet<String>();
+
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        final PluginInfo that = (PluginInfo)obj;
+        return pluginId.equals(that.pluginId);
+    }
+
+    public int hashCode()
+    {
+        return pluginId.hashCode();
+    }
 
     public void setPluginDirectory(File pluginDirectory)
     {
@@ -96,14 +108,14 @@ public class PluginInfo
         return pluginClassName;
     }
 
-    public void setResourceBundle(ResourceBundle resourceBundle)
+    public void setResourceBundleName(String resourceBundleName)
     {
-        this.resourceBundle = resourceBundle;
+        this.resourceBundleName = resourceBundleName;
     }
 
-    public ResourceBundle getResourceBundle()
+    public String getResourceBundleName()
     {
-        return resourceBundle;
+        return resourceBundleName;
     }
 
     public void addRequiredPluginId(String requiredPluginId)

@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Locale;
 import java.util.logging.Logger;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -35,7 +36,7 @@ public abstract class ExtensionParser
 
     public abstract void parse(Element extensionElement, ExtensionInfo extensionInfo);
 
-    protected String evaluateI18nElement(Element element, ResourceBundle bundle) throws XPathExpressionException
+    protected String evaluateI18nElement(Element element, String resourceBundleName) throws XPathExpressionException
     {
         if (element == null) return null;
 
@@ -47,7 +48,7 @@ public abstract class ExtensionParser
         }
         else
         {
-            if (bundle == null)
+            if (resourceBundleName == null)
             {
                 return bundleKey;
             }
@@ -55,6 +56,7 @@ public abstract class ExtensionParser
             {
                 try
                 {
+                    ResourceBundle bundle = ResourceBundle.getBundle(resourceBundleName, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
                     return bundle.getString(bundleKey);
                 }
                 catch (MissingResourceException x)

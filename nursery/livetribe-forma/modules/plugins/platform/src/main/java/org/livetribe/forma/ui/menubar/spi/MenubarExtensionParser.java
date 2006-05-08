@@ -17,7 +17,6 @@ package org.livetribe.forma.ui.menubar.spi;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -26,8 +25,8 @@ import javax.xml.xpath.XPathFactory;
 import org.livetribe.forma.ExtensionInfo;
 import org.livetribe.forma.ExtensionParser;
 import org.livetribe.forma.ManagerRegistry;
-import org.livetribe.forma.ui.menubar.MenubarManager;
 import org.livetribe.forma.ui.menubar.MenubarException;
+import org.livetribe.forma.ui.menubar.MenubarManager;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
 import org.w3c.dom.Element;
@@ -52,7 +51,7 @@ public class MenubarExtensionParser extends ExtensionParser
                 containerManager.resolve(menubarManager);
                 managerRegistry.put(MenubarManager.ID, MenubarManager.class, menubarManager);
             }
-            ResourceBundle resourceBundle = extensionInfo.getPluginInfo().getResourceBundle();
+            String resourceBundleName = extensionInfo.getPluginInfo().getResourceBundleName();
             XPath xpath = XPathFactory.newInstance().newXPath();
             NodeList menubars = (NodeList)xpath.evaluate("menubars/menubar", extensionElement, XPathConstants.NODESET);
             for (int i = 0; i < menubars.getLength(); ++i)
@@ -65,7 +64,7 @@ public class MenubarExtensionParser extends ExtensionParser
                 menubarInfo.setMenubarId(menubarId);
 
                 NodeList menus = (NodeList)xpath.evaluate("menus/menu", menubarElement, XPathConstants.NODESET);
-                List<MenuInfo> menuInfos = parseMenus(extensionInfo, menus, resourceBundle);
+                List<MenuInfo> menuInfos = parseMenus(extensionInfo, menus, resourceBundleName);
                 for (MenuInfo menuInfo : menuInfos) menubarInfo.addMenuInfo(menuInfo);
                 menubarManager.spiAddMenubarInfo(menubarInfo);
             }
@@ -76,7 +75,7 @@ public class MenubarExtensionParser extends ExtensionParser
         }
     }
 
-    private List<MenuInfo> parseMenus(ExtensionInfo extensionInfo, NodeList menus, ResourceBundle resourceBundle) throws XPathExpressionException
+    private List<MenuInfo> parseMenus(ExtensionInfo extensionInfo, NodeList menus, String resourceBundleName) throws XPathExpressionException
     {
         List<MenuInfo> result = new ArrayList<MenuInfo>();
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -90,11 +89,11 @@ public class MenubarExtensionParser extends ExtensionParser
             menuInfo.setMenuId(menuId);
 
             Element textElement = (Element)xpath.evaluate("text", menuElement, XPathConstants.NODE);
-            String menuText = evaluateI18nElement(textElement, resourceBundle);
+            String menuText = evaluateI18nElement(textElement, resourceBundleName);
             menuInfo.setMenuText(menuText);
 
             Element mnemonicElement = (Element)xpath.evaluate("mnemonic", menuElement, XPathConstants.NODE);
-            String mnemonic = evaluateI18nElement(mnemonicElement, resourceBundle);
+            String mnemonic = evaluateI18nElement(mnemonicElement, resourceBundleName);
             menuInfo.setMenuMnemonic(mnemonic);
 
             NodeList sections = (NodeList)xpath.evaluate("sections/section", menuElement, XPathConstants.NODESET);
@@ -126,7 +125,7 @@ public class MenubarExtensionParser extends ExtensionParser
                 }
 
                 NodeList subMenus = (NodeList)xpath.evaluate("items/menu", sectionElement, XPathConstants.NODESET);
-                List<MenuInfo> subMenuInfos = parseMenus(extensionInfo, subMenus, resourceBundle);
+                List<MenuInfo> subMenuInfos = parseMenus(extensionInfo, subMenus, resourceBundleName);
                 for (MenuInfo subMenuInfo : subMenuInfos) sectionInfo.addMenuInfo(subMenuInfo);
 
                 menuInfo.addMenuSectionInfo(sectionInfo);

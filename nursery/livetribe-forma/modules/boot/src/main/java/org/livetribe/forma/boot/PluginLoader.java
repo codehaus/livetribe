@@ -18,10 +18,11 @@ package org.livetribe.forma.boot;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
@@ -31,10 +32,10 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.livetribe.ioc.Container;
 import org.livetribe.forma.ExtensionInfo;
 import org.livetribe.forma.ExtensionParser;
 import org.livetribe.forma.PluginInfo;
+import org.livetribe.ioc.Container;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -60,10 +61,35 @@ public class PluginLoader
 
     public void start() throws Exception
     {
-        if (!pluginsDirectory.exists()) throw new FileNotFoundException("Could not find plugins directory " + pluginsDirectory);
+        if (!pluginsDirectory.exists())
+            throw new FileNotFoundException("Could not find plugins directory " + pluginsDirectory);
 
-        Set<String> pluginIds = new HashSet<String>();
         File[] pluginDirs = listPluginDirs(pluginsDirectory);
+        Map<String, PluginInfo> pluginInfos = scanPluginDirectories(pluginDirs);
+        // Sort the plugins following their dependencies
+        List<PluginInfo> sortedPluginInfos = sort(pluginInfos);
+        for (PluginInfo pluginInfo : sortedPluginInfos) pluginManager.addPluginInfo(pluginInfo);
+        for (PluginInfo pluginInfo : sortedPluginInfos) parseExtensions(pluginInfo);
+        if (logger.isLoggable(Level.CONFIG)) logger.config("Plugin scanning and parsing completed");
+
+        pluginManager.initPlugins();
+        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins initialized");
+        pluginManager.startPlugins();
+        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins started");
+    }
+
+    /**
+     * Scans the plugin directories, looking for classes, libraries and the plugin configuration file.
+     * It is important that this method does not perform any classloading, since the plugins directories
+     * must first be all scanned, then dependencies resolved and only then classloading can be performed.
+     *
+     * @param pluginDirs The plugin directories to scan
+     * @return An unordered collection of PluginInfos
+     * @throws Exception
+     */
+    private Map<String, PluginInfo> scanPluginDirectories(File[] pluginDirs) throws Exception
+    {
+        Map<String, PluginInfo> result = new HashMap<String, PluginInfo>();
         for (File pluginDir : pluginDirs)
         {
             PluginInfo pluginInfo = new PluginInfo();
@@ -73,11 +99,14 @@ public class PluginLoader
             File pluginConfig = new File(pluginClasses, PLUGIN_CONFIG_FILE);
             if (pluginClasses.exists())
             {
-                if (!pluginConfig.exists()) throw new FileNotFoundException("Could not find " + PLUGIN_CONFIG_FILE + " in plugin directory " + pluginDir);
-                if (logger.isLoggable(Level.CONFIG)) logger.config("Found " + PLUGIN_CONFIG_FILE + " in plugin directory " + pluginDir);
+                if (!pluginConfig.exists())
+                    throw new FileNotFoundException("Could not find " + PLUGIN_CONFIG_FILE + " in plugin directory " + pluginDir);
+                if (logger.isLoggable(Level.CONFIG))
+                    logger.config("Found " + PLUGIN_CONFIG_FILE + " in plugin directory " + pluginDir);
                 pluginInfo.setConfigurationFile(pluginConfig);
 
-                if (logger.isLoggable(Level.CONFIG)) logger.config("Found plugin classes in plugin directory " + pluginDir);
+                if (logger.isLoggable(Level.CONFIG))
+                    logger.config("Found plugin classes in plugin directory " + pluginDir);
                 pluginInfo.setClassesDirectory(pluginClasses);
             }
 
@@ -93,7 +122,8 @@ public class PluginLoader
                 });
                 for (File jar : jars)
                 {
-                    if (logger.isLoggable(Level.CONFIG)) logger.config("Found plugin library in plugin directory " + pluginLibs.getName() + ": " + jar.getCanonicalPath());
+                    if (logger.isLoggable(Level.CONFIG))
+                        logger.config("Found plugin library in plugin directory " + pluginLibs.getName() + ": " + jar.getCanonicalPath());
                     pluginInfo.addLibrary(new JarFile(jar));
                 }
             }
@@ -103,32 +133,19 @@ public class PluginLoader
             XPath xpath = XPathFactory.newInstance().newXPath();
 
             String pluginId = xpath.evaluate("/plugin/@id", pluginDocument);
-            if (pluginId == null) throw new PluginException("Missing required attribute 'id' of element 'plugin' in " + pluginConfig);
-            if (!pluginIds.add(pluginId)) throw new PluginException("Duplicate plugin id " + pluginId + " in " + pluginConfig);
+            if (pluginId == null)
+                throw new PluginException("Missing required attribute 'id' of element 'plugin' in " + pluginConfig);
             pluginInfo.setPluginId(pluginId);
 
-            // Afterwards we are loading classes from this plugin, so we need the PluginClassLoader, via the PluginManager,
-            // to be aware of this plugin. But before we must set the pluginId, as it is used as key in hash structures.
-            pluginManager.addPluginInfo(pluginInfo);
-
             String pluginClassName = xpath.evaluate("/plugin/@plugin-class", pluginDocument);
-            if (pluginClassName == null) throw new PluginException("Missing required attribute 'plugin-class' of element 'plugin' in " + pluginConfig);
+            if (pluginClassName == null)
+                throw new PluginException("Missing required attribute 'plugin-class' of element 'plugin' in " + pluginConfig);
             pluginInfo.setPluginClassName(pluginClassName);
-            if (logger.isLoggable(Level.CONFIG)) logger.config("Found plugin '" + pluginId + "', implementation is '" + pluginClassName + "'");
+            if (logger.isLoggable(Level.CONFIG))
+                logger.config("Found plugin '" + pluginId + "', implementation is '" + pluginClassName + "'");
 
             String bundleName = xpath.evaluate("/plugin/@bundle", pluginDocument);
-            if (bundleName != null)
-            {
-                try
-                {
-                    ResourceBundle resourceBundle = ResourceBundle.getBundle(bundleName, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
-                    pluginInfo.setResourceBundle(resourceBundle);
-                }
-                catch (MissingResourceException x)
-                {
-                    if (logger.isLoggable(Level.CONFIG)) logger.config("Could not find bundle '" + bundleName + "' for plugin '" + pluginId + "'");
-                }
-            }
+            pluginInfo.setResourceBundleName(bundleName);
 
             NodeList dependencies = (NodeList)xpath.evaluate("/plugin/dependencies/dependency", pluginDocument, XPathConstants.NODESET);
             for (int i = 0; i < dependencies.getLength(); ++i)
@@ -136,37 +153,85 @@ public class PluginLoader
                 Element dependency = (Element)dependencies.item(i);
                 String requiredPluginId = xpath.evaluate("text()", dependency);
                 pluginInfo.addRequiredPluginId(requiredPluginId);
-                if (logger.isLoggable(Level.CONFIG)) logger.config("Found dependency: plugin '" + pluginId + "' depends on plugin '" + requiredPluginId + "'");
+                if (logger.isLoggable(Level.CONFIG))
+                    logger.config("Found dependency: plugin '" + pluginId + "' depends on plugin '" + requiredPluginId + "'");
             }
 
             String pluginName = xpath.evaluate("/plugin/name/@bundleKey", pluginDocument);
             if (pluginName == null) pluginName = xpath.evaluate("/plugin/name/text()", pluginDocument);
             pluginInfo.setPluginName(pluginName);
 
-            NodeList extensions = (NodeList)xpath.evaluate("/plugin/extensions/extension", pluginDocument, XPathConstants.NODESET);
-            for (int i = 0; i < extensions.getLength(); ++i)
-            {
-                Element extensionElement = (Element)extensions.item(i);
-                ExtensionInfo extensionInfo = new ExtensionInfo(pluginInfo);
-
-                String extensionId = ExtensionParser.evaluateId(xpath.evaluate("@id", extensionElement));
-                if (extensionId == null) throw new PluginException("Missing required attribute 'id' of element 'extension' in " + pluginConfig);
-                extensionInfo.setExtensionId(extensionId);
-
-                String extensionParserClassName = xpath.evaluate("@parser-class", extensionElement);
-                if (extensionParserClassName == null) throw new PluginException("Missing required attribute 'parser-class' of element 'extension' in " + pluginConfig);
-
-                ExtensionParser extensionParser = newExtensionParser(extensionParserClassName);
-                if (logger.isLoggable(Level.CONFIG)) logger.config("Parsing extension '" + extensionId + "'");
-                extensionParser.parse(extensionElement, extensionInfo);
-            }
+            if (result.containsKey(pluginId))
+                throw new PluginException("Duplicate plugin id " + pluginId + " in " + pluginConfig);
+            result.put(pluginId, pluginInfo);
         }
-        if (logger.isLoggable(Level.CONFIG)) logger.config("Plugin scanning and parsing completed");
+        return result;
+    }
 
-        pluginManager.initPlugins();
-        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins initialized");
-        pluginManager.startPlugins();
-        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins started");
+    /**
+     * Returns a sorted copy of the given plugin infos.
+     * The sort is a partial ordered sort, since plugin infos cannot in
+     * general be compared using a less-than operator.
+     * However, plugins that declare dependencies may be compared, hence
+     * the partial ordered sort.
+     */
+    private List<PluginInfo> sort(Map<String, PluginInfo> pluginInfos)
+    {
+        Set<String> visited = new LinkedHashSet<String>();
+        List<PluginInfo> result = new LinkedList<PluginInfo>();
+        for (PluginInfo pluginInfo : pluginInfos.values()) visit(pluginInfos, pluginInfo, visited, result);
+        return result;
+    }
+
+    private void visit(Map<String, PluginInfo> pluginInfos, PluginInfo pluginInfo, Set<String> visited, List<PluginInfo> result)
+    {
+        String pluginId = pluginInfo.getPluginId();
+        if (!visited.add(pluginId))
+        {
+            if (result.contains(pluginInfo)) return;
+
+            StringBuilder builder = new StringBuilder();
+            for (String deadPluginId : visited) builder.append(deadPluginId).append(" < ");
+            builder.append(pluginId);
+            throw new PluginException("Cyclic dependency among plugins ('<' means 'depends on'): " + builder);
+        }
+
+        for (String childPluginId : pluginInfo.getRequiredPluginIds())
+        {
+            PluginInfo childPluginInfo = pluginInfos.get(childPluginId);
+            if (childPluginInfo == null)
+                throw new PluginException("Broken dependency " + childPluginId + " for plugin " + pluginId);
+            visit(pluginInfos, childPluginInfo, visited, result);
+        }
+        result.add(pluginInfo);
+    }
+
+
+    private void parseExtensions(PluginInfo pluginInfo) throws Exception
+    {
+        File pluginConfig = pluginInfo.getConfigurationFile();
+        Document pluginDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(pluginConfig);
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        NodeList extensions = (NodeList)xpath.evaluate("/plugin/extensions/extension", pluginDocument, XPathConstants.NODESET);
+        for (int i = 0; i < extensions.getLength(); ++i)
+        {
+            Element extensionElement = (Element)extensions.item(i);
+            ExtensionInfo extensionInfo = new ExtensionInfo(pluginInfo);
+
+            String extensionId = ExtensionParser.evaluateId(xpath.evaluate("@id", extensionElement));
+            if (extensionId == null)
+                throw new PluginException("Missing required attribute 'id' of element 'extension' in " + pluginConfig);
+            extensionInfo.setExtensionId(extensionId);
+
+            String extensionParserClassName = xpath.evaluate("@parser-class", extensionElement);
+            if (extensionParserClassName == null)
+                throw new PluginException("Missing required attribute 'parser-class' of element 'extension' in " + pluginConfig);
+
+            ExtensionParser extensionParser = newExtensionParser(extensionParserClassName);
+            if (logger.isLoggable(Level.CONFIG)) logger.config("Parsing extension '" + extensionId + "'");
+            extensionParser.parse(extensionElement, extensionInfo);
+        }
     }
 
     private File[] listPluginDirs(File pluginsDirectory)

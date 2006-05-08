@@ -15,21 +15,18 @@
  */
 package org.livetribe.forma.boot;
 
+import java.awt.EventQueue;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.awt.EventQueue;
 
-import org.livetribe.ioc.Container;
 import org.livetribe.forma.Plugin;
 import org.livetribe.forma.PluginInfo;
+import org.livetribe.ioc.Container;
 
 /**
  * @version $Rev: 118 $ $Date$
@@ -38,7 +35,7 @@ public class DefaultPluginManager implements PluginManager
 {
     private final Container containerManager;
     private final Lock lock = new ReentrantLock();
-    private final Map<String, PluginInfo> pluginInfos = new HashMap<String, PluginInfo>();
+    private final Map<String, PluginInfo> pluginInfos = new LinkedHashMap<String, PluginInfo>();
     private final List<Plugin> plugins = new ArrayList<Plugin>();
 
     public DefaultPluginManager(Container containerManager)
@@ -78,8 +75,7 @@ public class DefaultPluginManager implements PluginManager
 
     public void initPlugins()
     {
-        List<PluginInfo> sortedPluginInfos = sort(pluginInfos);
-        for (PluginInfo pluginInfo : sortedPluginInfos)
+        for (PluginInfo pluginInfo : pluginInfos.values())
         {
             Plugin plugin = newPlugin(pluginInfo);
             plugins.add(plugin);
@@ -172,42 +168,5 @@ public class DefaultPluginManager implements PluginManager
                 plugin.destroy();
             }
         });
-    }
-
-    /**
-     * Returns a sorted copy of the given plugin infos.
-     * The sort is a partial ordered sort, since plugin infos cannot in
-     * general be compared using a less-than operator.
-     * However, plugins that declare dependencies may be compared, hence
-     * the partial ordered sort.
-     */
-    private List<PluginInfo> sort(Map<String, PluginInfo> pluginInfos)
-    {
-        Set<String> dead = new LinkedHashSet<String>();
-        List<PluginInfo> result = new LinkedList<PluginInfo>();
-        for (PluginInfo pluginInfo : pluginInfos.values()) visit(pluginInfos, pluginInfo, dead, result);
-        return result;
-    }
-
-    private void visit(Map<String, PluginInfo> pluginInfos, PluginInfo pluginInfo, Set<String> dead, List<PluginInfo> result)
-    {
-        String pluginId = pluginInfo.getPluginId();
-        if (!dead.add(pluginId))
-        {
-            if (result.contains(pluginInfo)) return;
-
-            StringBuilder builder = new StringBuilder();
-            for (String deadPluginId : dead) builder.append(deadPluginId).append(" < ");
-            builder.append(pluginId);
-            throw new PluginException("Cyclic dependency among plugins ('<' means 'depends on'): " + builder);
-        }
-
-        for (String childPluginId : pluginInfo.getRequiredPluginIds())
-        {
-            PluginInfo childPluginInfo = pluginInfos.get(childPluginId);
-            if (childPluginInfo == null) throw new PluginException("Broken dependency " + childPluginId + " for plugin " + pluginId);
-            visit(pluginInfos, childPluginInfo, dead, result);
-        }
-        result.add(pluginInfo);
     }
 }

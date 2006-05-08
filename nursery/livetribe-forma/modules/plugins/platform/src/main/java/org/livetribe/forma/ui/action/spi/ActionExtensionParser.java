@@ -15,17 +15,16 @@
  */
 package org.livetribe.forma.ui.action.spi;
 
-import java.util.ResourceBundle;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.livetribe.forma.ManagerRegistry;
-import org.livetribe.forma.ExtensionParser;
 import org.livetribe.forma.ExtensionInfo;
-import org.livetribe.forma.ui.action.ActionManager;
+import org.livetribe.forma.ExtensionParser;
+import org.livetribe.forma.ManagerRegistry;
 import org.livetribe.forma.ui.action.ActionException;
+import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
 import org.w3c.dom.Element;
@@ -50,7 +49,7 @@ public class ActionExtensionParser extends ExtensionParser
                 containerManager.resolve(actionManager);
                 managerRegistry.put(ActionManager.ID, ActionManager.class, actionManager);
             }
-            ResourceBundle resourceBundle = extensionInfo.getPluginInfo().getResourceBundle();
+            String resourceBundleName = extensionInfo.getPluginInfo().getResourceBundleName();
             XPath xpath = XPathFactory.newInstance().newXPath();
             NodeList actions = (NodeList)xpath.evaluate("actions/action", extensionElement, XPathConstants.NODESET);
             for (int i = 0; i < actions.getLength(); ++i)
@@ -67,23 +66,23 @@ public class ActionExtensionParser extends ExtensionParser
                 actionInfo.setActionClassName(actionClassName);
 
                 Element textElement = (Element)xpath.evaluate("text", actionElement, XPathConstants.NODE);
-                String actionText = evaluateI18nElement(textElement, resourceBundle);
+                String actionText = evaluateI18nElement(textElement, resourceBundleName);
                 actionInfo.setActionText(actionText);
 
                 Element tooltipElement = (Element)xpath.evaluate("tooltip", actionElement, XPathConstants.NODE);
-                String actionTooltip = evaluateI18nElement(tooltipElement, resourceBundle);
+                String actionTooltip = evaluateI18nElement(tooltipElement, resourceBundleName);
                 actionInfo.setActionTooltip(actionTooltip);
 
                 Element iconElement = (Element)xpath.evaluate("icon", actionElement, XPathConstants.NODE);
-                String iconPath = evaluateI18nElement(iconElement, resourceBundle);
+                String iconPath = evaluateI18nElement(iconElement, resourceBundleName);
                 actionInfo.setActionIconPath(iconPath);
 
                 Element mnemonicElement = (Element)xpath.evaluate("mnemonic", actionElement, XPathConstants.NODE);
-                String mnemonic = evaluateI18nElement(mnemonicElement, resourceBundle);
+                String mnemonic = evaluateI18nElement(mnemonicElement, resourceBundleName);
                 actionInfo.setActionMnemonic(mnemonic);
 
                 Element acceleratorElement = (Element)xpath.evaluate("accelerator", actionElement, XPathConstants.NODE);
-                String accelerator = evaluateI18nElement(acceleratorElement, resourceBundle);
+                String accelerator = evaluateI18nElement(acceleratorElement, resourceBundleName);
                 actionInfo.setActionAccelerator(accelerator);
 
                 actionManager.spiAddActionInfo(actionInfo);
