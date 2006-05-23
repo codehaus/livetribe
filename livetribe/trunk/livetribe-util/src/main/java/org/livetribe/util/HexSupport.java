@@ -53,6 +53,8 @@ public final class HexSupport
      */
     static public byte[] toBytesFromHex(String hex)
     {
+        if (hex.length() % 2 == 1) hex = "0" + hex;
+
         byte rc[] = new byte[hex.length() / 2];
         for (int i = 0; i < rc.length; i++)
         {
