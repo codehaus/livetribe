@@ -26,7 +26,7 @@
             </notifier>
         </notifiers>
     </ciManagement>
-
+ 
     <mailingLists>
         <mailingList>
             <name>LiveTribe Announcement List</name>
