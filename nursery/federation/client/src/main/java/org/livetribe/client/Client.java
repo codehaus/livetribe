@@ -15,12 +15,12 @@
  */
 package org.livetribe.client;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.livetribe.slp.api.ua.UserAgent;
-import org.livetribe.slp.ServiceURL;
 import org.livetribe.slp.ServiceType;
+import org.livetribe.slp.ServiceURL;
+import org.livetribe.slp.api.ua.UserAgent;
 
 /**
  * @version $Rev$ $Date$
@@ -52,7 +52,7 @@ public class Client
     {
         ServiceType serviceType = new ServiceType("service:jmx");
         String[] consoleScope = new String[]{"console"};
-        List<ServiceURL> serviceURLs = (List<ServiceURL>)userAgent.findServices(serviceType, consoleScope, null);
+        List<ServiceURL> serviceURLs = (List<ServiceURL>)userAgent.findServices(serviceType, consoleScope, null, null);
         List<ConsoleClient> result = new ArrayList<ConsoleClient>();
         for (ServiceURL serviceURL : serviceURLs)
         {

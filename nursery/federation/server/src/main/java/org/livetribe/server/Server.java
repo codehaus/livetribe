@@ -16,6 +16,7 @@
 package org.livetribe.server;
 
 import java.util.List;
+import java.util.Locale;
 import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
 import javax.management.MalformedObjectNameException;
@@ -65,8 +66,8 @@ public class Server
         serviceListener = new ServiceListener();
         directoryAgent.addServiceRegistrationListener(serviceListener);
         directoryAgent.start();
-        ServiceURL serviceURL = new ServiceURL(jmxConnectorServer.getAddress().toString(), ServiceURL.LIFETIME_PERMANENT);
-        directoryAgent.registerService(null, serviceURL, new String[]{"console"}, null, null, false);
+        ServiceURL serviceURL = new ServiceURL(jmxConnectorServer.getAddress().toString(), ServiceURL.LIFETIME_DEFAULT);
+        directoryAgent.registerService(null, serviceURL, new String[]{"console"}, null, Locale.getDefault().getLanguage(), false);
 
         running = true;
     }
@@ -113,7 +114,7 @@ public class Server
                 ServiceURL serviceURL = event.getServiceURL();
                 String jmxServiceURL = serviceURL.getURL();
                 ObjectName pattern = ObjectName.getInstance("*:*");
-                String agentName = event.getAttributes().getValue("agentName");
+                String agentName = (String)event.getAttributes().getValue("agentName");
 
                 MountPoint mountPoint = new MountPoint(jmxServiceURL);
                 mountPoint.setSourcePattern(pattern);
@@ -131,7 +132,7 @@ public class Server
         {
             ServiceURL serviceURL = event.getServiceURL();
             String jmxServiceURL = serviceURL.getURL();
-            String agentName = event.getAttributes().getValue("agentName");
+            String agentName = (String)event.getAttributes().getValue("agentName");
 
             MountPoint mountPoint = new MountPoint(jmxServiceURL);
             mountPoint.setName(agentName);

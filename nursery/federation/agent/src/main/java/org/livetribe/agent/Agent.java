@@ -17,6 +17,7 @@ package org.livetribe.agent;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Locale;
 import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
 import javax.management.ObjectName;
@@ -27,6 +28,7 @@ import javax.management.remote.JMXServiceURL;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.ServiceURL;
 import org.livetribe.slp.api.sa.ServiceAgent;
+import org.livetribe.slp.api.sa.ServiceInfo;
 
 /**
  * @version $Rev$ $Date$
@@ -63,9 +65,8 @@ public class Agent
         String[] scopes = new String[]{"agent"};
 
         ServiceURL serviceURL = new ServiceURL(jmxServiceURL.toString(), ServiceURL.LIFETIME_DEFAULT);
-        serviceAgent.setServiceURL(serviceURL);
-        serviceAgent.setAttributes(attributes);
-        serviceAgent.setScopes(scopes);
+        ServiceInfo serviceInfo = new ServiceInfo(serviceURL, scopes, attributes, Locale.getDefault().getLanguage());
+        serviceAgent.register(serviceInfo);
         serviceAgent.start();
 
         running = true;
