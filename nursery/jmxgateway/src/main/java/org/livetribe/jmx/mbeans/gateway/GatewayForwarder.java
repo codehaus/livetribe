@@ -19,29 +19,30 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Hashtable;
 import java.util.Set;
-import javax.management.remote.MBeanServerForwarder;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-import javax.management.MBeanException;
-import javax.management.AttributeNotFoundException;
-import javax.management.InstanceNotFoundException;
-import javax.management.ReflectionException;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectInstance;
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.MBeanRegistrationException;
-import javax.management.NotCompliantMBeanException;
-import javax.management.OperationsException;
-import javax.management.NotificationListener;
-import javax.management.NotificationFilter;
-import javax.management.ListenerNotFoundException;
-import javax.management.MBeanInfo;
-import javax.management.IntrospectionException;
 import javax.management.Attribute;
-import javax.management.InvalidAttributeValueException;
 import javax.management.AttributeList;
+import javax.management.AttributeNotFoundException;
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.InstanceNotFoundException;
+import javax.management.IntrospectionException;
+import javax.management.InvalidAttributeValueException;
+import javax.management.ListenerNotFoundException;
+import javax.management.MBeanException;
+import javax.management.MBeanInfo;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.Notification;
+import javax.management.NotificationFilter;
+import javax.management.NotificationListener;
+import javax.management.ObjectInstance;
+import javax.management.ObjectName;
+import javax.management.OperationsException;
 import javax.management.QueryExp;
+import javax.management.ReflectionException;
 import javax.management.loading.ClassLoaderRepository;
+import javax.management.remote.MBeanServerForwarder;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -68,69 +69,206 @@ public class GatewayForwarder implements MBeanServerForwarder
         this.mbeanServer = mbeanServer;
     }
 
-    public void addNotificationListener(ObjectName objectName, NotificationListener listener, NotificationFilter filter, Object obj) throws InstanceNotFoundException
+    public void addNotificationListener(ObjectName objectName, ObjectName listenerObjectName, NotificationFilter filter, Object callback) throws InstanceNotFoundException
     {
+        // TODO: this is not easy: in general, it can be of the form:
+        // TODO: addNotificationListener("path1/dom1:k=v", "path2/path3/dom2:k=v", null, null)
+        // We can put the limit that routing paths must be equal
+        throw new AssertionError("NYI");
     }
 
-    public void addNotificationListener(ObjectName objectName, ObjectName objectName1, NotificationFilter filter, Object obj) throws InstanceNotFoundException
+    public void addNotificationListener(ObjectName objectName, NotificationListener listener, NotificationFilter filter, Object callback) throws InstanceNotFoundException
     {
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                gate.addNotificationListener(translated.getTranslatedObjectName(), listener, filter, callback);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            mbeanServer.addNotificationListener(objectName, listener, filter, callback);
+        }
     }
 
-    public void removeNotificationListener(ObjectName objectName, ObjectName objectName1) throws InstanceNotFoundException, ListenerNotFoundException
+    public void removeNotificationListener(ObjectName objectName, ObjectName listenerObjectName) throws InstanceNotFoundException, ListenerNotFoundException
     {
+        throw new AssertionError("NYI");
     }
 
     public void removeNotificationListener(ObjectName objectName, NotificationListener listener) throws InstanceNotFoundException, ListenerNotFoundException
     {
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                gate.removeNotificationListener(translated.getTranslatedObjectName(), listener);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            mbeanServer.removeNotificationListener(objectName, listener);
+        }
     }
 
-    public void removeNotificationListener(ObjectName objectName, ObjectName objectName1, NotificationFilter filter, Object obj) throws InstanceNotFoundException, ListenerNotFoundException
+    public void removeNotificationListener(ObjectName objectName, ObjectName listenerObjectName, NotificationFilter filter, Object callback) throws InstanceNotFoundException, ListenerNotFoundException
     {
+        throw new AssertionError("NYI");
     }
 
-    public void removeNotificationListener(ObjectName objectName, NotificationListener listener, NotificationFilter filter, Object obj) throws InstanceNotFoundException, ListenerNotFoundException
+    public void removeNotificationListener(ObjectName objectName, NotificationListener listener, NotificationFilter filter, Object callback) throws InstanceNotFoundException, ListenerNotFoundException
     {
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                gate.removeNotificationListener(translated.getTranslatedObjectName(), listener, filter, callback);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            mbeanServer.removeNotificationListener(objectName, listener, filter, callback);
+        }
     }
 
     public MBeanInfo getMBeanInfo(ObjectName objectName) throws InstanceNotFoundException, IntrospectionException, ReflectionException
     {
-        return null;
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                return gate.getMBeanInfo(translated.getTranslatedObjectName());
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            return mbeanServer.getMBeanInfo(objectName);
+        }
     }
 
-    public boolean isInstanceOf(ObjectName objectName, String string) throws InstanceNotFoundException
+    public boolean isInstanceOf(ObjectName objectName, String className) throws InstanceNotFoundException
     {
-        return false;
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                return gate.isInstanceOf(translated.getTranslatedObjectName(), className);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            return mbeanServer.isInstanceOf(objectName, className);
+        }
     }
 
     public ObjectInstance createMBean(String string, ObjectName objectName) throws ReflectionException, InstanceAlreadyExistsException, MBeanRegistrationException, MBeanException, NotCompliantMBeanException
     {
-        return null;
+        throw new AssertionError("NYI");
     }
 
     public ObjectInstance createMBean(String string, ObjectName objectName, ObjectName objectName1) throws ReflectionException, InstanceAlreadyExistsException, MBeanRegistrationException, MBeanException, NotCompliantMBeanException, InstanceNotFoundException
     {
-        return null;
+        throw new AssertionError("NYI");
     }
 
     public ObjectInstance createMBean(String string, ObjectName objectName, Object[] objects, String[] strings) throws ReflectionException, InstanceAlreadyExistsException, MBeanRegistrationException, MBeanException, NotCompliantMBeanException
     {
-        return null;
+        throw new AssertionError("NYI");
     }
 
     public ObjectInstance createMBean(String string, ObjectName objectName, ObjectName objectName1, Object[] objects, String[] strings) throws ReflectionException, InstanceAlreadyExistsException, MBeanRegistrationException, MBeanException, NotCompliantMBeanException, InstanceNotFoundException
     {
-        return null;
+        throw new AssertionError("NYI");
     }
 
     public void unregisterMBean(ObjectName objectName) throws InstanceNotFoundException, MBeanRegistrationException
     {
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                gate.unregisterMBean(translated.getTranslatedObjectName());
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            mbeanServer.unregisterMBean(objectName);
+        }
     }
 
     public void setAttribute(ObjectName objectName, Attribute attribute) throws InstanceNotFoundException, AttributeNotFoundException, InvalidAttributeValueException, MBeanException, ReflectionException
     {
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                gate.setAttribute(translated.getTranslatedObjectName(), attribute);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            mbeanServer.setAttribute(objectName, attribute);
+        }
     }
 
-    public Object getAttribute(ObjectName objectName, String string) throws MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException
+    public Object getAttribute(ObjectName objectName, String attributeName) throws MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException
     {
         TranslatedObjectName translated = translateObjectName(objectName);
         if (translated != null)
@@ -140,27 +278,30 @@ public class GatewayForwarder implements MBeanServerForwarder
 
             try
             {
-                return gate.getAttribute(translated.getTranslatedObjectName(), string);
+                return gate.getAttribute(translated.getTranslatedObjectName(), attributeName);
             }
             catch (IOException x)
             {
                 throw new RuntimeIOException(x);
             }
         }
-        return mbeanServer.getAttribute(objectName, string);
+        else
+        {
+            return mbeanServer.getAttribute(objectName, attributeName);
+        }
     }
 
     public AttributeList setAttributes(ObjectName objectName, AttributeList attributeList) throws InstanceNotFoundException, ReflectionException
     {
-        return null;
+        throw new AssertionError("NYI");
     }
 
     public AttributeList getAttributes(ObjectName objectName, String[] strings) throws InstanceNotFoundException, ReflectionException
     {
-        return null;
+        throw new AssertionError("NYI");
     }
 
-    public Object invoke(ObjectName objectName, String string, Object[] objects, String[] strings) throws InstanceNotFoundException, MBeanException, ReflectionException
+    public Object invoke(ObjectName objectName, String operationName, Object[] arguments, String[] signature) throws InstanceNotFoundException, MBeanException, ReflectionException
     {
         TranslatedObjectName translated = translateObjectName(objectName);
         if (translated != null)
@@ -170,14 +311,17 @@ public class GatewayForwarder implements MBeanServerForwarder
 
             try
             {
-                return gate.invoke(translated.getTranslatedObjectName(), string, objects, strings);
+                return gate.invoke(translated.getTranslatedObjectName(), operationName, arguments, signature);
             }
             catch (IOException x)
             {
                 throw new RuntimeIOException(x);
             }
         }
-        return mbeanServer.invoke(objectName, string, objects, strings);
+        else
+        {
+            return mbeanServer.invoke(objectName, operationName, arguments, signature);
+        }
     }
 
     public boolean isRegistered(ObjectName objectName)
@@ -202,12 +346,48 @@ public class GatewayForwarder implements MBeanServerForwarder
 
     public ObjectInstance getObjectInstance(ObjectName objectName) throws InstanceNotFoundException
     {
-        return null;
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) throw new InstanceNotFoundException(objectName.getCanonicalName());
+
+            try
+            {
+                return gate.getObjectInstance(translated.getTranslatedObjectName());
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            return mbeanServer.getObjectInstance(objectName);
+        }
     }
 
     public Set queryMBeans(ObjectName objectName, QueryExp queryExp)
     {
-        return null;
+        TranslatedObjectName translated = translateObjectName(objectName);
+        if (translated != null)
+        {
+            Gate gate = gateway.getGate(translated.getTranslationPath());
+            if (gate == null) return Collections.emptySet();
+
+            try
+            {
+                return gate.queryMBeans(translated.getTranslatedObjectName(), queryExp);
+            }
+            catch (IOException x)
+            {
+                throw new RuntimeIOException(x);
+            }
+        }
+        else
+        {
+            return mbeanServer.queryMBeans(objectName, queryExp);
+        }
     }
 
     public Set queryNames(ObjectName objectName, QueryExp queryExp)
@@ -227,7 +407,10 @@ public class GatewayForwarder implements MBeanServerForwarder
                 throw new RuntimeIOException(x);
             }
         }
-        return mbeanServer.queryNames(objectName, queryExp);
+        else
+        {
+            return mbeanServer.queryNames(objectName, queryExp);
+        }
     }
 
     public String[] getDomains()
@@ -287,7 +470,17 @@ public class GatewayForwarder implements MBeanServerForwarder
 
     public ClassLoader getClassLoaderFor(ObjectName objectName) throws InstanceNotFoundException
     {
-        return mbeanServer.getClassLoaderFor(objectName);
+        if (TranslatedObjectName.isTranslatable(objectName))
+        {
+            // If the objectName refers to a remote MBean, it's not possible to serialize its classloader
+            // from the remote location to here. The only hope is that this server has the class in its
+            // classpath and so here the context classloader is returned instead.
+            return Thread.currentThread().getContextClassLoader();
+        }
+        else
+        {
+            return mbeanServer.getClassLoaderFor(objectName);
+        }
     }
 
     public ClassLoader getClassLoader(ObjectName objectName) throws InstanceNotFoundException
@@ -328,6 +521,7 @@ public class GatewayForwarder implements MBeanServerForwarder
 
         public static boolean isTranslatable(ObjectName objectName)
         {
+            if (objectName == null) return false;
             return getSeparatorIndex(objectName.getDomain()) >= 0;
         }
 
@@ -356,6 +550,37 @@ public class GatewayForwarder implements MBeanServerForwarder
             {
                 throw new AssertionError(x);
             }
+        }
+    }
+
+    private static class TranslatorListener implements NotificationListener
+    {
+        private final NotificationListener listener;
+
+        public TranslatorListener(NotificationListener listener)
+        {
+            this.listener = listener;
+        }
+
+        public void handleNotification(Notification notification, Object obj)
+        {
+            // TODO
+//            Object source = notification.getSource();
+//            Object newSource = GatewayTranslator.recursivelyTranslateObjectNames(source);
+//            notification.setSource(newSource);
+        }
+
+        public boolean equals(Object obj)
+        {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            final TranslatorListener that = (TranslatorListener)obj;
+            return listener.equals(that.listener);
+        }
+
+        public int hashCode()
+        {
+            return listener.hashCode();
         }
     }
 }

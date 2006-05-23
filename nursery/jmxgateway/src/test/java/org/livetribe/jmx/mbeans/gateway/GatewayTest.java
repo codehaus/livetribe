@@ -156,13 +156,14 @@ public class GatewayTest extends TestCase
                                 // Perform invocation directly using the gates
                                 MBeanServerConnection jmxConnection = jmxConnector.getMBeanServerConnection();
 
+                                // First style of invocation: nested invoke() calls
                                 String remoteMBeanServerId0 = (String)jmxConnection.invoke(gateObjectName2,
                                         "invoke",
                                         new Object[]{gateObjectName1, "getAttribute", new Object[]{delegateObjectName, attributeName}, new String[]{ObjectName.class.getName(), String.class.getName()}},
                                         new String[]{ObjectName.class.getName(), String.class.getName(), Object[].class.getName(), String[].class.getName()});
                                 assertEquals(mbeanServerId, remoteMBeanServerId0);
 
-                                // Assume the gateway has a known name
+                                // Alternative to the nested invoke() calls, using the Gateway MBean
                                 ObjectName gatewayObjectName = ObjectName.getInstance(":type=Gateway");
                                 GatewayMBean gatewayProxy = (GatewayMBean)MBeanServerInvocationHandler.newProxyInstance(jmxConnection, gatewayObjectName, GatewayMBean.class, false);
                                 ObjectName gateNameOnHost2 = gatewayProxy.getGateObjectName(mountPoint2.getName());
@@ -171,7 +172,7 @@ public class GatewayTest extends TestCase
                                 String remoteMBeanServerId1 = (String)gateProxyOnHost2.invoke(gateNameOnHost1, "getAttribute", new Object[]{delegateObjectName, attributeName}, new String[]{ObjectName.class.getName(), String.class.getName()});
                                 assertEquals(mbeanServerId, remoteMBeanServerId1);
 
-                                // Perform the invocation transparently
+                                // Second style of invocation: use routed ObjectNames
                                 ObjectName remoteDelegateObjectName = ObjectName.getInstance(mountPoint2.getName() + "/" + mountPoint1.getName() + "/" + delegateObjectName);
                                 String remoteMBeanServerId2 = (String)jmxConnection.getAttribute(remoteDelegateObjectName, attributeName);
                                 assertEquals(mbeanServerId, remoteMBeanServerId2);
@@ -206,4 +207,87 @@ public class GatewayTest extends TestCase
             remoteConnectorServer.stop();
         }
     }
+/*
+    // TODO
+    public void testNotificationsRemoteToServerToClient() throws Exception
+    {
+        MBeanServer remoteMBeanServer = MBeanServerFactory.newMBeanServer();
+        JMXServiceURL remoteJMXServiceURL = new JMXServiceURL("rmi", null, 0);
+        JMXConnectorServer remoteConnectorServer = JMXConnectorServerFactory.newJMXConnectorServer(remoteJMXServiceURL, null, remoteMBeanServer);
+        remoteConnectorServer.start();
+        remoteJMXServiceURL = remoteConnectorServer.getAddress();
+        ObjectName delegateObjectName = ObjectName.getInstance("JMImplementation:type=MBeanServerDelegate");
+        String attributeName = "MBeanServerId";
+        String mbeanServerId = (String)remoteMBeanServer.getAttribute(delegateObjectName, attributeName);
+
+        try
+        {
+            MBeanServer gatewayMBeanServer = MBeanServerFactory.newMBeanServer();
+            Gateway gateway = new Gateway();
+            ObjectName gatewayObjectName = ObjectName.getInstance(":type=Gateway");
+            gatewayMBeanServer.registerMBean(gateway, gatewayObjectName);
+            MountPoint mountPoint = new MountPoint(remoteJMXServiceURL.toString());
+            mountPoint.setName("remote1");
+            ObjectName gateObjectName = gateway.mount(mountPoint);
+
+            try
+            {
+                JMXServiceURL gatewayJMXServiceURL = new JMXServiceURL("rmi", null, 0);
+                JMXConnectorServer gatewayConnectorServer = JMXConnectorServerFactory.newJMXConnectorServer(gatewayJMXServiceURL, null, gatewayMBeanServer);
+                gatewayConnectorServer.setMBeanServerForwarder(new GatewayForwarder(gateway));
+                gatewayConnectorServer.start();
+                gatewayJMXServiceURL = gatewayConnectorServer.getAddress();
+
+                try
+                {
+                    JMXConnector jmxConnector = JMXConnectorFactory.connect(gatewayJMXServiceURL);
+
+                    try
+                    {
+                        MBeanServerConnection jmxConnection = jmxConnector.getMBeanServerConnection();
+                        ObjectName remoteDelegateObjectName = ObjectName.getInstance(mountPoint.getName() + "/" + delegateObjectName);
+
+                        final AtomicReference notificationRef = new AtomicReference(null);
+                        NotificationListener listener = new NotificationListener()
+                        {
+                            public void handleNotification(Notification notification, Object obj)
+                            {
+                                notificationRef.set(notification);
+                            }
+                        };
+                        jmxConnection.addNotificationListener(remoteDelegateObjectName, listener, null, null);
+
+                        // Register a new MBean, so that the delegate emits a notification
+                        ObjectName objectName = ObjectName.getInstance("domain:type=MLet");
+                        remoteMBeanServer.registerMBean(new MLet(), objectName);
+
+                        Thread.sleep(500);
+
+                        assertNotNull(notificationRef.get());
+                        assertTrue(notificationRef.get() instanceof MBeanServerNotification);
+                        MBeanServerNotification received = (MBeanServerNotification)notificationRef.get();
+                        assertEquals(remoteDelegateObjectName, received.getSource());
+                        assertEquals(mountPoint.getName() + "/" + objectName, received.getMBeanName().toString());
+                    }
+                    finally
+                    {
+                        jmxConnector.close();
+                    }
+                }
+                finally
+                {
+                    gatewayConnectorServer.stop();
+                }
+            }
+            finally
+            {
+                gatewayMBeanServer.invoke(gateObjectName, "close", null, null);
+            }
+        }
+        finally
+        {
+            remoteConnectorServer.stop();
+        }
+    }
+*/
 }
