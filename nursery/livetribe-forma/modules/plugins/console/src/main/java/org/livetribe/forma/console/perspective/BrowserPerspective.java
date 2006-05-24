@@ -15,15 +15,24 @@
  */
 package org.livetribe.forma.console.perspective;
 
+import java.awt.BorderLayout;
+
 import org.livetribe.forma.ui.Part;
 import org.livetribe.forma.ui.perspective.AbstractPerspective;
+import org.livetribe.ioc.PostConstruct;
 
 /**
  * @version $Rev$ $Date$
  */
 public class BrowserPerspective extends AbstractPerspective
 {
-    public static final String ID = "org.livetribe.forma.perspective.browser";
+    public static final String ID = BrowserPerspective.class.getName();
+
+    @PostConstruct
+    private void initComponents()
+    {
+        setLayout(new BorderLayout());
+    }
 
     public String getPerspectiveId()
     {
@@ -32,6 +41,6 @@ public class BrowserPerspective extends AbstractPerspective
 
     public void spiDisplay(Part part)
     {
-        add(part.spiGetComponent());
+        add(part.spiGetComponent(), BorderLayout.CENTER);
     }
 }

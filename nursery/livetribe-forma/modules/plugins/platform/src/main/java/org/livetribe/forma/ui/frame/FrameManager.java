@@ -22,7 +22,7 @@ import org.livetribe.forma.ui.frame.spi.FrameInfo;
  */
 public interface FrameManager
 {
-    public static final String ID = "org.livetribe.forma.frame.frameManager";
+    public static final String ID = FrameManager.class.getName();
 
     public void spiAddFrameInfo(FrameInfo frameInfo);
 

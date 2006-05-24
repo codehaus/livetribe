@@ -132,7 +132,14 @@ public class DefaultPluginManager implements PluginManager
         {
             public void run()
             {
-                plugin.init();
+                try
+                {
+                    plugin.init();
+                }
+                catch (Exception x)
+                {
+                    throw new PluginException(x);
+                }
             }
         });
     }
@@ -143,7 +150,14 @@ public class DefaultPluginManager implements PluginManager
         {
             public void run()
             {
-                plugin.start();
+                try
+                {
+                    plugin.start();
+                }
+                catch (Exception x)
+                {
+                    throw new PluginException(x);
+                }
             }
         });
     }
@@ -154,7 +168,14 @@ public class DefaultPluginManager implements PluginManager
         {
             public void run()
             {
-                plugin.stop();
+                try
+                {
+                    plugin.stop();
+                }
+                catch (Exception x)
+                {
+                    throw new PluginException(x);
+                }
             }
         });
     }
@@ -165,7 +186,14 @@ public class DefaultPluginManager implements PluginManager
         {
             public void run()
             {
-                plugin.destroy();
+                try
+                {
+                    plugin.destroy();
+                }
+                catch (Exception x)
+                {
+                    throw new PluginException(x);
+                }
             }
         });
     }

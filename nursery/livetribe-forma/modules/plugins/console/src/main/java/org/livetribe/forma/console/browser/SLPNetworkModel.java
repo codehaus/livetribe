@@ -16,20 +16,22 @@
 package org.livetribe.forma.console.browser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.livetribe.ioc.PostConstruct;
-import org.livetribe.slp.api.ua.UserAgent;
-import org.livetribe.slp.api.ua.StandardUserAgent;
-import org.livetribe.slp.api.Configuration;
-import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceLocationException;
+import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceURL;
+import org.livetribe.slp.api.Configuration;
+import org.livetribe.slp.api.sa.ServiceInfo;
+import org.livetribe.slp.api.ua.StandardUserAgent;
+import org.livetribe.slp.api.ua.UserAgent;
 
 /**
  * @version $Rev$ $Date$
  */
-public class SLPNetworkController
+public class SLPNetworkModel
 {
     private UserAgent userAgent;
 
@@ -43,8 +45,17 @@ public class SLPNetworkController
         userAgent.start();
     }
 
-    public List<ServiceURL> findServices(String serviceType) throws IOException, ServiceLocationException
+    public List<ServiceInfo> findServices(String serviceType) throws IOException, ServiceLocationException
     {
-        return userAgent.findServices(new ServiceType(serviceType), null, null, null);
+        List<ServiceInfo> result = new ArrayList<ServiceInfo>();
+
+        List<ServiceURL> serviceURLs = userAgent.findServices(new ServiceType(serviceType), null, null, null);
+        for (ServiceURL serviceURL : serviceURLs)
+        {
+            ServiceInfo service = new ServiceInfo(serviceURL, null, null, null);
+            result.add(service);
+        }
+
+        return result;
     }
 }

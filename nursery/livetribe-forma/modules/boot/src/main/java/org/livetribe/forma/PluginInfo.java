@@ -31,7 +31,7 @@ import java.util.jar.JarFile;
 /**
  * @version $Rev: 118 $ $Date$
  */
-public class PluginInfo
+public class PluginInfo implements PartiallyOrdered
 {
     private static final String CLASS_FILE_EXTENSION = ".class";
 
@@ -93,6 +93,11 @@ public class PluginInfo
         return pluginId;
     }
 
+    public String getElementId()
+    {
+        return getPluginId();
+    }
+
     public void setPluginName(String pluginName)
     {
         this.pluginName = pluginName;
@@ -123,7 +128,7 @@ public class PluginInfo
         requiredPluginIds.add(requiredPluginId);
     }
 
-    public Set<String> getRequiredPluginIds()
+    public Set<String> getLesserElements()
     {
         return requiredPluginIds;
     }

@@ -19,21 +19,21 @@ import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.BorderFactory;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.livetribe.forma.console.action.SLPNetworkScanAction;
 import org.livetribe.forma.i18n.Bundle;
 import org.livetribe.forma.i18n.InternationalizationManager;
 import org.livetribe.forma.ui.Part;
-import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.perspective.AbstractPerspective;
-import org.livetribe.forma.console.action.SLPNetworkScanAction;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 
@@ -42,7 +42,7 @@ import org.livetribe.ioc.PostConstruct;
  */
 public class WelcomePerspective extends AbstractPerspective
 {
-    public static final String ID = "org.livetribe.forma.perspective.welcome";
+    public static final String ID = WelcomePerspective.class.getName();
 
     @Inject private ActionManager actionManager;
     private Bundle bundle;
@@ -66,7 +66,7 @@ public class WelcomePerspective extends AbstractPerspective
         if (iconURL != null) icon = new ImageIcon(iconURL);
         final JButton slpScanButton = new JButton(icon);
         slpScanButton.setFocusPainted(false);
-        Action action = actionManager.getAction(SLPNetworkScanAction.ID);
+        Action action = actionManager.getAction(SLPNetworkScanAction.ID, null);
         slpScanButton.setToolTipText(action.getTooltip());
         slpScanButton.addActionListener(action);
 
@@ -94,6 +94,6 @@ public class WelcomePerspective extends AbstractPerspective
 
     public void spiDisplay(Part part)
     {
-        throw new AssertionError("This class does not support children components: " + getClass().getName());
+        throw new AssertionError("Children components are not supported by this class: " + getClass().getName());
     }
 }

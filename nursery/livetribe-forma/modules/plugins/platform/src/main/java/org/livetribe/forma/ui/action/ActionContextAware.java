@@ -13,35 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui.browser;
-
-import java.awt.Component;
-import javax.swing.JPanel;
-
-import org.livetribe.forma.ui.PartContainer;
+package org.livetribe.forma.ui.action;
 
 /**
  * @version $Rev$ $Date$
  */
-public abstract class AbstractBrowser extends JPanel implements Browser
+public interface ActionContextAware
 {
-    private PartContainer container;
-
-    public Component spiGetComponent()
-    {
-        return this;
-    }
-
-    public void spiDisplayIn(PartContainer container)
-    {
-        this.container = container;
-        container.spiDisplay(this);
-    }
-
-    public void spiUndisplay()
-    {
-        if (container == null) return;
-        container.spiDisplay(null);
-        container = null;
-    }
+    public void spiSetActionContext(ActionContext context);
 }

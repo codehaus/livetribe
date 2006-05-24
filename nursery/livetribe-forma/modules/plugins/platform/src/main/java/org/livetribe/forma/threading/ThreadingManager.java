@@ -15,8 +15,8 @@
  */
 package org.livetribe.forma.threading;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import org.livetribe.forma.ui.feedback.FeedbackManager;
 
@@ -39,5 +39,5 @@ public interface ThreadingManager
      * is completed, but dequeueing AWT events in the meanwhile.
      * @param callable The object containing the code to run in a separate thread
      */
-    public <T> T executeSync(Callable<T> callable);
+    public <T> T syncExecute(Callable<T> callable);
 }

@@ -17,15 +17,17 @@ package org.livetribe.forma;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Locale;
 import java.util.logging.Logger;
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * @version $Rev$ $Date$
@@ -64,6 +66,21 @@ public abstract class ExtensionParser
                     return bundleKey;
                 }
             }
+        }
+    }
+
+    protected void parseProperties(ExtensionInfo extensionInfo, AbstractInfo abstractInfo, Element element) throws XPathExpressionException
+    {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        NodeList properties = (NodeList)xpath.evaluate("property", element, XPathConstants.NODESET);
+        for (int i = 0; i < properties.getLength(); ++i)
+        {
+            Element propertyElement = (Element)properties.item(i);
+            String propertyName = xpath.evaluate("@name", propertyElement);
+            if (propertyName == null || propertyName.length() == 0)
+                throw new XPathExpressionException("Missing required attribute 'name' in element 'property' in " + extensionInfo.getPluginInfo().getConfigurationFile());
+            String propertyValue = xpath.evaluate("text()", propertyElement);
+            abstractInfo.put(propertyName, propertyValue);
         }
     }
 

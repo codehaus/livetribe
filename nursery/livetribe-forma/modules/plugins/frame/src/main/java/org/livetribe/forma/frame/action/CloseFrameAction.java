@@ -18,8 +18,8 @@ package org.livetribe.forma.frame.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.ioc.Inject;
 
 /**
@@ -27,8 +27,8 @@ import org.livetribe.ioc.Inject;
  */
 public class CloseFrameAction implements ActionListener
 {
-    public static final String ID = "action.frame.closeFrame";
-    
+    public static final String ID = CloseFrameAction.class.getName();
+
     @Inject
     private FrameManager frameManager;
 

@@ -15,19 +15,19 @@
  */
 package org.livetribe.forma.frame.action;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import org.livetribe.ioc.Inject;
-import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
 public class NewFrameAction implements ActionListener
 {
-    public static final String ID = "action.frame.newFrame";
+    public static final String ID = NewFrameAction.class.getName();
 
     @Inject
     private FrameManager frameManager;

@@ -16,6 +16,7 @@
 package org.livetribe.forma.ui.perspective;
 
 import org.livetribe.forma.ui.PartContainer;
+import org.livetribe.forma.ui.action.ActionContext;
 import org.livetribe.forma.ui.perspective.spi.PerspectiveInfo;
 
 /**
@@ -23,7 +24,7 @@ import org.livetribe.forma.ui.perspective.spi.PerspectiveInfo;
  */
 public interface PerspectiveManager
 {
-    public static final String ID = "org.livetribe.forma.perspective.perspectiveManager";
+    public static final String ID = PerspectiveManager.class.getName();
 
     public void spiAddPerspectiveInfo(PerspectiveInfo perspectiveInfo);
 
@@ -31,7 +32,7 @@ public interface PerspectiveManager
 
     public String getDefaultPerspectiveId();
 
-    public Perspective displayNewPerspective(PartContainer container, String perspectiveId);
+    public Perspective displayPerspective(String perspectiveId, PartContainer container, ActionContext context);
 
     public void closePerspective(Perspective perspective);
 

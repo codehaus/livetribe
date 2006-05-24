@@ -20,11 +20,11 @@ package org.livetribe.forma;
  */
 public interface Plugin
 {
-    public void init();
+    public void init() throws Exception;
 
-    public void start();
+    public void start() throws Exception;
 
-    public void stop();
+    public void stop() throws Exception;
 
-    public void destroy();
+    public void destroy() throws Exception;
 }

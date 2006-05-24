@@ -22,9 +22,9 @@ import org.livetribe.forma.ui.action.spi.ActionInfo;
  */
 public interface ActionManager
 {
-    public static final String ID = "org.livetribe.forma.ui.action.actionManager";
+    public static final String ID = ActionManager.class.getName();
 
     public void spiAddActionInfo(ActionInfo actionInfo);
 
-    public Action getAction(String actionId);
+    public Action getAction(String actionId, ActionContext context);
 }

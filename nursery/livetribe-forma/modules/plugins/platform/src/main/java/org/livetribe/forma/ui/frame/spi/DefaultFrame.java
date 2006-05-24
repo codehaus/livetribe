@@ -17,26 +17,26 @@ package org.livetribe.forma.ui.frame.spi;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Toolkit;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.livetribe.forma.i18n.Bundle;
+import org.livetribe.forma.i18n.InternationalizationManager;
+import org.livetribe.forma.ui.Part;
+import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.menubar.MenubarContainer;
 import org.livetribe.forma.ui.menubar.MenubarManager;
-import org.livetribe.forma.ui.Part;
-import org.livetribe.forma.ui.statusbar.StatusbarManager;
-import org.livetribe.forma.ui.statusbar.StatusbarContainer;
-import org.livetribe.forma.ui.perspective.PerspectiveManager;
-import org.livetribe.forma.ui.perspective.PerspectiveContainer;
 import org.livetribe.forma.ui.perspective.Perspective;
-import org.livetribe.forma.ui.frame.FrameManager;
-import org.livetribe.forma.ui.frame.Frame;
-import org.livetribe.forma.i18n.InternationalizationManager;
-import org.livetribe.forma.i18n.Bundle;
+import org.livetribe.forma.ui.perspective.PerspectiveContainer;
+import org.livetribe.forma.ui.perspective.PerspectiveManager;
+import org.livetribe.forma.ui.statusbar.StatusbarContainer;
+import org.livetribe.forma.ui.statusbar.StatusbarManager;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 
@@ -74,7 +74,7 @@ public class DefaultFrame extends JFrame implements Frame, MenubarContainer, Sta
         contentPane.setLayout(new BorderLayout());
         contentPane.add(defaultPerspective, BorderLayout.CENTER);
 
-        perspectiveManager.displayNewPerspective(this, perspectiveManager.getDefaultPerspectiveId());
+        perspectiveManager.displayPerspective(perspectiveManager.getDefaultPerspectiveId(), this, null);
 
         statusbarManager.installStatusBar(this, StatusbarManager.STATUSBAR_ID);
 
@@ -123,6 +123,11 @@ public class DefaultFrame extends JFrame implements Frame, MenubarContainer, Sta
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         return JOptionPane.YES_OPTION == result;
+    }
+
+    public JFrame getJFrame()
+    {
+        return this;
     }
 
     public Perspective spiGetPerspective()

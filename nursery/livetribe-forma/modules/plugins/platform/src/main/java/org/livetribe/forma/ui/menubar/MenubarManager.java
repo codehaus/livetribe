@@ -22,8 +22,8 @@ import org.livetribe.forma.ui.menubar.spi.MenubarInfo;
  */
 public interface MenubarManager
 {
-    public static final String ID = "org.livetribe.forma.menubar.menubarManager";
-    public static final String MENUBAR_ID = "org.livetribe.forma.menubar.mainMenubar";
+    public static final String ID = MenubarManager.class.getName();
+    public static final String MENUBAR_ID = MenubarManager.class.getName() + ".menubar";
 
     public void spiAddMenubarInfo(MenubarInfo menubarInfo);
 

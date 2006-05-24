@@ -23,7 +23,7 @@ import org.livetribe.forma.ui.browser.spi.BrowserInfo;
  */
 public interface BrowserManager
 {
-    public static final String ID = "org.livetribe.forma.browser.browserManager";
+    public static final String ID = BrowserManager.class.getName();
 
     public void spiAddBrowserInfo(BrowserInfo browserInfo);
 
@@ -31,5 +31,5 @@ public interface BrowserManager
 
     public void removeBrowserListener(BrowserListener listener);
 
-    public Browser displayNewBrowser(PartContainer container, String browserId);
+    public Browser displayBrowser(String browserId, PartContainer container);
 }

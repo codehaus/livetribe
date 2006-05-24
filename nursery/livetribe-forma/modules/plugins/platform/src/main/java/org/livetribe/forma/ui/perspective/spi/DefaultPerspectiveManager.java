@@ -15,20 +15,21 @@
  */
 package org.livetribe.forma.ui.perspective.spi;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
+import org.livetribe.forma.ui.PartContainer;
+import org.livetribe.forma.ui.action.ActionContext;
+import org.livetribe.forma.ui.perspective.Perspective;
+import org.livetribe.forma.ui.perspective.PerspectiveContainer;
+import org.livetribe.forma.ui.perspective.PerspectiveEvent;
 import org.livetribe.forma.ui.perspective.PerspectiveException;
 import org.livetribe.forma.ui.perspective.PerspectiveListener;
-import org.livetribe.forma.ui.perspective.Perspective;
-import org.livetribe.forma.ui.perspective.PerspectiveEvent;
-import org.livetribe.forma.ui.perspective.PerspectiveContainer;
 import org.livetribe.forma.ui.perspective.PerspectiveManager;
-import org.livetribe.forma.ui.PartContainer;
-import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.Container;
+import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
@@ -57,16 +58,24 @@ public class DefaultPerspectiveManager implements PerspectiveManager
         return defaultPerspectiveId;
     }
 
-    public Perspective displayNewPerspective(PartContainer container, String perspectiveId)
+    public Perspective displayPerspective(String perspectiveId, PartContainer container, ActionContext context)
     {
         if (perspectiveId == null) return null;
         PerspectiveInfo perspectiveInfo = perspectiveInfos.get(perspectiveId);
         if (perspectiveInfo == null) throw new PerspectiveException("No perspective with id '" + perspectiveId + "' is registered in the perspective extensions");
+
+        Perspective currentPerspective = getPerspective(container);
+        if (currentPerspective != null)
+        {
+            if (perspectiveId.equals(currentPerspective.getPerspectiveId())) return currentPerspective;
+            closePerspective(currentPerspective);
+        }
+
         String perspectiveClassName = perspectiveInfo.getPerspectiveClassName();
         Perspective perspective = createPerspective(perspectiveClassName);
         perspective.spiDisplayIn(container);
-//        perspective.open();
-//        perspective.load();
+//        perspective.spiOpen(context);
+//        perspective.spiLoad();
         notifyPerspectiveOpened(perspective);
         return perspective;
     }
@@ -88,8 +97,8 @@ public class DefaultPerspectiveManager implements PerspectiveManager
     public void closePerspective(Perspective perspective)
     {
         if (perspective == null) return;
-//        perspective.save();
-//        perspective.close();
+//        perspective.spiSave();
+//        perspective.spiClose();
         perspective.spiUndisplay();
         notifyPerspectiveClosed(perspective);
     }

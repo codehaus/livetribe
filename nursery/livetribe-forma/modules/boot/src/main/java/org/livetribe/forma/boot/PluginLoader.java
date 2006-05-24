@@ -19,11 +19,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +29,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.livetribe.forma.AbstractInfo;
+import org.livetribe.forma.ExtensionException;
 import org.livetribe.forma.ExtensionInfo;
 import org.livetribe.forma.ExtensionParser;
 import org.livetribe.forma.PluginInfo;
@@ -67,7 +66,7 @@ public class PluginLoader
         File[] pluginDirs = listPluginDirs(pluginsDirectory);
         Map<String, PluginInfo> pluginInfos = scanPluginDirectories(pluginDirs);
         // Sort the plugins following their dependencies
-        List<PluginInfo> sortedPluginInfos = sort(pluginInfos);
+        List<PluginInfo> sortedPluginInfos = AbstractInfo.sort(pluginInfos);
         for (PluginInfo pluginInfo : sortedPluginInfos) pluginManager.addPluginInfo(pluginInfo);
         for (PluginInfo pluginInfo : sortedPluginInfos) parseExtensions(pluginInfo);
         if (logger.isLoggable(Level.CONFIG)) logger.config("Plugin scanning and parsing completed");
@@ -168,45 +167,6 @@ public class PluginLoader
         return result;
     }
 
-    /**
-     * Returns a sorted copy of the given plugin infos.
-     * The sort is a partial ordered sort, since plugin infos cannot in
-     * general be compared using a less-than operator.
-     * However, plugins that declare dependencies may be compared, hence
-     * the partial ordered sort.
-     */
-    private List<PluginInfo> sort(Map<String, PluginInfo> pluginInfos)
-    {
-        Set<String> visited = new LinkedHashSet<String>();
-        List<PluginInfo> result = new LinkedList<PluginInfo>();
-        for (PluginInfo pluginInfo : pluginInfos.values()) visit(pluginInfos, pluginInfo, visited, result);
-        return result;
-    }
-
-    private void visit(Map<String, PluginInfo> pluginInfos, PluginInfo pluginInfo, Set<String> visited, List<PluginInfo> result)
-    {
-        String pluginId = pluginInfo.getPluginId();
-        if (!visited.add(pluginId))
-        {
-            if (result.contains(pluginInfo)) return;
-
-            StringBuilder builder = new StringBuilder();
-            for (String deadPluginId : visited) builder.append(deadPluginId).append(" < ");
-            builder.append(pluginId);
-            throw new PluginException("Cyclic dependency among plugins ('<' means 'depends on'): " + builder);
-        }
-
-        for (String childPluginId : pluginInfo.getRequiredPluginIds())
-        {
-            PluginInfo childPluginInfo = pluginInfos.get(childPluginId);
-            if (childPluginInfo == null)
-                throw new PluginException("Broken dependency " + childPluginId + " for plugin " + pluginId);
-            visit(pluginInfos, childPluginInfo, visited, result);
-        }
-        result.add(pluginInfo);
-    }
-
-
     private void parseExtensions(PluginInfo pluginInfo) throws Exception
     {
         File pluginConfig = pluginInfo.getConfigurationFile();
@@ -221,12 +181,12 @@ public class PluginLoader
 
             String extensionId = ExtensionParser.evaluateId(xpath.evaluate("@id", extensionElement));
             if (extensionId == null)
-                throw new PluginException("Missing required attribute 'id' of element 'extension' in " + pluginConfig);
+                throw new ExtensionException("Missing required attribute 'id' of element 'extension' in " + pluginConfig);
             extensionInfo.setExtensionId(extensionId);
 
             String extensionParserClassName = xpath.evaluate("@parser-class", extensionElement);
             if (extensionParserClassName == null)
-                throw new PluginException("Missing required attribute 'parser-class' of element 'extension' in " + pluginConfig);
+                throw new ExtensionException("Missing required attribute 'parser-class' of element 'extension' in " + pluginConfig);
 
             ExtensionParser extensionParser = newExtensionParser(extensionParserClassName);
             if (logger.isLoggable(Level.CONFIG)) logger.config("Parsing extension '" + extensionId + "'");
@@ -255,7 +215,7 @@ public class PluginLoader
         }
         catch (Exception x)
         {
-            throw new PluginException(x);
+            throw new ExtensionException(x);
         }
     }
 }

@@ -32,7 +32,7 @@ import org.livetribe.ioc.Inject;
  */
 public class SLPNetworkScanAction implements ActionListener
 {
-    public static final String ID = "action.console.network.scan.slp";
+    public static final String ID = SLPNetworkScanAction.class.getName();
 
     @Inject private FrameManager frameManager;
     @Inject private PerspectiveManager perspectiveManager;
@@ -41,14 +41,7 @@ public class SLPNetworkScanAction implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         Frame frame = frameManager.getCurrentFrame();
-        Perspective perspective = perspectiveManager.getPerspective(frame);
-        if (perspective == null) perspective = perspectiveManager.displayNewPerspective(frame, BrowserPerspective.ID);
-        if (!BrowserPerspective.ID.equals(perspective.getPerspectiveId()))
-        {
-            perspectiveManager.closePerspective(perspective);
-            perspective = perspectiveManager.displayNewPerspective(frame, BrowserPerspective.ID);
-        }
-
-        browserManager.displayNewBrowser(perspective, SLPNetworkBrowser.ID);
+        Perspective perspective = perspectiveManager.displayPerspective(BrowserPerspective.ID, frame, null);
+        browserManager.displayBrowser(SLPNetworkBrowser.ID, perspective);
     }
 }

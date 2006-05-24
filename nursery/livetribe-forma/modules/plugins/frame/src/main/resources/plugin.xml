@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="org.livetribe.forma.frame.FramePlugin.ID" plugin-class="org.livetribe.forma.frame.FramePlugin" bundle="Frame">
+<plugin id="org.livetribe.forma.frame.FramePlugin.ID" plugin-class="org.livetribe.forma.frame.FramePlugin"
+        bundle="Frame">
     <name bundleKey="plugin.frame.name">Forma Frame</name>
 
     <dependencies>
@@ -19,14 +20,16 @@
         <extension id="org.livetribe.forma.ui.action.ActionManager.ID"
                    parser-class="org.livetribe.forma.ui.action.spi.ActionExtensionParser">
             <actions>
-                <action id="org.livetribe.forma.frame.action.NewFrameAction.ID" action-class="org.livetribe.forma.frame.action.NewFrameAction">
+                <action id="org.livetribe.forma.frame.action.NewFrameAction.ID"
+                        action-class="org.livetribe.forma.frame.action.NewFrameAction">
                     <text bundleKey="">New Frame</text>
                     <tooltip>Opens a new frame</tooltip>
                     <!--<icon bundleKey="">images/new.png</icon>-->
                     <mnemonic bundleKey="">N</mnemonic>
                     <accelerator bundleKey="">ctrl N</accelerator>
                 </action>
-                <action id="org.livetribe.forma.frame.action.CloseFrameAction.ID" action-class="org.livetribe.forma.frame.action.CloseFrameAction">
+                <action id="org.livetribe.forma.frame.action.CloseFrameAction.ID"
+                        action-class="org.livetribe.forma.frame.action.CloseFrameAction">
                     <text bundleKey="">Close</text>
                 </action>
                 <action id="org.livetribe.forma.frame.action.ExitApplicationAction.ID"
@@ -79,19 +82,19 @@
                    parser-class="org.livetribe.forma.ui.statusbar.spi.StatusbarExtensionParser">
             <statusbars>
                 <statusbar id="org.livetribe.forma.ui.statusbar.StatusbarManager.STATUSBAR_ID">
-<!--
-                    <sections>
-                        <section id="text">
-                            <text-component id="" component-class="org.livetribe.forma.frame.statusbar.StatusBarLabel" />
-                        </section>
-                        <section id="memory">
-                            <component id="" component-class="org.livetribe..MemoryBar">
-                                <property name="garbageCollectorButton" value="#gcButton" />
-                            </component>
-                            <component id="gcButton" component-class="org.livetribe.GarbageCollectorButton" />
-                        </section>
-                    </sections>
--->
+                    <!--
+                                        <sections>
+                                            <section id="text">
+                                                <text-component id="" component-class="org.livetribe.forma.frame.statusbar.StatusBarLabel" />
+                                            </section>
+                                            <section id="memory">
+                                                <component id="" component-class="org.livetribe..MemoryBar">
+                                                    <property name="garbageCollectorButton" value="#gcButton" />
+                                                </component>
+                                                <component id="gcButton" component-class="org.livetribe.GarbageCollectorButton" />
+                                            </section>
+                                        </sections>
+                    -->
                 </statusbar>
             </statusbars>
         </extension>
@@ -99,34 +102,15 @@
         <extension id="org.livetribe.forma.ui.browser.BrowserManager.ID"
                    parser-class="org.livetribe.forma.ui.browser.spi.BrowserExtensionParser">
         </extension>
-<!--
-                <extension>
-                    <popupmenus>
-                        <popupmenu>
-                            <sections>
-                                <section>
-                                    <item></item>
-                                </section>
-                                <section>
-                                    <menu id="">
-                                        <text></text>
-                                        <mnemonic></mnemonic>
-                                        <sections>
-                                            <item></item>
-                                        </sections>
-                                    </menu>
-                                </section>
-                            </sections>
-                        </popupmenu>
-                    </popupmenus>
-                </extension>
 
-                <extension>
-                    <editors>
-                        <editor
-                    </editors>
-                </extension>
-        -->
+        <extension id="org.livetribe.forma.ui.popup.PopupManager.ID"
+                   parser-class="org.livetribe.forma.ui.popup.spi.PopupExtensionParser">
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.editor.EditorManager.ID"
+                   parser-class="org.livetribe.forma.ui.editor.spi.EditorExtensionParser">
+        </extension>
+
     </extensions>
 
 </plugin>

@@ -15,9 +15,9 @@
  */
 package org.livetribe.forma.ui.action;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.EventQueue;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
@@ -31,6 +31,11 @@ public class Action extends AbstractAction
     public Action(ActionListener actionListener)
     {
         this.actionListener = actionListener;
+    }
+
+    public void setActionContext(ActionContext context)
+    {
+        if (actionListener instanceof ActionContextAware) ((ActionContextAware)actionListener).spiSetActionContext(context);
     }
 
     public void actionPerformed(final ActionEvent e)
@@ -56,5 +61,10 @@ public class Action extends AbstractAction
     public Icon getIcon()
     {
         return (Icon)getValue(SMALL_ICON);
+    }
+
+    public String getCommand()
+    {
+        return (String)getValue(ACTION_COMMAND_KEY);
     }
 }

@@ -15,6 +15,8 @@
  */
 package org.livetribe.forma.ui.frame;
 
+import javax.swing.JFrame;
+
 import org.livetribe.forma.ui.PartContainer;
 
 /**
@@ -22,11 +24,13 @@ import org.livetribe.forma.ui.PartContainer;
  */
 public interface Frame extends PartContainer
 {
-    public static final String ID = "org.livetribe.forma.frame.mainFrame";
+    public static final String ID = Frame.class.getName();
 
     public void spiDisplay();
 
     public void spiUndisplay();
 
     public boolean spiConfirmClose();
+
+    public JFrame getJFrame();
 }

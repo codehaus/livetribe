@@ -15,32 +15,69 @@
  */
 package org.livetribe.forma.console;
 
+import java.lang.management.ManagementFactory;
+import java.util.Locale;
+import javax.management.MBeanServer;
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
+
 import org.livetribe.forma.Plugin;
-import org.livetribe.forma.ui.perspective.PerspectiveManager;
 import org.livetribe.forma.console.perspective.WelcomePerspective;
+import org.livetribe.forma.ui.perspective.PerspectiveManager;
 import org.livetribe.ioc.Inject;
+import org.livetribe.slp.ServiceURL;
+import org.livetribe.slp.api.Configuration;
+import org.livetribe.slp.api.sa.ServiceAgent;
+import org.livetribe.slp.api.sa.ServiceInfo;
+import org.livetribe.slp.api.sa.StandardServiceAgent;
+import org.livetribe.slp.spi.net.SocketUnicastConnector;
+import org.livetribe.slp.spi.sa.StandardServiceAgentManager;
 
 /**
  * @version $Rev$ $Date$
  */
 public class ConsolePlugin implements Plugin
 {
-    public static final String ID = "org.livetribe.forma.console";
-
     @Inject
     private PerspectiveManager perspectiveManager;
+    private JMXConnectorServer connectorServer;
+    private ServiceAgent serviceAgent;
+    private ServiceInfo serviceInfo;
 
-    public void init()
+    public void init() throws Exception
     {
         perspectiveManager.setDefaultPerspectiveId(WelcomePerspective.ID);
+
+        MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
+        JMXServiceURL jmxServiceURL = new JMXServiceURL("rmi", null, 0);
+        connectorServer = JMXConnectorServerFactory.newJMXConnectorServer(jmxServiceURL, null, mbeanServer);
+
+        Configuration slpConfiguration = new Configuration();
+        slpConfiguration.setPort(1427);
+        SocketUnicastConnector unicastConnector = new SocketUnicastConnector();
+        unicastConnector.setUnicastListening(true);
+        StandardServiceAgentManager serviceAgentManager = new StandardServiceAgentManager();
+        serviceAgentManager.setUnicastConnector(unicastConnector);
+        serviceAgent = new StandardServiceAgent();
+        serviceAgent.setServiceAgentManager(serviceAgentManager);
+        serviceAgent.setConfiguration(slpConfiguration);
     }
 
-    public void start()
+    public void start() throws Exception
     {
+        connectorServer.start();
+        JMXServiceURL jmxServiceURL = connectorServer.getAddress();
+
+        serviceInfo = new ServiceInfo(new ServiceURL(jmxServiceURL.toString()), null, null, Locale.getDefault().getLanguage());
+        serviceAgent.register(serviceInfo);
+        serviceAgent.start();
     }
 
-    public void stop()
+    public void stop() throws Exception
     {
+        serviceAgent.stop();
+        connectorServer.stop();
     }
 
     public void destroy()

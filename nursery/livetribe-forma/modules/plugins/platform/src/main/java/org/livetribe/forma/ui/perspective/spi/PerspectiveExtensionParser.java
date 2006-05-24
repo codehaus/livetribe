@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.livetribe.forma.ExtensionParser;
+import org.livetribe.forma.ManagerRegistry;
 import org.livetribe.forma.ui.perspective.PerspectiveException;
 import org.livetribe.forma.ui.perspective.PerspectiveManager;
 import org.livetribe.ioc.Container;
@@ -34,7 +35,7 @@ import org.w3c.dom.NodeList;
 public class PerspectiveExtensionParser extends ExtensionParser
 {
     @Inject private Container containerManager;
-    @Inject private org.livetribe.forma.ManagerRegistry managerRegistry;
+    @Inject private ManagerRegistry managerRegistry;
 
     public void parse(Element extensionElement, org.livetribe.forma.ExtensionInfo extensionInfo)
     {

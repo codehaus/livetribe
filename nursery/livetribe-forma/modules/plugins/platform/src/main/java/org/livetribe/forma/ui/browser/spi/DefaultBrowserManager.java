@@ -22,10 +22,10 @@ import java.util.Map;
 
 import org.livetribe.forma.ui.PartContainer;
 import org.livetribe.forma.ui.browser.Browser;
+import org.livetribe.forma.ui.browser.BrowserEvent;
 import org.livetribe.forma.ui.browser.BrowserException;
 import org.livetribe.forma.ui.browser.BrowserListener;
 import org.livetribe.forma.ui.browser.BrowserManager;
-import org.livetribe.forma.ui.browser.BrowserEvent;
 import org.livetribe.forma.ui.perspective.PerspectiveException;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
@@ -57,7 +57,7 @@ public class DefaultBrowserManager implements BrowserManager
         listeners.remove(listener);
     }
 
-    public Browser displayNewBrowser(PartContainer container, String browserId)
+    public Browser displayBrowser(String browserId, PartContainer container)
     {
         if (browserId == null) return null;
         BrowserInfo browserInfo = browserInfos.get(browserId);

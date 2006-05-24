@@ -18,20 +18,18 @@ package org.livetribe.forma.frame;
 import java.awt.EventQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.UIManager;
 
-import org.livetribe.ioc.Inject;
-import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.forma.Plugin;
 import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class FramePlugin implements org.livetribe.forma.Plugin
+public class FramePlugin implements Plugin
 {
-    public static final String ID = "org.livetribe.forma.frame";
-
     @Inject
     private FrameManager frameManager;
     private final Logger logger = Logger.getLogger(getClass().getName());

@@ -22,8 +22,9 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import org.livetribe.forma.ui.action.ActionException;
 import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionContext;
+import org.livetribe.forma.ui.action.ActionException;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
@@ -36,6 +37,7 @@ public class DefaultActionManager implements ActionManager
     @Inject
     private Container containerManager;
     private final Map<String, ActionInfo> actionInfos = new HashMap<String, ActionInfo>();
+    private final Map<String, Action> actions = new HashMap<String, Action>();
 
     public void spiAddActionInfo(ActionInfo actionInfo)
     {
@@ -44,39 +46,42 @@ public class DefaultActionManager implements ActionManager
         actionInfos.put(actionId, actionInfo);
     }
 
-    public Action getAction(String actionId)
+    public Action getAction(String actionId, ActionContext context)
     {
-        // TODO: cache actions ?
-
-        ActionInfo actionInfo = actionInfos.get(actionId);
-        if (actionInfo == null) return null;
-
-        ActionListener action = newActionListener(actionInfo.getActionClassName());
-        Action result = new Action(action);
-
-        result.putValue(Action.ACTION_COMMAND_KEY, actionId);
-        result.putValue(Action.NAME, actionInfo.getActionText());
-        result.putValue(Action.SHORT_DESCRIPTION, actionInfo.getActionTooltip());
-
-        String iconPath = actionInfo.getActionIconPath();
-        if (iconPath != null)
+        Action action = actions.get(actionId);
+        if (action == null)
         {
-            URL iconURL = getClass().getClassLoader().getResource(iconPath);
-            if (iconURL != null)
+            ActionInfo actionInfo = actionInfos.get(actionId);
+            if (actionInfo == null) return null;
+
+            ActionListener actionListener = newActionListener(actionInfo.getActionClassName());
+            action = new Action(actionListener);
+            actions.put(actionId, action);
+
+            action.putValue(Action.ACTION_COMMAND_KEY, actionId);
+            action.putValue(Action.NAME, actionInfo.getActionText());
+            action.putValue(Action.SHORT_DESCRIPTION, actionInfo.getActionTooltip());
+
+            String iconPath = actionInfo.getActionIconPath();
+            if (iconPath != null)
             {
-                ImageIcon icon = new ImageIcon(iconURL);
-                result.putValue(Action.SMALL_ICON, icon);
+                URL iconURL = getClass().getClassLoader().getResource(iconPath);
+                if (iconURL != null)
+                {
+                    ImageIcon icon = new ImageIcon(iconURL);
+                    action.putValue(Action.SMALL_ICON, icon);
+                }
             }
+
+            String mnemonic = actionInfo.getActionMnemonic();
+            if (mnemonic != null && mnemonic.length() > 0)
+                action.putValue(Action.MNEMONIC_KEY, Integer.valueOf(mnemonic.charAt(0)));
+
+            String accelerator = actionInfo.getActionAccelerator();
+            if (accelerator != null) action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(accelerator));
         }
-
-        String mnemonic = actionInfo.getActionMnemonic();
-        if (mnemonic != null && mnemonic.length() > 0)
-            result.putValue(Action.MNEMONIC_KEY, Integer.valueOf(mnemonic.charAt(0)));
-
-        String accelerator = actionInfo.getActionAccelerator();
-        if (accelerator != null) result.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(accelerator));
-
-        return result;
+        action.setActionContext(context);
+        return action;
     }
 
     private ActionListener newActionListener(String actionClassName)

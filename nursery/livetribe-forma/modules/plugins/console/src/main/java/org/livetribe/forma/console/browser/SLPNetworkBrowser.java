@@ -15,50 +15,72 @@
  */
 package org.livetribe.forma.console.browser;
 
+import java.awt.Component;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.livetribe.forma.threading.ThreadingManager;
-import org.livetribe.forma.ui.browser.AbstractBrowser;
+import org.livetribe.forma.ui.PartContainer;
+import org.livetribe.forma.ui.browser.Browser;
 import org.livetribe.forma.ui.feedback.Feedback;
 import org.livetribe.forma.ui.feedback.FeedbackManager;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
-import org.livetribe.slp.ServiceURL;
+import org.livetribe.slp.api.sa.ServiceInfo;
 
 /**
  * @version $Rev$ $Date$
  */
-public class SLPNetworkBrowser extends AbstractBrowser
+public class SLPNetworkBrowser implements Browser
 {
-    public static final String ID = "org.livetribe.forma.browser.network.slp";
+    public static final String ID = SLPNetworkBrowser.class.getName();
 
     @Inject private Container containerManager;
     @Inject private FeedbackManager feedbackManager;
     @Inject private ThreadingManager threadingManager;
-    private SLPNetworkController controller;
+    private final SLPNetworkModel model = new SLPNetworkModel();
+    private final SLPNetworkPanel panel = new SLPNetworkPanel();
+    private PartContainer container;
 
     @PostConstruct
     private void initComponents()
     {
-        controller = new SLPNetworkController();
-        containerManager.resolve(controller);
+        containerManager.resolve(panel);
+        containerManager.resolve(model);
+    }
+
+    public Component spiGetComponent()
+    {
+        return panel;
+    }
+
+    public void spiDisplayIn(PartContainer container)
+    {
+        this.container = container;
+        container.spiDisplay(this);
+    }
+
+    public void spiUndisplay()
+    {
+        if (container == null) return;
+        container.spiDisplay(null);
+        container = null;
     }
 
     public void spiOpen()
     {
-        Feedback feedback = feedbackManager.showWaitCursor(this);
+        Feedback feedback = feedbackManager.showWaitCursor(panel);
         try
         {
-            Object result = threadingManager.executeSync(new Callable<List<ServiceURL>>()
+            List<ServiceInfo> result = threadingManager.syncExecute(new Callable<List<ServiceInfo>>()
             {
-                public List<ServiceURL> call() throws Exception
+                public List<ServiceInfo> call() throws Exception
                 {
-                    return controller.findServices("service:jmx");
+                    return model.findServices("service:jmx");
                 }
             });
-            System.out.println("result = " + result);
+            panel.display(result);
         }
         finally
         {

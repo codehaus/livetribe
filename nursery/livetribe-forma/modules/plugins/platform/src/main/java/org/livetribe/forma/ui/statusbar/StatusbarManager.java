@@ -22,8 +22,8 @@ import org.livetribe.forma.ui.statusbar.spi.StatusbarInfo;
  */
 public interface StatusbarManager
 {
-    public static final String ID = "org.livetribe.forma.statusbar.statusbarManager";
-    public static final String STATUSBAR_ID = "org.livetribe.forma.statusbar.mainStatusbar";
+    public static final String ID = StatusbarManager.class.getName();
+    public static final String STATUSBAR_ID = StatusbarManager.class.getName() + ".statusbar";
 
     public void spiAddStatusbarInfo(StatusbarInfo statusbarInfo);
 

@@ -89,7 +89,7 @@ public class DefaultMenubarManager implements MenubarManager
                     JMenuItem item = new JMenuItem();
                     item.setName(itemInfo.getMenuItemId());
                     String actionId = itemInfo.getActionId();
-                    Action action = actionManager.getAction(actionId);
+                    Action action = actionManager.getAction(actionId, null);
                     item.setAction(action);
                     menu.add(item);
                 }

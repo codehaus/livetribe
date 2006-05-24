@@ -21,8 +21,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import foxtrot.Worker;
 import foxtrot.Job;
+import foxtrot.Worker;
 
 /**
  * @version $Rev: 118 $ $Date$
@@ -49,7 +49,7 @@ public class DefaultThreadingManager implements ThreadingManager
         EventQueue.invokeLater(runnable);
     }
 
-    public <T> T executeSync(final Callable<T> callable)
+    public <T> T syncExecute(final Callable<T> callable)
     {
         Object result = Worker.post(new Job()
         {

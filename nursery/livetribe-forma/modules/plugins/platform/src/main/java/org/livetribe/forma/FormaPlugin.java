@@ -28,8 +28,6 @@ import org.livetribe.ioc.Inject;
  */
 public class FormaPlugin extends org.livetribe.forma.AbstractPlugin
 {
-    public static final String ID = "org.livetribe.forma.platform";
-
     @Inject
     private ManagerRegistry managerRegistry;
 
