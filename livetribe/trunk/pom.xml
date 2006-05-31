@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>LiveTribe</description>
-    <url>http://www.livetribe.org</url>
+    <url>http://livetribe.codehaus.org</url>
 
     <issueManagement>
         <system>jira</system>
@@ -22,7 +22,7 @@
                 <type>mail</type>
                 <sendOnError />
                 <sendOnFailure />
-                <address>dev@livetribe.org</address>
+                <address>dev@livetribe.codehaus.org</address>
             </notifier>
         </notifiers>
     </ciManagement>
@@ -30,27 +30,27 @@
     <mailingLists>
         <mailingList>
             <name>LiveTribe Announcement List</name>
-            <subscribe>announce-subscribe@livetribe.org</subscribe>
-            <unsubscribe>announce-unsubscribe@livetribe.org</unsubscribe>
-            <archive>http://archive.livetribe.org/announce</archive>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
         </mailingList>
         <mailingList>
             <name>LiveTribe User List</name>
-            <subscribe>user-subscribe@livetribe.org</subscribe>
-            <unsubscribe>user-unsubscribe@livetribe.org</unsubscribe>
-            <archive>http://archive.livetribe.org/user</archive>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
         </mailingList>
         <mailingList>
             <name>LiveTribe Developer List</name>
-            <subscribe>dev-subscribe@livetribe.org</subscribe>
-            <unsubscribe>dev-unsubscribe@livetribe.org</unsubscribe>
-            <archive>http://archive.livetribe.org/dev</archive>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
         </mailingList>
         <mailingList>
             <name>LiveTribe SCM List</name>
-            <subscribe>scm-subscribe@livetribe.org</subscribe>
-            <unsubscribe>scm-unsubscribe@livetribe.org</unsubscribe>
-            <archive>http://archive.livetribe.org/scm</archive>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
         </mailingList>
     </mailingLists>
 
@@ -74,32 +74,38 @@
 
     <repositories>
         <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <id>central</id>
-            <name>Maven Repository Switchboard</name>
+            <name>Maven Central Repository</name>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
         <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <id>snapshots</id>
-            <name>Maven SNAPSHOT Repository</name>
+            <name>Maven Snapshots Repository</name>
             <url>http://snapshots.maven.codehaus.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots Repository</name>
+            <url>http://svn.apache.org/maven-snapshot-repository</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>snapshots</id>
-            <name>Maven Central Plugins Development Repository</name>
+            <name>Maven Plugins Repository</name>
             <url>http://snapshots.maven.codehaus.org/maven2</url>
         </pluginRepository>
     </pluginRepositories>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-1-SNAPSHOT</version>
+            </extension>
+        </extensions>
         <defaultGoal>install</defaultGoal>
         <pluginManagement>
             <plugins>
@@ -111,6 +117,24 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-one-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install-maven-one-repository</goal>
+                            <goal>deploy-maven-one-repository</goal>
+                        </goals>
+                        <configuration>
+                            <remoteRepositoryId>livetribe-m1</remoteRepositoryId>
+                            <remoteRepositoryUrl>dav:https://dav.codehaus.org/dist/livetribe/maven/m1</remoteRepositoryUrl>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <modules>
@@ -130,15 +154,14 @@
     </licenses>
 
     <scm>
-        <connection>scm:svn:https://svn.codehaus.org/livetribe/livetribe/</connection>
-        <developerConnection>
-            scm:svn:svn+ssh://${maven.username}@svn.codehaus.org/home/projects/livetribe/scm/livetribe/</developerConnection>
-        <url>http://svn.livetribe.codehaus.org/livetribe/</url>
+        <connection>scm:svn:http://svn.codehaus.org/livetribe/</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/</developerConnection>
+        <url>http://svn.livetribe.codehaus.org/</url>
     </scm>
 
     <organization>
         <name>LiveTribe</name>
-        <url>http://www.livetribe.org/</url>
+        <url>http://livetribe.codehaus.org/</url>
     </organization>
 
     <dependencyManagement>
@@ -244,16 +267,16 @@
         <repository>
             <id>livetribe-repo</id>
             <name>LiveTribe Central Repository</name>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2</url>
+            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2</url>
         </repository>
         <snapshotRepository>
             <id>livetribe-snapshots</id>
             <name>LiveTribe Central Development Repository</name>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2-snapshot</url>
+            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2-snapshots</url>
         </snapshotRepository>
         <site>
             <id>livetribe-website</id>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/public_html/maven/</url>
+            <url>dav:https://dav.codehaus.org/livetribe</url>
         </site>
     </distributionManagement>
 
