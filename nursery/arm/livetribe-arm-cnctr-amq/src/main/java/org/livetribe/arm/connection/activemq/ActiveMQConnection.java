@@ -31,6 +31,7 @@ import org.livetribe.arm.connection.activemq.messages.ApplicationMessage;
 import org.livetribe.arm.connection.activemq.messages.ApplicationRemoteMessage;
 import org.livetribe.arm.connection.activemq.messages.BlockMessage;
 import org.livetribe.arm.connection.activemq.messages.Message;
+import org.livetribe.arm.connection.activemq.messages.MetricGroupDefinitionMessage;
 import org.livetribe.arm.connection.activemq.messages.ResetMessage;
 import org.livetribe.arm.connection.activemq.messages.StartMessage;
 import org.livetribe.arm.connection.activemq.messages.StopMessage;
@@ -95,9 +96,9 @@ public class ActiveMQConnection implements Connection
         send(new ApplicationMessage(appId, appDefId, group, instance, contextValues));
     }
 
-    public void introduceApplicationRemote(byte[] appId, byte[] systemAddress)
+    public void introduceApplicationRemote(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues, byte[] systemAddress)
     {
-        send(new ApplicationRemoteMessage(appId, systemAddress));
+        send(new ApplicationRemoteMessage(appId, appDefId, group, instance, contextValues, systemAddress));
     }
 
     public void introduceTransactionDefinition(byte[] transDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, String uri, byte[] id)
@@ -108,6 +109,11 @@ public class ActiveMQConnection implements Connection
     public void associateTransaction(byte[] transId, byte [] appId, byte [] transDefId)
     {
         send(new TransactionMessage(transId, appId, transDefId));
+    }
+
+    public void introduceMetricGroupDefinition(byte[] metricGroupDef, byte[][] appDef, String[] name, String[] units, short[] usage, byte[][]id)
+    {
+        send(new MetricGroupDefinitionMessage(metricGroupDef, appDef, name, units, usage, id));
     }
 
     public void start(byte[] transId, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)

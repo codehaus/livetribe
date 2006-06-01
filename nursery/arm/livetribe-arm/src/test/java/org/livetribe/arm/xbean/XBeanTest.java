@@ -31,7 +31,7 @@ public class XBeanTest extends TestCase
 {
     public void test0001() throws Exception
     {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/org/livetribe/arm/impl/configure.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/org/livetribe/arm/impl/configure_metric.xml");
         try
         {
             ArmMetricFactory factory = (ArmMetricFactory) context.getBean("metricFactory");

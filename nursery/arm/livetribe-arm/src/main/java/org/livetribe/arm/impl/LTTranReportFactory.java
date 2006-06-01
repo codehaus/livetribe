@@ -40,6 +40,11 @@ public class LTTranReportFactory extends FacadeFactoryBase implements ArmTranRep
         factoryProxy = (ArmTranReportFactory) getApplicationContext().getBean("tranReportFactory");
     }
 
+    protected String getFactoryType()
+    {
+        return "tranreport";
+    }
+
     public ArmApplicationRemote newArmApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
         return factoryProxy.newArmApplicationRemote(definition, group, instance, contextValues, systemAddress);

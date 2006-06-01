@@ -13,7 +13,8 @@ public abstract class FacadeFactoryBase extends AbstractFactoryBase
 
     public FacadeFactoryBase()
     {
-        String configLocation = System.getProperty("org.livetribe.arm.config", "/META-INF/org/livetribe/arm/impl/configure.xml");
+        String configLocation = System.getProperty("org.livetribe.arm.config",
+                                                   "/META-INF/org/livetribe/arm/impl/configure_" + getFactoryType() + ".xml");
 
         applicationContext = new ClassPathXmlApplicationContext(configLocation);
     }
@@ -22,4 +23,6 @@ public abstract class FacadeFactoryBase extends AbstractFactoryBase
     {
         return applicationContext;
     }
+
+    protected abstract String getFactoryType();
 }

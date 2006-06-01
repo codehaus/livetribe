@@ -47,20 +47,28 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.livetribe</groupId>
-            <artifactId>livetribe-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>backport-util-concurrent</groupId>
-            <artifactId>backport-util-concurrent</artifactId>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.4_spec</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.xbean</groupId>
             <artifactId>xbean-spring</artifactId>
-            <version>2.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opengroup</groupId>
+            <artifactId>ARM_4_0</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe</groupId>
+            <artifactId>livetribe-util</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.arm</groupId>
+            <artifactId>livetribe-arm</artifactId>
         </dependency>
 
     </dependencies>

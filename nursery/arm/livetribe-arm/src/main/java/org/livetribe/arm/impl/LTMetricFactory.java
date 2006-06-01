@@ -62,6 +62,11 @@ public class LTMetricFactory extends FacadeFactoryBase implements ArmMetricFacto
         factoryProxy = (ArmMetricFactory) getApplicationContext().getBean("metricFactory");
     }
 
+    protected String getFactoryType()
+    {
+        return "metric";
+    }
+
     public ArmMetricCounter32Definition newArmMetricCounter32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         return factoryProxy.newArmMetricCounter32Definition(appDef, name, units, usage, id);

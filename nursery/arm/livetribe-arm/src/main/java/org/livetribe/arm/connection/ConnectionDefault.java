@@ -48,6 +48,10 @@ public class ConnectionDefault implements Connection
     {
     }
 
+    public void introduceMetricGroupDefinition(byte[] metricGroupDef, byte[][] appDef, String[] name, String[] units, short[] usage, byte[][]id)
+    {
+    }
+
     public void start(byte[] transId, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
     {
     }

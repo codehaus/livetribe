@@ -16,13 +16,16 @@
  */
 package org.livetribe.arm.impl;
 
+import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 
 
 /**
+ * Add <code>ArmApplicationDefinition</code> for access via procies.
+ *
  * @version $Revision: $ $Date: $
  */
-public interface LTMetricDefinition
+public interface LTMetricDefinition extends ArmMetricDefinition
 {
     public ArmApplicationDefinition getAppDef();
 }

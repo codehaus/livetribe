@@ -20,6 +20,8 @@ import org.opengroup.arm40.tranreport.ArmApplicationRemote;
 import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 
+import org.livetribe.arm.AbstractIdentifiableObject;
+import org.livetribe.arm.Identifiable;
 import org.livetribe.arm.KnitPoint;
 import org.livetribe.arm.connection.Connection;
 
@@ -27,17 +29,52 @@ import org.livetribe.arm.connection.Connection;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTApplicationRemote extends LTApplication implements ArmApplicationRemote
+class LTApplicationRemote extends AbstractIdentifiableObject implements ArmApplicationRemote
 {
     private final Connection connection = KnitPoint.getConnection();
+    private final ArmApplicationDefinition definition;
+    private final String group;
+    private final String instance;
+    private final String[] contextValues;
     private final ArmSystemAddress systemAddress;
 
-    LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
+    public LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
-        super(definition, group, instance, contextValues);
+        this.definition = definition;
+        this.group = group;
+        this.instance = instance;
+        this.contextValues = contextValues;
         this.systemAddress = systemAddress;
 
-        connection.introduceApplicationRemote(getObjectId(), ArmAPIUtil.extractArmSystemAddress(systemAddress));
+        connection.introduceApplicationRemote(getObjectId(),
+                                              ((Identifiable) definition).getObjectId(),
+                                              group, instance, contextValues,
+                                              ArmAPIUtil.extractArmSystemAddress(systemAddress));
+    }
+
+    public int end()
+    {
+        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String getContextValue(int index)
+    {
+        return contextValues[index];
+    }
+
+    public ArmApplicationDefinition getDefinition()
+    {
+        return definition;
+    }
+
+    public String getGroup()
+    {
+        return group;
+    }
+
+    public String getInstance()
+    {
+        return instance;
     }
 
     public ArmSystemAddress getSystemAddress()

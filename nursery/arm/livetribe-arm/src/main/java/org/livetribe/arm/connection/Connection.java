@@ -28,11 +28,13 @@ public interface Connection
 
     public void introduceApplication(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues);
 
-    public void introduceApplicationRemote(byte[] appId, byte[] systemAddress);
+    public void introduceApplicationRemote(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues, byte[] systemAddress);
 
     public void introduceTransactionDefinition(byte[] transDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, String uri, byte[] id);
 
     public void associateTransaction(byte[] transId, byte [] appId, byte [] transDefId);
+
+    public void introduceMetricGroupDefinition(byte[] metricGroupDef, byte[][] appDef, String[] name, String[] units, short[] usage, byte[][]id);
 
     public void start(byte[] transId, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI);
 

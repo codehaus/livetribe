@@ -32,13 +32,13 @@ class LTApplicationDefinition extends AbstractIdentifiableObject implements ArmA
 {
     private final Connection connection = KnitPoint.getConnection();
     private final String name;
-    private final LTIdentityProperties identityProperties;
+    private final ArmIdentityProperties identityProperties;
     private final ArmID id;
 
     LTApplicationDefinition(String name, ArmIdentityProperties identityProperties, ArmID id)
     {
         this.name = name;
-        this.identityProperties = (LTIdentityProperties) identityProperties;
+        this.identityProperties = identityProperties;
         this.id = id;
 
         connection.introduceApplicationDefinition(getObjectId(),

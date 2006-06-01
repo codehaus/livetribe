@@ -42,6 +42,11 @@ public class LTTransactionFactory extends FacadeFactoryBase implements ArmTransa
         factoryProxy = (ArmTransactionFactory) getApplicationContext().getBean("transactionFactory");
     }
 
+    protected String getFactoryType()
+    {
+        return "transaction";
+    }
+
     public ArmApplication newArmApplication(ArmApplicationDefinition definition, String group, String instance, String[] contextValues)
     {
         return factoryProxy.newArmApplication(definition, group, instance, contextValues);

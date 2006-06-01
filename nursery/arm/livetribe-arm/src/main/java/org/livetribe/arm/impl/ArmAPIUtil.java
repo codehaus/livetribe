@@ -33,6 +33,7 @@ import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
 import org.livetribe.arm.GeneralErrorCodes;
+import org.livetribe.arm.Identifiable;
 import org.livetribe.arm.KnitPoint;
 import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
@@ -43,16 +44,16 @@ import org.livetribe.arm.util.StaticArmAPIMonitor;
  */
 public class ArmAPIUtil implements GeneralErrorCodes
 {
-    public static final LTApplicationDefinition BAD_APP_DEF;
-    public static final AbstractMetricDefinition BAD_METRIC_DEF;
-    public static final LTApplication BAD_APP;
-    public static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
-    public static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
-    public static final AbstractMetricBase BAD_METRIC;
-    public static final AbstractMetricBase[] BAD_METRICS;
-    public static final LTMetricGroup BAD_METRIC_GROUP;
-    public static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
-    public static final LTTransactionDefinition BAD_TRANS_DEF;
+    private static final LTApplicationDefinition BAD_APP_DEF;
+    private static final AbstractMetricDefinition BAD_METRIC_DEF;
+    private static final LTApplication BAD_APP;
+    private static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
+    private static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
+    private static final AbstractMetricBase BAD_METRIC;
+    private static final AbstractMetricBase[] BAD_METRICS;
+    private static final LTMetricGroup BAD_METRIC_GROUP;
+    private static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
+    private static final LTTransactionDefinition BAD_TRANS_DEF;
 
     static
     {
@@ -80,7 +81,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC_GRP_DEF = new LTMetricGroupDefinition(new ArmMetricDefinition[7])
+        BAD_METRIC_GRP_DEF = new LTMetricGroupDefinition(new LTMetricDefinition[7])
         {
             public boolean isBad()
             {
@@ -430,4 +431,72 @@ public class ArmAPIUtil implements GeneralErrorCodes
     {
         return (props == null ? null : props.getURIValue());
     }
+
+    static byte[][] extractObjectIds(LTMetricDefinition[] definitions)
+    {
+        byte[][] result = new byte[7][];
+
+        for (int i = 0; i < 7; i++)
+        {
+            LTMetricDefinition def = definitions[i];
+            Identifiable appDef = (def != null ? (Identifiable) def.getAppDef() : null);
+            result[i] = (appDef != null ? appDef.getObjectId() : null);
+        }
+
+        return result;
+    }
+
+    static String[] extractNames(ArmMetricDefinition[] definitions)
+    {
+        String[] result = new String[7];
+
+        for (int i = 0; i < 7; i++)
+        {
+            ArmMetricDefinition def = definitions[i];
+            result[i] = (def != null ? def.getName() : null);
+        }
+
+        return result;
+    }
+
+    static String[] extractUnits(ArmMetricDefinition[] definitions)
+    {
+        String[] result = new String[7];
+
+        for (int i = 0; i < 7; i++)
+        {
+            ArmMetricDefinition def = definitions[i];
+            result[i] = (def != null ? def.getUnits() : null);
+        }
+
+        return result;
+    }
+
+    static short[] extractUsage(ArmMetricDefinition[] definitions)
+    {
+        short[] result = new short[7];
+
+        for (int i = 0; i < 7; i++)
+        {
+            ArmMetricDefinition def = definitions[i];
+            result[i] = (def != null ? def.getUsage() : 0);
+        }
+
+        return result;
+    }
+
+    static byte[][] extractIds(ArmMetricDefinition[] definitions)
+    {
+        byte[][] result = new byte[7][];
+
+        for (int i = 0; i < 7; i++)
+        {
+            ArmMetricDefinition def = definitions[i];
+            ArmID id = (def != null ? def.getID() : null);
+            result[i] = (id != null ? id.getBytes() : null);
+        }
+
+        return result;
+    }
+
 }
