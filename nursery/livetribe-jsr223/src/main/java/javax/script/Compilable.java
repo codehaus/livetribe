@@ -27,18 +27,6 @@ import java.io.Reader;
 public interface Compilable
 {
     /**
-     * Compiles the script (source represented as a String) for later
-     * execution.
-     *
-     * @param script The source of the script, represented as a String.
-     * @return A subclass of CompiledScript to be executed later using one of
-     *         the eval methods of CompiledScript.
-     * @throws ScriptException      if compilation fails.
-     * @throws NullPointerException if script is null.
-     */
-    public CompiledScript compile(String script) throws ScriptException;
-
-    /**
      * Compiles the script (source read from Reader) for later execution.
      * Functionality is identical to compile(String) other than the way in
      * which the source is passed.
@@ -50,4 +38,16 @@ public interface Compilable
      * @throws NullPointerException if script is null.
      */
     public CompiledScript compile(Reader script) throws ScriptException;
+
+    /**
+     * Compiles the script (source represented as a String) for later
+     * execution.
+     *
+     * @param script The source of the script, represented as a String.
+     * @return A subclass of CompiledScript to be executed later using one of
+     *         the eval methods of CompiledScript.
+     * @throws ScriptException      if compilation fails.
+     * @throws NullPointerException if script is null.
+     */
+    public CompiledScript compile(String script) throws ScriptException;
 }

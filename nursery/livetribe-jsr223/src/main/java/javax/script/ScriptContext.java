@@ -45,6 +45,12 @@ public interface ScriptContext
     public final static int GLOBAL_SCOPE = 1;
 
     /**
+     * ScriptScope attributes are visible during the execution of a single
+     * script.
+     */
+    public final static int SCRIPT_SCOPE = 2;
+
+    /**
      * Associates a Namespace instance with a particular scope in
      * this ScriptContext. Calls to the getAttribute and
      * setAttribute methods must map to the put and get methods of
