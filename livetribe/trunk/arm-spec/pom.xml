@@ -24,7 +24,7 @@
                         </goals>
                         <configuration>
                             <remoteRepositoryId>livetribe-m1</remoteRepositoryId>
-                            <remoteRepositoryUrl>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m1</remoteRepositoryUrl>
+                            <remoteRepositoryUrl>dav:https://dav.codehaus.org/dist/livetribe/maven/m1</remoteRepositoryUrl>
                         </configuration>
                     </execution>
                 </executions>
@@ -57,16 +57,16 @@
         <repository>
             <id>livetribe-repo</id>
             <name>LiveTribe Central Repository</name>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2</url>
+            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2</url>
         </repository>
         <snapshotRepository>
             <id>livetribe-snapshots</id>
             <name>LiveTribe Central Development Repository</name>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2-snapshot</url>
+            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2-snapshots</url>
         </snapshotRepository>
         <site>
             <id>livetribe-website</id>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/public_html/maven/</url>
+            <url>dav:https://dav.codehaus.org/livetribe</url>
         </site>
     </distributionManagement>
 

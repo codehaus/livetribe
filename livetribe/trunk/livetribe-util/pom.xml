@@ -28,7 +28,7 @@
                         </goals>
                         <configuration>
                             <remoteRepositoryId>livetribe-m1</remoteRepositoryId>
-                            <remoteRepositoryUrl>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m1</remoteRepositoryUrl>
+                            <remoteRepositoryUrl>dav:https://dav.codehaus.org/dist/livetribe/maven/m1</remoteRepositoryUrl>
                         </configuration>
                     </execution>
                 </executions>
