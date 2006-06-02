@@ -18,27 +18,9 @@
 package javax.script;
 
 /**
- * ScriptEngineFactory is used to describe and instantiate
- * ScriptEngines.
- * <p/>
- * Each class implementing ScriptEngine has a corresponding factory
- * that exposes metadata describing the engine class.
- * <p/>
- * The ScriptEngineManager uses the service provider mechanism
- * described in the Jar File Specification to obtain instances of all
- * ScriptEngineFactories available in the current ClassLoader.
- *
  * @version $Revision: $ $Date: $
  */
 public interface ScriptEngineFactory extends ScriptEngineInfo
 {
-    /**
-     * Returns an instance of the ScriptEngine associated with this
-     * ScriptEngineFactory. Properties of this ScriptEngine class
-     * are described by the ScriptEngineInfo members of this
-     * ScriptEngineFactory.
-     *
-     * @return A new ScriptEngine instance.
-     */
     public ScriptEngine getScriptEngine();
 }

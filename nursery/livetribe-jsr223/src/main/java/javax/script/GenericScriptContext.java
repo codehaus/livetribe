@@ -21,34 +21,20 @@ import java.io.Writer;
 
 
 /**
- * Generic implementation of ScriptContext.
- *
  * @version $Revision: $ $Date$
  */
 public class GenericScriptContext implements ScriptContext
 {
-    /**
-     * Namespace of attributes storing GLOBAL_SCOPE
-     */
     protected Namespace globalScope;
 
-    /**
-     * Namespace of attributes storing SCRIPT_SCOPE
-     */
     protected Namespace scriptScope;
 
-    /**
-     * Namespace of attributes storing ENGINE_SCOPE.
-     */
     protected Namespace engineScope;
 
     protected Writer writer;
     protected Writer errorWriter;
     protected Reader reader;
 
-    /**
-     * {@inheritDoc}
-     */
     public void setNamespace(Namespace namespace, int scope)
     {
         if (namespace == null) throw new IllegalArgumentException("Namespace is null");
@@ -69,9 +55,6 @@ public class GenericScriptContext implements ScriptContext
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Namespace getNamespace(int scope)
     {
         switch (scope)
@@ -87,9 +70,6 @@ public class GenericScriptContext implements ScriptContext
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setAttribute(String name, Object value, int scope)
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
@@ -114,9 +94,6 @@ public class GenericScriptContext implements ScriptContext
         namespace.put(name, value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Object getAttribute(String name, int scope)
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
@@ -141,9 +118,6 @@ public class GenericScriptContext implements ScriptContext
         return namespace.get(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Object removeAttribute(String name, int scope)
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
@@ -168,9 +142,6 @@ public class GenericScriptContext implements ScriptContext
         return namespace.remove(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Object getAttribute(String name)
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
@@ -182,9 +153,6 @@ public class GenericScriptContext implements ScriptContext
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public int getAttributeScope(String name)
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
@@ -196,49 +164,31 @@ public class GenericScriptContext implements ScriptContext
         return -1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Writer getWriter()
     {
         return writer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Writer getErrorWriter()
     {
         return errorWriter;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setWriter(Writer writer)
     {
         this.writer = writer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setErrorWriter(Writer writer)
     {
         this.errorWriter = writer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Reader getReader()
     {
         return reader;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setReader(Reader reader)
     {
         this.reader = reader;
