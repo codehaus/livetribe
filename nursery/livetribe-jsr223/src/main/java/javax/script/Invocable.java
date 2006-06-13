@@ -27,5 +27,5 @@ public interface Invocable
 
     public Object getInterface(Class clazz);
 
-    public Object getInterface(Object thiz, Class clazz);
+    public Object getInterface(Object thizz, Class clazz);
 }

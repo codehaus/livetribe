@@ -26,25 +26,22 @@ import java.io.Writer;
 public class GenericScriptContext implements ScriptContext
 {
     protected Namespace globalScope;
-
-    protected Namespace scriptScope;
-
     protected Namespace engineScope;
 
     protected Writer writer;
     protected Writer errorWriter;
     protected Reader reader;
 
+    public GenericScriptContext()
+    {
+    }
+
     public void setNamespace(Namespace namespace, int scope)
     {
-        if (namespace == null) throw new IllegalArgumentException("Namespace is null");
-
         switch (scope)
         {
-            case SCRIPT_SCOPE:
-                scriptScope = namespace;
-                break;
             case ENGINE_SCOPE:
+                if (namespace == null) throw new NullPointerException("Namespace for ENGINE scope is null");
                 engineScope = namespace;
                 break;
             case GLOBAL_SCOPE:
@@ -59,8 +56,6 @@ public class GenericScriptContext implements ScriptContext
     {
         switch (scope)
         {
-            case SCRIPT_SCOPE:
-                return scriptScope;
             case ENGINE_SCOPE:
                 return engineScope;
             case GLOBAL_SCOPE:
@@ -77,9 +72,6 @@ public class GenericScriptContext implements ScriptContext
         Namespace namespace;
         switch (scope)
         {
-            case SCRIPT_SCOPE:
-                namespace = scriptScope;
-                break;
             case ENGINE_SCOPE:
                 namespace = engineScope;
                 break;
@@ -101,9 +93,6 @@ public class GenericScriptContext implements ScriptContext
         Namespace namespace;
         switch (scope)
         {
-            case SCRIPT_SCOPE:
-                namespace = scriptScope;
-                break;
             case ENGINE_SCOPE:
                 namespace = engineScope;
                 break;
@@ -125,9 +114,6 @@ public class GenericScriptContext implements ScriptContext
         Namespace namespace;
         switch (scope)
         {
-            case SCRIPT_SCOPE:
-                namespace = scriptScope;
-                break;
             case ENGINE_SCOPE:
                 namespace = engineScope;
                 break;
@@ -146,7 +132,6 @@ public class GenericScriptContext implements ScriptContext
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
 
-        if (scriptScope != null && scriptScope.containsKey(name)) return scriptScope.get(name);
         if (engineScope != null && engineScope.containsKey(name)) return engineScope.get(name);
         if (globalScope != null && globalScope.containsKey(name)) return globalScope.get(name);
 
@@ -157,7 +142,6 @@ public class GenericScriptContext implements ScriptContext
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
 
-        if (scriptScope != null && scriptScope.containsKey(name)) return SCRIPT_SCOPE;
         if (engineScope != null && engineScope.containsKey(name)) return ENGINE_SCOPE;
         if (globalScope != null && globalScope.containsKey(name)) return GLOBAL_SCOPE;
 

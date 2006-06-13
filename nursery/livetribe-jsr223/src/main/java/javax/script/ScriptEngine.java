@@ -25,17 +25,11 @@ import java.io.Reader;
 public interface ScriptEngine
 {
     public final static String ARGV = "javax.script.argv";
-
     public final static String FILENAME = "javax.script.filename";
-
     public final static String ENGINE = "javax.script.engine";
-
     public final static String ENGINE_VERSION = "javax.script.engine_version";
-
     public final static String NAME = "javax.script.name";
-
     public final static String LANGUAGE = "javax.script.language";
-
     public final static String LANGUAGE_VERSION = "javax.script.language_version";
 
     public Object eval(String script, ScriptContext context) throws ScriptException;

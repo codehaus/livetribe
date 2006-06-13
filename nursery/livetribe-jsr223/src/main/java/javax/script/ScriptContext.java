@@ -26,10 +26,7 @@ import java.io.Writer;
 public interface ScriptContext
 {
     public final static int ENGINE_SCOPE = 0;
-
     public final static int GLOBAL_SCOPE = 1;
-
-    public final static int SCRIPT_SCOPE = 2;
 
     public void setNamespace(Namespace namespace, int scope);
 

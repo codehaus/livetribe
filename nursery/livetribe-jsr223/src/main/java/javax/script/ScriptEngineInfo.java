@@ -35,5 +35,11 @@ public interface ScriptEngineInfo
 
     public String getLanguageVersion();
 
-    public Object getParameter(java.lang.String key);
+    public Object getParameter(String key);
+
+    public String getMethodCallSyntax(String obj, String m, String[] args);
+
+    public String getOutputStatement(String toDisplay);
+
+    public String getProgram(String[] statements);
 }

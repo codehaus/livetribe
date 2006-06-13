@@ -27,21 +27,19 @@ public abstract class CompiledScript
 
     public Object eval() throws ScriptException
     {
-        GenericScriptContext context = new GenericScriptContext();
-
-        context.setNamespace(getEngine().getNamespace(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
-        context.setNamespace(getEngine().getNamespace(ScriptContext.ENGINE_SCOPE), ScriptContext.ENGINE_SCOPE);
-
-        return eval(context);
+        return eval(getEngine().getContext());
     }
 
-    public java.lang.Object eval(Namespace namespace) throws ScriptException
+    public Object eval(Namespace namespace) throws ScriptException
     {
+        ScriptEngine engine = getEngine();
         GenericScriptContext context = new GenericScriptContext();
 
-        context.setNamespace(namespace, ScriptContext.SCRIPT_SCOPE);
-        context.setNamespace(getEngine().getNamespace(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
-        context.setNamespace(getEngine().getNamespace(ScriptContext.ENGINE_SCOPE), ScriptContext.ENGINE_SCOPE);
+        context.setNamespace(namespace, ScriptContext.ENGINE_SCOPE);
+        context.setNamespace(engine.getNamespace(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
+
+        context.setReader(engine.getContext().getReader());
+        context.setWriter(engine.getContext().getWriter());
 
         return eval(context);
     }

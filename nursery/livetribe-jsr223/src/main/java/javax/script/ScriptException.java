@@ -21,4 +21,68 @@ package javax.script;
  */
 public class ScriptException extends Exception
 {
+    private final String fileName;
+    private final int lineNumber;
+    private final int columnNumber;
+
+    public ScriptException(String message)
+    {
+        this(message, null, -1, -1);
+    }
+
+    public ScriptException(Exception e)
+    {
+        super(null, e);
+
+        this.fileName = null;
+        this.lineNumber = -1;
+        this.columnNumber = -1;
+    }
+
+    public ScriptException(String message, String fileName, int lineNumber)
+    {
+        this(message, fileName, lineNumber, -1);
+    }
+
+    public ScriptException(String message, String fileName, int lineNumber, int columnNumber)
+    {
+        super(message);
+
+        this.fileName = fileName;
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+    }
+
+    public String getMessage()
+    {
+        StringBuffer message = new StringBuffer(super.getMessage());
+
+        if (fileName != null)
+        {
+            if (lineNumber != -1)
+            {
+                message.append(" at [").append(lineNumber);
+                if (columnNumber != -1) message.append(", ").append(columnNumber);
+                message.append("]");
+            }
+            message.append(" in file ").append(fileName);
+        }
+
+        return message.toString();
+    }
+
+    public String getFileName()
+    {
+        return fileName;
+    }
+
+    public int getLineNumber()
+    {
+        return lineNumber;
+    }
+
+    public int getColumnNumber()
+    {
+        return columnNumber;
+    }
 }
