@@ -147,6 +147,7 @@
         <module>livetribe-webconsole</module>
         <module>livetribe-jmx</module>
         <module>livetribe-slp</module>
+        <module>livetribe-jsr223</module>
         <module>arm-spec</module>
     </modules>
 
