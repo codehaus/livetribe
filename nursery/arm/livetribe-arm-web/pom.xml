@@ -58,7 +58,7 @@
 
         <dependency>
             <groupId>org.opengroup</groupId>
-            <artifactId>ARM_4_0</artifactId>
+            <artifactId>arm-spec</artifactId>
         </dependency>
 
         <dependency>
