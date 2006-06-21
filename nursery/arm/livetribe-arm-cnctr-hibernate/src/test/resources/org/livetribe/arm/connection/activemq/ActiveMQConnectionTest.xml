@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="armKnitPoint" class="org.livetribe.arm.KnitPoint">
+        <property name="connection">
+            <ref local="amqConnector"/>
+        </property>
+    </bean>
+
+    <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="vm://localhost?broker.deleteAllMessagesOnStartup=true"/>
+    </bean>
+
+    <bean id="amqConnector"
+          class="org.livetribe.arm.connection.activemq.ActiveMQConnection"
+          init-method="init"
+          destroy-method="destroy">
+        <property name="factory">
+            <ref local="jmsFactory"/>
+        </property>
+        <property name="destination">
+            <ref local="destination"/>
+        </property>
+    </bean>
+
+    <bean id="consumer" class="org.livetribe.arm.connection.activemq.ConsumerBean">
+        <property name="factory">
+            <ref local="jmsFactory"/>
+        </property>
+        <property name="destination">
+            <ref bean="destination"/>
+        </property>
+    </bean>
+
+    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue" autowire="constructor">
+        <constructor-arg>
+            <value>org.livetribe.arm.queue</value>
+        </constructor-arg>
+    </bean>
+
+</beans>

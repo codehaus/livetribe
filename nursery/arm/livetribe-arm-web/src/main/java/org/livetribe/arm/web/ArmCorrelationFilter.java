@@ -16,9 +16,7 @@
  */
 package org.livetribe.arm.web;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -26,6 +24,9 @@ import java.io.IOException;
 
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.filter.GenericFilterBean;
 
 import org.livetribe.arm.CorrelationManager;
 import org.livetribe.util.HexSupport;
@@ -40,15 +41,30 @@ import org.livetribe.util.HexSupport;
  * @version $Revision: $ $Date$
  * @see ArmDecisionPoint
  */
-public class ArmCorrelationFilter implements Filter
+public class ArmCorrelationFilter extends GenericFilterBean
 {
-    private static final String TRANSACTION_FACTORY = "org.livetribe.arm.web.ArmCorrelationFilter.transactionFactory";
     private static final String CORRELATOR_PARAM = "org.livetribe.arm.correlator";
+    private String transactionFactoryName;
     private ArmTransactionFactory transactionFactory;
 
-    public void init(FilterConfig filterConfig) throws ServletException
+    public String getTransactionFactoryName()
     {
-        transactionFactory = (ArmTransactionFactory) KnitPoint.getContext().getBean(TRANSACTION_FACTORY);
+        return transactionFactoryName;
+    }
+
+    public void setTransactionFactoryName(String transactionFactoryName)
+    {
+        this.transactionFactoryName = transactionFactoryName;
+    }
+
+    public ArmTransactionFactory getTransactionFactory()
+    {
+        if (transactionFactory == null)
+        {
+            ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+            transactionFactory = (ArmTransactionFactory) context.getBean(transactionFactoryName);
+        }
+        return transactionFactory;
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException
@@ -60,7 +76,7 @@ public class ArmCorrelationFilter implements Filter
         {
             try
             {
-                ArmCorrelator correlator = transactionFactory.newArmCorrelator(HexSupport.toBytesFromHex(correlatorParam));
+                ArmCorrelator correlator = getTransactionFactory().newArmCorrelator(HexSupport.toBytesFromHex(correlatorParam));
 
                 CorrelationManager.put(correlator);
             }
@@ -79,7 +95,11 @@ public class ArmCorrelationFilter implements Filter
         }
     }
 
-    public void destroy()
+    protected void initFilterBean() throws ServletException
     {
+        if (transactionFactoryName == null)
+        {
+            transactionFactoryName = getFilterName();
+        }
     }
 }

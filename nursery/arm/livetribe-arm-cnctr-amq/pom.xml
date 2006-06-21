@@ -109,6 +109,11 @@
             <artifactId>livetribe-arm</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.livetribe.arm</groupId>
+            <artifactId>livetribe-arm-cnctr</artifactId>
+        </dependency>
+
     </dependencies>
 
     <reporting>

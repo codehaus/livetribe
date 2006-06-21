@@ -14,25 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.web;
-
-import org.springframework.context.ApplicationContext;
-
+package org.livetribe.arm.connection.activemq;
 
 /**
- * @version $Revision: $ $Date$
+ * @version $Revision$ $Date$
  */
-public class KnitPoint
+public class AtmCustomer
 {
-    private static ApplicationContext context;
+    public int no;
+    public String name;
+    public int pin;
+    public double balance;
+    public String currency;
 
-    public static ApplicationContext getContext()
+    public AtmCustomer(int no, String name, int pin, double balance, String currency)
     {
-        return context;
+        this.no = no;
+        this.name = name;
+        this.pin = pin;
+        this.balance = balance;
+        this.currency = currency;
     }
 
-    public static void setContext(ApplicationContext context)
-    {
-        KnitPoint.context = context;
-    }
 }

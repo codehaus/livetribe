@@ -16,9 +16,7 @@
  */
 package org.livetribe.arm.web;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -27,6 +25,9 @@ import java.io.IOException;
 import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransaction;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.filter.GenericFilterBean;
 
 import org.livetribe.arm.CorrelationManager;
 
@@ -34,9 +35,8 @@ import org.livetribe.arm.CorrelationManager;
 /**
  * @version $Revision: $ $Date$
  */
-public class ArmTransactionFilter implements Filter
+public class ArmTransactionFilter extends GenericFilterBean
 {
-    public static final String TRANSACTION = "org.livetribe.arm.web.ArmTransactionFilter.transaction";
     private static final ThreadLocal fireTransaction = new ThreadLocal()
     {
         protected Object initialValue()
@@ -44,12 +44,27 @@ public class ArmTransactionFilter implements Filter
             return Boolean.FALSE;
         }
     };
+    private String transactionName;
     private ArmTransaction transaction;
 
-    public void init(FilterConfig filterConfig) throws ServletException
+    public String getTransactionName()
     {
-        String key = filterConfig.getInitParameter(TRANSACTION);
-        transaction = (ArmTransaction) KnitPoint.getContext().getBean(key);
+        return transactionName;
+    }
+
+    public void setTransactionName(String transactionName)
+    {
+        this.transactionName = transactionName;
+    }
+
+    public ArmTransaction getTransactionFactory()
+    {
+        if (transaction == null)
+        {
+            ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+            transaction = (ArmTransaction) context.getBean(transactionName);
+        }
+        return transaction;
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException
@@ -58,10 +73,10 @@ public class ArmTransactionFilter implements Filter
 
         if (transactionFired())
         {
-            if (parent != null) transaction.start(parent);
-            else transaction.start();
+            if (parent != null) getTransactionFactory().start(parent);
+            else getTransactionFactory().start();
 
-            CorrelationManager.put(transaction.getCorrelator());
+            CorrelationManager.put(getTransactionFactory().getCorrelator());
 
             try
             {
@@ -88,10 +103,6 @@ public class ArmTransactionFilter implements Filter
         {
             filterChain.doFilter(servletRequest, servletResponse);
         }
-    }
-
-    public void destroy()
-    {
     }
 
     public static void fireTransaction(boolean fire)

@@ -16,21 +16,12 @@
  */
 package org.livetribe.arm.web;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
+import org.springframework.web.filter.GenericFilterBean;
 
 
 /**
  * @version $Revision: $ $Date$
  */
-public abstract class ArmDecisionPoint implements Filter
+public abstract class ArmDecisionPoint extends GenericFilterBean
 {
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
-    }
-
-    public void destroy()
-    {
-    }
 }

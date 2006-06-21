@@ -17,7 +17,6 @@
 package org.livetribe.arm.web;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -32,22 +31,18 @@ import java.util.Random;
  */
 public class ArmDecisionPointRandom extends ArmDecisionPoint
 {
-    private final static String PERCENT = "org.livetribe.arm.web.ArmDecisionPointRandom.float";
     private Random random = new Random(System.currentTimeMillis());
     private float percent;
 
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
-        super.init(filterConfig);
 
-        try
-        {
-            percent = Float.parseFloat(filterConfig.getInitParameter(PERCENT));
-        }
-        catch (NumberFormatException nfe)
-        {
-            throw new ServletException("Bad format of percent parameter", nfe);
-        }
+    public float getPercent()
+    {
+        return percent;
+    }
+
+    public void setPercent(float percent)
+    {
+        this.percent = percent;
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException

@@ -17,7 +17,6 @@
 package org.livetribe.arm.web;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -31,22 +30,17 @@ import java.io.IOException;
  */
 public class ArmDecisionPointEveryNth extends ArmDecisionPoint
 {
-    private final static String NTH = "org.livetribe.arm.web.ArmDecisionPointEveryNth.nth";
     private int count = 0;
     private int nth;
 
-    public void init(FilterConfig filterConfig) throws ServletException
+    public int getNth()
     {
-        super.init(filterConfig);
+        return nth;
+    }
 
-        try
-        {
-            nth = Integer.parseInt(filterConfig.getInitParameter(NTH));
-        }
-        catch (NumberFormatException nfe)
-        {
-            throw new ServletException("Bad format of nth parameter", nfe);
-        }
+    public void setNth(int nth)
+    {
+        this.nth = nth;
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException
