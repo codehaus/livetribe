@@ -26,19 +26,19 @@ import org.opengroup.arm40.transaction.ArmUser;
 
 import org.livetribe.arm.connection.Connection;
 import org.livetribe.arm.connection.StaticConnectionMonitor;
-import org.livetribe.arm.connection.activemq.messages.ApplicationDefinitionMessage;
-import org.livetribe.arm.connection.activemq.messages.ApplicationMessage;
-import org.livetribe.arm.connection.activemq.messages.ApplicationRemoteMessage;
-import org.livetribe.arm.connection.activemq.messages.BlockMessage;
-import org.livetribe.arm.connection.activemq.messages.Message;
-import org.livetribe.arm.connection.activemq.messages.MetricGroupDefinitionMessage;
-import org.livetribe.arm.connection.activemq.messages.ResetMessage;
-import org.livetribe.arm.connection.activemq.messages.StartMessage;
-import org.livetribe.arm.connection.activemq.messages.StopMessage;
-import org.livetribe.arm.connection.activemq.messages.TransactionDefinitionMessage;
-import org.livetribe.arm.connection.activemq.messages.TransactionMessage;
-import org.livetribe.arm.connection.activemq.messages.UnblockedMessage;
-import org.livetribe.arm.connection.activemq.messages.UpdateMessage;
+import org.livetribe.arm.connection.messages.ApplicationDefinitionMessage;
+import org.livetribe.arm.connection.messages.ApplicationMessage;
+import org.livetribe.arm.connection.messages.ApplicationRemoteMessage;
+import org.livetribe.arm.connection.messages.BlockMessage;
+import org.livetribe.arm.connection.messages.Message;
+import org.livetribe.arm.connection.messages.MetricGroupDefinitionMessage;
+import org.livetribe.arm.connection.messages.ResetMessage;
+import org.livetribe.arm.connection.messages.StartMessage;
+import org.livetribe.arm.connection.messages.StopMessage;
+import org.livetribe.arm.connection.messages.TransactionDefinitionMessage;
+import org.livetribe.arm.connection.messages.TransactionMessage;
+import org.livetribe.arm.connection.messages.UnblockedMessage;
+import org.livetribe.arm.connection.messages.UpdateMessage;
 
 /**
  * @version $Revision$ $Date$

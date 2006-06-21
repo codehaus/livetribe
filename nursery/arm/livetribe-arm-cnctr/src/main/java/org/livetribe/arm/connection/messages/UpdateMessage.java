@@ -1,14 +1,14 @@
-package org.livetribe.arm.connection.activemq.messages;
+package org.livetribe.arm.connection.messages;
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class ResetMessage implements Message
+public class UpdateMessage implements Message
 {
     private final byte[] transId;
     private final byte[] correlator;
 
-    public ResetMessage(byte[] transId, byte[] correlator)
+    public UpdateMessage(byte[] transId, byte[] correlator)
     {
         this.transId = transId;
         this.correlator = correlator;

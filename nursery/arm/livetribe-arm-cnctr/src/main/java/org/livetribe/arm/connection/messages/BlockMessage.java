@@ -1,4 +1,4 @@
-package org.livetribe.arm.connection.activemq.messages;
+package org.livetribe.arm.connection.messages;
 
 /**
  * @version $Revision: $ $Date: $
