@@ -111,7 +111,7 @@
 
         <dependency>
             <groupId>org.livetribe.arm</groupId>
-            <artifactId>livetribe-arm-cnctr</artifactId>
+            <artifactId>livetribe-arm-util</artifactId>
         </dependency>
 
     </dependencies>

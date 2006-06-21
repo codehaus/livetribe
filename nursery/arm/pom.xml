@@ -115,11 +115,11 @@
 
     <modules>
         <module>livetribe-arm</module>
-        <module>livetribe-arm-cnctr</module>
+        <module>livetribe-arm-amq</module>
         <module>livetribe-arm-cnctr-amq</module>
         <module>livetribe-arm-cnctr-hibernate</module>
+        <module>livetribe-arm-util</module>
         <module>livetribe-arm-xbean</module>
-        <module>livetribe-arm-amq</module>
         <module>livetribe-arm-james</module>
         <module>livetribe-arm-openejb</module>
         <module>livetribe-arm-smx</module>
@@ -290,7 +290,7 @@
 
             <dependency>
                 <groupId>org.livetribe.arm</groupId>
-                <artifactId>livetribe-arm-cnctr</artifactId>
+                <artifactId>livetribe-arm-util</artifactId>
                 <version>${version}</version>
             </dependency>
 
