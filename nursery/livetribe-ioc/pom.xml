@@ -1,6 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <parent>
+        <groupId>org.livetribe.nursery</groupId>
+        <artifactId>nursery</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.livetribe.nursery</groupId>
     <artifactId>livetribe-ioc</artifactId>
@@ -19,15 +25,6 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*TestCase.*</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -39,18 +36,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-        <repository>
-            <id>livetribe-repo</id>
-            <name>LiveTribe Central Repository</name>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2</url>
-        </repository>
-        <snapshotRepository>
-            <id>livetribe-snapshots</id>
-            <name>LiveTribe Central Development Repository</name>
-            <url>scpexe://repo.livetribe.org/home/projects/livetribe/dist-m2-snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>

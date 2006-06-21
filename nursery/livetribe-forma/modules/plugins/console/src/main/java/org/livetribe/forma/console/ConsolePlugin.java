@@ -31,8 +31,6 @@ import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.api.sa.ServiceAgent;
 import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.api.sa.StandardServiceAgent;
-import org.livetribe.slp.spi.net.SocketUnicastConnector;
-import org.livetribe.slp.spi.sa.StandardServiceAgentManager;
 
 /**
  * @version $Rev$ $Date$
@@ -55,12 +53,7 @@ public class ConsolePlugin implements Plugin
 
         Configuration slpConfiguration = new Configuration();
         slpConfiguration.setPort(1427);
-        SocketUnicastConnector unicastConnector = new SocketUnicastConnector();
-        unicastConnector.setUnicastListening(true);
-        StandardServiceAgentManager serviceAgentManager = new StandardServiceAgentManager();
-        serviceAgentManager.setUnicastConnector(unicastConnector);
         serviceAgent = new StandardServiceAgent();
-        serviceAgent.setServiceAgentManager(serviceAgentManager);
         serviceAgent.setConfiguration(slpConfiguration);
     }
 
