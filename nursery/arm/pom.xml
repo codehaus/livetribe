@@ -247,25 +247,19 @@
             <dependency>
                 <groupId>org.apache.xbean</groupId>
                 <artifactId>xbean-kernel</artifactId>
-                <version>2.3-SNAPSHOT</version>
+                <version>2.3</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.xbean</groupId>
                 <artifactId>xbean-spring</artifactId>
-                <version>2.3-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>incubator-activemq</groupId>
-                <artifactId>activeio-core</artifactId>
-                <version>3.0-SNAPSHOT</version>
+                <version>2.3</version>
             </dependency>
 
             <dependency>
                 <groupId>incubator-activemq</groupId>
                 <artifactId>activemq-core</artifactId>
-                <version>4.0-SNAPSHOT</version>
+                <version>4.0.1</version>
             </dependency>
 
             <dependency>
@@ -300,8 +294,8 @@
 
             <dependency>
                 <groupId>org.opengroup</groupId>
-                <artifactId>arm-spec</artifactId>
-                <version>4.0</version>
+                <artifactId>ARM_4_0</artifactId>
+                <version>1.0</version>
             </dependency>
 
             <dependency>

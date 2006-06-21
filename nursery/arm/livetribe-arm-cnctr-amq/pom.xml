@@ -80,12 +80,6 @@
 
         <dependency>
             <groupId>incubator-activemq</groupId>
-            <artifactId>activeio-core</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>incubator-activemq</groupId>
             <artifactId>activemq-core</artifactId>
         </dependency>
 

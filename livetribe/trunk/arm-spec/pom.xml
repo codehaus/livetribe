@@ -9,8 +9,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.opengroup</groupId>
-    <artifactId>arm-spec</artifactId>
-    <version>4.0</version>
+    <artifactId>ARM_4_0</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <name>ARM 4.0 :: Java Language Bindings</name>
     <description>ARM 4.0 Java Language Bindings</description>
