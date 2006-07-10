@@ -177,9 +177,9 @@ public class ApplicationAssemblerMojo extends AbstractMojo
 
     private void addModules(Archiver archiver) throws MojoExecutionException
     {
-        for (Iterator projects = reactorProjects.iterator(); projects.hasNext();)
+        for (Object reactorProject : reactorProjects)
         {
-            MavenProject project = (MavenProject)projects.next();
+            MavenProject project = (MavenProject) reactorProject;
             Artifact artifact = project.getArtifact();
             String artifactKey = ArtifactUtils.versionlessKey(artifact);
             if (modules.contains(artifactKey))
@@ -190,7 +190,7 @@ public class ApplicationAssemblerMojo extends AbstractMojo
                     List dependencies = project.getRuntimeClasspathElements();
                     for (int i = 0; i < dependencies.size(); ++i)
                     {
-                        String dependency = (String)dependencies.get(i);
+                        String dependency = (String) dependencies.get(i);
                         File dependencyFile = new File(dependency);
                         if (dependencyFile.isFile()) FileUtils.copyFileToDirectory(dependencyFile, workDirectory);
                     }
@@ -212,18 +212,18 @@ public class ApplicationAssemblerMojo extends AbstractMojo
         File pluginsDirectory = new File(workDirectory, "plugins");
         pluginsDirectory.mkdirs();
 
-        for (Iterator projects = reactorProjects.iterator(); projects.hasNext();)
+        for (Object reactorProject : reactorProjects)
         {
-            MavenProject project = (MavenProject)projects.next();
+            MavenProject project = (MavenProject) reactorProject;
             Artifact artifact = project.getArtifact();
             String artifactKey = ArtifactUtils.versionlessKey(artifact);
             if (plugins.contains(artifactKey))
             {
                 Artifact plugin = null;
                 List attachedArtifacts = project.getAttachedArtifacts();
-                for (Iterator attachments = attachedArtifacts.iterator(); attachments.hasNext();)
+                for (Object attachedArtifact : attachedArtifacts)
                 {
-                    Artifact attachment = (Artifact)attachments.next();
+                    Artifact attachment = (Artifact) attachedArtifact;
                     if (PluginAssemblerMojo.PLUGIN_CLASSIFIER.equals(attachment.getClassifier()))
                     {
                         plugin = attachment;

@@ -153,9 +153,9 @@ public class PluginAssemblerMojo extends AbstractMojo
 
         try
         {
-            for (Iterator it = dependencies.iterator(); it.hasNext();)
+            for (Object dependency : dependencies)
             {
-                String artifact = (String)it.next();
+                String artifact = (String) dependency;
                 File artifactFile = new File(artifact);
                 if (artifactFile.isFile()) archiver.addFile(artifactFile, "lib/" + artifactFile.getName());
             }
