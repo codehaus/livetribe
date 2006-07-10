@@ -34,7 +34,7 @@
     <dependencies>
         <dependency>
             <groupId>org.livetribe.nursery.forma</groupId>
-            <artifactId>boot</artifactId>
+            <artifactId>livetribe-forma-boot</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

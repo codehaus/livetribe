@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.livetribe.nursery.forma</groupId>
-    <artifactId>boot</artifactId>
+    <artifactId>livetribe-forma-boot</artifactId>
     <name>LiveTribe :: Forma :: Boot</name>
     <version>${bootVersion}</version>
     <packaging>jar</packaging>
