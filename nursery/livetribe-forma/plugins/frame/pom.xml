@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>org.livetribe.nursery.forma</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>plugins</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

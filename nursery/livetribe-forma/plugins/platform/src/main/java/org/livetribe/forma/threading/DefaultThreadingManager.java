@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import foxtrot.Job;
 import foxtrot.Worker;
-import foxtrot.utils.FlushTask;
+import foxtrot.utils.FlushJob;
 
 /**
  * @version $Rev: 118 $ $Date$
@@ -71,6 +71,6 @@ public class DefaultThreadingManager implements ThreadingManager
 
     public void flushEvents()
     {
-        Worker.post(new FlushTask());
+        Worker.post(new FlushJob());
     }
 }

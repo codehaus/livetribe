@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>org.livetribe.nursery.forma</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>plugins</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -11,7 +11,7 @@
     <groupId>org.livetribe.nursery.forma</groupId>
     <artifactId>platform</artifactId>
     <name>LiveTribe :: Forma :: Platform</name>
-    <version>${parent.version}</version>
+    <version>${pluginPlatformVersion}</version>
     <packaging>jar</packaging>
 
     <build>
