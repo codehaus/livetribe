@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.livetribe.nursery</groupId>
+        <artifactId>livetribe-forma</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.livetribe.nursery.forma</groupId>
+    <artifactId>plugins</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>LiveTribe :: Forma :: Plugins</name>
+
+    <modules>
+        <module>platform</module>
+        <module>frame</module>
+        <module>console</module>
+    </modules>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+    </build>
+
+    <properties>
+        <bootVersion>1.0-SNAPSHOT</bootVersion>
+        <pluginPlatformVersion>1.0-SNAPSHOT</pluginPlatformVersion>
+        <pluginFrameVersion>1.0-SNAPSHOT</pluginFrameVersion>
+        <pluginConsoleVersion>1.0-SNAPSHOT</pluginConsoleVersion>
+    </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.livetribe.nursery.forma</groupId>
+                <artifactId>boot</artifactId>
+                <version>${bootVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.livetribe.nursery.forma</groupId>
+                <artifactId>platform</artifactId>
+                <version>${pluginPlatformVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.livetribe.nursery.forma</groupId>
+                <artifactId>frame</artifactId>
+                <version>${pluginFrameVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.livetribe.nursery</groupId>
+                <artifactId>livetribe-ioc</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+</project>
