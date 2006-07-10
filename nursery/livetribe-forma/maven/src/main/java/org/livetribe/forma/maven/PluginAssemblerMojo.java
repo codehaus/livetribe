@@ -36,7 +36,7 @@ import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
  * @goal assemble-plugin
  * @phase package
  * @requiresDependencyResolution compile
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date$
  */
 public class PluginAssemblerMojo extends AbstractMojo
 {
