@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="org.livetribe.forma.console.ConsolePlugin.ID" plugin-class="org.livetribe.forma.console.ConsolePlugin"
+        bundle="Console">
+    <name bundleKey="plugin.console.name">Forma Console</name>
+
+    <dependencies>
+        <dependency>org.livetribe.forma.FormaPlugin.ID</dependency>
+        <dependency>org.livetribe.forma.frame.FramePlugin.ID</dependency>
+    </dependencies>
+
+    <extensions>
+
+        <extension id="org.livetribe.forma.ui.action.ActionManager.ID"
+                   parser-class="org.livetribe.forma.ui.action.spi.ActionExtensionParser">
+            <actions>
+                <action id="org.livetribe.forma.console.action.ScanSLPAndDisplayAction.ID"
+                        action-class="org.livetribe.forma.console.action.ScanSLPAndDisplayAction">
+                </action>
+                <action id="org.livetribe.forma.console.action.ScanNetworkWithSLPAction.ID"
+                        action-class="org.livetribe.forma.console.action.ScanNetworkWithSLPAction">
+                </action>
+                <action id="org.livetribe.forma.console.action.SLPNetworkScanAction.ID"
+                        action-class="org.livetribe.forma.console.action.SLPNetworkScanAction">
+                    <text bundleKey="action.slp.scan.text">SLP Network Scan</text>
+                </action>
+                <action id="org.livetribe.forma.console.action.ManageNodeAction.ID"
+                        action-class="org.livetribe.forma.console.action.ManageNodeAction">
+                    <text>Browse...</text>
+                </action>
+
+                <action id="org.livetribe.forma.console.action.OpenWelcomPerspectiveAction.ID"
+                        action-class="org.livetribe.forma.frame.action.OpenPerspectiveAction">
+                    <text>Welcome</text>
+                    <property name="perspectiveId">org.livetribe.forma.console.perspective.WelcomePerspective.ID</property>
+                </action>
+            </actions>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.menubar.MenubarManager.ID"
+                   parser-class="org.livetribe.forma.ui.menubar.spi.MenubarExtensionParser">
+            <menubars>
+                <menubar id="org.livetribe.forma.ui.menubar.MenubarManager.MENUBAR_ID">
+                    <menus>
+                        <menu id="menubar.menu.file">
+                            <sections>
+                                <section id="menubar.menu.file.section.new">
+                                    <items>
+                                        <menu id="menubar.menu.file.menu.networkScans">
+                                            <text>Network Scans</text>
+                                            <sections>
+                                                <section id="menubar.menu.file.menu.networkScans.section.scans">
+                                                    <items>
+                                                        <item id="menubar.menu.file.menu.networkScans.item.slpScan">
+                                                            <action refid="org.livetribe.forma.console.action.SLPNetworkScanAction.ID" />
+                                                        </item>
+                                                    </items>
+                                                </section>
+                                            </sections>
+                                        </menu>
+                                    </items>
+                                </section>
+                            </sections>
+                        </menu>
+                        <menu id="menubar.menu.perspective">
+                            <sections>
+                                <section id="menubar.menu.perspective.section.open">
+                                    <items>
+                                        <menu id="menubar.menu.perspective.menu.open">
+                                            <sections>
+                                                <section id="menubar.menu.perspective.menu.open.perspectives">
+                                                    <items>
+                                                        <item id="menubar.menu.perspective.menu.open.perspectives.item.welcomePerspective">
+                                                            <action refid="org.livetribe.forma.console.action.OpenWelcomPerspectiveAction.ID" />
+                                                        </item>
+                                                    </items>
+                                                </section>
+                                            </sections>
+                                        </menu>
+                                    </items>
+                                </section>
+                            </sections>
+                        </menu>
+                    </menus>
+                </menubar>
+            </menubars>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.perspective.PerspectiveManager.ID"
+                   parser-class="org.livetribe.forma.ui.perspective.spi.PerspectiveExtensionParser">
+            <perspectives>
+                <perspective id="org.livetribe.forma.console.perspective.WelcomePerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.WelcomePerspective">
+                </perspective>
+                <perspective id="org.livetribe.forma.console.perspective.BrowserPerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.BrowserPerspective">
+                </perspective>
+                <perspective id="org.livetribe.forma.console.perspective.ServicesSummaryPerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.ServicesSummaryPerspective">
+                </perspective>
+                <!--
+                <perspective id="org.livetribe.forma.console.perspective.jmx.ManagementPerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.jmx.ManagementPerspective">
+                </perspective>
+                -->
+            </perspectives>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.browser.BrowserManager.ID"
+                   parser-class="org.livetribe.forma.ui.browser.spi.BrowserExtensionParser">
+            <browsers>
+                <browser id="org.livetribe.forma.console.browser.SLPNetworkBrowser.ID"
+                         browser-class="org.livetribe.forma.console.browser.SLPNetworkBrowser">
+                </browser>
+            </browsers>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.popup.PopupManager.ID"
+                   parser-class="org.livetribe.forma.ui.popup.spi.PopupExtensionParser">
+            <popups>
+                <popup id="org.livetribe.forma.console.browser.ManageableNodePanel.POPUP_ID">
+                    <sections>
+                        <section id="popup.network.service.section.browse">
+                            <items>
+                                <item id="popup.network.service.browse.item.browse">
+                                    <action refid="org.livetribe.forma.console.action.ManageNodeAction.ID" />
+                                </item>
+                            </items>
+                        </section>
+                    </sections>
+                </popup>
+            </popups>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.editor.EditorManager.ID"
+                   parser-class="org.livetribe.forma.ui.editor.spi.EditorExtensionParser">
+            <sources>
+                <source source-class="org.livetribe.forma.console.editor.JMXEditorSource" />
+                <!--
+                                <source source-class="JSPFileEditorSource">
+                                    <property name="fileSuffix">jsp,jspx</property>
+                                </source>
+                                <source source-class="JettyJMXEditorSource" specializes="JMXEditorSource" />
+                -->
+            </sources>
+            <editors>
+                <editor editor-class="org.livetribe.forma.console.editor.JMXEditor" />
+            </editors>
+        </extension>
+
+        <extension id="org.livetribe.forma.ui.view.ViewManager.ID"
+                   parser-class="org.livetribe.forma.ui.view.spi.ViewExtensionParser">
+            <views>
+                <view id="">
+
+                </view>
+            </views>
+        </extension>
+
+    </extensions>
+
+</plugin>
