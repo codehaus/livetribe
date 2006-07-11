@@ -25,7 +25,6 @@
     </build>
 
     <properties>
-        <bootVersion>1.0-SNAPSHOT</bootVersion>
         <pluginPlatformVersion>1.0-SNAPSHOT</pluginPlatformVersion>
         <pluginFrameVersion>1.0-SNAPSHOT</pluginFrameVersion>
         <pluginConsoleVersion>1.0-SNAPSHOT</pluginConsoleVersion>
