@@ -13,11 +13,8 @@
         <extension id="org.livetribe.forma.ui.action.ActionManager.ID"
                    parser-class="org.livetribe.forma.ui.action.spi.ActionExtensionParser">
             <actions>
-                <action id="org.livetribe.forma.console.action.ScanSLPAndDisplayAction.ID"
-                        action-class="org.livetribe.forma.console.action.ScanSLPAndDisplayAction">
-                </action>
-                <action id="org.livetribe.forma.console.action.ScanNetworkWithSLPAction.ID"
-                        action-class="org.livetribe.forma.console.action.ScanNetworkWithSLPAction">
+                <action id="org.livetribe.forma.console.action.SLPNetworkScanAndDisplayAction.ID"
+                        action-class="org.livetribe.forma.console.action.SLPNetworkScanAndDisplayAction">
                 </action>
                 <action id="org.livetribe.forma.console.action.SLPNetworkScanAction.ID"
                         action-class="org.livetribe.forma.console.action.SLPNetworkScanAction">
@@ -32,6 +29,10 @@
                         action-class="org.livetribe.forma.frame.action.OpenPerspectiveAction">
                     <text>Welcome</text>
                     <property name="perspectiveId">org.livetribe.forma.console.perspective.WelcomePerspective.ID</property>
+                </action>
+
+                <action id="org.livetribe.forma.console.action.DisplayJMXServiceNodeAction.ID"
+                        action-class="org.livetribe.forma.console.action.DisplayJMXServiceNodeAction">
                 </action>
             </actions>
         </extension>
@@ -97,11 +98,9 @@
                 <perspective id="org.livetribe.forma.console.perspective.ServicesSummaryPerspective.ID"
                              perspective-class="org.livetribe.forma.console.perspective.ServicesSummaryPerspective">
                 </perspective>
-                <!--
-                <perspective id="org.livetribe.forma.console.perspective.jmx.ManagementPerspective.ID"
-                             perspective-class="org.livetribe.forma.console.perspective.jmx.ManagementPerspective">
+                <perspective id="org.livetribe.forma.console.perspective.JMXServiceNodesPerspective.ID"
+                             perspective-class="org.livetribe.forma.console.perspective.JMXServiceNodesPerspective">
                 </perspective>
-                -->
             </perspectives>
         </extension>
 

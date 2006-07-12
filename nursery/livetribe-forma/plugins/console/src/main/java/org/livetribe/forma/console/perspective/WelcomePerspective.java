@@ -26,6 +26,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -35,12 +36,11 @@ import javax.swing.JPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import org.livetribe.forma.console.action.SLPNetworkScanAction;
-import org.livetribe.forma.console.action.ScanSLPAndDisplayAction;
+import org.livetribe.forma.console.action.SLPNetworkScanAndDisplayAction;
 import org.livetribe.forma.i18n.Bundle;
 import org.livetribe.forma.i18n.InternationalizationManager;
 import org.livetribe.forma.ui.Part;
-import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionCommand;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.perspective.AbstractPerspective;
 import org.livetribe.ioc.Inject;
@@ -60,40 +60,6 @@ public class WelcomePerspective extends AbstractPerspective
     public void setTranslator(InternationalizationManager translator)
     {
         this.bundle = translator.getBundle("Console", null);
-    }
-
-//    @PostConstruct
-    private void initComponents2()
-    {
-        setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-
-        FormLayout layout = new FormLayout("pref, 5dlu, left:default", "pref");
-        setLayout(layout);
-
-        URL iconURL = getClass().getClassLoader().getResource(bundle.get("perspective.welcome.slp.scan.button.icon"));
-        Icon icon = null;
-        if (iconURL != null) icon = new ImageIcon(iconURL);
-        final JButton slpScanButton = new JButton(icon);
-        slpScanButton.setFocusPainted(false);
-        Action action = actionManager.getAction(SLPNetworkScanAction.ID, null);
-        slpScanButton.setToolTipText(action.getTooltip());
-        slpScanButton.addActionListener(action);
-
-        String slpScanText = bundle.get("perspective.welcome.slp.scan.label.text");
-        JLabel slpScanLabel = new JLabel(slpScanText);
-        slpScanLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        slpScanLabel.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                slpScanButton.doClick();
-            }
-        });
-
-        CellConstraints cc = new CellConstraints();
-        add(slpScanButton, cc.xy(1, 1));
-        add(slpScanLabel, cc.xy(3, 1));
     }
 
     @PostConstruct
@@ -134,9 +100,9 @@ public class WelcomePerspective extends AbstractPerspective
         if (iconURL != null) icon = new ImageIcon(iconURL);
         final JButton slpScanButton = new JButton(icon);
         slpScanButton.setFocusPainted(false);
-        Action action = actionManager.getAction(ScanSLPAndDisplayAction.ID, null);
-        slpScanButton.setToolTipText(action.getTooltip());
-        slpScanButton.addActionListener(action);
+        ActionCommand actionCommand = actionManager.getActionCommand(SLPNetworkScanAndDisplayAction.ID);
+        slpScanButton.setToolTipText(actionCommand.getTooltip());
+        slpScanButton.addActionListener(actionCommand.getSwingAction());
 
         String slpScanText = bundle.get("perspective.welcome.slp.scan.label.text");
         JLabel slpScanLabel = new JLabel(slpScanText);

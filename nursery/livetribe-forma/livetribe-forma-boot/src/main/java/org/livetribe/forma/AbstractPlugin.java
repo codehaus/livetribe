@@ -15,24 +15,57 @@
  */
 package org.livetribe.forma;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * @version $Rev$ $Date$
  */
 public abstract class AbstractPlugin implements Plugin
 {
-    public void init()
+    protected Logger logger = Logger.getLogger(getClass().getName());
+
+    public void init() throws Exception
+    {
+        if (logger.isLoggable(Level.FINE)) logger.fine("Initializing plugin " + this);
+        doInit();
+        if (logger.isLoggable(Level.FINE)) logger.fine("Initialized plugin " + this);
+    }
+
+    protected void doInit() throws Exception
     {
     }
 
-    public void start()
+    public void start() throws Exception
+    {
+        if (logger.isLoggable(Level.FINE)) logger.fine("Starting plugin " + this);
+        doStart();
+        if (logger.isLoggable(Level.FINE)) logger.fine("Started plugin " + this);
+    }
+
+    protected void doStart() throws Exception
     {
     }
 
-    public void stop()
+    public void stop() throws Exception
+    {
+        if (logger.isLoggable(Level.FINE)) logger.fine("Stopping plugin " + this);
+        doStop();
+        if (logger.isLoggable(Level.FINE)) logger.fine("Stopped plugin " + this);
+    }
+
+    protected void doStop() throws Exception
     {
     }
 
-    public void destroy()
+    public void destroy() throws Exception
+    {
+        if (logger.isLoggable(Level.FINE)) logger.fine("Destroying plugin " + this);
+        doDestroy();
+        if (logger.isLoggable(Level.FINE)) logger.fine("Destroyed plugin " + this);
+    }
+
+    protected void doDestroy() throws Exception
     {
     }
 }

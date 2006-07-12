@@ -15,18 +15,17 @@
  */
 package org.livetribe.forma.frame.action;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import org.livetribe.ioc.Inject;
-import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.forma.ui.Context;
+import org.livetribe.forma.ui.action.Action;
 import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.perspective.PerspectiveManager;
+import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class OpenPerspectiveAction implements ActionListener
+public class OpenPerspectiveAction implements Action
 {
     @Inject
     private FrameManager frameManager;
@@ -39,7 +38,7 @@ public class OpenPerspectiveAction implements ActionListener
         this.perspectiveId = perspectiveId;
     }
 
-    public void actionPerformed(ActionEvent e)
+    public void execute(Context context)
     {
         Frame frame = frameManager.getCurrentFrame();
         perspectiveManager.openPerspective(perspectiveId, frame, null);

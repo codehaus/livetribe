@@ -15,7 +15,6 @@
  */
 package org.livetribe.forma.ui.action.spi;
 
-import java.awt.event.ActionListener;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -24,11 +23,14 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import org.livetribe.forma.ui.Context;
 import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionCommand;
 import org.livetribe.forma.ui.action.ActionException;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.ioc.Container;
@@ -39,10 +41,11 @@ import org.livetribe.ioc.Inject;
  */
 public class DefaultActionManager implements ActionManager
 {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     @Inject
     private Container containerManager;
     private final Map<String, ActionInfo> actionInfos = new HashMap<String, ActionInfo>();
-    private final Map<String, Action> actions = new HashMap<String, Action>();
+    private final Map<String, ActionCommand> actionCommands = new HashMap<String, ActionCommand>();
 
     public void spiAddActionInfo(ActionInfo actionInfo)
     {
@@ -51,23 +54,27 @@ public class DefaultActionManager implements ActionManager
         actionInfos.put(actionId, actionInfo);
     }
 
-    public Action getAction(String actionId, Context context)
+    public ActionCommand getActionCommand(String actionId)
     {
-        Action action = actions.get(actionId);
-        if (action == null)
+        ActionCommand actionCommand = actionCommands.get(actionId);
+        if (actionCommand == null)
         {
             ActionInfo actionInfo = actionInfos.get(actionId);
-            if (actionInfo == null) return null;
+            if (actionInfo == null)
+            {
+                if (logger.isLoggable(Level.INFO)) logger.info("Could not find action with id: " + actionId);
+                return null;
+            }
 
-            ActionListener actionListener = newActionListener(actionInfo.getActionClassName());
-            action = new Action(actionListener);
-            actions.put(actionId, action);
+            Action action = newAction(actionInfo.getActionClassName());
+            actionCommand = new ActionCommand(action);
+            actionCommands.put(actionId, actionCommand);
 
-            setProperties(actionListener, actionInfo.getProperties());
+            setProperties(action, actionInfo.getProperties());
 
-            action.putValue(Action.ACTION_COMMAND_KEY, actionId);
-            action.putValue(Action.NAME, actionInfo.getActionText());
-            action.putValue(Action.SHORT_DESCRIPTION, actionInfo.getActionTooltip());
+            actionCommand.spiSetCommand(actionId);
+            actionCommand.spiSetText(actionInfo.getActionText());
+            actionCommand.spiSetTooltip(actionInfo.getActionTooltip());
 
             String iconPath = actionInfo.getActionIconPath();
             if (iconPath != null)
@@ -76,26 +83,25 @@ public class DefaultActionManager implements ActionManager
                 if (iconURL != null)
                 {
                     ImageIcon icon = new ImageIcon(iconURL);
-                    action.putValue(Action.SMALL_ICON, icon);
+                    actionCommand.spiSetIcon(icon);
                 }
             }
 
             String mnemonic = actionInfo.getActionMnemonic();
             if (mnemonic != null && mnemonic.length() > 0)
-                action.putValue(Action.MNEMONIC_KEY, Integer.valueOf(mnemonic.charAt(0)));
+                actionCommand.spiSetMnemonic(mnemonic.charAt(0));
 
             String accelerator = actionInfo.getActionAccelerator();
-            if (accelerator != null) action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(accelerator));
+            if (accelerator != null) actionCommand.spiSetAccelerator(KeyStroke.getKeyStroke(accelerator));
         }
-        action.setActionContext(context);
-        return action;
+        return actionCommand;
     }
 
-    private ActionListener newActionListener(String actionClassName)
+    private Action newAction(String actionClassName)
     {
         try
         {
-            ActionListener action = (ActionListener)Thread.currentThread().getContextClassLoader().loadClass(actionClassName).newInstance();
+            Action action = (Action)Thread.currentThread().getContextClassLoader().loadClass(actionClassName).newInstance();
             containerManager.resolve(action);
             return action;
         }
@@ -136,7 +142,7 @@ public class DefaultActionManager implements ActionManager
         }
         catch (IntrospectionException x)
         {
-            // TODO: log this
+            if (logger.isLoggable(Level.FINE)) logger.log(Level.FINE, "Could not retrieve BeanInfo information for " + cls, x);
             return null;
         }
     }
@@ -149,7 +155,7 @@ public class DefaultActionManager implements ActionManager
         }
         catch (Exception x)
         {
-            // TODO: log this
+            if (logger.isLoggable(Level.FINE)) logger.log(Level.FINE, "Could not invoke setter " + setter + " on " + target + ", ignoring", x);
         }
     }
 }

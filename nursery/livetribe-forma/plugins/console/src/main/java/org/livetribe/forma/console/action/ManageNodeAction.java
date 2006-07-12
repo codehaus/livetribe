@@ -15,10 +15,9 @@
  */
 package org.livetribe.forma.console.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import javax.management.remote.JMXConnector;
 
 import org.livetribe.forma.console.browser.JMXConnectorDialog;
@@ -26,12 +25,12 @@ import org.livetribe.forma.console.browser.ManageableNodePanel;
 import org.livetribe.forma.console.editor.JMXEditor;
 import org.livetribe.forma.i18n.Bundle;
 import org.livetribe.forma.i18n.InternationalizationManager;
+import org.livetribe.forma.ui.Context;
+import org.livetribe.forma.ui.action.Action;
 import org.livetribe.forma.ui.editor.EditorManager;
 import org.livetribe.forma.ui.frame.Frame;
 import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.perspective.PerspectiveManager;
-import org.livetribe.forma.ui.ContextAware;
-import org.livetribe.forma.ui.Context;
 import org.livetribe.ioc.Container;
 import org.livetribe.ioc.Inject;
 import org.livetribe.slp.api.sa.ServiceInfo;
@@ -39,7 +38,7 @@ import org.livetribe.slp.api.sa.ServiceInfo;
 /**
  * @version $Rev$ $Date$
  */
-public class ManageNodeAction implements ActionListener, ContextAware
+public class ManageNodeAction implements Action
 {
     public static final String ID = ManageNodeAction.class.getName();
 
@@ -48,7 +47,6 @@ public class ManageNodeAction implements ActionListener, ContextAware
     @Inject PerspectiveManager perspectiveManager;
     @Inject EditorManager editorManager;
     private Bundle bundle;
-    private Context context;
 
     @Inject
     public void setTranslator(InternationalizationManager translator)
@@ -56,12 +54,7 @@ public class ManageNodeAction implements ActionListener, ContextAware
         this.bundle = translator.getBundle("Console", null);
     }
 
-    public void spiSetContext(Context context)
-    {
-        this.context = context;
-    }
-
-    public void actionPerformed(ActionEvent e)
+    public void execute(Context context)
     {
         Frame frame = frameManager.getCurrentFrame();
         JMXConnectorDialog dialog = new JMXConnectorDialog(frame.getJFrame(), context);

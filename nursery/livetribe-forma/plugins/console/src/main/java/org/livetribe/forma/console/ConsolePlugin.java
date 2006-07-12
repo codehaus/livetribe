@@ -17,13 +17,14 @@ package org.livetribe.forma.console;
 
 import java.lang.management.ManagementFactory;
 import java.util.Locale;
+
 import javax.management.MBeanServer;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.livetribe.forma.AbstractPlugin;
 import org.livetribe.forma.ManagerRegistry;
-import org.livetribe.forma.Plugin;
 import org.livetribe.forma.console.model.service.slp.LocalSLPModelManager;
 import org.livetribe.forma.console.model.service.slp.SLPModelManager;
 import org.livetribe.forma.console.perspective.WelcomePerspective;
@@ -38,7 +39,7 @@ import org.livetribe.slp.api.sa.StandardServiceAgent;
 /**
  * @version $Rev$ $Date$
  */
-public class ConsolePlugin implements Plugin
+public class ConsolePlugin extends AbstractPlugin
 {
     @Inject
     private PerspectiveManager perspectiveManager;
@@ -48,7 +49,8 @@ public class ConsolePlugin implements Plugin
     private ServiceAgent serviceAgent;
     private ServiceInfo serviceInfo;
 
-    public void init() throws Exception
+    @Override
+    protected void doInit() throws Exception
     {
         LocalSLPModelManager slpModelManager = new LocalSLPModelManager();
         slpModelManager.start();
@@ -66,7 +68,8 @@ public class ConsolePlugin implements Plugin
         serviceAgent.setConfiguration(slpConfiguration);
     }
 
-    public void start() throws Exception
+    @Override
+    protected void doStart() throws Exception
     {
         connectorServer.start();
         JMXServiceURL jmxServiceURL = connectorServer.getAddress();
@@ -76,13 +79,16 @@ public class ConsolePlugin implements Plugin
         serviceAgent.start();
     }
 
-    public void stop() throws Exception
+    @Override
+    protected void doStop() throws Exception
     {
         serviceAgent.stop();
         connectorServer.stop();
     }
 
-    public void destroy()
+    @Override
+    protected void doDestroy() throws Exception
     {
+        managerRegistry.remove("slpModelManager");
     }
 }

@@ -26,13 +26,13 @@ import org.livetribe.ioc.Inject;
 /**
  * @version $Rev$ $Date$
  */
-public class FormaPlugin extends org.livetribe.forma.AbstractPlugin
+public class FormaPlugin extends AbstractPlugin
 {
     @Inject
     private ManagerRegistry managerRegistry;
 
     @Override
-    public void init()
+    protected void doInit()
     {
         managerRegistry.put("i18nManager", InternationalizationManager.class, new DefaultInternationalizationManager());
         managerRegistry.put("threadingManager", ThreadingManager.class, new DefaultThreadingManager());
@@ -40,7 +40,7 @@ public class FormaPlugin extends org.livetribe.forma.AbstractPlugin
     }
 
     @Override
-    public void destroy()
+    protected void doDestroy()
     {
         managerRegistry.remove("feedbackManager");
         managerRegistry.remove("threadingManager");

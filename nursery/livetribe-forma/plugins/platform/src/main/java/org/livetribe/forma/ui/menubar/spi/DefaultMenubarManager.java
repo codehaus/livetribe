@@ -19,11 +19,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionCommand;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.menubar.MenubarContainer;
 import org.livetribe.forma.ui.menubar.MenubarException;
@@ -89,8 +90,8 @@ public class DefaultMenubarManager implements MenubarManager
                     JMenuItem item = new JMenuItem();
                     item.setName(itemInfo.getMenuItemId());
                     String actionId = itemInfo.getActionId();
-                    Action action = actionManager.getAction(actionId, null);
-                    item.setAction(action);
+                    ActionCommand action = actionManager.getActionCommand(actionId);
+                    item.setAction(action.getSwingAction());
                     menu.add(item);
                 }
 

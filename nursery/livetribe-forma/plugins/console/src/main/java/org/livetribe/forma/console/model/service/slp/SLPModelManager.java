@@ -17,7 +17,7 @@ package org.livetribe.forma.console.model.service.slp;
 
 import java.util.List;
 
-import org.livetribe.forma.console.model.service.ServiceNode;
+import org.livetribe.forma.console.model.service.JMXServiceNode;
 
 /**
  * @version $Rev$ $Date$
@@ -26,5 +26,5 @@ public interface SLPModelManager
 {
     public static final String ID = SLPModelManager.class.getName();
 
-    List<ServiceNode> findJMXServices();
+    public List<JMXServiceNode> findJMXServices();
 }

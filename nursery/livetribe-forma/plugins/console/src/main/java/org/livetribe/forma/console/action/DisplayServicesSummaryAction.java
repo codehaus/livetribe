@@ -15,12 +15,9 @@
  */
 package org.livetribe.forma.console.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import org.livetribe.forma.console.perspective.ServicesSummaryPerspective;
 import org.livetribe.forma.ui.Context;
-import org.livetribe.forma.ui.ContextAware;
+import org.livetribe.forma.ui.action.Action;
 import org.livetribe.forma.ui.frame.Frame;
 import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.perspective.PerspectiveManager;
@@ -29,7 +26,7 @@ import org.livetribe.ioc.Inject;
 /**
  * @version $Rev$ $Date$
  */
-public class DisplayServicesSummaryAction implements ActionListener, ContextAware
+public class DisplayServicesSummaryAction implements Action
 {
     public static final String ID = DisplayServicesSummaryAction.class.getName();
 
@@ -37,14 +34,8 @@ public class DisplayServicesSummaryAction implements ActionListener, ContextAwar
     private FrameManager frameManager;
     @Inject
     private PerspectiveManager perspectiveManager;
-    private Context context;
 
-    public void spiSetContext(Context context)
-    {
-        this.context = context;
-    }
-
-    public void actionPerformed(ActionEvent e)
+    public void execute(Context context)
     {
         Frame frame = frameManager.getCurrentFrame();
         perspectiveManager.openPerspective(ServicesSummaryPerspective.ID, frame, context);

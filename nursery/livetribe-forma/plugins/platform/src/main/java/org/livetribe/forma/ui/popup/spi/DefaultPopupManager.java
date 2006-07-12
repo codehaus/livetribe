@@ -19,12 +19,13 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.livetribe.forma.ui.action.Action;
 import org.livetribe.forma.ui.Context;
+import org.livetribe.forma.ui.action.ActionCommand;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.popup.PopupException;
 import org.livetribe.forma.ui.popup.PopupManager;
@@ -72,8 +73,9 @@ public class DefaultPopupManager implements PopupManager
                 JMenuItem item = new JMenuItem();
                 item.setName(popupItemInfo.getPopupMenuItemId());
                 String actionId = popupItemInfo.getActionId();
-                Action action = actionManager.getAction(actionId, context);
-                item.setAction(action);
+                ActionCommand actionCommand = actionManager.getActionCommand(actionId);
+                actionCommand.setContext(context);
+                item.setAction(actionCommand.getSwingAction());
                 menu.addMenuItem(item);
             }
 

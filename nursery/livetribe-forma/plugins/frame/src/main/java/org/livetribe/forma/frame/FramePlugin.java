@@ -17,10 +17,10 @@ package org.livetribe.forma.frame;
 
 import java.awt.EventQueue;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.swing.UIManager;
 
-import org.livetribe.forma.Plugin;
+import org.livetribe.forma.AbstractPlugin;
 import org.livetribe.forma.ui.frame.Frame;
 import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.ioc.Inject;
@@ -28,34 +28,34 @@ import org.livetribe.ioc.Inject;
 /**
  * @version $Rev$ $Date$
  */
-public class FramePlugin implements Plugin
+public class FramePlugin extends AbstractPlugin
 {
     @Inject
     private FrameManager frameManager;
-    private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public void init()
+    @Override
+    protected void doInit()
     {
         assert EventQueue.isDispatchThread();
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 
         setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
 
-        // Handle uncaught exceptions
+        // TODO: Handle uncaught exceptions
 //        Thread.currentThread().setUncaughtExceptionHandler(new SwingUncaughtExceptionHandler());
     }
 
-    public void start()
+    @Override
+    protected void doStart()
     {
-        frameManager.displayNewFrame(Frame.ID);
-    }
-
-    public void stop()
-    {
-    }
-
-    public void destroy()
-    {
+        // Delay the display of the Frame to the last moment possible
+        EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                frameManager.displayNewFrame(Frame.ID);
+            }
+        });
     }
 
     private void setLookAndFeel(String lafClassName)

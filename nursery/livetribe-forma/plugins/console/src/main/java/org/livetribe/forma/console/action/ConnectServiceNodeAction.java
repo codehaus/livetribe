@@ -15,28 +15,16 @@
  */
 package org.livetribe.forma.console.action;
 
-import java.util.List;
-
-import org.livetribe.forma.console.model.service.JMXServiceNode;
-import org.livetribe.forma.console.model.service.slp.SLPModelManager;
 import org.livetribe.forma.ui.Context;
 import org.livetribe.forma.ui.action.Action;
-import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class SLPNetworkScanAction implements Action
+public class ConnectServiceNodeAction implements Action
 {
-    public static final String ID = SLPNetworkScanAction.class.getName();
-    public static final String RESULT = ID + ".result";
-
-    @Inject
-    private SLPModelManager slpModelManager;
-
     public void execute(Context context)
     {
-        List<JMXServiceNode> nodes = slpModelManager.findJMXServices();
-        context.put(RESULT, nodes);
+        //
     }
 }

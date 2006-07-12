@@ -13,27 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.frame.action;
+package org.livetribe.forma.console.action;
 
+import org.livetribe.forma.console.perspective.JMXServiceNodesPerspective;
+import org.livetribe.forma.threading.ThreadingManager;
 import org.livetribe.forma.ui.Context;
 import org.livetribe.forma.ui.action.Action;
 import org.livetribe.forma.ui.frame.Frame;
 import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.forma.ui.perspective.Perspective;
+import org.livetribe.forma.ui.perspective.PerspectiveManager;
 import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class CloseFrameAction implements Action
+public class DisplayJMXServiceNodeAction implements Action
 {
-    public static final String ID = CloseFrameAction.class.getName();
+    public static final String ID = DisplayJMXServiceNodeAction.class.getName();
+    public static final String JMX_SERVICE_NODE_KEY = ID + ".jmxServiceNode";
 
     @Inject
     private FrameManager frameManager;
+    @Inject
+    private PerspectiveManager perspectiveManager;
+    @Inject
+    private ThreadingManager threadingManager;
+    private Context context;
 
     public void execute(Context context)
     {
         Frame frame = frameManager.getCurrentFrame();
-        frameManager.closeFrame(frame);
+        Perspective perspective = perspectiveManager.loadPerspective(JMXServiceNodesPerspective.ID, frame, context);
+        threadingManager.flushEvents();
+        perspectiveManager.openPerspective(perspective, context);
     }
 }

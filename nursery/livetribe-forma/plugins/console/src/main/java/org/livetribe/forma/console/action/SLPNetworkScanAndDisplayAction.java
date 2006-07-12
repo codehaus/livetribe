@@ -15,28 +15,24 @@
  */
 package org.livetribe.forma.console.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import org.livetribe.forma.ui.Context;
-import org.livetribe.forma.ui.feedback.Feedback;
-import org.livetribe.forma.ui.feedback.FeedbackManager;
-import org.livetribe.forma.ui.frame.FrameManager;
-import org.livetribe.forma.ui.frame.Frame;
-import org.livetribe.forma.ui.perspective.PerspectiveManager;
-import org.livetribe.forma.ui.perspective.Perspective;
-import org.livetribe.forma.ui.action.ActionManager;
-import org.livetribe.forma.ui.action.Action;
-import org.livetribe.forma.threading.ThreadingManager;
 import org.livetribe.forma.console.perspective.ServicesSummaryPerspective;
+import org.livetribe.forma.threading.ThreadingManager;
+import org.livetribe.forma.ui.Context;
+import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.action.ActionManager;
+import org.livetribe.forma.ui.feedback.FeedbackManager;
+import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
+import org.livetribe.forma.ui.perspective.Perspective;
+import org.livetribe.forma.ui.perspective.PerspectiveManager;
 import org.livetribe.ioc.Inject;
 
 /**
  * @version $Rev$ $Date$
  */
-public class ScanSLPAndDisplayAction implements ActionListener
+public class SLPNetworkScanAndDisplayAction implements Action
 {
-    public static final String ID = ScanSLPAndDisplayAction.class.getName();
+    public static final String ID = SLPNetworkScanAndDisplayAction.class.getName();
 
     @Inject
     private FrameManager frameManager;
@@ -49,25 +45,11 @@ public class ScanSLPAndDisplayAction implements ActionListener
     @Inject
     private FeedbackManager feedbackManager;
 
-    public void actionPerformed(ActionEvent e)
+    public void execute(Context context)
     {
         Frame currentFrame = frameManager.getCurrentFrame();
-        Perspective perspective = perspectiveManager.loadPerspective(ServicesSummaryPerspective.ID, currentFrame, null);
-
-//        threadingManager.flushEvents();
-
-        Context context = new Context();
-        Action scan = actionManager.getAction(ScanNetworkWithSLPAction.ID, context);
-        Feedback feedback = feedbackManager.showWaitCursor(currentFrame.getJFrame().getRootPane());
-        try
-        {
-            scan.actionPerformed(e);
-        }
-        finally
-        {
-            feedback.stop();
-        }
-
+        Perspective perspective = perspectiveManager.loadPerspective(ServicesSummaryPerspective.ID, currentFrame, context);
+        threadingManager.flushEvents();
         perspectiveManager.openPerspective(perspective, context);
     }
 }

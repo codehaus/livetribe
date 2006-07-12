@@ -15,13 +15,34 @@
  */
 package org.livetribe.forma.console.perspective;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
-import org.livetribe.forma.console.action.ScanNetworkWithSLPAction;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import org.livetribe.forma.console.action.DisplayJMXServiceNodeAction;
+import org.livetribe.forma.console.action.SLPNetworkScanAction;
+import org.livetribe.forma.console.model.service.JMXServiceNode;
 import org.livetribe.forma.ui.Context;
 import org.livetribe.forma.ui.Part;
+import org.livetribe.forma.ui.action.ActionCommand;
+import org.livetribe.forma.ui.action.ActionManager;
+import org.livetribe.forma.ui.feedback.Feedback;
+import org.livetribe.forma.ui.feedback.FeedbackManager;
+import org.livetribe.forma.ui.frame.Frame;
+import org.livetribe.forma.ui.frame.FrameManager;
 import org.livetribe.forma.ui.perspective.AbstractPerspective;
+import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 
 /**
@@ -30,6 +51,13 @@ import org.livetribe.ioc.PostConstruct;
 public class ServicesSummaryPerspective extends AbstractPerspective
 {
     public static final String ID = ServicesSummaryPerspective.class.getName();
+
+    @Inject
+    private ActionManager actionManager;
+    @Inject
+    private FrameManager frameManager;
+    @Inject
+    private FeedbackManager feedbackManager;
     private Preferences preferences;
 
     public String getPerspectiveId()
@@ -40,7 +68,9 @@ public class ServicesSummaryPerspective extends AbstractPerspective
     @PostConstruct
     private void initComponents()
     {
-        // TODO: initialize the layout, borders, etc; load of the UI is done in spiLoad
+        // TODO: initialize the borders, etc; load of the UI is done in spiLoad
+        setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        setBackground(Color.WHITE);
     }
 
     public void spiDisplay(Part part, Object constraint)
@@ -58,13 +88,68 @@ public class ServicesSummaryPerspective extends AbstractPerspective
     @Override
     public void spiOpen(Context context)
     {
-        List nodes = (List)context.get(ScanNetworkWithSLPAction.RESULT);
+        Context newContext = context == null ? new Context() : context;
 
+        ActionCommand scan = actionManager.getActionCommand(SLPNetworkScanAction.ID);
+        scan.setContext(newContext);
+        Frame frame = frameManager.getCurrentFrame();
+        Feedback feedback = feedbackManager.showWaitCursor(frame.getJFrame().getRootPane());
+        try
+        {
+            scan.execute();
+        }
+        finally
+        {
+            feedback.stop();
+        }
+
+
+
+
+
+        List<JMXServiceNode> jmxServiceNodes = (List<JMXServiceNode>)newContext.get(SLPNetworkScanAction.RESULT);
+        List<JMXServiceNodePanel> panels = createJMXServiceNodePanels(jmxServiceNodes);
+        for (JMXServiceNodePanel panel : panels) add(panel);
     }
 
-    @Override
-    public void spiClose()
+    private List<JMXServiceNodePanel> createJMXServiceNodePanels(List<JMXServiceNode> nodes)
     {
-        super.spiClose();
+        List<JMXServiceNodePanel> result = new ArrayList<JMXServiceNodePanel>();
+        for (JMXServiceNode node : nodes) result.add(new JMXServiceNodePanel(node));
+        return result;
+    }
+
+    private class JMXServiceNodePanel extends JPanel
+    {
+        private final JMXServiceNode serviceNode;
+        private final Dimension dimension = new Dimension(200, 150);
+
+        private JMXServiceNodePanel(JMXServiceNode serviceNode)
+        {
+            this.serviceNode = serviceNode;
+
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBackground(new Color(0xFFFFDD));
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            setPreferredSize(dimension);
+            setMaximumSize(dimension);
+
+            add(new JLabel(serviceNode.getJMXServiceURL().toString()));
+            addMouseListener(new MouseAdapter()
+            {
+                @Override
+                public void mouseClicked(MouseEvent e)
+                {
+                    if (SwingUtilities.isLeftMouseButton(e))
+                    {
+                        Context context = new Context();
+                        context.put(DisplayJMXServiceNodeAction.JMX_SERVICE_NODE_KEY, JMXServiceNodePanel.this.serviceNode);
+                        ActionCommand actionCommand = actionManager.getActionCommand(DisplayJMXServiceNodeAction.ID);
+                        actionCommand.setContext(context);
+                        actionCommand.execute();
+                    }
+                }
+            });
+        }
     }
 }

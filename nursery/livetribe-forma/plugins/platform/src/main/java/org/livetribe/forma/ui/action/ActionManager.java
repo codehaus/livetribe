@@ -16,7 +16,6 @@
 package org.livetribe.forma.ui.action;
 
 import org.livetribe.forma.ui.action.spi.ActionInfo;
-import org.livetribe.forma.ui.Context;
 
 /**
  * @version $Rev$ $Date$
@@ -27,5 +26,5 @@ public interface ActionManager
 
     public void spiAddActionInfo(ActionInfo actionInfo);
 
-    public Action getAction(String actionId, Context context);
+    public ActionCommand getActionCommand(String actionId);
 }

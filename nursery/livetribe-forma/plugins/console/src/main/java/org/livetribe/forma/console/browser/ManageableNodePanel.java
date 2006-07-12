@@ -17,10 +17,10 @@ package org.livetribe.forma.console.browser;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,10 +31,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import org.livetribe.forma.console.action.ManageNodeAction;
 import org.livetribe.forma.i18n.Bundle;
 import org.livetribe.forma.i18n.InternationalizationManager;
-import org.livetribe.forma.ui.action.Action;
+import org.livetribe.forma.ui.Context;
+import org.livetribe.forma.ui.action.ActionCommand;
 import org.livetribe.forma.ui.action.ActionManager;
 import org.livetribe.forma.ui.popup.PopupManager;
-import org.livetribe.forma.ui.Context;
 import org.livetribe.ioc.Inject;
 import org.livetribe.ioc.PostConstruct;
 import org.livetribe.slp.Attributes;
@@ -105,9 +105,9 @@ public class ManageableNodePanel extends JPanel
 
             if (SwingUtilities.isLeftMouseButton(e))
             {
-                Action action = actionManager.getAction(ManageNodeAction.ID, context);
-                ActionEvent actionEvent = new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, action.getCommand(), System.currentTimeMillis(), e.getModifiersEx());
-                action.actionPerformed(actionEvent);
+                ActionCommand actionCommand = actionManager.getActionCommand(ManageNodeAction.ID);
+                actionCommand.setContext(context);
+                actionCommand.execute();
             }
             else if (SwingUtilities.isRightMouseButton(e))
             {

@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -72,9 +73,7 @@ public class PluginLoader
         if (logger.isLoggable(Level.CONFIG)) logger.config("Plugin scanning and parsing completed");
 
         pluginManager.initPlugins();
-        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins initialized");
         pluginManager.startPlugins();
-        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins started");
     }
 
     /**

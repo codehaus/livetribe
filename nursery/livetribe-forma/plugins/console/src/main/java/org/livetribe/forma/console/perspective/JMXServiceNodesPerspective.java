@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2006 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.console.model.service;
+package org.livetribe.forma.console.perspective;
+
+import org.livetribe.forma.ui.Part;
+import org.livetribe.forma.ui.perspective.AbstractPerspective;
+import org.livetribe.ioc.PostConstruct;
 
 /**
  * @version $Rev$ $Date$
  */
-public class ServiceNode
+public class JMXServiceNodesPerspective extends AbstractPerspective
 {
+    public static final String ID = JMXServiceNodesPerspective.class.getName();
+
+    public String getPerspectiveId()
+    {
+        return ID;
+    }
+
+    @PostConstruct
+    private void initComponents()
+    {
+
+    }
+
+    public void spiDisplay(Part part, Object constraint)
+    {
+    }
 }

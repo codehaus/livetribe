@@ -15,10 +15,13 @@
  */
 package org.livetribe.forma.console.model.service.slp;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.livetribe.forma.console.model.service.ServiceNode;
+import javax.management.remote.JMXServiceURL;
+
+import org.livetribe.forma.console.model.service.JMXServiceNode;
 import org.livetribe.forma.ui.configuration.ConfigurationManager;
 import org.livetribe.ioc.Inject;
 import org.livetribe.slp.ServiceType;
@@ -39,12 +42,12 @@ public class LocalSLPModelManager implements SLPModelManager
     private UserAgent userAgent;
 
 
-    public List<ServiceNode> findJMXServices()
+    public List<JMXServiceNode> findJMXServices()
     {
         try
         {
-            List<ServiceInfo> services = userAgent.findServices(JMX_SERVICE_TYPE, null, null, null);
-            return serviceInfosToServiceNodes(services);
+            List<ServiceInfo> serviceInfos = userAgent.findServices(JMX_SERVICE_TYPE, null, null, null);
+            return serviceInfosToJMXServiceNodes(serviceInfos);
         }
         catch (Exception x)
         {
@@ -54,6 +57,7 @@ public class LocalSLPModelManager implements SLPModelManager
 
     public void start() throws Exception
     {
+        // TODO: implement the configuration manager
 //        SLPConfiguration config = configurationManager.getConfiguration(SLPModelManager.ID);
 
         Configuration configuration = new Configuration();
@@ -65,17 +69,26 @@ public class LocalSLPModelManager implements SLPModelManager
         userAgent.start();
     }
 
-    private List<ServiceNode> serviceInfosToServiceNodes(List<ServiceInfo> services)
+    private List<JMXServiceNode> serviceInfosToJMXServiceNodes(List<ServiceInfo> serviceInfos)
     {
-        List<ServiceNode> result = new ArrayList<ServiceNode>();
-        for (ServiceInfo serviceInfo : services) result.add(serviceInfoToServiceNode(serviceInfo));
+        List<JMXServiceNode> result = new ArrayList<JMXServiceNode>();
+        for (ServiceInfo serviceInfo : serviceInfos) result.add(serviceInfoToServiceNode(serviceInfo));
         return result;
     }
 
-    private ServiceNode serviceInfoToServiceNode(ServiceInfo serviceInfo)
+    private JMXServiceNode serviceInfoToServiceNode(ServiceInfo serviceInfo)
     {
-        ServiceNode serviceNode = new ServiceNode();
-        // TODO: convert the serviceInfo
-        return serviceNode;
+        JMXServiceNode jmxServiceNode = new JMXServiceNode();
+        try
+        {
+            JMXServiceURL jmxServiceURL = new JMXServiceURL(serviceInfo.getServiceURL().getURL());
+            jmxServiceNode.setJMXServiceURL(jmxServiceURL);
+            // TODO: convert other serviceInfo properties
+        }
+        catch (MalformedURLException x)
+        {
+            // TODO: mark the node as "unavailable" or "unconnectable" so the GUI can show it differently
+        }
+        return jmxServiceNode;
     }
 }

@@ -36,10 +36,7 @@ public class DefaultShutDownManager implements ShutDownManager
     public void shutdown()
     {
         pluginManager.stopPlugins();
-        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins stopped");
-
         pluginManager.destroyPlugins();
-        if (logger.isLoggable(Level.FINE)) logger.fine("Plugins destroyed");
 
         if (logger.isLoggable(Level.FINE)) logger.fine("JVM is exiting now");
         System.exit(0);

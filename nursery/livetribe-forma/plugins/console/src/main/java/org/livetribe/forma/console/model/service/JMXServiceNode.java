@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.forma.ui;
+package org.livetribe.forma.console.model.service;
+
+import javax.management.remote.JMXServiceURL;
 
 /**
  * @version $Rev$ $Date$
  */
-public interface ContextAware
+public class JMXServiceNode
 {
-    public void spiSetContext(Context context);
+    private JMXServiceURL jmxServiceURL;
+
+    public JMXServiceURL getJMXServiceURL()
+    {
+        return jmxServiceURL;
+    }
+
+    public void setJMXServiceURL(JMXServiceURL jmxServiceURL)
+    {
+        this.jmxServiceURL = jmxServiceURL;
+    }
 }
