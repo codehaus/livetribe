@@ -15,10 +15,6 @@
  */
 package org.livetribe.ioc;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import junit.framework.TestCase;
 
 /**
@@ -31,9 +27,9 @@ public class ContainerTest extends TestCase
     @Override
     protected void setUp() throws Exception
     {
-        TestRegistry container = new TestRegistry();
-        container.addService("srv", Service.class, new Service());
-        ioc = new DefaultContainer(container);
+        StandardRegistry container = new StandardRegistry();
+        container.putService("srv", Service.class, new Service());
+        ioc = new StandardContainer(container);
     }
 
     public void testNonInjectAnnotated()
@@ -77,45 +73,6 @@ public class ContainerTest extends TestCase
         PostConstructAnnotated target = new PostConstructAnnotated();
         ioc.resolve(target);
         assertTrue(target.postConstructed());
-    }
-
-    private static class TestRegistry implements Registry
-    {
-        private final Map<String, ServiceInfo> services = new HashMap<String, ServiceInfo>();
-
-        public void addService(String name, Class<?> type, Object instance)
-        {
-            services.put(name, new ServiceInfo(type, instance));
-        }
-
-        public Set<String> getServiceNames()
-        {
-            return services.keySet();
-        }
-
-        public Class<?> getServiceType(String serviceName)
-        {
-            ServiceInfo info = services.get(serviceName);
-            return info == null ? null : info.type;
-        }
-
-        public Object getService(String serviceName)
-        {
-            ServiceInfo info = services.get(serviceName);
-            return info == null ? null : info.instance;
-        }
-
-        private static class ServiceInfo
-        {
-            private final Class<?> type;
-            private final Object instance;
-
-            public ServiceInfo(Class<?> type, Object instance)
-            {
-                this.type = type;
-                this.instance = instance;
-            }
-        }
     }
 
     private static interface IService

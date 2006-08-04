@@ -25,11 +25,11 @@ import java.util.Set;
 /**
  * @version $Rev$ $Date$
  */
-public class DefaultContainer implements Container
+public class StandardContainer implements Container
 {
     private final Registry container;
 
-    public DefaultContainer(Registry container)
+    public StandardContainer(Registry container)
     {
         this.container = container;
     }

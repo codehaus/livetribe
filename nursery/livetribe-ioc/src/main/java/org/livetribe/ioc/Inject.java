@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * that receive as argument an instance of a service needed by the class
  * declaring the annotated method for its functionalities.
  * <br />
- * The class {@link DefaultContainer} contains the logic to inject service
+ * The class {@link StandardContainer} contains the logic to inject service
  * instances into objects whose class contains methods with this annotation.
  * @see PostConstruct
  * @version $Rev$ $Date$
