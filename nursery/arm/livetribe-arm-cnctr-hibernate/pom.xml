@@ -52,8 +52,14 @@
         </dependency>
 
         <dependency>
-            <groupId>concurrent</groupId>
-            <artifactId>concurrent</artifactId>
+            <groupId>jencks</groupId>
+            <artifactId>jencks-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mx4j</groupId>
+            <artifactId>mx4j-remote</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -79,19 +85,13 @@
         </dependency>
 
         <dependency>
-            <groupId>jencks</groupId>
-            <artifactId>jencks-all</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>mx4j</groupId>
-            <artifactId>mx4j-remote</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.xbean</groupId>
             <artifactId>xbean-spring</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate</artifactId>
         </dependency>
 
         <dependency>
@@ -106,7 +106,7 @@
 
         <dependency>
             <groupId>org.livetribe.arm</groupId>
-            <artifactId>livetribe-arm-util</artifactId>
+            <artifactId>livetribe-arm-data</artifactId>
         </dependency>
 
     </dependencies>

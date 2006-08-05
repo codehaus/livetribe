@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="org.livetribe.arm.connection.messages.ApplicationDefinitionMessage" table="APPLICATION_DEFINITIONS"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <!-- TODO unsaved value should be null? -->
+        <id name="oid" column="APPLICATION_DEFINITION_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_APPLICATION_DEFINITIONS</param>
+            </generator>
+        </id>
+        <property name="appDefId" column="APP_DEF_ID" type="string" not-null="true"/>
+        <property name="name" column="NAME" type="string"/>
+        <list name="idNames" table="APPLICATION_DEFINITIONS_ID_NAMES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="APPLICATION_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="ID_NAME" type="string"/>
+        </list>
+        <list name="idValues" table="APPLICATION_DEFINITIONS_ID_VALUES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="APPLICATION_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="ID_VALUE" type="string"/>
+        </list>
+        <list name="ctxNames" table="APPLICATION_DEFINITIONS_CTX_NAMES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="APPLICATION_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="CTX_NAME" type="string"/>
+        </list>
+        <property name="id" column="ID" type="string"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.ApplicationMessage" table="APPLICATIONS" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="APPLICATION_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_APPLICATIONS</param>
+            </generator>
+        </id>
+        <property name="appId" column="APP_ID" type="string" not-null="true"/>
+        <property name="appDefId" column="APP_DEF_ID" type="string" not-null="true"/>
+        <property name="group" column="GROUP" type="string"/>
+        <property name="instance" column="INSTANCE" type="string"/>
+        <list name="ctxValues" table="APPLICATIONS_CTX_VALUES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="APPLICATION_OID"/>
+            <index column="POSITION"/>
+            <element column="CTX_VALUE" type="string"/>
+        </list>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.ApplicationRemoteMessage" table="APPLICATION_REMOTES"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="APPLICATION_REMOTE_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_APPLICATION_REMOTES</param>
+            </generator>
+        </id>
+        <property name="appId" column="APP_ID" type="string" not-null="true"/>
+        <property name="appDefId" column="APP_DEF_ID" type="string" not-null="true"/>
+        <property name="group" column="GROUP" type="string"/>
+        <property name="instance" column="INSTANCE" type="string"/>
+        <list name="ctxValues" table="APPLICATION_DEFINITIONS_CTX_VALUES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="APPLICATION_REMOTE_OID"/>
+            <index column="POSITION"/>
+            <element column="CTX_VALUE" type="string"/>
+        </list>
+        <property name="systemAddress" column="SYSTEM_ADDRESS" type="string"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.BlockMessage" table="BLOCKS" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="BLOCK_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_BLOCKS</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
+        <property name="handle" column="HANDLE" type="long"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.MetricGroupDefinitionMessage" table="METRIC_GROUP_DEFINITIONS"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="METRIC_GROUP_DEFINITION_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_METRIC_GROUP_DEFINITIONS</param>
+            </generator>
+        </id>
+        <property name="metricGroupDef" column="METRIC_GROUP_DEF" type="string" not-null="true"/>
+        <list name="appDef" table="METRIC_GROUP_DEFINITIONS_APP_DEF" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="METRIC_GROUP_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="APP_DEF" type="string"/>
+        </list>
+        <list name="name" table="METRIC_GROUP_DEFINITIONS_NAME" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="METRIC_GROUP_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="NAME" type="string"/>
+        </list>
+        <list name="name" table="METRIC_GROUP_DEFINITIONS_UNITS" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="METRIC_GROUP_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="UNITS" type="string"/>
+        </list>
+        <list name="name" table="METRIC_GROUP_DEFINITIONS_USAGE" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="METRIC_GROUP_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="USAGE" type="string"/>
+        </list>
+        <list name="name" table="METRIC_GROUP_DEFINITIONS_ID" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="METRIC_GROUP_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="ID" type="string"/>
+        </list>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.ResetMessage" table="RESETS"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="RESET_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_RESETS</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.StartMessage" table="STARTS"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="START_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_STARTS</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
+        <property name="start" column="START" type="long"/>
+        <property name="parent" column="PARENT" type="string"/>
+        <list name="contextValues" table="STARTS_CONTEXT_VALUE" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="START_OID"/>
+            <index column="POSITION"/>
+            <element column="CONTEXT_VALUE" type="string"/>
+        </list>
+        <property name="contextURI" column="CONTEXT_URI" type="string"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.StopMessage" table="STOPS"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="STOP_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_STOPS</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
+        <property name="end" column="END" type="long"/>
+        <property name="status" column="STATUS" type="int"/>
+        <property name="message" column="MESSAGE" type="string"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.TransactionDefinitionMessage" table="TRANSACTION_DEFINITIONS"
+           dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="TRANSACTION_DEFINITION_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_TRANSACTION_DEFINITIONS</param>
+            </generator>
+        </id>
+        <property name="transDefId" column="TRANS_DEF_ID" type="string" not-null="true"/>
+        <property name="name" column="NAME" type="string"/>
+        <list name="idNames" table="TRANSACTION_DEFINITIONS_ID_NAMES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="TRANSACTION_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="ID_NAME" type="string"/>
+        </list>
+        <list name="idValues" table="TRANSACTION_DEFINITIONS_ID_VALUES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="TRANSACTION_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="ID_VALUE" type="string"/>
+        </list>
+        <list name="ctxNames" table="TRANSACTION_DEFINITIONS_CTX_NAMES" lazy="false" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="TRANSACTION_DEFINITION_OID"/>
+            <index column="POSITION"/>
+            <element column="CTX_NAME" type="string"/>
+        </list>
+        <property name="uri" column="URI" type="string"/>
+        <property name="id" column="ID" type="string"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.TransactionMessage" table="TRANSACTIONS" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="TRANSACTION_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_TRANSACTIONS</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="appId" column="APP_ID" type="string" not-null="true"/>
+        <property name="transDefId" column="TRANS_DEF_IF" type="string" not-null="true"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.UnblockedMessage" table="UNBLOCKS" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="UNBLOCKED_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_UNBLOCKS</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
+        <property name="handle" column="HANDLE" type="long"/>
+    </class>
+
+    <class name="org.livetribe.arm.connection.messages.UpdateMessage" table="UPDATES" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="oid" column="UPDATE_OID" type="long" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_UPDATES</param>
+            </generator>
+        </id>
+        <property name="transId" column="TRANS_ID" type="string" not-null="true"/>
+        <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
+    </class>
+
+</hibernate-mapping>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.ra.activemq;
+package org.livetribe.arm.ra.hibernate;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.ConnectionEvent;
@@ -24,13 +24,14 @@ import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
 import javax.resource.spi.ManagedConnectionFactory;
 import javax.security.auth.Subject;
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 
 /**
  * @version $Revision$ $Date$
  */
-public class DefaultConnectionManager implements ConnectionManager, ConnectionEventListener
+public class DefaultConnectionManager implements ConnectionManager, ConnectionEventListener, Serializable
 {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -39,6 +40,7 @@ public class DefaultConnectionManager implements ConnectionManager, ConnectionEv
         Subject subject = null;
 
         ManagedConnection connection = managedConnectionFactory.createManagedConnection(subject, connectionRequestInfo);
+
         connection.addConnectionEventListener(this);
 
         return connection.getConnection(subject, connectionRequestInfo);

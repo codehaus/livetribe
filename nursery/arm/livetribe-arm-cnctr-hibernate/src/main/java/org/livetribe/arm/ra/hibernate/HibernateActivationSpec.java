@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.ra.activemq;
+package org.livetribe.arm.ra.hibernate;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.ActivationSpec;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * @version $Revision$ $Date$
  */
-public class ActiveMQActivationSpec implements ActivationSpec, Serializable
+public class HibernateActivationSpec implements ActivationSpec, Serializable
 {
     private ResourceAdapter resourceAdapter;
 
@@ -44,7 +44,8 @@ public class ActiveMQActivationSpec implements ActivationSpec, Serializable
     {
         if (this.resourceAdapter != null) throw new ResourceException("ResourceAdapter already set");
 
-        if (!(resourceAdapter instanceof ActiveMQResourceAdapter)) throw new ResourceException("ResourceAdapter is not of type: " + ActiveMQResourceAdapter.class.getName());
+        if (!(resourceAdapter instanceof HibernateResourceAdapter))
+            throw new ResourceException("ResourceAdapter is not of type: " + HibernateResourceAdapter.class.getName());
 
         this.resourceAdapter = resourceAdapter;
     }

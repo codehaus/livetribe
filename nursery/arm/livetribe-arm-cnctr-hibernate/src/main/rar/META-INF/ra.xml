@@ -19,8 +19,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd"
            version="1.5">
-    <description>LiveTribe Connector ActiveMQ JMS ResourceAdapter</description>
-    <display-name>LiveTribe Connector ActiveMQ JMS Resource Adapter</display-name>
+    <description>LiveTribe Connector Hibernate Resource Adapter</description>
+    <display-name>LiveTribe Connector Hibernate Resource Adapter</display-name>
     <vendor-name>livetribe.org</vendor-name>
     <eis-type>LiveTribe ARM 1.0</eis-type>
 
@@ -47,84 +47,66 @@
     </license>
 
     <resourceadapter>
-        <resourceadapter-class>org.livetribe.arm.ra.activemq.ActiveMQResourceAdapter</resourceadapter-class>
+        <resourceadapter-class>org.livetribe.arm.ra.hibernate.HibernateResourceAdapter</resourceadapter-class>
         <config-property>
             <description>
-                The URL to the ActiveMQ server that you want this connection to connect to. If using
-                an embedded broker, this value should be 'vm://localhost'.
+                Database dialect
             </description>
-            <config-property-name>ServerUrl</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-            <config-property-value>tcp://localhost:61616</config-property-value>
-            <!--            <config-property-value>vm://localhost</config-property-value> -->
-        </config-property>
-        <config-property>
-            <description>
-                The default user name that will be used to establish connections to the ActiveMQ server.
-            </description>
-            <config-property-name>UserName</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-            <config-property-value>defaultUser</config-property-value>
-        </config-property>
-        <config-property>
-            <description>
-                The default password that will be used to log the default user into the ActiveMQ server.
-            </description>
-            <config-property-name>Password</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-            <config-property-value>defaultPassword</config-property-value>
-        </config-property>
-        <config-property>
-            <description>
-                The client id that will be set on the connection that is established to the ActiveMQ server.
-            </description>
-            <config-property-name>Clientid</config-property-name>
+            <config-property-name>dialect</config-property-name>
             <config-property-type>java.lang.String</config-property-type>
         </config-property>
         <config-property>
             <description>
-                Boolean to configure if outbound connections should reuse the inbound connection's session for sending
-                messages.
+                JDBC driver class.
             </description>
-            <config-property-name>UseInboundSession</config-property-name>
-            <config-property-type>java.lang.Boolean</config-property-type>
-            <config-property-value>false</config-property-value>
+            <config-property-name>driverClass</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
         </config-property>
-
-        <!-- NOTE disable the following property if you do not wish to deploy an embedded broker -->
         <config-property>
             <description>
-                Sets the XML configuration file used to configure the embedded ActiveMQ broker via
-                Spring if using embedded mode.
-
-                BrokerXmlConfig is the filename which is assumed to be on the classpath unless
-                a URL is specified. So a value of foo/bar.xml would be assumed to be on the
-                classpath whereas file:dir/file.xml would use the file system.
-                Any valid URL string is supported.
+                JDBC URL.
             </description>
-            <config-property-name>BrokerXmlConfig</config-property-name>
+            <config-property-name>url</config-property-name>
             <config-property-type>java.lang.String</config-property-type>
-            <config-property-value></config-property-value>
-            <!--
-            <config-property-value>xbean:broker-config.xml</config-property-value>
-            -->
+        </config-property>
+        <config-property>
+            <description>
+                Database user.
+            </description>
+            <config-property-name>username</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
+        </config-property>
+        <config-property>
+            <description>
+                Database password.
+            </description>
+            <config-property-name>password</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
+        </config-property>
+        <config-property>
+            <description>
+                Maximum number of pooled connections.
+            </description>
+            <config-property-name>poolSize</config-property-name>
+            <config-property-type>java.lang.Integer</config-property-type>
+            <config-property-value>5</config-property-value>
+        </config-property>
+        <config-property>
+            <description>
+                Class of cache provider.
+            </description>
+            <config-property-name>cacheProviderClass</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
+            <config-property-value>org.hibernate.cache.HashtableCacheProvider</config-property-value>
         </config-property>
 
         <outbound-resourceadapter>
             <connection-definition>
-                <managedconnectionfactory-class>
-                    org.livetribe.arm.ra.activemq.ActiveMQManagedConnectionFactory</managedconnectionfactory-class>
-                <config-property>
-                    <description>
-                        The destination URL, e.g. queue:///FOO or topic:///bar.
-                    </description>
-                    <config-property-name>destinationURL</config-property-name>
-                    <config-property-type>java.lang.String</config-property-type>
-                </config-property>
+                <managedconnectionfactory-class>org.livetribe.arm.ra.hibernate.HibernateManagedConnectionFactory</managedconnectionfactory-class>
                 <connectionfactory-interface>org.livetribe.arm.connection.ConnectionFactory</connectionfactory-interface>
-                <connectionfactory-impl-class>org.livetribe.arm.ra.activemq.ActiveMQConnectionFactory</connectionfactory-impl-class>
+                <connectionfactory-impl-class>org.livetribe.arm.ra.hibernate.HibernateConnectionFactory</connectionfactory-impl-class>
                 <connection-interface>org.livetribe.arm.connection.Connection</connection-interface>
-                <connection-impl-class>org.livetribe.arm.ra.activemq.ManagedConnectionHandle</connection-impl-class>
+                <connection-impl-class>org.livetribe.arm.ra.hibernate.ConnectionHandle</connection-impl-class>
             </connection-definition>
             <transaction-support>XATransaction</transaction-support>
             <authentication-mechanism>
@@ -133,42 +115,6 @@
             </authentication-mechanism>
             <reauthentication-support>false</reauthentication-support>
         </outbound-resourceadapter>
-
-        <inbound-resourceadapter>
-            <messageadapter>
-                <messagelistener>
-                    <messagelistener-type>org.livetribe.arm.connection.Connection</messagelistener-type>
-                    <activationspec>
-                        <activationspec-class>org.apache.activemq.ra.ActiveMQActivationSpec</activationspec-class>
-
-                        <required-config-property>
-                            <config-property-name>destination</config-property-name>
-                        </required-config-property>
-                        <required-config-property>
-                            <config-property-name>destinationType</config-property-name>
-                        </required-config-property>
-
-                    </activationspec>
-                </messagelistener>
-            </messageadapter>
-        </inbound-resourceadapter>
-
-        <adminobject>
-            <adminobject-interface>javax.jms.Queue</adminobject-interface>
-            <adminobject-class>org.apache.activemq.command.ActiveMQQueue</adminobject-class>
-            <config-property>
-                <config-property-name>PhysicalName</config-property-name>
-                <config-property-type>java.lang.String</config-property-type>
-            </config-property>
-        </adminobject>
-        <adminobject>
-            <adminobject-interface>javax.jms.Topic</adminobject-interface>
-            <adminobject-class>org.apache.activemq.command.ActiveMQTopic</adminobject-class>
-            <config-property>
-                <config-property-name>PhysicalName</config-property-name>
-                <config-property-type>java.lang.String</config-property-type>
-            </config-property>
-        </adminobject>
 
     </resourceadapter>
 </connector>
