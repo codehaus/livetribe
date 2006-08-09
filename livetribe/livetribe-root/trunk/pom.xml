@@ -1,0 +1,287 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.livetribe</groupId>
+    <artifactId>livetribe</artifactId>
+    <name>LiveTribe</name>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <description>LiveTribe Systems Management Project</description>
+    <url>http://livetribe.codehaus.org</url>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>http://jira.codehaus.org/browse/LIVETRIBE</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>continuum</system>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnError />
+                <sendOnFailure />
+                <address>dev@livetribe.codehaus.org</address>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+
+    <inceptionYear>2006</inceptionYear>
+
+    <mailingLists>
+        <mailingList>
+            <name>LiveTribe Announcement List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+        <mailingList>
+            <name>LiveTribe User List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+        <mailingList>
+            <name>LiveTribe Developer List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+        <mailingList>
+            <name>LiveTribe SCM List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+    </mailingLists>
+
+    <developers>
+        <developer>
+            <id>maguro</id>
+            <name>Alan D. Cabrera</name>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <id>hogstrom</id>
+            <name>Matt Hogstrom</name>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>sbordet</id>
+            <name>Simone Bordet</name>
+            <timezone>1</timezone>
+        </developer>
+    </developers>
+
+    <contributors />
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:svn:http://svn.codehaus.org/livetribe/</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/</developerConnection>
+        <url>http://svn.livetribe.codehaus.org/</url>
+    </scm>
+
+    <organization>
+        <name>LiveTribe</name>
+        <url>http://livetribe.codehaus.org/</url>
+    </organization>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-1-SNAPSHOT</version>
+            </extension>
+        </extensions>
+        <defaultGoal>install</defaultGoal>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <tagBase>https://svn.codehaus.org/livetribe/tags</tagBase>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-one-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install-maven-one-repository</goal>
+                            <goal>deploy-maven-one-repository</goal>
+                        </goals>
+                        <configuration>
+                            <remoteRepositoryId>livetribe-m1</remoteRepositoryId>
+                            <remoteRepositoryUrl>dav:https://dav.codehaus.org/dist/livetribe/maven/m1</remoteRepositoryUrl>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles />
+
+    <modules />
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <name>Maven Snapshots Repository</name>
+            <url>http://snapshots.maven.codehaus.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots Repository</name>
+            <url>http://svn.apache.org/maven-snapshot-repository</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>snapshots</id>
+            <name>Maven Plugins Repository</name>
+            <url>http://snapshots.maven.codehaus.org/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <reporting />
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>antlr</groupId>
+                <artifactId>antlr</artifactId>
+                <version>2.7.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>activeio</groupId>
+                <artifactId>activeio</artifactId>
+                <version>2.2-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>backport-util-concurrent</groupId>
+                <artifactId>backport-util-concurrent</artifactId>
+                <version>2.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.0.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xbean</groupId>
+                <artifactId>xbean-spring</artifactId>
+                <version>2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe</groupId>
+                <artifactId>livetribe-util</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opengroup</groupId>
+                <artifactId>ARM_4_0</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.8</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>mx4j</groupId>
+                <artifactId>mx4j</artifactId>
+                <version>3.0.1</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>mx4j</groupId>
+                <artifactId>mx4j-jmx</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.4</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>livetribe-repo</id>
+            <name>LiveTribe Central Repository</name>
+            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2</url>
+        </repository>
+        <snapshotRepository>
+            <id>livetribe-snapshots</id>
+            <name>LiveTribe Central Development Repository</name>
+            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2-snapshots</url>
+        </snapshotRepository>
+        <site>
+            <id>livetribe-website</id>
+            <url>dav:https://dav.codehaus.org/livetribe</url>
+        </site>
+    </distributionManagement>
+
+</project>
