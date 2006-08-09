@@ -17,12 +17,10 @@ package org.livetribe.slp.spi.net;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicReference;
 import org.livetribe.slp.SLPTestSupport;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.spi.msg.SrvRply;
 import org.livetribe.slp.spi.msg.URLEntry;
 
@@ -44,9 +42,8 @@ public class SocketUDPConnectorTest extends SLPTestSupport
      */
     public void testStartStop() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
         SocketUDPConnector connector = new SocketUDPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
         connector.start();
         assert connector.isRunning();
         connector.stop();
@@ -63,10 +60,8 @@ public class SocketUDPConnectorTest extends SLPTestSupport
      */
     public void testClientSendsEmptyMessage() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
-
         SocketUDPConnector connector = new SocketUDPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
 
         final AtomicReference message = new AtomicReference(null);
         connector.addMessageListener(new MessageListener()
@@ -77,16 +72,16 @@ public class SocketUDPConnectorTest extends SLPTestSupport
             }
         });
 
-        connector.start();
-        sleep(500);
-
         try
         {
+            connector.start();
+            sleep(500);
+
             DatagramSocket client = new DatagramSocket();
             byte[] messageBytes = new byte[0];
             DatagramPacket packet = new DatagramPacket(messageBytes, messageBytes.length);
-            packet.setPort(config.getPort());
-            packet.setAddress(InetAddress.getByName(config.getMulticastAddress()));
+            packet.setPort(connector.getPort());
+            packet.setAddress(connector.getMulticastAddress());
             client.send(packet);
             client.close();
 
@@ -108,10 +103,8 @@ public class SocketUDPConnectorTest extends SLPTestSupport
      */
     public void testClientSendsMessage() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
-
         SocketUDPConnector connector = new SocketUDPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
 
         final AtomicReference message = new AtomicReference(null);
         connector.addMessageListener(new MessageListener()
@@ -122,11 +115,11 @@ public class SocketUDPConnectorTest extends SLPTestSupport
             }
         });
 
-        connector.start();
-        sleep(500);
-
         try
         {
+            connector.start();
+            sleep(500);
+
             SrvRply reply = new SrvRply();
             URLEntry entry = new URLEntry();
             entry.setURL("url1");
@@ -134,8 +127,8 @@ public class SocketUDPConnectorTest extends SLPTestSupport
 
             byte[] messageBytes = reply.serialize();
             DatagramPacket packet = new DatagramPacket(messageBytes, messageBytes.length);
-            packet.setPort(config.getPort());
-            packet.setAddress(InetAddress.getByName(config.getMulticastAddress()));
+            packet.setPort(connector.getPort());
+            packet.setAddress(connector.getMulticastAddress());
 
             DatagramSocket client = new DatagramSocket();
             client.send(packet);

@@ -31,11 +31,11 @@ import edu.emory.mathcs.backport.java.util.concurrent.ThreadFactory;
 import edu.emory.mathcs.backport.java.util.concurrent.TimeUnit;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceLocationException;
 import org.livetribe.slp.ServiceType;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.api.StandardAgent;
-import org.livetribe.slp.api.sa.ServiceInfo;
+import org.livetribe.slp.spi.Defaults;
 import org.livetribe.slp.spi.ServiceInfoCache;
 import org.livetribe.slp.spi.da.DirectoryAgentManager;
 import org.livetribe.slp.spi.da.StandardDirectoryAgentManager;
@@ -48,18 +48,20 @@ import org.livetribe.slp.spi.net.MessageEvent;
 import org.livetribe.slp.spi.net.MessageListener;
 
 /**
+ * Implementation of an SLP DirectoryAgent.
+ *
  * @version $Rev$ $Date$
  */
 public class StandardDirectoryAgent extends StandardAgent implements DirectoryAgent
 {
-    private Attributes attributes;
     private DirectoryAgentManager manager;
-    private int heartBeatPeriod;
-    private boolean periodicAdvertisement = true;
-    private boolean periodicServiceExpiration = true;
-    private int serviceExpirationPeriod = 1;
-    private InetAddress address;
     private ScheduledExecutorService scheduledExecutorService;
+    private Attributes attributes;
+    private int advertisementPeriod = Defaults.DA_ADVERTISEMENT_PERIOD;
+    private boolean periodicAdvertisementEnabled = true;
+    private boolean periodicServiceExpiration = true;
+    private int serviceExpirationPeriod = Defaults.DA_SERVICE_EXPIRATION_PERIOD;
+    private InetAddress address;
     private long bootTime;
     private InetAddress localhost;
     private MessageListener udpListener;
@@ -71,13 +73,11 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
         this.manager = manager;
     }
 
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setHeartBeatPeriod(configuration.getDAHeartBeatPeriod());
-        if (manager != null) manager.setConfiguration(configuration);
-    }
-
+    /**
+     * Sets the ScheduledExecutorService used to perform periodic tasks such as sending unsolicited
+     * DAAdverts or to check if services' lifetime are expired.
+     * @see #createScheduledExecutorService()
+     */
     public void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService)
     {
         this.scheduledExecutorService = scheduledExecutorService;
@@ -93,41 +93,82 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
         return attributes;
     }
 
-    public int getHeartBeatPeriod()
+    /**
+     * Returns the period of time, in seconds, between unsolicited DAAdverts.
+     * @see #setAdvertisementPeriod(int)
+     * @see #isPeriodicAdvertisementEnabled()
+     */
+    public int getAdvertisementPeriod()
     {
-        return heartBeatPeriod;
+        return advertisementPeriod;
     }
 
-    public void setHeartBeatPeriod(int heartBeatPeriod)
+    /**
+     * Sets the period of time, in seconds, between unsolicited DAAdverts.
+     * @see #getAdvertisementPeriod()
+     * @see #isPeriodicAdvertisementEnabled()
+     */
+    public void setAdvertisementPeriod(int advertisementPeriod)
     {
-        this.heartBeatPeriod = heartBeatPeriod;
+        this.advertisementPeriod = advertisementPeriod;
     }
 
+    /**
+     * Returns whether this DirectoryAgent sends periodically unsolicited DAAdverts to advertise its presence.
+     * By default, DirectoryAgents advertise their presence.
+     * @see #setPeriodicAdvertisementEnabled(boolean)
+     * @see #getAdvertisementPeriod()
+     */
     public boolean isPeriodicAdvertisementEnabled()
     {
-        return periodicAdvertisement;
+        return periodicAdvertisementEnabled;
     }
 
+    /**
+     * Sets whether this DirectoryAgent sends periodically unsolicited DAAdverts to advertise its presence.
+     * @see #isPeriodicAdvertisementEnabled()
+     * @see #getAdvertisementPeriod()
+     */
     public void setPeriodicAdvertisementEnabled(boolean periodicAdvertisement)
     {
-        this.periodicAdvertisement = periodicAdvertisement;
+        this.periodicAdvertisementEnabled = periodicAdvertisement;
     }
 
+    /**
+     * Returns whether this DirectoryAgent periodically checks for service expiration, to remove expired services.
+     * @see #setPeriodicServiceExpirationEnabled(boolean)
+     * @see #getServiceExpirationPeriod()
+     */
     public boolean isPeriodicServiceExpirationEnabled()
     {
         return periodicServiceExpiration;
     }
 
+    /**
+     * Sets whether this DirectoryAgent periodically checks for service expiration, to remove expired services.
+     * @see #isPeriodicServiceExpirationEnabled()
+     * @see #getServiceExpirationPeriod()
+     */
     public void setPeriodicServiceExpirationEnabled(boolean periodicServiceExpiration)
     {
         this.periodicServiceExpiration = periodicServiceExpiration;
     }
 
+    /**
+     * Returns the period, in seconds, between checks to remove expired services.
+     * @see #setServiceExpirationPeriod(int)
+     * @see #isPeriodicServiceExpirationEnabled()
+     */
     public int getServiceExpirationPeriod()
     {
         return serviceExpirationPeriod;
     }
 
+    /**
+     * Sets the period, in seconds, between checks to remove expired services
+     * @see #getServiceExpirationPeriod()
+     * @see #isPeriodicServiceExpirationEnabled()
+     */
     public void setServiceExpirationPeriod(int serviceExpirationPeriod)
     {
         this.serviceExpirationPeriod = serviceExpirationPeriod;
@@ -143,6 +184,9 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
         this.address = address;
     }
 
+    /**
+     * Returns the POSIX time of the boot of this DirectoryAgent, in milliseconds.
+     */
     public long getBootTime()
     {
         return bootTime;
@@ -166,11 +210,8 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
         }
         localhost = agentAddr;
 
-        if (manager == null)
-        {
-            manager = createDirectoryAgentManager();
-            manager.setConfiguration(getConfiguration());
-        }
+        if (manager == null) manager = createDirectoryAgentManager();
+        configureDirectoryAgentManager(manager);
         manager.start();
 
         udpListener = new MulticastMessageListener();
@@ -182,7 +223,7 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
 
         // DirectoryAgents send unsolicited DAAdverts every heartBeat seconds (RFC 2608, 12.2)
         if (isPeriodicAdvertisementEnabled())
-            scheduledExecutorService.scheduleWithFixedDelay(new UnsolicitedDAAdvert(), 0L, getHeartBeatPeriod(), TimeUnit.SECONDS);
+            scheduledExecutorService.scheduleWithFixedDelay(new UnsolicitedDAAdvert(), 0L, getAdvertisementPeriod(), TimeUnit.SECONDS);
         if (isPeriodicServiceExpirationEnabled())
             scheduledExecutorService.scheduleWithFixedDelay(new ServiceExpirer(), 0L, getServiceExpirationPeriod(), TimeUnit.SECONDS);
     }
@@ -192,6 +233,18 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
         return new StandardDirectoryAgentManager();
     }
 
+    protected void configureDirectoryAgentManager(DirectoryAgentManager daManager)
+    {
+        if (daManager instanceof StandardDirectoryAgentManager)
+        {
+            StandardDirectoryAgentManager directoryAgentManager = (StandardDirectoryAgentManager)daManager;
+            directoryAgentManager.setPort(getPort());
+        }
+    }
+
+    /**
+     * Creates and returns the default ScheduledExecutorService, configured to use one daemon thread.
+     */
     protected ScheduledExecutorService createScheduledExecutorService()
     {
         return Executors.newSingleThreadScheduledExecutor(new ThreadFactory()
@@ -218,6 +271,7 @@ public class StandardDirectoryAgent extends StandardAgent implements DirectoryAg
         manager.removeMessageListener(udpListener, true);
         manager.removeMessageListener(tcpListener, false);
         manager.stop();
+        manager = null;
     }
 
     protected void handleMulticastSrvRqst(SrvRqst message, InetSocketAddress address) throws ServiceLocationException

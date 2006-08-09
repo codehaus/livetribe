@@ -24,19 +24,16 @@ import edu.emory.mathcs.backport.java.util.concurrent.Executors;
 import edu.emory.mathcs.backport.java.util.concurrent.ScheduledExecutorService;
 import edu.emory.mathcs.backport.java.util.concurrent.TimeUnit;
 import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicBoolean;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.api.MatchingServiceInfoCache;
 import org.livetribe.slp.api.ServiceRegistrationEvent;
 import org.livetribe.slp.api.ServiceRegistrationListener;
 import org.livetribe.slp.api.sa.ServiceAgent;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.api.sa.StandardServiceAgent;
 import org.livetribe.slp.api.ua.StandardUserAgent;
 import org.livetribe.slp.api.ua.UserAgent;
 
 /**
- * Purpose of this test is to start N ServiceAgents that expose one service each,
- * and that service is similar for all SAs, thus simulating a cluster of the service.
+ * Purpose of this test is to start N ServiceAgents that expose one service each, simulating a cluster.
  * SAs can be notified of when other SAs come online and when SAs shutdown, thus
  * keeping the cluster always up-to-date.
  *
@@ -49,10 +46,9 @@ public class ServiceAgentClusterTest extends SLPTestSupport
      */
     public void testClusterWithOneNode() throws Exception
     {
-        Configuration configuration = getDefaultConfiguration();
-
+        int port = getPort();
         int lifetime = 15;
-        TestClusterNode node1 = new TestClusterNode(configuration, "/node1", lifetime);
+        TestClusterNode node1 = new TestClusterNode(port, "/node1", lifetime);
         node1.start();
         sleep(500);
 
@@ -72,16 +68,16 @@ public class ServiceAgentClusterTest extends SLPTestSupport
      */
     public void testClusterWithTwoNodes() throws Exception
     {
-        Configuration configuration = getDefaultConfiguration();
+        int port = getPort();
         int lifetime = 15;
 
-        TestClusterNode node1 = new TestClusterNode(configuration, "/node1", lifetime);
+        TestClusterNode node1 = new TestClusterNode(port, "/node1", lifetime);
         node1.start();
         sleep(500);
 
         try
         {
-            TestClusterNode node2 = new TestClusterNode(configuration, "/node2", lifetime);
+            TestClusterNode node2 = new TestClusterNode(port, "/node2", lifetime);
             node2.start();
             sleep(500);
 
@@ -118,7 +114,7 @@ public class ServiceAgentClusterTest extends SLPTestSupport
         private static final Scopes SCOPES = new Scopes(new String[]{"scope"});
         private static final String LANGUAGE = Locale.ENGLISH.getLanguage();
 
-        private final Configuration configuration;
+        private final int port;
         private final String nodeName;
         private final int lifetime;
         private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -128,9 +124,9 @@ public class ServiceAgentClusterTest extends SLPTestSupport
         private UserAgent userAgent;
 
 
-        public ClusterNode(Configuration configuration, String nodeName, int lifetime)
+        public ClusterNode(int port, String nodeName, int lifetime)
         {
-            this.configuration = configuration;
+            this.port = port;
             this.nodeName = nodeName;
             this.lifetime = lifetime;
         }
@@ -146,10 +142,10 @@ public class ServiceAgentClusterTest extends SLPTestSupport
             {
                 agents = new MatchingServiceInfoCache(SERVICE_TYPE, SCOPES, null, LANGUAGE);
                 agents.addServiceRegistrationListener(this);
-
-                serviceAgent = new StandardServiceAgent();
-                serviceAgent.setConfiguration(configuration);
-                serviceAgent.setScopes(SCOPES);
+                StandardServiceAgent sa = new StandardServiceAgent();
+                sa.setPort(port);
+                sa.setScopes(SCOPES);
+                serviceAgent = sa;
 
                 StringBuffer url = new StringBuffer().append(SERVICE_TYPE).append("://").append(InetAddress.getLocalHost().getHostAddress());
                 url.append(":").append(1427).append(nodeName);
@@ -158,9 +154,10 @@ public class ServiceAgentClusterTest extends SLPTestSupport
                 serviceAgent.register(serviceInfo);
                 serviceAgent.start();
 
-                userAgent = new StandardUserAgent();
-                userAgent.setConfiguration(configuration);
-                userAgent.addMessageRegistrationListener(agents);
+                StandardUserAgent ua = new StandardUserAgent();
+                ua.setPort(port);
+                ua.addMessageRegistrationListener(agents);
+                userAgent = ua;
                 userAgent.start();
 
                 // Fill the cache with an initial query
@@ -231,9 +228,9 @@ public class ServiceAgentClusterTest extends SLPTestSupport
     {
         private final List nodes = new ArrayList();
 
-        public TestClusterNode(Configuration configuration, String nodeName, int lifetime)
+        public TestClusterNode(int port, String nodeName, int lifetime)
         {
-            super(configuration, nodeName, lifetime);
+            super(port, nodeName, lifetime);
         }
 
         protected void nodeBorn(String nodeName)

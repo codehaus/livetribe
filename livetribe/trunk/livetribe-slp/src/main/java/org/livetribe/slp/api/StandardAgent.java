@@ -15,11 +15,12 @@
  */
 package org.livetribe.slp.api;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicBoolean;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.spi.Defaults;
 
 /**
  * @version $Rev$ $Date$
@@ -28,18 +29,27 @@ public abstract class StandardAgent implements Agent
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Configuration configuration;
-    private volatile boolean running;
+    private int port = Defaults.PORT;
     private Scopes scopes = Scopes.DEFAULT;
+    private volatile boolean running;
+    private final AtomicBoolean starting = new AtomicBoolean(false);
 
-    public void setConfiguration(Configuration configuration) throws IOException
+    /**
+     * Returns the SLP port.
+     * @see #setPort(int)
+     */
+    public int getPort()
     {
-        this.configuration = configuration;
+        return port;
     }
 
-    protected Configuration getConfiguration()
+    /**
+     * Sets the SLP port.
+     * @see #getPort()
+     */
+    public void setPort(int port)
     {
-        return configuration;
+        this.port = port;
     }
 
     public Scopes getScopes()
@@ -60,9 +70,9 @@ public abstract class StandardAgent implements Agent
 
     public void start() throws Exception
     {
-        if (isRunning())
+        if (!starting.compareAndSet(false, true) || isRunning())
         {
-            if (logger.isLoggable(Level.FINER)) logger.finer("Agent " + this + " is already started");
+            if (logger.isLoggable(Level.FINER)) logger.finer("Agent " + this + " is already running");
             return;
         }
 
@@ -79,7 +89,7 @@ public abstract class StandardAgent implements Agent
 
     public void stop() throws Exception
     {
-        if (!isRunning())
+        if (!starting.compareAndSet(true, false) && !isRunning())
         {
             if (logger.isLoggable(Level.FINER)) logger.finer("Agent " + this + " is already stopped");
             return;
@@ -87,9 +97,9 @@ public abstract class StandardAgent implements Agent
 
         if (logger.isLoggable(Level.FINER)) logger.finer("Agent " + this + " stopping...");
 
-        running = false;
-
         doStop();
+
+        running = false;
 
         if (logger.isLoggable(Level.FINE)) logger.fine("Agent " + this + " stopped successfully");
     }

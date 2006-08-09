@@ -21,24 +21,17 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.logging.Logger;
 
-import org.livetribe.slp.api.Configuration;
+import org.livetribe.slp.spi.Defaults;
 
 /**
  * @version $Rev$ $Date$
  */
 public abstract class UDPConnector extends NetworkConnector
 {
-    private int multicastTimeToLive;
-    private int maxTransmissionUnit;
+    private int multicastTimeToLive = Defaults.MULTICAST_TIME_TO_LIVE;
+    private int maxTransmissionUnit = Defaults.MAX_TRANSMISSION_UNIT;
     private InetAddress multicastAddress;
-
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setMulticastTimeToLive(configuration.getMulticastTTL());
-        setMaxTransmissionUnit(configuration.getMTU());
-        setMulticastAddress(InetAddress.getByName(configuration.getMulticastAddress()));
-    }
+    private int port = Defaults.PORT;
 
     public void setMulticastTimeToLive(int multicastTimeToLive)
     {
@@ -70,6 +63,22 @@ public abstract class UDPConnector extends NetworkConnector
         this.multicastAddress = multicastAddress;
     }
 
+    public int getPort()
+    {
+        return port;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+
+    protected void doStart() throws IOException
+    {
+        if (getMulticastAddress() == null) setMulticastAddress(InetAddress.getByName(Defaults.MULTICAST_ADDRESS));
+        super.doStart();
+    }
+
     /**
      * Sends the given bytes to the given address.
      * @param socket The datagram socket to be used to send the bytes, or null if the datagram socket must be created
@@ -89,9 +98,9 @@ public abstract class UDPConnector extends NetworkConnector
      */
     public abstract DatagramSocket multicastSend(DatagramSocket socket, InetSocketAddress address, byte[] bytes) throws IOException;
 
+    // Made method public
     public void accept(Runnable executor)
     {
-        if (executor instanceof Acceptor) ((Acceptor)executor).setMulticastConnector(this);
         super.accept(executor);
     }
 
@@ -99,9 +108,9 @@ public abstract class UDPConnector extends NetworkConnector
     {
         protected final Logger logger = Logger.getLogger(getClass().getName());
 
-        private UDPConnector udpConnector;
+        private final UDPConnector udpConnector;
 
-        private void setMulticastConnector(UDPConnector udpConnector)
+        protected Acceptor(UDPConnector udpConnector)
         {
             this.udpConnector = udpConnector;
         }
@@ -114,6 +123,16 @@ public abstract class UDPConnector extends NetworkConnector
         protected void handle(Runnable executor)
         {
             udpConnector.handle(executor);
+        }
+
+        protected InetAddress getMulticastAddress()
+        {
+            return udpConnector.getMulticastAddress();
+        }
+
+        protected int getPort()
+        {
+            return udpConnector.getPort();
         }
     }
 }

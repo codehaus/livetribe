@@ -21,7 +21,6 @@ import java.net.Socket;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicReference;
 import org.livetribe.slp.SLPTestSupport;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.spi.msg.SrvRply;
 import org.livetribe.slp.spi.msg.URLEntry;
 
@@ -36,7 +35,7 @@ public class SocketTCPConnectorTest extends SLPTestSupport
     protected void tearDown() throws Exception
     {
         // Allow ServerSocket to shutdown completely
-        sleep(500);
+        sleep(1500);
     }
 
     /**
@@ -44,9 +43,9 @@ public class SocketTCPConnectorTest extends SLPTestSupport
      */
     public void testStartStop() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
         SocketTCPConnector connector = new SocketTCPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
+
         connector.start();
         assertTrue(connector.isRunning());
         connector.stop();
@@ -56,6 +55,7 @@ public class SocketTCPConnectorTest extends SLPTestSupport
         connector.start();
         assertTrue(connector.isRunning());
         connector.stop();
+        assertFalse(connector.isRunning());
     }
 
     /**
@@ -63,10 +63,8 @@ public class SocketTCPConnectorTest extends SLPTestSupport
      */
     public void testClientSendsNothing() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
-
         SocketTCPConnector connector = new SocketTCPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
         connector.setTCPListening(true);
 
         final AtomicReference message = new AtomicReference(null);
@@ -78,12 +76,12 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             }
         });
 
-        connector.start();
-        sleep(500);
-
         try
         {
-            Socket client = new Socket((String)null, config.getPort());
+            connector.start();
+            sleep(500);
+
+            Socket client = new Socket((String)null, connector.getPort());
             client.close();
 
             sleep(500);
@@ -92,7 +90,7 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             assert message.get() == null;
 
             // Check that the connector is still able to accept connections
-            client = new Socket((String)null, config.getPort());
+            client = new Socket((String)null, connector.getPort());
             client.close();
         }
         finally
@@ -107,10 +105,8 @@ public class SocketTCPConnectorTest extends SLPTestSupport
      */
     public void testClientSendsIncompleteHeader() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
-
         SocketTCPConnector connector = new SocketTCPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
         connector.setTCPListening(true);
 
         final AtomicReference message = new AtomicReference(null);
@@ -122,12 +118,12 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             }
         });
 
-        connector.start();
-        sleep(500);
-
         try
         {
-            Socket client = new Socket((String)null, config.getPort());
+            connector.start();
+            sleep(500);
+
+            Socket client = new Socket((String)null, connector.getPort());
             OutputStream output = client.getOutputStream();
             byte[] incompleteHeader = new byte[]{2, 1, 0};
             output.write(incompleteHeader);
@@ -140,7 +136,7 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             assert message.get() == null;
 
             // Check that the connector is still able to accept connections
-            client = new Socket((String)null, config.getPort());
+            client = new Socket((String)null, connector.getPort());
             client.close();
         }
         finally
@@ -155,10 +151,8 @@ public class SocketTCPConnectorTest extends SLPTestSupport
      */
     public void testClientSendsIncompleteMessage() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
-
         SocketTCPConnector connector = new SocketTCPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
         connector.setTCPListening(true);
 
         final AtomicReference message = new AtomicReference(null);
@@ -170,12 +164,12 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             }
         });
 
-        connector.start();
-        sleep(500);
-
         try
         {
-            Socket client = new Socket((String)null, config.getPort());
+            connector.start();
+            sleep(500);
+
+            Socket client = new Socket((String)null, connector.getPort());
             OutputStream output = client.getOutputStream();
 
             SrvRply reply = new SrvRply();
@@ -196,7 +190,7 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             assert message.get() == null;
 
             // Check that the connector is still able to accept connections
-            client = new Socket((String)null, config.getPort());
+            client = new Socket((String)null, connector.getPort());
             client.close();
         }
         finally
@@ -211,10 +205,8 @@ public class SocketTCPConnectorTest extends SLPTestSupport
      */
     public void testClientSendsMessage() throws Exception
     {
-        Configuration config = getDefaultConfiguration();
-
         SocketTCPConnector connector = new SocketTCPConnector();
-        connector.setConfiguration(config);
+        connector.setPort(getPort());
         connector.setTCPListening(true);
 
         final AtomicReference message = new AtomicReference(null);
@@ -226,12 +218,12 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             }
         });
 
-        connector.start();
-        sleep(500);
-
         try
         {
-            Socket client = new Socket((String)null, config.getPort());
+            connector.start();
+            sleep(500);
+
+            Socket client = new Socket((String)null, connector.getPort());
             OutputStream output = client.getOutputStream();
 
             SrvRply reply = new SrvRply();
@@ -254,7 +246,7 @@ public class SocketTCPConnectorTest extends SLPTestSupport
             assertTrue(Arrays.equals(messageBytes, event.getMessageBytes()));
 
             // Check that the connector is still able to accept connections
-            client = new Socket((String)null, config.getPort());
+            client = new Socket((String)null, connector.getPort());
             client.close();
         }
         finally

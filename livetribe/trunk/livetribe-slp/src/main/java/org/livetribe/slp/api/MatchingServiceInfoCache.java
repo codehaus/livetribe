@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceLocationException;
 import org.livetribe.slp.ServiceType;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.spi.MessageRegistrationListener;
 import org.livetribe.slp.spi.ServiceInfoCache;
 import org.livetribe.slp.spi.filter.Filter;

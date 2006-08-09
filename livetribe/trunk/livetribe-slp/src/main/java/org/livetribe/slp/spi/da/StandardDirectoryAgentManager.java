@@ -24,9 +24,8 @@ import java.util.logging.Level;
 
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceURL;
-import org.livetribe.slp.api.Configuration;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.spi.StandardAgentManager;
 import org.livetribe.slp.spi.msg.AttributeListExtension;
 import org.livetribe.slp.spi.msg.DAAdvert;
@@ -42,14 +41,6 @@ public class StandardDirectoryAgentManager extends StandardAgentManager implemen
 {
     private InetAddress address;
     private InetAddress localhost;
-
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        // By default, DirectoryAgent listens to TCP also
-        TCPConnector connector = getTCPConnector();
-        if (connector != null) connector.setTCPListening(true);
-    }
 
     public InetAddress getInetAddress()
     {
@@ -78,7 +69,7 @@ public class StandardDirectoryAgentManager extends StandardAgentManager implemen
     protected TCPConnector createTCPConnector() throws IOException
     {
         TCPConnector result = super.createTCPConnector();
-        // By default, DirectoryAgent listens to TCP also
+        // By default, DAs listen on TCP
         result.setTCPListening(true);
         return result;
     }
@@ -90,7 +81,7 @@ public class StandardDirectoryAgentManager extends StandardAgentManager implemen
 
         if (logger.isLoggable(Level.FINEST)) logger.finest("Multicasting " + daAdvert);
 
-        InetSocketAddress address = new InetSocketAddress(getConfiguration().getMulticastAddress(), getConfiguration().getPort());
+        InetSocketAddress address = new InetSocketAddress(getMulticastAddress(), getPort());
         getUDPConnector().multicastSend(null, address, bytes).close();
     }
 

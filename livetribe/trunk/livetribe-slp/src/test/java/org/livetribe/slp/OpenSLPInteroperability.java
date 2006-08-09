@@ -18,12 +18,10 @@ package org.livetribe.slp;
 import java.util.List;
 import java.util.Locale;
 
-import org.livetribe.slp.api.Configuration;
-import org.livetribe.slp.api.sa.ServiceAgent;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.api.sa.StandardServiceAgent;
 import org.livetribe.slp.api.ua.StandardUserAgent;
-import org.livetribe.slp.api.ua.UserAgent;
+import org.livetribe.slp.spi.sa.StandardServiceAgentManager;
+import org.livetribe.slp.spi.ua.StandardUserAgentManager;
 
 /**
  * This class tests that the SLP implementation is compatible with <a href="http://openslp.org">OpenSLP</a>.
@@ -54,28 +52,31 @@ public class OpenSLPInteroperability
 
     public void test() throws Exception
     {
-        Configuration configuration = new Configuration();
-        configuration.setMulticastTimeouts(new long[]{3000L, 3000L, 3000L, 3000L, 3000L});
+        long[] timeouts = new long[]{3000L, 3000L, 3000L, 3000L, 3000L};
 
         ServiceURL serviceURL = new ServiceURL("service:jmx:rmi://host/path", ServiceURL.LIFETIME_DEFAULT);
 
         System.out.println("Service Agent: discovering DA and registering service " + serviceURL);
-        ServiceAgent sa = new StandardServiceAgent();
-        sa.setConfiguration(configuration);
+        StandardServiceAgent sa = new StandardServiceAgent();
+        StandardServiceAgentManager saManager = new StandardServiceAgentManager();
+        saManager.setMulticastTimeouts(timeouts);
+        sa.setServiceAgentManager(saManager);
         ServiceInfo service = new ServiceInfo(null, serviceURL, null, null, Locale.ITALY.getLanguage());
         sa.register(service);
-        sa.start();
-        System.out.println("Service Agent: registered service " + serviceURL);
 
         try
         {
+            sa.start();
+            System.out.println("Service Agent: registered service " + serviceURL);
             System.out.println("User Agent: discovering DA");
-            UserAgent ua = new StandardUserAgent();
-            ua.setConfiguration(configuration);
-            ua.start();
+            StandardUserAgent ua = new StandardUserAgent();
+            StandardUserAgentManager uaManager = new StandardUserAgentManager();
+            uaManager.setMulticastTimeouts(timeouts);
+            ua.setUserAgentManager(uaManager);
 
             try
             {
+                ua.start();
                 ServiceType serviceType = serviceURL.getServiceType();
                 System.out.println("User Agent: finding service of type " + serviceType);
                 List serviceInfos = ua.findServices(serviceType, Scopes.DEFAULT, null, null);

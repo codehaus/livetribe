@@ -24,10 +24,10 @@ import java.util.Locale;
 import java.util.logging.Level;
 
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceLocationException;
 import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceURL;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.spi.StandardAgentManager;
 import org.livetribe.slp.spi.msg.AttributeListExtension;
 import org.livetribe.slp.spi.msg.DAAdvert;
@@ -47,8 +47,19 @@ import org.livetribe.slp.spi.net.TCPConnector;
  */
 public class StandardServiceAgentManager extends StandardAgentManager implements ServiceAgentManager
 {
+    private boolean tcpListening;
     private InetAddress address;
     private InetAddress localhost;
+
+    public boolean isTCPListening()
+    {
+        return tcpListening;
+    }
+
+    public void setTCPListening(boolean tcpListening)
+    {
+        this.tcpListening = tcpListening;
+    }
 
     public InetAddress getInetAddress()
     {
@@ -74,9 +85,11 @@ public class StandardServiceAgentManager extends StandardAgentManager implements
         localhost = agentAddr;
     }
 
-    public boolean isTCPListening()
+    protected TCPConnector createTCPConnector() throws IOException
     {
-        return getTCPConnector().isTCPListening();
+        TCPConnector connector = super.createTCPConnector();
+        connector.setTCPListening(isTCPListening());
+        return connector;
     }
 
     public DAAdvert[] multicastDASrvRqst(Scopes scopes, String filter, String language, long timeframe) throws IOException
@@ -290,7 +303,7 @@ public class StandardServiceAgentManager extends StandardAgentManager implements
         registration.addExtension(extension);
 
         byte[] bytes = serializeMessage(registration);
-        InetSocketAddress address = new InetSocketAddress(getConfiguration().getMulticastAddress(), getConfiguration().getNotificationPort());
+        InetSocketAddress address = new InetSocketAddress(getMulticastAddress(), getNotificationPort());
 
         if (logger.isLoggable(Level.FINEST)) logger.finest("Multicasting notification " + registration + " to " + address);
 
@@ -308,7 +321,7 @@ public class StandardServiceAgentManager extends StandardAgentManager implements
         deregistration.addExtension(extension);
 
         byte[] bytes = serializeMessage(deregistration);
-        InetSocketAddress address = new InetSocketAddress(getConfiguration().getMulticastAddress(), getConfiguration().getNotificationPort());
+        InetSocketAddress address = new InetSocketAddress(getMulticastAddress(), getNotificationPort());
 
         if (logger.isLoggable(Level.FINEST)) logger.finest("Multicasting notification " + deregistration + " to " + address);
 

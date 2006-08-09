@@ -50,23 +50,23 @@ public class StandardAgentManagerTest extends SLPTestSupport
     public void testMulticastConvergenceNoReplies() throws Exception
     {
         StandardAgentManager agent = new Agent();
+        agent.setPort(getPort());
         agent.setUDPConnector(new MCConnector(0, new long[]{20L}));
         agent.setTCPConnector(new UCConnector());
-        agent.setConfiguration(getDefaultConfiguration());
 
         long[] timeouts = new long[]{100L, 200L, 300L, 400L, 500L};
         agent.setMulticastTimeouts(timeouts);
         agent.setMulticastMaxWait(sum(timeouts));
 
-        agent.start();
-
         try
         {
+            agent.start();
+
             SrvRqst rqst = new SrvRqst();
             rqst.setServiceType(new ServiceType("service:test"));
 
             long start = System.currentTimeMillis();
-            Listener converger = new Listener();
+            Listener converger = new Listener(agent.getUDPConnector());
             try
             {
                 agent.addMessageListener(converger, true);
@@ -99,23 +99,23 @@ public class StandardAgentManagerTest extends SLPTestSupport
     public void testMulticastConvergenceOneReply() throws Exception
     {
         StandardAgentManager agent = new Agent();
+        agent.setPort(getPort());
         agent.setUDPConnector(new MCConnector(1, new long[]{20L}));
         agent.setTCPConnector(new UCConnector());
-        agent.setConfiguration(getDefaultConfiguration());
 
         long[] timeouts = new long[]{100L, 200L, 300L, 400L, 500L};
         agent.setMulticastTimeouts(timeouts);
         agent.setMulticastMaxWait(sum(timeouts));
 
-        agent.start();
-
         try
         {
+            agent.start();
+
             SrvRqst rqst = new SrvRqst();
             rqst.setServiceType(new ServiceType("service:test"));
 
             long start = System.currentTimeMillis();
-            Listener converger = new Listener();
+            Listener converger = new Listener(agent.getUDPConnector());
             try
             {
                 agent.addMessageListener(converger, true);
@@ -150,22 +150,22 @@ public class StandardAgentManagerTest extends SLPTestSupport
         long[] timeouts = new long[]{100L, 200L, 300L, 400L, 500L};
 
         StandardAgentManager agent = new Agent();
+        agent.setPort(getPort());
         agent.setUDPConnector(new MCConnector(1, new long[]{timeouts[0] + 20L}));
         agent.setTCPConnector(new UCConnector());
-        agent.setConfiguration(getDefaultConfiguration());
 
         agent.setMulticastTimeouts(timeouts);
         agent.setMulticastMaxWait(sum(timeouts));
 
-        agent.start();
-
         try
         {
+            agent.start();
+
             SrvRqst rqst = new SrvRqst();
             rqst.setServiceType(new ServiceType("service:test"));
 
             long start = System.currentTimeMillis();
-            Listener converger = new Listener();
+            Listener converger = new Listener(agent.getUDPConnector());
             try
             {
                 agent.addMessageListener(converger, true);
@@ -197,24 +197,24 @@ public class StandardAgentManagerTest extends SLPTestSupport
      */
     public void testMulticastConvergenceTwoReplies() throws Exception
     {
+        long[] timeouts = new long[]{100L, 200L, 300L, 400L, 500L};
+
         StandardAgentManager agent = new Agent();
+        agent.setPort(getPort());
         agent.setUDPConnector(new MCConnector(2, new long[]{20L, 20L}));
         agent.setTCPConnector(new UCConnector());
-        agent.setConfiguration(getDefaultConfiguration());
-
-        long[] timeouts = new long[]{100L, 200L, 300L, 400L, 500L};
         agent.setMulticastTimeouts(timeouts);
         agent.setMulticastMaxWait(sum(timeouts));
 
-        agent.start();
-
         try
         {
+            agent.start();
+
             SrvRqst rqst = new SrvRqst();
             rqst.setServiceType(new ServiceType("service:test"));
 
             long start = System.currentTimeMillis();
-            Listener converger = new Listener();
+            Listener converger = new Listener(agent.getUDPConnector());
             try
             {
                 agent.addMessageListener(converger, true);
@@ -249,22 +249,21 @@ public class StandardAgentManagerTest extends SLPTestSupport
         long[] timeouts = new long[]{100L, 200L, 300L, 400L, 500L};
 
         StandardAgentManager agent = new Agent();
+        agent.setPort(getPort());
         agent.setUDPConnector(new MCConnector(2, new long[]{20L, timeouts[0] + 20L}));
         agent.setTCPConnector(new UCConnector());
-        agent.setConfiguration(getDefaultConfiguration());
-
         agent.setMulticastTimeouts(timeouts);
         agent.setMulticastMaxWait(sum(timeouts));
 
-        agent.start();
-
         try
         {
+            agent.start();
+
             SrvRqst rqst = new SrvRqst();
             rqst.setServiceType(new ServiceType("service:test"));
 
             long start = System.currentTimeMillis();
-            Listener converger = new Listener();
+            Listener converger = new Listener(agent.getUDPConnector());
             try
             {
                 agent.addMessageListener(converger, true);
@@ -391,8 +390,9 @@ public class StandardAgentManagerTest extends SLPTestSupport
 
     private class Listener extends Converger
     {
-        public Listener() throws SocketException
+        public Listener(UDPConnector connector) throws SocketException
         {
+            super(connector);
         }
 
         public void send(UDPConnector connector, byte[] bytes) throws IOException

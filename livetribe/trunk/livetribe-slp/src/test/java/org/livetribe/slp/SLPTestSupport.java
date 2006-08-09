@@ -15,14 +15,12 @@
  */
 package org.livetribe.slp;
 
-import java.io.IOException;
-
-import org.livetribe.slp.api.Configuration;
+import junit.framework.TestCase;
 
 /**
  * @version $Rev$ $Date$
  */
-public class SLPTestSupport
+public class SLPTestSupport extends TestCase
 {
     protected void sleep(long time)
     {
@@ -36,29 +34,28 @@ public class SLPTestSupport
         }
     }
 
-    protected Configuration getDefaultConfiguration() throws IOException
+    protected int getPort()
     {
-        Configuration configuration = new Configuration();
-        configuration.setPort(1427);
-        return configuration;
+        // Default SLP port (427) is a reserved port in Unix-like operative systems
+        return 1427;
     }
 
-    protected void assertTrue(boolean value)
+    public static void assertTrue(boolean value)
     {
         assert value;
     }
 
-    protected void assertFalse(boolean value)
+    public static void assertFalse(boolean value)
     {
         assert !value;
     }
 
-    protected void assertNotNull(Object value)
+    public static void assertNotNull(Object value)
     {
         assert value != null;
     }
 
-    protected void assertEquals(Object expected, Object value)
+    public static void assertEquals(Object expected, Object value)
     {
         if (expected != value)
         {

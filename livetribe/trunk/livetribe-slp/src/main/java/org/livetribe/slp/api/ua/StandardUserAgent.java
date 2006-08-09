@@ -26,15 +26,16 @@ import java.util.logging.Level;
 
 import edu.emory.mathcs.backport.java.util.concurrent.Executors;
 import edu.emory.mathcs.backport.java.util.concurrent.ScheduledExecutorService;
+import edu.emory.mathcs.backport.java.util.concurrent.ThreadFactory;
 import edu.emory.mathcs.backport.java.util.concurrent.TimeUnit;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceLocationException;
 import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceURL;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.api.StandardAgent;
-import org.livetribe.slp.api.sa.ServiceInfo;
+import org.livetribe.slp.spi.Defaults;
 import org.livetribe.slp.spi.MessageRegistrationListener;
 import org.livetribe.slp.spi.da.DirectoryAgentInfo;
 import org.livetribe.slp.spi.da.DirectoryAgentInfoCache;
@@ -58,9 +59,9 @@ import org.livetribe.util.ConcurrentListeners;
  */
 public class StandardUserAgent extends StandardAgent implements UserAgent
 {
-    private boolean periodicDirectoryAgentDiscovery = true;
-    private int directoryAgentDiscoveryInitialWaitBound;
-    private long directoryAgentDiscoveryPeriod;
+    private boolean periodicDiscoveryEnabled = true;
+    private long discoveryPeriod = Defaults.UA_DISCOVERY_PERIOD;
+    private int discoveryInitialWaitBound = Defaults.UA_DISCOVERY_INITIAL_WAIT_BOUND;
     private UserAgentManager manager;
     private MessageListener multicastMessageListener;
     private MessageListener multicastNotificationListener;
@@ -73,60 +74,74 @@ public class StandardUserAgent extends StandardAgent implements UserAgent
         this.manager = manager;
     }
 
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setDirectoryAgentDiscoveryInitialWaitBound(configuration.getDADiscoveryStartWaitBound());
-        setDirectoryAgentDiscoveryPeriod(configuration.getDADiscoveryPeriod());
-        if (manager != null) manager.setConfiguration(configuration);
-    }
-
+    /**
+     * Sets the ScheduledExecutorService used to perform periodic tasks such as discovery
+     * of DirectoryAgents.
+     * @see #createScheduledExecutorService()
+     */
     public void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService)
     {
         this.scheduledExecutorService = scheduledExecutorService;
     }
 
-    public boolean isPeriodicDirectoryAgentDiscoveryEnabled()
+    /**
+     * Returns whether this UserAgent should periodically discover DirectoryAgents
+     * @see #setPeriodicDiscoveryEnabled(boolean)
+     * @see #getDiscoveryPeriod()
+     */
+    public boolean isPeriodicDiscoveryEnabled()
     {
-        return periodicDirectoryAgentDiscovery;
+        return periodicDiscoveryEnabled;
     }
 
-    public void setPeriodicDirectoryAgentDiscoveryEnabled(boolean periodicDirectoryAgentDiscoveryEnabled)
+    /**
+     * Sets whether this UserAgent should periodically discover DirectoryAgents
+     * @see #isPeriodicDiscoveryEnabled()
+     * @see #getDiscoveryPeriod()
+     */
+    public void setPeriodicDiscoveryEnabled(boolean periodicDiscoveryEnabled)
     {
-        this.periodicDirectoryAgentDiscovery = periodicDirectoryAgentDiscoveryEnabled;
+        this.periodicDiscoveryEnabled = periodicDiscoveryEnabled;
     }
 
-    public int getDirectoryAgentDiscoveryInitialWaitBound()
+    /**
+     * Returns the period, in seconds, between discovery of DirectoryAgents
+     * @see #setDiscoveryPeriod(long)
+     * @see #isPeriodicDiscoveryEnabled()
+     */
+    public long getDiscoveryPeriod()
     {
-        return directoryAgentDiscoveryInitialWaitBound;
+        return discoveryPeriod;
+    }
+
+    /**
+     * Sets the period, in seconds, between discovery of DirectoryAgents
+     * @see #getDiscoveryPeriod()
+     * @see #isPeriodicDiscoveryEnabled()
+     */
+    public void setDiscoveryPeriod(long discoveryPeriod)
+    {
+        this.discoveryPeriod = discoveryPeriod;
+    }
+
+    public int getDiscoveryInitialWaitBound()
+    {
+        return discoveryInitialWaitBound;
     }
 
     /**
      * Sets the bound (in seconds) to the initial random delay this UserAgent waits
      * before attempting to discover DirectoryAgents
      */
-    public void setDirectoryAgentDiscoveryInitialWaitBound(int directoryAgentDiscoveryInitialWaitBound)
+    public void setDiscoveryInitialWaitBound(int discoveryInitialWaitBound)
     {
-        this.directoryAgentDiscoveryInitialWaitBound = directoryAgentDiscoveryInitialWaitBound;
-    }
-
-    public long getDirectoryAgentDiscoveryPeriod()
-    {
-        return directoryAgentDiscoveryPeriod;
-    }
-
-    public void setDirectoryAgentDiscoveryPeriod(long directoryAgentDiscoveryPeriod)
-    {
-        this.directoryAgentDiscoveryPeriod = directoryAgentDiscoveryPeriod;
+        this.discoveryInitialWaitBound = discoveryInitialWaitBound;
     }
 
     protected void doStart() throws IOException
     {
-        if (manager == null)
-        {
-            manager = createUserAgentManager();
-            manager.setConfiguration(getConfiguration());
-        }
+        if (manager == null) manager = createUserAgentManager();
+        configureUserAgentManager(manager);
         manager.start();
 
         multicastMessageListener = new MulticastMessageListener();
@@ -135,14 +150,39 @@ public class StandardUserAgent extends StandardAgent implements UserAgent
         manager.addNotificationListener(multicastNotificationListener);
 
         if (scheduledExecutorService == null) scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        long delay = new Random(System.currentTimeMillis()).nextInt(getDirectoryAgentDiscoveryInitialWaitBound() + 1) * 1000L;
-        if (isPeriodicDirectoryAgentDiscoveryEnabled())
-            scheduledExecutorService.scheduleWithFixedDelay(new DirectoryAgentDiscovery(), delay, getDirectoryAgentDiscoveryPeriod() * 1000L, TimeUnit.MILLISECONDS);
+        long delay = new Random(System.currentTimeMillis()).nextInt(getDiscoveryInitialWaitBound() + 1) * 1000L;
+        if (isPeriodicDiscoveryEnabled())
+            scheduledExecutorService.scheduleWithFixedDelay(new DirectoryAgentDiscovery(), delay, getDiscoveryPeriod() * 1000L, TimeUnit.MILLISECONDS);
     }
 
     protected UserAgentManager createUserAgentManager()
     {
         return new StandardUserAgentManager();
+    }
+
+    protected void configureUserAgentManager(UserAgentManager uaManager)
+    {
+        if (uaManager instanceof StandardUserAgentManager)
+        {
+            StandardUserAgentManager userAgentManager = (StandardUserAgentManager)uaManager;
+            userAgentManager.setPort(getPort());
+        }
+    }
+
+    /**
+     * Creates and returns the default ScheduledExecutorService, configured to use one daemon thread.
+     */
+    protected ScheduledExecutorService createScheduledExecutorService()
+    {
+        return Executors.newSingleThreadScheduledExecutor(new ThreadFactory()
+        {
+            public Thread newThread(Runnable runnable)
+            {
+                Thread thread = new Thread(runnable, "SLP UserAgent Scheduler");
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
     }
 
     protected void doStop() throws IOException
@@ -156,6 +196,7 @@ public class StandardUserAgent extends StandardAgent implements UserAgent
         manager.removeNotificationListener(multicastNotificationListener);
         manager.removeMessageListener(multicastMessageListener, true);
         manager.stop();
+        manager = null;
     }
 
     public void addMessageRegistrationListener(MessageRegistrationListener listener)

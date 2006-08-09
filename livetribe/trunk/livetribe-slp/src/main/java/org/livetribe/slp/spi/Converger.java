@@ -45,8 +45,9 @@ public abstract class Converger extends UDPConnector.Acceptor implements Message
     private final Lock lock = new ReentrantLock();
     private final Condition wait = lock.newCondition();
 
-    protected Converger() throws SocketException
+    protected Converger(UDPConnector connector) throws SocketException
     {
+        super(connector);
         this.socket = new DatagramSocket();
     }
 

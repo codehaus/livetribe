@@ -16,6 +16,7 @@
 package org.livetribe.slp.spi;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -29,8 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
+import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicBoolean;
 import org.livetribe.slp.ServiceLocationException;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.spi.msg.DAAdvert;
 import org.livetribe.slp.spi.msg.IdentifierExtension;
 import org.livetribe.slp.spi.msg.Message;
@@ -53,28 +54,46 @@ public abstract class StandardAgentManager implements AgentManager
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Configuration configuration;
-    private long multicastMaxWait;
-    private long[] multicastTimeouts;
-    private int maxTransmissionUnit;
+    private InetAddress multicastAddress;
+    private int port = Defaults.PORT;
+    private int notificationPort = Defaults.NOTIFICATION_PORT;
+    private long multicastMaxWait = Defaults.MULTICAST_MAX_WAIT;
+    private long[] multicastTimeouts = Defaults.MULTICAST_TIMEOUTS;
+    private int maxTransmissionUnit = Defaults.MAX_TRANSMISSION_UNIT;
     private volatile boolean running;
+    private final AtomicBoolean starting = new AtomicBoolean(false);
     private UDPConnector udpConnector;
     private TCPConnector tcpConnector;
     private final Random random = new Random(System.currentTimeMillis());
 
-    public void setConfiguration(Configuration configuration) throws IOException
+    public InetAddress getMulticastAddress()
     {
-        this.configuration = configuration;
-        setMulticastMaxWait(configuration.getMulticastMaxWait());
-        setMulticastTimeouts(configuration.getMulticastTimeouts());
-        setMaxTransmissionUnit(configuration.getMTU());
-        if (udpConnector != null) udpConnector.setConfiguration(configuration);
-        if (tcpConnector != null) tcpConnector.setConfiguration(configuration);
+        return multicastAddress;
     }
 
-    protected Configuration getConfiguration()
+    public void setMulticastAddress(InetAddress multicastAddress)
     {
-        return configuration;
+        this.multicastAddress = multicastAddress;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+
+    public int getNotificationPort()
+    {
+        return notificationPort;
+    }
+
+    public void setNotificationPort(int notificationPort)
+    {
+        this.notificationPort = notificationPort;
     }
 
     public long getMulticastMaxWait()
@@ -131,11 +150,13 @@ public abstract class StandardAgentManager implements AgentManager
     {
         if (udp)
         {
-            if (udpConnector != null) udpConnector.addMessageListener(listener);
+            UDPConnector connector = getUDPConnector();
+            if (connector != null) connector.addMessageListener(listener);
         }
         else
         {
-            if (tcpConnector != null) tcpConnector.addMessageListener(listener);
+            TCPConnector connector = getTCPConnector();
+            if (connector != null) connector.addMessageListener(listener);
         }
     }
 
@@ -143,11 +164,13 @@ public abstract class StandardAgentManager implements AgentManager
     {
         if (udp)
         {
-            if (udpConnector != null) udpConnector.removeMessageListener(listener);
+            UDPConnector connector = getUDPConnector();
+            if (connector != null) connector.removeMessageListener(listener);
         }
         else
         {
-            if (tcpConnector != null) tcpConnector.removeMessageListener(listener);
+            TCPConnector connector = getTCPConnector();
+            if (connector != null) connector.removeMessageListener(listener);
         }
     }
 
@@ -158,7 +181,7 @@ public abstract class StandardAgentManager implements AgentManager
 
     public void start() throws IOException
     {
-        if (isRunning())
+        if (!starting.compareAndSet(false, true) || isRunning())
         {
             if (logger.isLoggable(Level.FINER)) logger.finer("AgentManager " + this + " is already started");
             return;
@@ -166,8 +189,11 @@ public abstract class StandardAgentManager implements AgentManager
 
         if (logger.isLoggable(Level.FINER)) logger.finer("AgentManager " + this + " starting...");
 
-        if (udpConnector == null) udpConnector = createUDPConnector();
-        if (tcpConnector == null) tcpConnector = createTCPConnector();
+        if (getMulticastAddress() == null) setMulticastAddress(InetAddress.getByName(Defaults.MULTICAST_ADDRESS));
+        if (getUDPConnector() == null) setUDPConnector(createUDPConnector());
+        configureUDPConnector(getUDPConnector());
+        if (getTCPConnector() == null) setTCPConnector(createTCPConnector());
+        configureTCPConnector(getTCPConnector());
 
         doStart();
 
@@ -178,27 +204,39 @@ public abstract class StandardAgentManager implements AgentManager
 
     protected void doStart() throws IOException
     {
-        udpConnector.start();
-        tcpConnector.start();
+        getUDPConnector().start();
+        getTCPConnector().start();
     }
 
     protected UDPConnector createUDPConnector() throws IOException
     {
-        SocketUDPConnector connector = new SocketUDPConnector();
-        connector.setConfiguration(getConfiguration());
-        return connector;
+        return new SocketUDPConnector();
+    }
+
+    protected void configureUDPConnector(UDPConnector connector)
+    {
+        connector.setMulticastAddress(getMulticastAddress());
+        connector.setPort(getPort());
+        connector.setMaxTransmissionUnit(getMaxTransmissionUnit());
     }
 
     protected TCPConnector createTCPConnector() throws IOException
     {
-        SocketTCPConnector connector = new SocketTCPConnector();
-        connector.setConfiguration(getConfiguration());
-        return connector;
+        return new SocketTCPConnector();
+    }
+
+    protected void configureTCPConnector(TCPConnector connector)
+    {
+        if (connector instanceof SocketTCPConnector)
+        {
+            SocketTCPConnector socketConnector = (SocketTCPConnector)connector;
+            socketConnector.setPort(getPort());
+        }
     }
 
     public void stop() throws IOException
     {
-        if (!isRunning())
+        if (!starting.compareAndSet(true, false) && !isRunning())
         {
             if (logger.isLoggable(Level.FINER)) logger.finer("AgentManager " + this + " is already stopped");
             return;
@@ -206,17 +244,21 @@ public abstract class StandardAgentManager implements AgentManager
 
         if (logger.isLoggable(Level.FINER)) logger.finer("AgentManager " + this + " stopping...");
 
-        running = false;
-
         doStop();
+
+        running = false;
 
         if (logger.isLoggable(Level.FINE)) logger.fine("AgentManager " + this + " stopped successfully");
     }
 
     protected void doStop() throws IOException
     {
-        if (udpConnector != null) udpConnector.stop();
-        if (tcpConnector != null) tcpConnector.stop();
+        UDPConnector udp = getUDPConnector();
+        if (udp != null) udp.stop();
+        setUDPConnector(null);
+        TCPConnector tcp = getTCPConnector();
+        if (tcp != null) tcp.stop();
+        setTCPConnector(null);
     }
 
     protected int generateXID()
@@ -251,7 +293,7 @@ public abstract class StandardAgentManager implements AgentManager
 
     protected DAAdvert[] convergentDASrvRqst(SrvRqst message, long timeframe) throws IOException
     {
-        DASrvRqstConverger converger = new DASrvRqstConverger();
+        DASrvRqstConverger converger = new DASrvRqstConverger(getUDPConnector());
         try
         {
             List replies = convergentMulticastSend(message, timeframe, converger);
@@ -265,7 +307,7 @@ public abstract class StandardAgentManager implements AgentManager
 
     protected SAAdvert[] convergentSASrvRqst(SrvRqst message, long timeframe) throws IOException
     {
-        SASrvRqstConverger converger = new SASrvRqstConverger();
+        SASrvRqstConverger converger = new SASrvRqstConverger(getUDPConnector());
         try
         {
             List replies = convergentMulticastSend(message, timeframe, converger);
@@ -279,7 +321,7 @@ public abstract class StandardAgentManager implements AgentManager
 
     protected SrvRply[] convergentSrvRqst(SrvRqst message, long timeframe) throws IOException
     {
-        SrvRqstConverger converger = new SrvRqstConverger();
+        SrvRqstConverger converger = new SrvRqstConverger(getUDPConnector());
         try
         {
             List replies = convergentMulticastSend(message, timeframe, converger);
@@ -338,7 +380,7 @@ public abstract class StandardAgentManager implements AgentManager
         Set previousResponders = new HashSet();
         Set previousResponderIdentifiers = new HashSet();
 
-        udpConnector.accept(converger);
+        getUDPConnector().accept(converger);
 
         int noReplies = 0;
         int timeoutIndex = 0;
@@ -365,7 +407,7 @@ public abstract class StandardAgentManager implements AgentManager
             }
 
             if (logger.isLoggable(Level.FINE)) logger.fine("Multicast convergence sending " + message);
-            converger.send(udpConnector, messageBytes);
+            converger.send(getUDPConnector(), messageBytes);
 
             // Wait for the convergence timeout at timeoutIndex
             converger.lock();
@@ -503,9 +545,10 @@ public abstract class StandardAgentManager implements AgentManager
     {
         private final InetSocketAddress address;
 
-        public DASrvRqstConverger() throws SocketException
+        public DASrvRqstConverger(UDPConnector connector) throws SocketException
         {
-            address = new InetSocketAddress(getConfiguration().getMulticastAddress(), getConfiguration().getPort());
+            super(connector);
+            address = new InetSocketAddress(getMulticastAddress(), getPort());
         }
 
         public void send(UDPConnector connector, byte[] bytes) throws IOException
@@ -548,9 +591,10 @@ public abstract class StandardAgentManager implements AgentManager
     {
         private final InetSocketAddress address;
 
-        public SASrvRqstConverger() throws SocketException
+        public SASrvRqstConverger(UDPConnector connector) throws SocketException
         {
-            address = new InetSocketAddress(getConfiguration().getMulticastAddress(), getConfiguration().getPort());
+            super(connector);
+            address = new InetSocketAddress(getMulticastAddress(), getPort());
         }
 
         public void send(UDPConnector connector, byte[] bytes) throws IOException
@@ -591,9 +635,10 @@ public abstract class StandardAgentManager implements AgentManager
     {
         private final InetSocketAddress address;
 
-        public SrvRqstConverger() throws SocketException
+        public SrvRqstConverger(UDPConnector connector) throws SocketException
         {
-            address = new InetSocketAddress(getConfiguration().getMulticastAddress(), getConfiguration().getPort());
+            super(connector);
+            address = new InetSocketAddress(getMulticastAddress(), getPort());
         }
 
         public void send(UDPConnector connector, byte[] bytes) throws IOException

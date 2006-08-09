@@ -16,7 +16,6 @@
 package org.livetribe.slp.spi.sa;
 
 import org.livetribe.slp.SLPTestSupport;
-import org.livetribe.slp.api.Configuration;
 
 /**
  * @version $Rev$ $Date$
@@ -28,11 +27,8 @@ public class StandardServiceAgentManagerTest extends SLPTestSupport
      */
     public void testStartStop() throws Exception
     {
-        Configuration configuration = new Configuration();
-        configuration.setPort(1427);
-
         StandardServiceAgentManager agent = new StandardServiceAgentManager();
-        agent.setConfiguration(configuration);
+        agent.setPort(getPort());
 
         assertFalse(agent.isRunning());
 

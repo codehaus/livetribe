@@ -17,7 +17,6 @@ package org.livetribe.slp.spi;
 
 import java.io.IOException;
 
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.spi.net.MessageListener;
 
 /**
@@ -25,8 +24,6 @@ import org.livetribe.slp.spi.net.MessageListener;
  */
 public interface AgentManager
 {
-    public void setConfiguration(Configuration configuration) throws IOException;
-
     public void start() throws IOException;
 
     public boolean isRunning();

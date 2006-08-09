@@ -20,7 +20,7 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import org.livetribe.slp.api.Configuration;
+import org.livetribe.slp.spi.Defaults;
 
 /**
  * @version $Rev$ $Date$
@@ -28,24 +28,17 @@ import org.livetribe.slp.api.Configuration;
 public abstract class TCPConnector extends NetworkConnector
 {
     private boolean tcpListening;
-    private int tcpReadTimeout;
-    private int maxTCPMessageLength;
-
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setTCPReadTimeout(configuration.getTCPReadTimeout());
-        setMaxTCPMessageLength(configuration.getMaxTCPMessageLength());
-    }
+    private int tcpReadTimeout = Defaults.TCP_READ_TIMEOUT;
+    private int maxTCPMessageLength = Defaults.TCP_MAX_MESSAGE_LENGTH;
 
     public boolean isTCPListening()
     {
         return tcpListening;
     }
 
-    public void setTCPListening(boolean unicastListening)
+    public void setTCPListening(boolean tcpListening)
     {
-        this.tcpListening = unicastListening;
+        this.tcpListening = tcpListening;
     }
 
     public int getTCPReadTimeout()

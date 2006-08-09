@@ -23,18 +23,14 @@ import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicReference;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.SLPTestSupport;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceURL;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.api.da.StandardDirectoryAgent;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.api.sa.StandardServiceAgent;
 import org.livetribe.slp.spi.MessageRegistrationListener;
-import org.livetribe.slp.spi.da.StandardDirectoryAgentManager;
 import org.livetribe.slp.spi.msg.SrvAck;
 import org.livetribe.slp.spi.msg.SrvDeReg;
 import org.livetribe.slp.spi.msg.SrvReg;
-import org.livetribe.slp.spi.net.SocketTCPConnector;
-import org.livetribe.slp.spi.net.SocketUDPConnector;
 import org.livetribe.slp.spi.sa.ServiceAgentInfo;
 import org.livetribe.slp.spi.sa.StandardServiceAgentManager;
 import org.livetribe.slp.spi.ua.StandardUserAgentManager;
@@ -57,12 +53,10 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testStartStop() throws Exception
     {
+        int port = getPort();
+
         StandardUserAgent ua = new StandardUserAgent();
-        StandardUserAgentManager uaManager = new StandardUserAgentManager();
-        uaManager.setUDPConnector(new SocketUDPConnector());
-        uaManager.setTCPConnector(new SocketTCPConnector());
-        ua.setUserAgentManager(uaManager);
-        ua.setConfiguration(getDefaultConfiguration());
+        ua.setPort(port);
 
         assert !ua.isRunning();
         ua.start();
@@ -80,25 +74,26 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testFindServices() throws Exception
     {
+        int port = getPort();
         Scopes scopes = new Scopes(new String[]{"DEFAULT", "scope1", "scope2"});
 
         StandardDirectoryAgent da = new StandardDirectoryAgent();
-        da.setConfiguration(getDefaultConfiguration());
+        da.setPort(port);
         da.setScopes(scopes);
-        da.start();
 
         try
         {
+            da.start();
+
             InetAddress localhost = InetAddress.getLocalHost();
 
             StandardServiceAgentManager saManager = new StandardServiceAgentManager();
-            saManager.setUDPConnector(new SocketUDPConnector());
-            saManager.setTCPConnector(new SocketTCPConnector());
-            saManager.setConfiguration(getDefaultConfiguration());
-            saManager.start();
+            saManager.setPort(port);
 
             try
             {
+                saManager.start();
+
                 ServiceURL serviceURL = new ServiceURL("service:jmx:rmi:///jndi/rmi:///suat1", 13);
                 Attributes attributes = new Attributes("(attr=suat1)");
                 ServiceInfo service = new ServiceInfo(serviceURL, scopes, attributes, null);
@@ -109,11 +104,12 @@ public class StandardUserAgentTest extends SLPTestSupport
                 assert ack.getErrorCode() == 0;
 
                 StandardUserAgent ua = new StandardUserAgent();
-                ua.setConfiguration(getDefaultConfiguration());
-                ua.start();
+                ua.setPort(port);
 
                 try
                 {
+                    ua.start();
+
                     List serviceInfos = ua.findServices(serviceURL.getServiceType(), scopes, null, null);
 
                     assert serviceInfos != null;
@@ -149,32 +145,26 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testListenForDAAdverts() throws Exception
     {
-        Configuration configuration = getDefaultConfiguration();
+        int port = getPort();
 
         StandardUserAgent ua = new StandardUserAgent();
-        StandardUserAgentManager uaManager = new StandardUserAgentManager();
-        ua.setUserAgentManager(uaManager);
-        uaManager.setUDPConnector(new SocketUDPConnector());
-        uaManager.setTCPConnector(new SocketTCPConnector());
-        ua.setConfiguration(configuration);
-        ua.start();
+        ua.setPort(port);
 
         try
         {
+            ua.start();
+
             List das = ua.getCachedDirectoryAgents(ua.getScopes(), null);
             assert das != null;
             assert das.isEmpty();
 
             StandardDirectoryAgent da = new StandardDirectoryAgent();
-            StandardDirectoryAgentManager daManager = new StandardDirectoryAgentManager();
-            da.setDirectoryAgentManager(daManager);
-            daManager.setUDPConnector(new SocketUDPConnector());
-            daManager.setTCPConnector(new SocketTCPConnector());
-            da.setConfiguration(getDefaultConfiguration());
-            da.start();
+            da.setPort(port);
 
             try
             {
+                da.start();
+
                 // Allow unsolicited DAAdvert to arrive and UA to cache it
                 sleep(500);
 
@@ -198,34 +188,29 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testDADiscoveryOnStartup() throws Exception
     {
-        Configuration configuration = getDefaultConfiguration();
+        int port = getPort();
 
         StandardDirectoryAgent da = new StandardDirectoryAgent();
-        StandardDirectoryAgentManager daManager = new StandardDirectoryAgentManager();
-        da.setDirectoryAgentManager(daManager);
-        daManager.setUDPConnector(new SocketUDPConnector());
-        daManager.setTCPConnector(new SocketTCPConnector());
-        da.setConfiguration(configuration);
-        da.start();
+        da.setPort(port);
 
         try
         {
+            da.start();
             sleep(500);
 
             StandardUserAgent ua = new StandardUserAgent();
             StandardUserAgentManager uaManager = new StandardUserAgentManager();
             ua.setUserAgentManager(uaManager);
-            uaManager.setUDPConnector(new SocketUDPConnector());
-            uaManager.setTCPConnector(new SocketTCPConnector());
-            ua.setConfiguration(configuration);
+            ua.setPort(port);
             // Discover the DAs immediately
-            ua.setDirectoryAgentDiscoveryInitialWaitBound(0);
-            ua.start();
+            ua.setDiscoveryInitialWaitBound(0);
 
             try
             {
+                ua.start();
+
                 // The multicast convergence should stop after 2 timeouts, but use 3 to be sure
-                long[] timeouts = configuration.getMulticastTimeouts();
+                long[] timeouts = uaManager.getMulticastTimeouts();
                 long sleep = timeouts[0] + timeouts[1] + timeouts[2];
                 sleep(sleep);
 
@@ -249,31 +234,29 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testSADiscoveryAndFindServicesViaTCP() throws Exception
     {
-        Configuration configuration = getDefaultConfiguration();
+        int port = getPort();
 
         StandardServiceAgent sa = new StandardServiceAgent();
         StandardServiceAgentManager saManager = new StandardServiceAgentManager();
+        saManager.setTCPListening(true);
         sa.setServiceAgentManager(saManager);
-        SocketTCPConnector unicastConnector = new SocketTCPConnector();
-        unicastConnector.setTCPListening(true);
-        saManager.setTCPConnector(unicastConnector);
-        sa.setConfiguration(configuration);
+        sa.setPort(port);
         ServiceURL serviceURL = new ServiceURL("service:jmx:rmi://host/suat2", ServiceURL.LIFETIME_DEFAULT);
         String language = Locale.ITALY.getLanguage();
         ServiceInfo service = new ServiceInfo(serviceURL, null, null, language);
         sa.register(service);
-        sa.start();
 
         try
         {
+            sa.start();
             sleep(500);
 
             StandardUserAgent ua = new StandardUserAgent();
-            ua.setConfiguration(configuration);
-            ua.start();
+            ua.setPort(port);
 
             try
             {
+                ua.start();
                 sleep(500);
 
                 List serviceInfos = ua.findServices(serviceURL.getServiceType(), null, null, language);
@@ -297,35 +280,36 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testDiscoveryOfTwoSA() throws Exception
     {
-        Configuration configuration = getDefaultConfiguration();
+        int port = getPort();
 
         StandardServiceAgent sa1 = new StandardServiceAgent();
-        sa1.setConfiguration(configuration);
+        sa1.setPort(port);
         ServiceURL serviceURL1 = new ServiceURL("service:jmx:rmi://host/suat3", ServiceURL.LIFETIME_DEFAULT);
         String language = Locale.ITALY.getLanguage();
         ServiceInfo service1 = new ServiceInfo(serviceURL1, null, null, language);
         sa1.register(service1);
-        sa1.start();
 
         try
         {
+            sa1.start();
+
             StandardServiceAgent sa2 = new StandardServiceAgent();
-            sa2.setConfiguration(configuration);
+            sa2.setPort(port);
             ServiceURL serviceURL2 = new ServiceURL("service:jmx:http://host/suat4", ServiceURL.LIFETIME_DEFAULT);
             ServiceInfo service2 = new ServiceInfo(serviceURL2, null, null, language);
             sa2.register(service2);
-            sa2.start();
 
             try
             {
+                sa2.start();
                 sleep(500);
 
                 StandardUserAgent ua = new StandardUserAgent();
-                ua.setConfiguration(configuration);
-                ua.start();
+                ua.setPort(port);
 
                 try
                 {
+                    ua.start();
                     sleep(500);
 
                     List sas = ua.findServiceAgents(null, null);
@@ -365,15 +349,17 @@ public class StandardUserAgentTest extends SLPTestSupport
      */
     public void testListenForSrvRegSrvDeRegNotifications() throws Exception
     {
+        int port = getPort();
+
         StandardServiceAgent sa = new StandardServiceAgent();
-        sa.setConfiguration(getDefaultConfiguration());
-        sa.start();
+        sa.setPort(port);
 
         try
         {
+            sa.start();
+
             StandardUserAgent ua = new StandardUserAgent();
-            ua.setConfiguration(getDefaultConfiguration());
-            ua.start();
+            ua.setPort(port);
 
             final AtomicReference registered = new AtomicReference();
             final AtomicReference deregistered = new AtomicReference();
@@ -392,6 +378,8 @@ public class StandardUserAgentTest extends SLPTestSupport
 
             try
             {
+                ua.start();
+
                 ServiceURL serviceURL = new ServiceURL("service:foo:bar://baz");
                 ServiceInfo service = new ServiceInfo(serviceURL, Scopes.DEFAULT, null, Locale.getDefault().getLanguage());
                 sa.register(service);
@@ -444,108 +432,4 @@ public class StandardUserAgentTest extends SLPTestSupport
             sa.stop();
         }
     }
-
-/*
-    public void testSADiscoveryAndFindServicesViaUDPWithOneSA() throws Exception
-    {
-        Configuration configuration = getDefaultConfiguration();
-
-        StandardServiceAgent sa = new StandardServiceAgent();
-        sa.setConfiguration(configuration);
-        Attributes attributes = new Attributes();
-        attributes.put(ServiceAgentInfo.SRVRQST_PROTOCOL_TAG, "multicast");
-        sa.setAttributes(attributes);
-        ServiceURL serviceURL = new ServiceURL("service:jmx:rmi://host/path", ServiceURL.LIFETIME_DEFAULT);
-        String language = Locale.ITALY.getLanguage();
-        ServiceInfo service = new ServiceInfo(serviceURL, null, null, language);
-        sa.register(service);
-        sa.start();
-
-        try
-        {
-            sleep(500);
-
-            StandardUserAgent ua = new StandardUserAgent();
-            ua.setConfiguration(configuration);
-            ua.start();
-
-            try
-            {
-                sleep(500);
-
-                List services = ua.findServices(serviceURL.getServiceType(), null, null, language);
-                assertNotNull(services);
-                assertEquals(1, services.size());
-                assertEquals(serviceURL, services.get(0));
-            }
-            finally
-            {
-                ua.stop();
-            }
-        }
-        finally
-        {
-            sa.stop();
-        }
-    }
-
-    public void testSADiscoveryAndFindServicesViaUDPWithTwoSA() throws Exception
-    {
-        Configuration configuration = getDefaultConfiguration();
-
-        StandardServiceAgent sa1 = new StandardServiceAgent();
-        sa1.setConfiguration(configuration);
-        Attributes attributes = new Attributes();
-        attributes.put(ServiceAgentInfo.ID_TAG, "sa1");
-        attributes.put(ServiceAgentInfo.SRVRQST_PROTOCOL_TAG, "multicast");
-        sa1.setAttributes(attributes);
-        ServiceURL serviceURL1 = new ServiceURL("service:jmx:rmi://host/path", ServiceURL.LIFETIME_DEFAULT);
-        String language = Locale.ITALY.getLanguage();
-        ServiceInfo service1 = new ServiceInfo(serviceURL1, null, null, language);
-        sa1.register(service1);
-        sa1.start();
-
-        StandardServiceAgent sa2 = new StandardServiceAgent();
-        sa2.setConfiguration(configuration);
-        attributes = new Attributes();
-        attributes.put(ServiceAgentInfo.ID_TAG, "sa2");
-        attributes.put(ServiceAgentInfo.SRVRQST_PROTOCOL_TAG, "multicast");
-        sa2.setAttributes(attributes);
-        ServiceURL serviceURL2 = new ServiceURL("service:jmx:http://host/path", ServiceURL.LIFETIME_DEFAULT);
-        ServiceInfo service2 = new ServiceInfo(serviceURL2, null, null, language);
-        sa2.register(service2);
-        sa2.start();
-
-        try
-        {
-            sleep(500);
-
-            StandardUserAgent ua = new StandardUserAgent();
-            ua.setConfiguration(configuration);
-            ua.start();
-
-            try
-            {
-                sleep(500);
-
-                ServiceType generic = new ServiceType("service:jmx");
-                List services = ua.findServices(generic, null, null, language);
-                assertNotNull(services);
-                assertEquals(2, services.size());
-                Set urls = new HashSet();
-                urls.add(serviceURL1);
-                urls.add(serviceURL2);
-                assertEquals(urls, new HashSet(services));
-            }
-            finally
-            {
-                ua.stop();
-            }
-        }
-        finally
-        {
-            sa1.stop();
-        }
-    }
-*/
 }

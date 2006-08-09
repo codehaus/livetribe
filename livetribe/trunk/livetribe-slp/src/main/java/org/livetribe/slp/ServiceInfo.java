@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.slp.api.sa;
+package org.livetribe.slp;
 
-import org.livetribe.slp.Attributes;
-import org.livetribe.slp.Scopes;
-import org.livetribe.slp.ServiceType;
-import org.livetribe.slp.ServiceURL;
 import org.livetribe.slp.spi.msg.SrvDeReg;
 import org.livetribe.slp.spi.msg.SrvReg;
 

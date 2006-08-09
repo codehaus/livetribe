@@ -25,31 +25,12 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 
-import org.livetribe.slp.api.Configuration;
-
 /**
  * @version $Rev$ $Date$
  */
 public class SocketUDPConnector extends UDPConnector
 {
-    private int port;
     private MulticastSocket[] sockets;
-
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setPort(configuration.getPort());
-    }
-
-    public int getPort()
-    {
-        return port;
-    }
-
-    public void setPort(int port)
-    {
-        this.port = port;
-    }
 
     protected Runnable[] createAcceptors() throws IOException
     {
@@ -95,10 +76,13 @@ public class SocketUDPConnector extends UDPConnector
         for (int i = 0; i < sockets.length; ++i)
         {
             MulticastSocket socket = sockets[i];
-            socket.leaveGroup(getMulticastAddress());
-            if (logger.isLoggable(Level.FINE)) logger.fine("Multicast socket " + socket + " left multicast group " + getMulticastAddress());
-            socket.close();
-            if (logger.isLoggable(Level.FINE)) logger.fine("Closed multicast socket " + socket);
+            if (socket != null)
+            {
+                socket.leaveGroup(getMulticastAddress());
+                if (logger.isLoggable(Level.FINE)) logger.fine("Multicast socket " + socket + " left multicast group " + getMulticastAddress());
+                socket.close();
+                if (logger.isLoggable(Level.FINE)) logger.fine("Closed multicast socket " + socket);
+            }
         }
     }
 
@@ -135,6 +119,7 @@ public class SocketUDPConnector extends UDPConnector
 
         public Receiver(MulticastSocket socket)
         {
+            super(SocketUDPConnector.this);
             this.socket = socket;
         }
 

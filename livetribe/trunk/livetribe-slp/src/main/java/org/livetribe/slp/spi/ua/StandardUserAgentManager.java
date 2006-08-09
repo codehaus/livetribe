@@ -30,12 +30,12 @@ import org.livetribe.slp.spi.msg.SAAdvert;
 import org.livetribe.slp.spi.msg.SrvRply;
 import org.livetribe.slp.spi.msg.SrvRqst;
 import org.livetribe.slp.spi.net.MessageListener;
-import org.livetribe.slp.spi.net.SocketUDPConnector;
 import org.livetribe.slp.spi.net.TCPConnector;
 import org.livetribe.slp.spi.net.UDPConnector;
 
 /**
- * An SLP User Agent (UA) can discover SLP ServiceAgents (SAs) and SLP DirectoryAgents(DAs).
+ * TODO: rework javadocs: they refer to StandardUserAgent, more than this class.
+ * An SLP User Agent (UA) can discover SLP ServiceAgents (SAs) and SLP DirectoryAgents (DAs).
  * <br />
  * It caches the DAs discovered, and listens for multicast DAAdverts coming from new DAs
  * or from known DAs that changed (for example, rebooted).
@@ -49,25 +49,40 @@ public class StandardUserAgentManager extends StandardAgentManager implements Us
 {
     private UDPConnector notificationConnector;
 
+    public UDPConnector getNotificationConnector()
+    {
+        return notificationConnector;
+    }
+
+    public void setNotificationConnector(UDPConnector notificationConnector)
+    {
+        this.notificationConnector = notificationConnector;
+    }
+
     protected void doStart() throws IOException
     {
         super.doStart();
-        notificationConnector = createNotificationConnector();
-        notificationConnector.start();
+        if (getNotificationConnector() == null) setNotificationConnector(createNotificationConnector());
+        configureNotificationConnector(getNotificationConnector());
+        getNotificationConnector().start();
     }
 
     protected void doStop() throws IOException
     {
-        if (notificationConnector != null) notificationConnector.stop();
+        UDPConnector connector = getNotificationConnector();
+        if (connector != null) connector.stop();
         super.doStop();
     }
 
     protected UDPConnector createNotificationConnector() throws IOException
     {
-        SocketUDPConnector connector = new SocketUDPConnector();
-        connector.setConfiguration(getConfiguration());
-        connector.setPort(getConfiguration().getNotificationPort());
-        return connector;
+        return createUDPConnector();
+    }
+
+    protected void configureNotificationConnector(UDPConnector connector)
+    {
+        configureUDPConnector(connector);
+        connector.setPort(getNotificationPort());
     }
 
     public void addNotificationListener(MessageListener listener)

@@ -17,7 +17,7 @@ package org.livetribe.slp.api;
 
 import java.util.EventObject;
 
-import org.livetribe.slp.api.sa.ServiceInfo;
+import org.livetribe.slp.ServiceInfo;
 
 /**
  * @version $Rev$ $Date$

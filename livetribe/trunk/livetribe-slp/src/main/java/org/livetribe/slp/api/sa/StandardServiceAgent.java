@@ -37,11 +37,12 @@ import edu.emory.mathcs.backport.java.util.concurrent.ThreadFactory;
 import edu.emory.mathcs.backport.java.util.concurrent.TimeUnit;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceLocationException;
 import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceURL;
-import org.livetribe.slp.api.Configuration;
 import org.livetribe.slp.api.StandardAgent;
+import org.livetribe.slp.spi.Defaults;
 import org.livetribe.slp.spi.ServiceInfoCache;
 import org.livetribe.slp.spi.da.DirectoryAgentInfo;
 import org.livetribe.slp.spi.da.DirectoryAgentInfoCache;
@@ -64,10 +65,10 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
 {
     private Attributes attributes;
     private String language;
-    private boolean periodicDirectoryAgentDiscovery = true;
-    private int directoryAgentDiscoveryInitialWaitBound;
-    private long directoryAgentDiscoveryPeriod;
-    private boolean periodicServiceRenewal = true;
+    private boolean periodicDiscoveryEnabled = true;
+    private long discoveryPeriod = Defaults.SA_DISCOVERY_PERIOD;
+    private int discoveryInitialWaitBound = Defaults.SA_DISCOVERY_INITIAL_WAIT_BOUND;
+    private boolean periodicServiceRenewalEnabled = true;
     private InetAddress address;
     private InetAddress localhost;
     private ServiceAgentManager manager;
@@ -89,14 +90,11 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
         return identifier;
     }
 
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setDirectoryAgentDiscoveryInitialWaitBound(configuration.getDADiscoveryStartWaitBound());
-        setDirectoryAgentDiscoveryPeriod(configuration.getDADiscoveryPeriod());
-        if (manager != null) manager.setConfiguration(configuration);
-    }
-
+    /**
+     * Sets the ScheduledExecutorService used to perform periodic tasks such as discovery
+     * of DirectoryAgents.
+     * @see #createScheduledExecutorService()
+     */
     public void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService)
     {
         this.scheduledExecutorService = scheduledExecutorService;
@@ -124,46 +122,46 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
 
     public boolean isPeriodicDirectoryAgentDiscoveryEnabled()
     {
-        return periodicDirectoryAgentDiscovery;
+        return periodicDiscoveryEnabled;
     }
 
     public void setPeriodicDirectoryAgentDiscoveryEnabled(boolean periodicDirectoryAgentDiscoveryEnabled)
     {
-        this.periodicDirectoryAgentDiscovery = periodicDirectoryAgentDiscoveryEnabled;
+        this.periodicDiscoveryEnabled = periodicDirectoryAgentDiscoveryEnabled;
+    }
+
+    public void setDiscoveryPeriod(long discoveryPeriod)
+    {
+        this.discoveryPeriod = discoveryPeriod;
+    }
+
+    public long getDiscoveryPeriod()
+    {
+        return discoveryPeriod;
     }
 
     /**
      * Sets the bound (in seconds) to the initial random delay this ServiceAgent waits
      * before attempting to discover DirectoryAgents
      */
-    public void setDirectoryAgentDiscoveryInitialWaitBound(int directoryAgentDiscoveryInitialWaitBound)
+    public void setDiscoveryInitialWaitBound(int discoveryInitialWaitBound)
     {
-        this.directoryAgentDiscoveryInitialWaitBound = directoryAgentDiscoveryInitialWaitBound;
+        this.discoveryInitialWaitBound = discoveryInitialWaitBound;
     }
 
-    public int getDirectoryAgentDiscoveryInitialWaitBound()
+    public int getDiscoveryInitialWaitBound()
     {
-        return directoryAgentDiscoveryInitialWaitBound;
-    }
-
-    public void setDirectoryAgentDiscoveryPeriod(long directoryAgentDiscoveryPeriod)
-    {
-        this.directoryAgentDiscoveryPeriod = directoryAgentDiscoveryPeriod;
-    }
-
-    public long getDirectoryAgentDiscoveryPeriod()
-    {
-        return directoryAgentDiscoveryPeriod;
+        return discoveryInitialWaitBound;
     }
 
     public boolean isPeriodicServiceRenewalEnabled()
     {
-        return periodicServiceRenewal;
+        return periodicServiceRenewalEnabled;
     }
 
-    public void setPeriodicServiceRenewalEnabled(boolean periodicServiceRenewal)
+    public void setPeriodicServiceRenewalEnabled(boolean periodicServiceRenewalEnabled)
     {
-        this.periodicServiceRenewal = periodicServiceRenewal;
+        this.periodicServiceRenewalEnabled = periodicServiceRenewalEnabled;
     }
 
     public void setInetAddress(InetAddress address)
@@ -231,11 +229,8 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
 
         serviceAgent = new ServiceAgentInfo(getIdentifier(), "service:service-agent://" + localhost, getScopes(), getAttributes(), getLanguage());
 
-        if (manager == null)
-        {
-            manager = createServiceAgentManager();
-            manager.setConfiguration(getConfiguration());
-        }
+        if (manager == null) manager = createServiceAgentManager();
+        configureServiceAgentManager(manager);
         manager.start();
 
         udpListener = new MulticastMessageListener();
@@ -244,15 +239,18 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
         manager.addMessageListener(tcpListener, false);
 
         if (scheduledExecutorService == null) scheduledExecutorService = createScheduledExecutorService();
-        long delay = new Random(System.currentTimeMillis()).nextInt(getDirectoryAgentDiscoveryInitialWaitBound() + 1);
+        long delay = new Random(System.currentTimeMillis()).nextInt(getDiscoveryInitialWaitBound() + 1);
         if (isPeriodicDirectoryAgentDiscoveryEnabled())
-            scheduledExecutorService.scheduleWithFixedDelay(new DirectoryAgentDiscovery(), delay, getDirectoryAgentDiscoveryPeriod(), TimeUnit.SECONDS);
+            scheduledExecutorService.scheduleWithFixedDelay(new DirectoryAgentDiscovery(), delay, getDiscoveryPeriod(), TimeUnit.SECONDS);
 
         registerServices();
 
         updateAttributes();
     }
 
+    /**
+     * Creates and returns the default ScheduledExecutorService, configured to use one daemon thread.
+     */
     protected ScheduledExecutorService createScheduledExecutorService()
     {
         return Executors.newSingleThreadScheduledExecutor(new ThreadFactory()
@@ -269,6 +267,15 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
     protected ServiceAgentManager createServiceAgentManager()
     {
         return new StandardServiceAgentManager();
+    }
+
+    protected void configureServiceAgentManager(ServiceAgentManager saManager)
+    {
+        if (saManager instanceof StandardServiceAgentManager)
+        {
+            StandardServiceAgentManager serviceAgentManager = (StandardServiceAgentManager)saManager;
+            serviceAgentManager.setPort(getPort());
+        }
     }
 
     private void updateAttributes()
@@ -298,6 +305,7 @@ public class StandardServiceAgent extends StandardAgent implements ServiceAgent
         manager.removeMessageListener(tcpListener, false);
         manager.removeMessageListener(udpListener, true);
         manager.stop();
+        manager = null;
     }
 
     private void registerServices() throws IOException, ServiceLocationException

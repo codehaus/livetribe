@@ -26,8 +26,8 @@ import edu.emory.mathcs.backport.java.util.concurrent.locks.Lock;
 import edu.emory.mathcs.backport.java.util.concurrent.locks.ReentrantLock;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceType;
-import org.livetribe.slp.api.sa.ServiceInfo;
 import org.livetribe.slp.spi.filter.Filter;
 
 /**

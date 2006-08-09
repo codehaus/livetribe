@@ -28,9 +28,9 @@ import edu.emory.mathcs.backport.java.util.concurrent.RejectedExecutionException
 import edu.emory.mathcs.backport.java.util.concurrent.SynchronousQueue;
 import edu.emory.mathcs.backport.java.util.concurrent.ThreadPoolExecutor;
 import edu.emory.mathcs.backport.java.util.concurrent.TimeUnit;
+import edu.emory.mathcs.backport.java.util.concurrent.atomic.AtomicBoolean;
 import edu.emory.mathcs.backport.java.util.concurrent.locks.Lock;
 import edu.emory.mathcs.backport.java.util.concurrent.locks.ReentrantLock;
-import org.livetribe.slp.api.Configuration;
 
 /**
  * @version $Rev$ $Date$
@@ -39,30 +39,13 @@ public abstract class NetworkConnector
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Configuration configuration;
     private final List listeners = new ArrayList();
     private final Lock listenersLock = new ReentrantLock();
     private InetAddress[] inetAddresses;
     private volatile boolean running;
+    private final AtomicBoolean starting = new AtomicBoolean(false);
     private ThreadPoolExecutor connectionPool;
     private ExecutorService acceptorPool;
-
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        this.configuration = configuration;
-        String[] interfaces = configuration.getInterfaceAddresses();
-        if (interfaces != null)
-        {
-            InetAddress[] interfaceAddresses = new InetAddress[interfaces.length];
-            for (int i = 0; i < interfaces.length; ++i) interfaceAddresses[i] = InetAddress.getByName(interfaces[i]);
-            setInetAddresses(interfaceAddresses);
-        }
-    }
-
-    protected Configuration getConfiguration()
-    {
-        return configuration;
-    }
 
     public void setAcceptorPool(ExecutorService acceptorPool)
     {
@@ -125,7 +108,7 @@ public abstract class NetworkConnector
 
     public void start() throws IOException
     {
-        if (isRunning())
+        if (!starting.compareAndSet(false, true) || isRunning())
         {
             if (logger.isLoggable(Level.FINER)) logger.finer("Connector " + this + " is already started");
             return;
@@ -146,10 +129,20 @@ public abstract class NetworkConnector
         if (acceptors != null && acceptors.length > 0)
         {
             int size = acceptors.length;
-            if (acceptorPool == null) acceptorPool = new ThreadPoolExecutor(size, Integer.MAX_VALUE, 5, TimeUnit.SECONDS, new SynchronousQueue());
-            if (connectionPool == null) connectionPool = new ThreadPoolExecutor(size, Integer.MAX_VALUE, 5, TimeUnit.SECONDS, new LinkedBlockingQueue());
+            if (acceptorPool == null) acceptorPool = createAcceptorPool(size);
+            if (connectionPool == null) connectionPool = createConnectionPool(size);
             for (int i = 0; i < acceptors.length; ++i) accept(acceptors[i]);
         }
+    }
+
+    protected ExecutorService createAcceptorPool(int suggestedCoreSize)
+    {
+        return new ThreadPoolExecutor(suggestedCoreSize, Integer.MAX_VALUE, 5, TimeUnit.SECONDS, new SynchronousQueue());
+    }
+
+    protected ThreadPoolExecutor createConnectionPool(int suggestedCoreSize)
+    {
+        return new ThreadPoolExecutor(suggestedCoreSize, Integer.MAX_VALUE, 5, TimeUnit.SECONDS, new LinkedBlockingQueue());
     }
 
     public boolean isRunning()
@@ -159,7 +152,7 @@ public abstract class NetworkConnector
 
     public void stop() throws IOException
     {
-        if (!isRunning())
+        if (!starting.compareAndSet(true, false) && !isRunning())
         {
             if (logger.isLoggable(Level.FINER)) logger.finer("Connector " + this + " is already stopped");
             return;
@@ -167,11 +160,10 @@ public abstract class NetworkConnector
 
         if (logger.isLoggable(Level.FINER)) logger.finer("Connector " + this + " stopping...");
 
-        running = false;
-
         doStop();
-
         clearMessageListeners();
+
+        running = false;
 
         if (logger.isLoggable(Level.FINE)) logger.fine("Connector " + this + " stopped successfully");
     }
@@ -201,7 +193,7 @@ public abstract class NetworkConnector
         {
             if (acceptorPool == null)
             {
-                if (isRunning()) throw new AssertionError("BUG: acceptor pool has been reset, but this connector is still running");
+                if (isRunning() && starting.get()) throw new AssertionError("BUG: acceptor pool has been reset, but this connector is still running");
             }
             else
             {
@@ -210,7 +202,7 @@ public abstract class NetworkConnector
         }
         catch (RejectedExecutionException x)
         {
-            if (isRunning()) throw x;
+            if (isRunning() && starting.get()) throw x;
             if (logger.isLoggable(Level.FINEST)) logger.finest("Connector has been stopped, rejected execution of " + executor);
         }
     }
@@ -221,7 +213,7 @@ public abstract class NetworkConnector
         {
             if (connectionPool == null)
             {
-                if (isRunning()) throw new AssertionError("BUG: connection pool has been reset, but this connector is still running");
+                if (isRunning() && starting.get()) throw new AssertionError("BUG: connection pool has been reset, but this connector is still running");
             }
             else
             {
@@ -230,7 +222,7 @@ public abstract class NetworkConnector
         }
         catch (RejectedExecutionException x)
         {
-            if (isRunning()) throw x;
+            if (isRunning() && starting.get()) throw x;
             if (logger.isLoggable(Level.FINEST)) logger.finest("Connector has been stopped, rejected execution of " + executor);
         }
     }

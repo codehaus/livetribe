@@ -20,9 +20,9 @@ import java.util.Locale;
 import org.livetribe.slp.Attributes;
 import org.livetribe.slp.SLPTestSupport;
 import org.livetribe.slp.Scopes;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceURL;
-import org.livetribe.slp.api.sa.ServiceInfo;
 
 /**
  * @version $Rev$ $Date$

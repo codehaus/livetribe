@@ -22,7 +22,7 @@ import java.net.Socket;
 import java.util.List;
 
 import org.livetribe.slp.Scopes;
-import org.livetribe.slp.api.sa.ServiceInfo;
+import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.spi.AgentManager;
 import org.livetribe.slp.spi.msg.DAAdvert;
 import org.livetribe.slp.spi.msg.SrvAck;

@@ -28,21 +28,15 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 
-import org.livetribe.slp.api.Configuration;
+import org.livetribe.slp.spi.Defaults;
 
 /**
  * @version $Rev$ $Date$
  */
 public class SocketTCPConnector extends TCPConnector
 {
-    private int port;
+    private int port = Defaults.PORT;
     private ServerSocket[] serverSockets;
-
-    public void setConfiguration(Configuration configuration) throws IOException
-    {
-        super.setConfiguration(configuration);
-        setPort(configuration.getPort());
-    }
 
     public int getPort()
     {
@@ -80,6 +74,7 @@ public class SocketTCPConnector extends TCPConnector
         {
             InetSocketAddress bindAddress = bindAddresses[i];
             serverSockets[i] = new ServerSocket();
+            serverSockets[i].setReuseAddress(true);
             serverSockets[i].bind(bindAddress);
             if (logger.isLoggable(Level.FINE)) logger.fine("Bound server socket to " + bindAddress);
 
@@ -96,8 +91,11 @@ public class SocketTCPConnector extends TCPConnector
         for (int i = 0; i < serverSockets.length; ++i)
         {
             ServerSocket socket = serverSockets[i];
-            socket.close();
-            if (logger.isLoggable(Level.FINE)) logger.fine("Closed server socket " + socket);
+            if (socket != null)
+            {
+                socket.close();
+                if (logger.isLoggable(Level.FINE)) logger.fine("Closed server socket " + socket);
+            }
         }
     }
 
