@@ -155,14 +155,14 @@
             <url>http://svn.apache.org/maven-snapshot-repository</url>
         </repository>
         <repository>
-            <id>livetribe</id>
-            <name>LiveTribe Repository</name>
-            <url>http://dist.codehaus.org/livetribe/maven/m2</url>
+            <id>codehaus</id>
+            <name>CodeHaus Repository</name>
+            <url>http://repository.codehaus.org</url>
         </repository>
         <repository>
-            <id>livetribe.snapshots</id>
-            <name>LiveTribe Repository</name>
-            <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
+            <id>codehaus.snapshots</id>
+            <name>CodeHaus Snapshots Repository</name>
+            <url>http://snapshots.repository.codehaus.org</url>
         </repository>
     </repositories>
 
@@ -178,16 +178,17 @@
         <repository>
             <id>livetribe-repo</id>
             <name>LiveTribe Central Repository</name>
-            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2</url>
+            <url>dav:https://dav.codehaus.org/repository/livetribe/</url>
         </repository>
         <snapshotRepository>
             <id>livetribe-snapshots</id>
-            <name>LiveTribe Central Development Repository</name>
-            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2-snapshots</url>
+            <name>LiveTribe Central Snapshots Repository</name>
+            <url>dav:https://dav.codehaus.org/snapshots.repository/livetribe/</url>
         </snapshotRepository>
         <site>
             <id>livetribe-website</id>
-            <url>dav:https://dav.codehaus.org/livetribe</url>
+            <name>LiveTribe Web Site</name>
+            <url>dav:https://dav.codehaus.org/livetribe/</url>
         </site>
     </distributionManagement>
 
