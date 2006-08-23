@@ -112,6 +112,19 @@
                         <jvm>${java.home}/bin/java</jvm>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Maven-GroupId>${project.groupId}</Maven-GroupId>
+                                <Maven-ArtifactId>${project.artifactId}</Maven-ArtifactId>
+                                <Maven-Version>${project.version}</Maven-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -126,7 +139,8 @@
                         </goals>
                         <configuration>
                             <remoteRepositoryId>livetribe-m1</remoteRepositoryId>
-                            <remoteRepositoryUrl>dav:https://dav.codehaus.org/dist/livetribe/maven/m1</remoteRepositoryUrl>
+                            <remoteRepositoryUrl>
+                                dav:https://dav.codehaus.org/dist/livetribe/maven/m1</remoteRepositoryUrl>
                         </configuration>
                     </execution>
                 </executions>
@@ -173,7 +187,7 @@
     <reporting />
 
     <dependencyManagement />
-    
+
     <distributionManagement>
         <repository>
             <id>livetribe-repo</id>
