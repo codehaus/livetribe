@@ -25,6 +25,25 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                            <Bundle-Name>LiveTribe-IOC</Bundle-Name>
+                            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                            <!-- OSGI does not understand version numbers with 'SNAPSHOT' inside -->
+                            <!--<Bundle-Version>${project.version}</Bundle-Version>-->
+                            <Bundle-Version>1.0.0</Bundle-Version>
+                            <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+                            <Bundle-Classpath>.</Bundle-Classpath>
+                            <Export-Package>org.livetribe.ioc</Export-Package>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
