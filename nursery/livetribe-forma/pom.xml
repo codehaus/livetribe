@@ -34,6 +34,17 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <executions>
+                <execution>
+                    <goals>
+                    <goal>clean</goal>
+                    </goals>
+                </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -41,4 +52,16 @@
         <bootVersion>1.0-SNAPSHOT</bootVersion>
     </properties>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
