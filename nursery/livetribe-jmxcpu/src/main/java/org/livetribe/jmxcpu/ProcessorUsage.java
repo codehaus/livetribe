@@ -19,12 +19,16 @@ package org.livetribe.jmxcpu;
 
 import java.util.logging.Logger;
 
-public abstract class ProcessorUsage
+public abstract class ProcessorUsage implements ProcessorUsageMBean
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
     
     private static final String OS_LINUX = "Linux";
     private static final String OS_WINXP = "Windows XP";
+    
+    public static final int USER_INDEX = 0;
+    public static final int SYSTEM_INDEX = 1;
+    public static final int IDLE_INDEX = 2;
     
     /**
      * Returns the correct instance of ProcessorUsage class based on the
@@ -37,28 +41,17 @@ public abstract class ProcessorUsage
         /* if platform is Linux-based */
         if(System.getProperty("os.name").equals(OS_LINUX))
             return new ProcStatProcessorUsage();
+        if(System.getProperty("os.name").equals(OS_WINXP))
+            return new Win32ProcessorUsage();
         // TODO : return the correct subclass for other OS's
         return null;
     }
     
-    /**
-     * This method will return a boolean indicating whether this 
-     * particular ProcessorUsage class can return information regarding
-     * its multiple processors if it has one.
-     */
     public abstract boolean supportsMultiprocessorUsageQuery(); 
     
-    public abstract int getProcessorAverageKernelUsage() throws Exception;
+    public abstract int[] getProcessorUsage() throws Exception;
     
-    public abstract int getProcessorAverageUserUsage() throws Exception;
-    
-    public abstract int getProcessorAverageIdleUsage() throws Exception;
-    
-    public abstract int[] getProcessorsKernelUsage() throws Exception;
-    
-    public abstract int[] getProcessorsUserUsage() throws Exception;
-    
-    public abstract int[] getProcessorsIdleUsage() throws Exception;
+    public abstract int[][] getProcessorsUsage() throws Exception; 
     
     public abstract ProcessorUsageInfo getProcessorAverageUsageInfo() throws Exception;
     
