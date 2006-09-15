@@ -18,6 +18,7 @@ package org.livetribe.arm.xbean;
 
 import junit.framework.TestCase;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
+import org.apache.xbean.server.spring.main.SpringBootstrap;
 import org.opengroup.arm40.metric.ArmMetricFactory;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
@@ -35,6 +36,13 @@ public class ArmXBeanTest extends TestCase
 
         ApplicationDefinition def = (ApplicationDefinition) context.getBean("myAppDef");
         ArmApplicationDefinition wrapped = (ArmApplicationDefinition) def.unWrap();
+    }
+
+    public void testXBeanDeployer()
+    {
+        SpringBootstrap bootstrap = new SpringBootstrap();
+        bootstrap.setConfigurationFile("test-xbean.xml");
+        SpringBootstrap.main(new String[0], bootstrap);
     }
 
     public void setUp()
