@@ -61,7 +61,7 @@
 
     <modules>
         <module>livetribe-ioc</module>
-        <module>livetribe-forma</module>
+        <module>livetribe-mock</module>
     </modules>
 
     <repositories>
