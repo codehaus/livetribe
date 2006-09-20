@@ -47,7 +47,7 @@
     </license>
 
     <resourceadapter>
-        <resourceadapter-class>org.livetribe.arm.ra.activemq.ActiveMQResourceAdapter</resourceadapter-class>
+        <resourceadapter-class>org.livetribe.arm.ra.activemq.ActiveMQResourceAdapterWrapper</resourceadapter-class>
         <config-property>
             <description>
                 The URL to the ActiveMQ server that you want this connection to connect to. If using
@@ -124,7 +124,7 @@
                 <connectionfactory-interface>org.livetribe.arm.connection.ConnectionFactory</connectionfactory-interface>
                 <connectionfactory-impl-class>org.livetribe.arm.ra.activemq.ActiveMQConnectionFactory</connectionfactory-impl-class>
                 <connection-interface>org.livetribe.arm.connection.Connection</connection-interface>
-                <connection-impl-class>org.livetribe.arm.ra.activemq.ManagedConnectionHandle</connection-impl-class>
+                <connection-impl-class>org.livetribe.arm.ra.activemq.ConnectionHandle</connection-impl-class>
             </connection-definition>
             <transaction-support>XATransaction</transaction-support>
             <authentication-mechanism>

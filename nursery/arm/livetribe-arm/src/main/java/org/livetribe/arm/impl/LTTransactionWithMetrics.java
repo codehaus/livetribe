@@ -16,170 +16,399 @@
  */
 package org.livetribe.arm.impl;
 
+import java.util.List;
+
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmTransactionWithMetrics;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
 import org.opengroup.arm40.transaction.ArmApplication;
+import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.AbstractIdentifiableObject;
+import org.livetribe.arm.connection.Connection;
+import org.livetribe.arm.connection.StaticThreadBindMonitor;
+import org.livetribe.arm.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionWithMetrics extends AbstractIdentifiableObject implements ArmTransactionWithMetrics
+class LTTransactionWithMetrics extends AbstractIdentifiableObject implements ArmTransactionWithMetrics, ApplicationLifecycleListener
 {
-    private final ArmApplication app;
-    private final ArmTransactionWithMetricsDefinition definition;
-    private final ArmMetricGroup group;
+    private final Connection connection;
+    private final UUIDGen guidGenerator;
+    private final ArmApplication application;
+    private final ArmTransactionWithMetricsDefinition tranMetricsDef;
+    private final MetricGroup metricGroup;
+    private ArmCorrelator parentCorrelator = null;
+    private ArmCorrelator correlator = ArmAPIUtil.newArmCorrelator(null);
+    private int status = ArmConstants.STATUS_INVALID;
+    private long start = 0;
+    private long blocked = 1;
+    private String contextURI;
+    private String[] contextValues = new String[20];
+    private ArmUser user;
+    private boolean trace = false;
 
-    public LTTransactionWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
+    private State state;
+
+    LTTransactionWithMetrics(String oid, Connection connection, UUIDGen guidGenerator,
+                             ArmApplication application, ArmTransactionWithMetricsDefinition tranMetricsDef, ArmMetricGroup metricGroup)
     {
-        this.app = app;
-        this.definition = definition;
-        this.group = group;
+        super(oid);
+
+        this.connection = connection;
+        this.guidGenerator = guidGenerator;
+        this.application = application;
+        this.tranMetricsDef = tranMetricsDef;
+        this.metricGroup = (MetricGroup) metricGroup;
+
+        this.state = STOPPED;
+
+        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+    }
+
+    public synchronized void end()
+    {
+        state.reset();
+        setBad(true);
     }
 
     public ArmTransactionWithMetricsDefinition getTransactionWithMetricsDefinition()
     {
-        return definition;
+        return tranMetricsDef;
     }
 
     public ArmMetricGroup getMetricGroup()
     {
-        return group;
+        return metricGroup;
     }
 
     public int bindThread()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        StaticThreadBindMonitor.bind(correlator.getBytes());
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public long blocked()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return state.blocked();
     }
 
     public ArmApplication getApplication()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return application;
     }
 
     public String getContextURIValue()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return contextURI;
     }
 
     public String getContextValue(int index)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return (index < 20 ? contextValues[index] : null);
     }
 
     public ArmCorrelator getCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return correlator;
     }
 
     public ArmCorrelator getParentCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return parentCorrelator;
     }
 
     public int getStatus()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return status;
     }
 
     public ArmTransactionDefinition getDefinition()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return tranMetricsDef;
     }
 
     public ArmUser getUser()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return user;
     }
 
     public boolean isTraceRequested()
     {
-        return false;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return trace;
     }
 
-    public int reset()
+    public synchronized int reset()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        state = state.reset();
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setArrivalTime()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        state.setArrivalTime();
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setContextURIValue(String value)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        contextURI = value;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setContextValue(int index, String value)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (index > 20) return StaticArmAPIMonitor.error(TransactionErrorCodes.INDEX_OUT_OF_RANGE);
+
+        if (value != null)
+        {
+            int length = value.length();
+
+            if (length == 0) value = null;
+            if (length > 127) StaticArmAPIMonitor.warning(TransactionErrorCodes.ID_PROP_TOO_LONG);
+            if (tranMetricsDef.getIdentityProperties().getContextName(index) != null)
+            {
+                contextValues[index] = value;
+            }
+            else
+            {
+                StaticArmAPIMonitor.warning(TransactionErrorCodes.ID_PROP_IGNORED);
+            }
+        }
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setTraceRequested(boolean traceState)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        trace = traceState;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setUser(ArmUser user)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        this.user = user;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int start()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return start((byte[]) null);
     }
 
     public int start(byte[] parentCorr)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return start(parentCorr, 0);
     }
 
     public int start(byte[] parentCorr, int offset)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return start(ArmAPIUtil.newArmCorrelator(parentCorr, offset));
     }
 
-    public int start(ArmCorrelator parentCorr)
+    public synchronized int start(ArmCorrelator parentCorr)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        state = state.start(parentCorr);
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int stop(int status)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return stop(status, null);
     }
 
-    public int stop(int status, String diagnosticDetail)
+    public synchronized int stop(int status, String diagnosticDetail)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        state = state.stop(status, diagnosticDetail);
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int unbindThread()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        StaticThreadBindMonitor.unbind(correlator.getBytes());
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
-    public int unblocked(long blockHandle)
+    public synchronized int unblocked(long blockHandle)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        state.unblocked(blockHandle);
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
-    public int update()
+    public synchronized int update()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        state.update();
+
+        return GeneralErrorCodes.SUCCESS;
     }
+
+    private abstract class State
+    {
+        abstract void setArrivalTime();
+
+        abstract State start(ArmCorrelator parent);
+
+        abstract State stop(int code, String diagnosticDetail);
+
+        abstract void update();
+
+        abstract long blocked();
+
+        abstract void unblocked(long handle);
+
+        abstract State reset();
+    }
+
+    private final State STOPPED = new State()
+    {
+        void setArrivalTime()
+        {
+            start = System.currentTimeMillis();
+        }
+
+        State start(ArmCorrelator parent)
+        {
+            correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
+                                                           trace || parent.isAgentTrace() || parent.isApplicationTrace());
+            if (start == 0) start = System.currentTimeMillis();
+            parentCorrelator = parent;
+
+            metricGroup.start();
+            metricGroup.snapshot();
+
+            connection.start(getObjectId(),
+                             correlator.getBytes(),
+                             start,
+                             (parent != null ? parent.getBytes() : null),
+                             user,
+                             contextValues,
+                             contextURI);
+
+            return STARTED;
+        }
+
+        State stop(int code, String diagnosticDetail)
+        {
+            return this;
+        }
+
+        void update()
+        {
+        }
+
+        long blocked()
+        {
+            return 0;
+        }
+
+        void unblocked(long handle)
+        {
+        }
+
+        State reset()
+        {
+            connection.reset(getObjectId(), correlator.getBytes());
+            start = 0;
+
+            unbindThread();
+
+            return this;
+        }
+
+        public String toString()
+        {
+            return "STOPPED";
+        }
+    };
+
+    private final State STARTED = new State()
+    {
+        void setArrivalTime()
+        {
+        }
+
+        State start(ArmCorrelator parent)
+        {
+            return this;
+        }
+
+        State stop(int code, String diagnosticDetail)
+        {
+            long end = System.currentTimeMillis();
+
+            metricGroup.snapshot();
+            List[] metrics = metricGroup.stop();
+
+            connection.stop(getObjectId(), correlator.getBytes(), end, code, diagnosticDetail, metrics);
+
+            start = 0;
+
+            if (blocked != 1)
+            {
+                StaticArmAPIMonitor.warning(TransactionErrorCodes.NOT_ALL_BLOCKS_REMOVED);
+                blocked = 1;
+            }
+
+            unbindThread();
+
+            status = code;
+
+            return STOPPED;
+        }
+
+        void update()
+        {
+            metricGroup.snapshot();
+            connection.update(getObjectId(), correlator.getBytes(), System.currentTimeMillis());
+        }
+
+        long blocked()
+        {
+            long handle = blocked++;
+
+            connection.block(getObjectId(), correlator.getBytes(), handle, System.currentTimeMillis());
+
+            return handle;
+        }
+
+        void unblocked(long handle)
+        {
+            blocked--;
+            connection.unblocked(getObjectId(), correlator.getBytes(), handle, System.currentTimeMillis());
+        }
+
+        State reset()
+        {
+            connection.reset(getObjectId(), correlator.getBytes());
+
+            metricGroup.clear();
+
+            start = 0;
+            blocked = 1;
+
+            unbindThread();
+
+            return STOPPED;
+        }
+
+        public String toString()
+        {
+            return "STARTED";
+        }
+    };
 }

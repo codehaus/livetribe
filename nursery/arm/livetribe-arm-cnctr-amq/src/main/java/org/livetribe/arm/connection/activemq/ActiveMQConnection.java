@@ -21,6 +21,8 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
+import java.util.List;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
@@ -30,6 +32,8 @@ import org.livetribe.arm.connection.messages.ApplicationDefinitionMessage;
 import org.livetribe.arm.connection.messages.ApplicationMessage;
 import org.livetribe.arm.connection.messages.ApplicationRemoteMessage;
 import org.livetribe.arm.connection.messages.BlockMessage;
+import org.livetribe.arm.connection.messages.IdentityPropertiesMessage;
+import org.livetribe.arm.connection.messages.IdentityPropertiesTransactionMessage;
 import org.livetribe.arm.connection.messages.Message;
 import org.livetribe.arm.connection.messages.MetricGroupDefinitionMessage;
 import org.livetribe.arm.connection.messages.ResetMessage;
@@ -39,6 +43,7 @@ import org.livetribe.arm.connection.messages.TransactionDefinitionMessage;
 import org.livetribe.arm.connection.messages.TransactionMessage;
 import org.livetribe.arm.connection.messages.UnblockedMessage;
 import org.livetribe.arm.connection.messages.UpdateMessage;
+
 
 /**
  * @version $Revision: $ $Date: $
@@ -86,64 +91,134 @@ public class ActiveMQConnection implements Connection
         connection.close();
     }
 
-    public void introduceApplicationDefinition(byte[] appDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, byte[] id)
+    public void declareIdentityProperties(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames)
     {
-        send(new ApplicationDefinitionMessage(appDefId, name, idNames, idValues, ctxNames, id));
+        send(new IdentityPropertiesMessage(idPropOID, idNames, idValues, ctxNames));
     }
 
-    public void introduceApplication(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues)
+    public void declareIdentityPropertiesTransaction(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames, String uriValue)
     {
-        send(new ApplicationMessage(appId, appDefId, group, instance, contextValues));
+        send(new IdentityPropertiesTransactionMessage(idPropOID, idNames, idValues, ctxNames, uriValue));
     }
 
-    public void introduceApplicationRemote(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues, byte[] systemAddress)
+    public void declareApplicationDefinition(String appDefOID, String name, String idPropOID, byte[] id)
     {
-        send(new ApplicationRemoteMessage(appId, appDefId, group, instance, contextValues, systemAddress));
+        send(new ApplicationDefinitionMessage(appDefOID, name, idPropOID, id));
     }
 
-    public void introduceTransactionDefinition(byte[] transDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, String uri, byte[] id)
+    public void declareApplication(String appOID, String appDefOID, String group, String instance, String[] contextValues)
     {
-        send(new TransactionDefinitionMessage(transDefId, name, idNames, idValues, ctxNames, uri, id));
+        send(new ApplicationMessage(appOID, appDefOID, group, instance, contextValues));
     }
 
-    public void associateTransaction(byte[] transId, byte [] appId, byte [] transDefId)
+    public void declareApplicationRemote(String appOID, String appDefOID, String group, String instance, String[] contextValues, byte[] systemAddress)
     {
-        send(new TransactionMessage(transId, appId, transDefId));
+        send(new ApplicationRemoteMessage(appOID, appDefOID, group, instance, contextValues, systemAddress));
     }
 
-    public void introduceMetricGroupDefinition(byte[] metricGroupDef, byte[][] appDef, String[] name, String[] units, short[] usage, byte[][]id)
+    public void declareTransactionDefinition(String transDefOID, String name, String idPropTranOID, byte[] id)
     {
-        send(new MetricGroupDefinitionMessage(metricGroupDef, appDef, name, units, usage, id));
+        send(new TransactionDefinitionMessage(transDefOID, name, idPropTranOID, id));
     }
 
-    public void start(byte[] transId, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
+    public void associateTransaction(String transOID, String appOID, String transDefOID)
     {
-        send(new StartMessage(transId, correlator, start, parent, user, contextValues, contextURI));
+        send(new TransactionMessage(transOID, appOID, transDefOID));
     }
 
-    public void update(byte[] transId, byte[] correlator)
+    public void declareMetricGroupDefinition(String metricGroupDefOID, String[] appDefOID, String[] name, String[] units, short[] usage, byte[][]id)
     {
-        send(new UpdateMessage(transId, correlator));
+        send(new MetricGroupDefinitionMessage(metricGroupDefOID, appDefOID, name, units, usage, id));
     }
 
-    public void block(byte[] transId, byte[] correlator, long handle)
+    public void declareTransactionWithMetricsDefinition(String transDefOID, String appDefOID, String name, String idPropOID, String metricGroupDefOID, byte[] id)
     {
-        send(new BlockMessage(transId, correlator, handle));
+        //todo: consider this autogenerated code
     }
 
-    public void unblocked(byte[] transId, byte[] correlator, long handle)
+    public void declareMetricGroup(String metricGroupOID, String metricGroupDefOID)
     {
-        send(new UnblockedMessage(transId, correlator, handle));
+        //todo: consider this autogenerated code
     }
 
-    public void stop(byte[] transId, byte[] correlator, long end, int status, String message)
+    public void declareTranReportWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID)
     {
-        send(new StopMessage(transId, correlator, end, status, message));
+        //todo: consider this autogenerated code
     }
 
-    public void reset(byte[] transId, byte[] correlator)
+    public void declareTranWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID)
     {
-        send(new ResetMessage(transId, correlator));
+        //todo: consider this autogenerated code
+    }
+
+    public void start(String transOID, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
+    {
+        send(new StartMessage(transOID, correlator, start, parent, user, contextValues, contextURI));
+    }
+
+    public void update(String transOID, byte[] correlator, long ts)
+    {
+        send(new UpdateMessage(transOID, correlator, ts));
+    }
+
+    public void block(String transOID, byte[] correlator, long handle, long ts)
+    {
+        send(new BlockMessage(transOID, correlator, handle, ts));
+    }
+
+    public void unblocked(String transOID, byte[] correlator, long handle, long ts)
+    {
+        send(new UnblockedMessage(transOID, correlator, handle, ts));
+    }
+
+    public void stop(String transOID, byte[] correlator, long end, int status, String message)
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void stop(String transOID, byte[] correlator, long end, int status, String message, List[] metrics)
+    {
+        send(new StopMessage(transOID, correlator, end, status, message));
+    }
+
+    public void reset(String transOID, byte[] correlator)
+    {
+        send(new ResetMessage(transOID, correlator));
+    }
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, String diagnosticDetail)
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, long stopTime, String diagnosticDetail)
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, String diagnosticDetail, List[] metrics)
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, long stopTime, String diagnosticDetail, List[] metrics)
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void start()
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void stop()
+    {
+        //todo: consider this autogenerated code
+    }
+
+    public void close()
+    {
+        //todo: consider this autogenerated code
     }
 
     private void send(Message msg)

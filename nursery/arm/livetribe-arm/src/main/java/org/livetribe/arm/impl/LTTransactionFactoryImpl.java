@@ -27,7 +27,6 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.AbstractFactoryBase;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
@@ -43,7 +42,15 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
         instance = ArmAPIUtil.checkOptional255(instance);
         contextValues = ArmAPIUtil.checkOptional(appDef, contextValues);
 
-        return new LTApplication(appDef, group, instance, contextValues);
+        LTApplication app = new LTApplication(allocateOID(), appDef, group, instance, contextValues);
+
+        getConnection().declareApplication(app.getObjectId(),
+                                           ((Identifiable) appDef).getObjectId(),
+                                           group,
+                                           instance,
+                                           contextValues);
+
+        return app;
     }
 
     public ArmApplicationDefinition newArmApplicationDefinition(String name, ArmIdentityProperties identityProperties, ArmID id)
@@ -52,7 +59,14 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
         identityProperties = ArmAPIUtil.checkOptional(identityProperties);
         id = ArmAPIUtil.checkOptional(id);
 
-        return new LTApplicationDefinition(name, identityProperties, id);
+        LTApplicationDefinition appDef = new LTApplicationDefinition(allocateOID(), name, identityProperties, id);
+
+        getConnection().declareApplicationDefinition(appDef.getObjectId(),
+                                                     name,
+                                                     ArmAPIUtil.extractOID((Identifiable) identityProperties),
+                                                     ArmAPIUtil.extractArmId(id));
+
+        return appDef;
     }
 
     public ArmCorrelator newArmCorrelator(byte[] corrBytes)
@@ -110,7 +124,14 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
             }
         }
 
-        return new LTIdentityProperties(cleanIdNames, cleanIdValues, cleanCtxNames);
+        LTIdentityProperties idProps = new LTIdentityProperties(allocateOID(), cleanIdNames, cleanIdValues, cleanCtxNames);
+
+        getConnection().declareIdentityProperties(idProps.getObjectId(),
+                                                  cleanIdNames,
+                                                  cleanIdValues,
+                                                  cleanCtxNames);
+
+        return idProps;
     }
 
     public ArmIdentityPropertiesTransaction newArmIdentityPropertiesTransaction(String[] identityNames, String[] identityValues, String[] contextNames, String uriValue)
@@ -135,7 +156,15 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
         if (uriValue != null && uriValue.length() > 4096) StaticArmAPIMonitor.warning(URI_TOO_LONG);
 
-        return new LTIdentityPropertiesTransaction(cleanIdNames, cleanIdValues, cleanCtxNames, uriValue);
+        LTIdentityPropertiesTransaction idPropsTrans = new LTIdentityPropertiesTransaction(allocateOID(), cleanIdNames, cleanIdValues, cleanCtxNames, uriValue);
+
+        getConnection().declareIdentityPropertiesTransaction(idPropsTrans.getObjectId(),
+                                                             cleanIdNames,
+                                                             cleanIdValues,
+                                                             cleanCtxNames,
+                                                             uriValue);
+
+        return idPropsTrans;
     }
 
     public ArmTransaction newArmTransaction(ArmApplication app, ArmTransactionDefinition definition)
@@ -143,7 +172,13 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
         app = ArmAPIUtil.checkRequired(app);
         definition = ArmAPIUtil.checkRequired(definition);
 
-        return new LTTransaction(app, definition);
+        LTTransaction transaction = new LTTransaction(allocateOID(), getConnection(), getGuidGenerator(), app, definition);
+
+        getConnection().associateTransaction(transaction.getObjectId(),
+                                             ((Identifiable) app).getObjectId(),
+                                             ((Identifiable) definition).getObjectId());
+
+        return transaction;
     }
 
     public ArmTransactionDefinition newArmTransactionDefinition(ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmID id)
@@ -153,7 +188,14 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
         identityProperties = ArmAPIUtil.checkOptional(identityProperties);
         id = ArmAPIUtil.checkOptional(id);
 
-        return new LTTransactionDefinition(app, name, identityProperties, id);
+        LTTransactionDefinition transDef = new LTTransactionDefinition(allocateOID(), app, name, identityProperties, id);
+
+        getConnection().declareTransactionDefinition(transDef.getObjectId(),
+                                                     name,
+                                                     ArmAPIUtil.extractOID((Identifiable) identityProperties),
+                                                     ArmAPIUtil.extractArmId(id));
+
+        return transDef;
     }
 
     public ArmUser newArmUser(String name, ArmID id)

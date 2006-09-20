@@ -3,7 +3,8 @@ package org.livetribe.arm.xbean;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-import org.livetribe.arm.LTObject;
+import org.livetribe.arm.impl.LTObject;
+
 
 /**
  * If the object is bad, then don't even bother the connector with the method

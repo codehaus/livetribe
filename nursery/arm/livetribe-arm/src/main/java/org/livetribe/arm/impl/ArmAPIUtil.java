@@ -32,24 +32,19 @@ import org.opengroup.arm40.transaction.ArmIdentityProperties;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
-import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.Identifiable;
-import org.livetribe.arm.KnitPoint;
-import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class ArmAPIUtil implements GeneralErrorCodes
+class ArmAPIUtil implements GeneralErrorCodes
 {
     private static final LTApplicationDefinition BAD_APP_DEF;
     private static final AbstractMetricDefinition BAD_METRIC_DEF;
     private static final LTApplication BAD_APP;
     private static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
     private static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
-    private static final AbstractMetricBase BAD_METRIC;
     private static final AbstractMetricBase[] BAD_METRICS;
     private static final LTMetricGroup BAD_METRIC_GROUP;
     private static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
@@ -57,7 +52,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
 
     static
     {
-        BAD_APP_DEF = new LTApplicationDefinition("", null, null)
+        BAD_APP_DEF = new LTApplicationDefinition("org.livetribe.arm.OID.BadApplicationDefinition", "", null, null)
         {
             public boolean isBad()
             {
@@ -73,7 +68,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_APP = new LTApplication(BAD_APP_DEF, "", null, null)
+        BAD_APP = new LTApplication("org.livetribe.arm.OID.BadApplication", BAD_APP_DEF, "", null, null)
         {
             public boolean isBad()
             {
@@ -81,7 +76,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC_GRP_DEF = new LTMetricGroupDefinition(new LTMetricDefinition[7])
+        BAD_METRIC_GRP_DEF = new LTMetricGroupDefinition("org.livetribe.arm.OID.BadMetricGroupDefinition", new MetricDefinition[7])
         {
             public boolean isBad()
             {
@@ -89,7 +84,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_TRANS_W_METRICS_DEF = new LTTransactionWithMetricsDefinition(BAD_APP_DEF, "", null, BAD_METRIC_GRP_DEF, null)
+        BAD_TRANS_W_METRICS_DEF = new LTTransactionWithMetricsDefinition("org.livetribe.arm.OID.BadTransactionWithMetricsDefinition", BAD_APP_DEF, "", null, BAD_METRIC_GRP_DEF, null)
         {
             public boolean isBad()
             {
@@ -97,7 +92,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC = new AbstractMetricBase(BAD_METRIC_DEF)
+        AbstractMetricBase BAD_METRIC = new AbstractMetricBase(BAD_METRIC_DEF)
         {
             public boolean isBad()
             {
@@ -107,13 +102,18 @@ public class ArmAPIUtil implements GeneralErrorCodes
             public boolean isValid()
             {
                 return false;
+            }
+
+            public Object snapshot()
+            {
+                return null;
             }
         };
 
         BAD_METRICS = new AbstractMetricBase[7];
         Arrays.fill(BAD_METRICS, BAD_METRIC);
 
-        BAD_METRIC_GROUP = new LTMetricGroup(BAD_METRIC_GRP_DEF, BAD_METRICS)
+        BAD_METRIC_GROUP = new LTMetricGroup("org.livetribe.arm.OID.BadMetricGroup", BAD_METRIC_GRP_DEF, BAD_METRICS)
         {
             public boolean isBad()
             {
@@ -121,20 +121,7 @@ public class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction(cleanIdProps(null), cleanIdProps(null), cleanIdProps(null), null)
-        {
-            public boolean isBad()
-            {
-                return true;
-            }
-
-            public boolean isValid()
-            {
-                return false;
-            }
-        };
-
-        BAD_TRANS_DEF = new LTTransactionDefinition(BAD_APP_DEF, "", BAD_ID_PROPS_TRANS, null)
+        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction("org.livetribe.arm.OID.BadIdentityPropertiesTransaction", cleanIdProps(null), cleanIdProps(null), cleanIdProps(null), null)
         {
             public boolean isBad()
             {
@@ -146,6 +133,23 @@ public class ArmAPIUtil implements GeneralErrorCodes
                 return false;
             }
         };
+
+        BAD_TRANS_DEF = new LTTransactionDefinition("org.livetribe.arm.OID.BadTransactionDefinition", BAD_APP_DEF, "", BAD_ID_PROPS_TRANS, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public boolean isValid()
+            {
+                return false;
+            }
+        };
+    }
+
+    private ArmAPIUtil()
+    {
     }
 
     static String checkRequiredName(String name)
@@ -338,17 +342,16 @@ public class ArmAPIUtil implements GeneralErrorCodes
         return cleanProps;
     }
 
-    public static ArmCorrelator newArmCorrelator(boolean trace)
+    static ArmCorrelator constructArmCorrelator(byte[] uuid, boolean trace)
     {
-        byte[] b = KnitPoint.getUuidGen().uuidgen();
-        int length = b.length + 4;
+        int length = uuid.length + 4;
         byte[] cleanBytes = new byte[length];
 
         cleanBytes[0] = (byte) (length >> 8);
         cleanBytes[1] = (byte) (length);
         if (trace) cleanBytes[3] |= 0xC0;
 
-        System.arraycopy(b, 0, cleanBytes, 4, b.length);
+        System.arraycopy(uuid, 0, cleanBytes, 4, uuid.length);
 
         return new LTCorrelator(cleanBytes);
     }
@@ -432,13 +435,18 @@ public class ArmAPIUtil implements GeneralErrorCodes
         return (props == null ? null : props.getURIValue());
     }
 
-    static byte[][] extractObjectIds(LTMetricDefinition[] definitions)
+    static String extractOID(Identifiable object)
     {
-        byte[][] result = new byte[7][];
+        return (object == null ? null : object.getObjectId());
+    }
+
+    static String[] extractObjectIds(MetricDefinition[] definitions)
+    {
+        String[] result = new String[7];
 
         for (int i = 0; i < 7; i++)
         {
-            LTMetricDefinition def = definitions[i];
+            MetricDefinition def = definitions[i];
             Identifiable appDef = (def != null ? (Identifiable) def.getAppDef() : null);
             result[i] = (appDef != null ? appDef.getObjectId() : null);
         }
@@ -498,5 +506,4 @@ public class ArmAPIUtil implements GeneralErrorCodes
 
         return result;
     }
-
 }

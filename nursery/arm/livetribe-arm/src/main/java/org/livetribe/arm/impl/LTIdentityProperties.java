@@ -18,20 +18,20 @@ package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
 
-import org.livetribe.arm.AbstractObject;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTIdentityProperties extends AbstractObject implements ArmIdentityProperties
+class LTIdentityProperties extends AbstractIdentifiableObject implements ArmIdentityProperties
 {
     private final String[] identityNames;
     private final String[] identityValues;
     private final String[] contextNames;
 
-    LTIdentityProperties(String[] identityNames, String[] identityValues, String[] contextNames)
+    LTIdentityProperties(String oid, String[] identityNames, String[] identityValues, String[] contextNames)
     {
+        super(oid);
+
         this.identityNames = identityNames;
         this.identityValues = identityValues;
         this.contextNames = contextNames;

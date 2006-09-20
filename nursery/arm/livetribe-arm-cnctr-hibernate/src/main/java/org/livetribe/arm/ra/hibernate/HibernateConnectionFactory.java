@@ -16,9 +16,9 @@
  */
 package org.livetribe.arm.ra.hibernate;
 
-import javax.resource.Referenceable;
-import javax.naming.Reference;
 import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.resource.Referenceable;
 import java.io.Serializable;
 
 import org.livetribe.arm.connection.Connection;
@@ -31,13 +31,7 @@ import org.livetribe.arm.connection.ConnectionFactory;
  */
 public class HibernateConnectionFactory implements ConnectionFactory, Referenceable, Serializable
 {
-    private final HibernateConnectionRequestInfo info;
     private Reference reference;
-
-    public HibernateConnectionFactory(HibernateConnectionRequestInfo info)
-    {
-        this.info = info;
-    }
 
     public Connection createConnection() throws ConnectionException
     {
@@ -56,7 +50,6 @@ public class HibernateConnectionFactory implements ConnectionFactory, Referencea
 
     public Reference getReference() throws NamingException
     {
-        if (reference == null) throw new NamingException("Reference is null");
         return reference;
     }
 }

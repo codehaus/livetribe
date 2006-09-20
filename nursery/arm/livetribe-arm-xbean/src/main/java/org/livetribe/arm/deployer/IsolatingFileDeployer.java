@@ -21,9 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.xbean.server.deployer.FileDeployer;
 
 import org.livetribe.arm.classloader.EmptyClassLoader;
@@ -34,11 +33,11 @@ import org.livetribe.arm.classloader.IsolatingClassLoader;
  * A service which auto-deploys services within a recursive file system.
  *
  * @version $Revision: $ $Date: $
- * @org.apache.xbean.XBean namespace="http://livetribe.org/schemas/server" element="isolating-file-deployer" description="Deploys services in a file system"
+ * @org.apache.xbean.XBean namespace="http://livetribe.org/schemas/server/1_0" element="isolating-file-deployer" description="Deploys services in a file system"
  */
 public class IsolatingFileDeployer extends FileDeployer
 {
-    private static final Log log = LogFactory.getLog(IsolatingFileDeployer.class);
+    protected final Logger logger = Logger.getLogger(getClass().getName());
     private ClassLoader ancestor;
 
     public void afterPropertiesSet() throws Exception
@@ -81,7 +80,7 @@ public class IsolatingFileDeployer extends FileDeployer
                     {
                         try
                         {
-                            log.info("Adding to classpath: " + loaderName + " jar: " + file.getCanonicalPath());
+                            logger.info("Adding to classpath: " + loaderName + " jar: " + file.getCanonicalPath());
                         }
                         catch (Exception ignore)
                         {

@@ -19,8 +19,6 @@ package org.livetribe.arm.impl;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.AbstractObject;
-
 
 /**
  * @version $Revision: $ $Date: $

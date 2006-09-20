@@ -16,25 +16,32 @@
  */
 package org.livetribe.arm.impl;
 
-import org.opengroup.arm40.metric.ArmMetric;
-import org.opengroup.arm40.metric.ArmMetricGroup;
-import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.livetribe.arm.AbstractObject;
+import org.opengroup.arm40.metric.ArmMetric;
+import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGroup extends AbstractObject implements ArmMetricGroup
+class LTMetricGroup extends AbstractIdentifiableObject implements MetricGroup
 {
     private final ArmMetricGroupDefinition groupDefinition;
-    private final LTMetric[] metrics;
+    private final Metric[] metrics;
+    private final List[] data;
 
-    public LTMetricGroup(ArmMetricGroupDefinition groupDefinition, LTMetric[] metrics)
+
+    LTMetricGroup(String oid, ArmMetricGroupDefinition groupDefinition, Metric[] metrics)
     {
+        super(oid);
+
         this.groupDefinition = groupDefinition;
         this.metrics = metrics;
+        this.data = new List[metrics.length];
+
+        clear();
     }
 
     public ArmMetricGroupDefinition getDefinition()
@@ -55,5 +62,31 @@ class LTMetricGroup extends AbstractObject implements ArmMetricGroup
     public int setMetricValid(int index, boolean value)
     {
         return metrics[index].setValid(value);
+    }
+
+    public void clear()
+    {
+        for (int i = 0; i < data.length; i++) data[i] = new ArrayList();
+    }
+
+    public void start()
+    {
+        clear();
+    }
+
+    public void snapshot()
+    {
+        for (int i = 0; i < metrics.length; i++) data[i].add(metrics[i].snapshot());
+    }
+
+    public List[] stop()
+    {
+        List[] result = new List[data.length];
+
+        System.arraycopy(data, 0, result, 0, data.length);
+
+        clear();
+
+        return result;
     }
 }

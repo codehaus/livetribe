@@ -27,8 +27,6 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.FacadeFactoryBase;
-
 
 /**
  * @version $Revision: $ $Date: $

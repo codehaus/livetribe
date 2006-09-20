@@ -28,7 +28,7 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.ARMException;
+import org.livetribe.arm.util.ARMException;
 import org.livetribe.arm.util.ARMUtil;
 
 

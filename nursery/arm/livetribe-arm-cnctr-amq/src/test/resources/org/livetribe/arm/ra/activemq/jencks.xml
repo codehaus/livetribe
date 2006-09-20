@@ -12,8 +12,8 @@
 
         <!-- the JCA Resource Adapter -->
         <property name="resourceAdapter">
-            <bean id="activeMQResourceAdapter" class="org.livetribe.arm.ra.activemq.ActiveMQResourceAdapter">
-                <property name="brokerURL" value="tcp://localhost:51616"/>
+            <bean id="activeMQResourceAdapter" class="org.livetribe.arm.ra.activemq.ActiveMQResourceAdapterWrapper">
+                <!-- TODO property name="brokerURL" value="tcp://localhost:51616"/ -->
             </bean>
         </property>
     </bean>

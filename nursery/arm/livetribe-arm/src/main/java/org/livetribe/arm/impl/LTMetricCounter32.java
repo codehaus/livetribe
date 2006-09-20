@@ -40,6 +40,11 @@ class LTMetricCounter32 extends AbstractMetricBase implements ArmMetricCounter32
     public int set(int value)
     {
         metric = value;
-        return 0;
+        return GeneralErrorCodes.SUCCESS;
+    }
+
+    public Object snapshot()
+    {
+        return (this.isValid() ? new Integer(metric) : null);
     }
 }

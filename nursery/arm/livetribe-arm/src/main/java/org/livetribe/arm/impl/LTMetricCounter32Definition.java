@@ -26,7 +26,7 @@ import org.opengroup.arm40.transaction.ArmID;
  */
 class LTMetricCounter32Definition extends AbstractMetricDefinition implements ArmMetricCounter32Definition
 {
-    protected LTMetricCounter32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
+    LTMetricCounter32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
         super(appDef, name, units, usage, id);
     }

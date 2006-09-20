@@ -39,13 +39,13 @@ public final class StaticThreadBindMonitor
         threadMonitor.removeThredaMonitor(monitor);
     }
 
-    public static void bind()
+    public static void bind(byte[] correlator)
     {
-        threadMonitor.bind();
+        threadMonitor.bind(correlator);
     }
 
-    public static void unbind()
+    public static void unbind(byte[] correlator)
     {
-        threadMonitor.unbind();
+        threadMonitor.unbind(correlator);
     }
 }

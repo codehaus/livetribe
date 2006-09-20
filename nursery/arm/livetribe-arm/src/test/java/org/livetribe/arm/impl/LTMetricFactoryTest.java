@@ -17,14 +17,14 @@
 package org.livetribe.arm.impl;
 
 import junit.framework.TestCase;
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 import org.opengroup.arm40.metric.ArmMetricCounter32Definition;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmInterface;
-
-import org.livetribe.arm.LTObject;
+import org.springframework.context.ApplicationContext;
 
 
 /**
@@ -32,6 +32,7 @@ import org.livetribe.arm.LTObject;
  */
 public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 {
+    private ApplicationContext applicationContext;
     private LTMetricFactory factory;
     private ArmApplicationDefinition app;
 
@@ -60,7 +61,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
         assertTrue(((LTObject) bad).isBad());
-        assertSame(app, ((LTMetricDefinition) bad).getAppDef());
+        assertSame(app, ((MetricDefinition) bad).getAppDef());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);
@@ -162,6 +163,8 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
     public void setUp()
     {
+        applicationContext = new ClassPathXmlApplicationContext("org/livetribe/arm/ArmAPIUtilTest.xml");
+
         factory = new LTMetricFactory();
         app = (new LTTransactionFactory()).newArmApplicationDefinition("TEST", null, null);
     }

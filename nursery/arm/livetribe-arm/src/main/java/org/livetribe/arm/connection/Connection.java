@@ -16,6 +16,8 @@
  */
 package org.livetribe.arm.connection;
 
+import java.util.List;
+
 import org.opengroup.arm40.transaction.ArmUser;
 
 
@@ -24,27 +26,55 @@ import org.opengroup.arm40.transaction.ArmUser;
  */
 public interface Connection
 {
-    public void introduceApplicationDefinition(byte[] appDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, byte[] id);
+    public void declareIdentityProperties(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames);
 
-    public void introduceApplication(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues);
+    public void declareIdentityPropertiesTransaction(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames, String uriValue);
 
-    public void introduceApplicationRemote(byte[] appId, byte[] appDefId, String group, String instance, String[] contextValues, byte[] systemAddress);
+    public void declareApplicationDefinition(String appDefOID, String name, String idPropOID, byte[] id);
 
-    public void introduceTransactionDefinition(byte[] transDefId, String name, String[] idNames, String[] idValues, String[] ctxNames, String uri, byte[] id);
+    public void declareApplication(String appOID, String appDefOID, String group, String instance, String[] contextValues);
 
-    public void associateTransaction(byte[] transId, byte [] appId, byte [] transDefId);
+    public void declareApplicationRemote(String appOID, String appDefOID, String group, String instance, String[] contextValues, byte[] systemAddress);
 
-    public void introduceMetricGroupDefinition(byte[] metricGroupDef, byte[][] appDef, String[] name, String[] units, short[] usage, byte[][]id);
+    public void declareTransactionDefinition(String transDefOID, String name, String idPropTranOID, byte[] id);
 
-    public void start(byte[] transId, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI);
+    public void associateTransaction(String transOID, String appOID, String transDefOID);
 
-    public void update(byte[] transId, byte[] correlator);
+    public void declareMetricGroupDefinition(String metricGroupDefOID, String[] appDef, String[] name, String[] units, short[] usage, byte[][]id);
 
-    public void block(byte[] transId, byte[] correlator, long handle);
+    public void declareTransactionWithMetricsDefinition(String transDefOID, String appDefOID, String name, String idPropOID, String metricGroupDefOID, byte[] id);
 
-    public void unblocked(byte[] transId, byte[] correlator, long handle);
+    public void declareMetricGroup(String metricGroupOID, String metricGroupDefOID);
 
-    public void stop(byte[] transId, byte[] correlator, long end, int status, String message);
+    public void declareTranReportWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID);
 
-    public void reset(byte[] transId, byte[] correlator);
+    public void declareTranWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID);
+
+    public void start(String transOID, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI);
+
+    public void update(String transOID, byte[] correlator, long ts);
+
+    public void block(String transOID, byte[] correlator, long handle, long ts);
+
+    public void unblocked(String transOID, byte[] correlator, long handle, long ts);
+
+    public void stop(String transOID, byte[] correlator, long end, int status, String message);
+
+    public void stop(String transOID, byte[] correlator, long end, int status, String message, List[] metrics);
+
+    public void reset(String transOID, byte[] correlator);
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, String diagnosticDetail);
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, long stopTime, String diagnosticDetail);
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, String diagnosticDetail, List[] metrics);
+
+    public void report(String reportOID, byte[] parent, byte[] correlator, int status, long respTime, long stopTime, String diagnosticDetail, List[] metrics);
+
+    public void start();
+
+    public void stop();
+
+    public void close();
 }

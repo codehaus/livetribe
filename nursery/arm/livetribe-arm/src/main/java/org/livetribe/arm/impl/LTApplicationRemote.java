@@ -16,45 +16,53 @@
  */
 package org.livetribe.arm.impl;
 
+import java.util.Iterator;
+import java.util.Vector;
+
 import org.opengroup.arm40.tranreport.ArmApplicationRemote;
 import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
-
-import org.livetribe.arm.AbstractIdentifiableObject;
-import org.livetribe.arm.Identifiable;
-import org.livetribe.arm.KnitPoint;
-import org.livetribe.arm.connection.Connection;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTApplicationRemote extends AbstractIdentifiableObject implements ArmApplicationRemote
+class LTApplicationRemote extends AbstractIdentifiableObject implements ArmApplicationRemote, ApplicationLifecycleSupport
 {
-    private final Connection connection = KnitPoint.getConnection();
+    private final Vector listeners = new Vector();
     private final ArmApplicationDefinition definition;
     private final String group;
     private final String instance;
     private final String[] contextValues;
     private final ArmSystemAddress systemAddress;
 
-    public LTApplicationRemote(ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
+    LTApplicationRemote(String oid, ArmApplicationDefinition definition, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
+        super(oid);
+
         this.definition = definition;
         this.group = group;
         this.instance = instance;
         this.contextValues = contextValues;
         this.systemAddress = systemAddress;
-
-        connection.introduceApplicationRemote(getObjectId(),
-                                              ((Identifiable) definition).getObjectId(),
-                                              group, instance, contextValues,
-                                              ArmAPIUtil.extractArmSystemAddress(systemAddress));
     }
 
     public int end()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        setBad(true);
+
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext())
+        {
+            try
+            {
+                ((ApplicationLifecycleListener) iter.next()).end();
+            }
+            catch (Exception ignore)
+            {
+            }
+        }
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public String getContextValue(int index)
@@ -80,5 +88,10 @@ class LTApplicationRemote extends AbstractIdentifiableObject implements ArmAppli
     public ArmSystemAddress getSystemAddress()
     {
         return systemAddress;
+    }
+
+    public void addApplicationLifecycleListener(ApplicationLifecycleListener listener)
+    {
+        listeners.add(listener);
     }
 }

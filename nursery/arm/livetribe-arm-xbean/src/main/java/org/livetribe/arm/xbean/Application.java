@@ -7,7 +7,7 @@ import org.opengroup.arm40.transaction.ArmTransactionFactory;
 
 /**
  * @version $Revision: $ $Date$
- * @org.apache.xbean.XBean namespace="http://livetribe.org/schemas/server" 
+ * @org.apache.xbean.XBean namespace="http://livetribe.org/schemas/server/1_0" 
  */
 public class Application extends Base
 {

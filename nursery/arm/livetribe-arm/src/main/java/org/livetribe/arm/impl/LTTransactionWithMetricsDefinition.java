@@ -22,8 +22,6 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.AbstractIdentifiableObject;
-
 
 /**
  * @version $Revision: $ $Date: $
@@ -36,8 +34,10 @@ class LTTransactionWithMetricsDefinition extends AbstractIdentifiableObject impl
     private final ArmMetricGroupDefinition definition;
     private final ArmID id;
 
-    public LTTransactionWithMetricsDefinition(ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition definition, ArmID id)
+    LTTransactionWithMetricsDefinition(String oid, ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition definition, ArmID id)
     {
+        super(oid);
+
         this.app = app;
         this.name = name;
         this.identityProperties = identityProperties;

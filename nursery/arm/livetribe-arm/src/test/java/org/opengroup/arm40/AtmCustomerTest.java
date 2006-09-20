@@ -19,6 +19,7 @@ package org.opengroup.arm40;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricCounter32;
 import org.opengroup.arm40.metric.ArmMetricCounter32Definition;
@@ -43,6 +44,7 @@ import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
+import org.springframework.context.ApplicationContext;
 
 
 /**
@@ -50,6 +52,8 @@ import org.opengroup.arm40.transaction.ArmUser;
  */
 public class AtmCustomerTest extends TestCase implements ArmErrorCallback
 {
+    ApplicationContext applicationContext;
+
     AtmCustomer[] customers = new AtmCustomer[]{
             new AtmCustomer(1, "Mueller", 1234, 150.0, "EUR"),
             new AtmCustomer(2, "Miller", 5678, 100.0, "GBP"),
@@ -129,6 +133,8 @@ public class AtmCustomerTest extends TestCase implements ArmErrorCallback
 
     public void setUp() throws Exception
     {
+        applicationContext = new ClassPathXmlApplicationContext("org/livetribe/arm/ArmAPIUtilTest.xml");
+
         Properties p = System.getProperties();
         p.setProperty(ArmTransactionFactory.propertyKey, "org.livetribe.arm.impl.LTTransactionFactory");
         p.setProperty(ArmMetricFactory.propertyKey, "org.livetribe.arm.impl.LTMetricFactory");

@@ -17,6 +17,7 @@
 package org.livetribe.arm.ra.hibernate;
 
 import javax.resource.spi.ConnectionRequestInfo;
+import javax.sql.DataSource;
 import java.io.Serializable;
 
 
@@ -25,104 +26,31 @@ import java.io.Serializable;
  */
 public class HibernateConnectionRequestInfo implements ConnectionRequestInfo, Serializable, Cloneable
 {
-    private String dialect;
-    private String driverClass;
-    private String url;
-    private String username;
-    private String password;
-    private Integer poolSize;
-    private String cacheProviderClass;
-
+    private DataSource dataSource;
 
     public HibernateConnectionRequestInfo()
     {
-        this(null, null, null, null, null, null, null);
+        this((DataSource) null);
     }
 
     public HibernateConnectionRequestInfo(HibernateConnectionRequestInfo that)
     {
-        this(that.dialect, that.driverClass, that.url, that.username, that.password, that.poolSize, that.cacheProviderClass);
+        this(that.dataSource);
     }
 
-    public HibernateConnectionRequestInfo(String dialect, String driverClass, String url, String username, String password, Integer poolSize, String cacheProviderClass)
+    public HibernateConnectionRequestInfo(DataSource dataSource)
     {
-        this.dialect = dialect;
-        this.driverClass = driverClass;
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        this.poolSize = poolSize;
-        this.cacheProviderClass = cacheProviderClass;
+        this.dataSource = dataSource;
     }
 
-    public String getDialect()
+    public DataSource getDataSource()
     {
-        return dialect;
+        return dataSource;
     }
 
-    public void setDialect(String dialect)
+    public void setDataSource(DataSource dataSource)
     {
-        this.dialect = dialect;
-    }
-
-    String getDriverClass()
-    {
-        return driverClass;
-    }
-
-    void setDriverClass(String driverClass)
-    {
-        this.driverClass = driverClass;
-    }
-
-    public String getUrl()
-    {
-        return url;
-    }
-
-    public void setUrl(String url)
-    {
-        this.url = url;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public Integer getPoolSize()
-    {
-        return poolSize;
-    }
-
-    public void setPoolSize(Integer poolSize)
-    {
-        this.poolSize = poolSize;
-    }
-
-    public String getCacheProviderClass()
-    {
-        return cacheProviderClass;
-    }
-
-    public void setCacheProviderClass(String cacheProviderClass)
-    {
-        this.cacheProviderClass = cacheProviderClass;
+        this.dataSource = dataSource;
     }
 
     public Object clone() throws CloneNotSupportedException
@@ -135,40 +63,16 @@ public class HibernateConnectionRequestInfo implements ConnectionRequestInfo, Se
      */
     public int hashCode()
     {
-        int rc = 0;
-
-        rc += 29 * dialect.hashCode();
-        rc+= 29 *  driverClass.hashCode();
-        rc += 29 *  url.hashCode();
-        if (username != null) rc += 29 *  username.hashCode();
-        if (password != null) rc += 29 *  password.hashCode();
-        if (poolSize != null) rc ^= poolSize.hashCode();
-        if (cacheProviderClass != null) rc ^= cacheProviderClass.hashCode();
-
-        return rc;
+        return (dataSource != null ? dataSource.hashCode() : 0);
     }
 
-    /**
-     * @see javax.resource.spi.ConnectionRequestInfo#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj)
+    public boolean equals(Object o)
     {
-        if (obj == null) return false;
-        if (!getClass().equals(obj.getClass())) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        final HibernateConnectionRequestInfo other = (HibernateConnectionRequestInfo) obj;
+        final HibernateConnectionRequestInfo that = (HibernateConnectionRequestInfo) o;
 
-        if (notEqual(dialect, other.dialect)) return false;
-        if (notEqual(driverClass, other.driverClass)) return false;
-        if (notEqual(url, other.url)) return false;
-        if (notEqual(username, other.username)) return false;
-        if (notEqual(password, other.password)) return false;
-        if (notEqual(poolSize, other.poolSize)) return false;
-        return !notEqual(cacheProviderClass, other.cacheProviderClass);
-    }
-
-    private boolean notEqual(Object x, Object y)
-    {
-        return (x == null ? y == null : x.equals(y));
+        return !(dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null);
     }
 }

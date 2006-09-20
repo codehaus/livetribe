@@ -16,15 +16,13 @@
  */
 package org.livetribe.arm.impl;
 
-import org.livetribe.arm.GeneralErrorCodes;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
-interface MetricErrorCodes extends GeneralErrorCodes
+public interface MetricErrorCodes extends GeneralErrorCodes
 {
-    public static final int APPLICATION_DEFINIITON_NULL = METRIC_CODES + 0;
+    public static final int APPLICATION_DEFINIITON_NULL = METRIC_CODES;
     public static final int GRP_DEF_ARRAY_INVALID = METRIC_CODES + 1;
     public static final int METRIC_DEFINIITON_NULL = METRIC_CODES + 2;
     public static final int METRIC_GRP_ARRAY_INVALID = METRIC_CODES + 3;

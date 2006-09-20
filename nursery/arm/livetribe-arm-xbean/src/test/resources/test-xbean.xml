@@ -17,7 +17,7 @@
 
 -->
 <beans xmlns:s="http://xbean.apache.org/schemas/server"
-       xmlns:lt="http://livetribe.org/schemas/server">
+       xmlns:lt="http://livetribe.org/schemas/server/1_0">
 
     <bean id="propertyPlaceholderConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>

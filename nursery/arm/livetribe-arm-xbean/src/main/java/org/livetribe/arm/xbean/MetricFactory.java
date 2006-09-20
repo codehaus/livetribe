@@ -48,7 +48,7 @@ import org.opengroup.arm40.transaction.ArmErrorCallback;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.ARMException;
+import org.livetribe.arm.util.ARMException;
 import org.livetribe.arm.util.ARMUtil;
 
 

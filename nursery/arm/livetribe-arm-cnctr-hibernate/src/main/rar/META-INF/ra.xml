@@ -47,57 +47,15 @@
     </license>
 
     <resourceadapter>
+
         <resourceadapter-class>org.livetribe.arm.ra.hibernate.HibernateResourceAdapter</resourceadapter-class>
+
         <config-property>
             <description>
-                Database dialect
+                Hibernate data source
             </description>
-            <config-property-name>dialect</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-        </config-property>
-        <config-property>
-            <description>
-                JDBC driver class.
-            </description>
-            <config-property-name>driverClass</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-        </config-property>
-        <config-property>
-            <description>
-                JDBC URL.
-            </description>
-            <config-property-name>url</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-        </config-property>
-        <config-property>
-            <description>
-                Database user.
-            </description>
-            <config-property-name>username</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-        </config-property>
-        <config-property>
-            <description>
-                Database password.
-            </description>
-            <config-property-name>password</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-        </config-property>
-        <config-property>
-            <description>
-                Maximum number of pooled connections.
-            </description>
-            <config-property-name>poolSize</config-property-name>
-            <config-property-type>java.lang.Integer</config-property-type>
-            <config-property-value>5</config-property-value>
-        </config-property>
-        <config-property>
-            <description>
-                Class of cache provider.
-            </description>
-            <config-property-name>cacheProviderClass</config-property-name>
-            <config-property-type>java.lang.String</config-property-type>
-            <config-property-value>org.hibernate.cache.HashtableCacheProvider</config-property-value>
+            <config-property-name>dataSource</config-property-name>
+            <config-property-type>javax.sql.DataSource</config-property-type>
         </config-property>
 
         <outbound-resourceadapter>
@@ -106,7 +64,7 @@
                 <connectionfactory-interface>org.livetribe.arm.connection.ConnectionFactory</connectionfactory-interface>
                 <connectionfactory-impl-class>org.livetribe.arm.ra.hibernate.HibernateConnectionFactory</connectionfactory-impl-class>
                 <connection-interface>org.livetribe.arm.connection.Connection</connection-interface>
-                <connection-impl-class>org.livetribe.arm.ra.hibernate.ConnectionHandle</connection-impl-class>
+                <connection-impl-class>org.livetribe.arm.ra.hibernate.HibernateConnection</connection-impl-class>
             </connection-definition>
             <transaction-support>XATransaction</transaction-support>
             <authentication-mechanism>

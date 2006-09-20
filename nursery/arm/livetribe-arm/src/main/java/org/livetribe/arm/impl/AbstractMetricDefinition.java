@@ -20,13 +20,11 @@ import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 
-import org.livetribe.arm.AbstractObject;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
-abstract class AbstractMetricDefinition extends AbstractObject implements ArmMetricDefinition, LTMetricDefinition
+abstract class AbstractMetricDefinition extends AbstractObject implements ArmMetricDefinition, MetricDefinition
 {
     private final ArmApplicationDefinition appDef;
     private final String name;

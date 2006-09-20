@@ -56,7 +56,7 @@ public class ActiveMQManagedConnection implements ManagedConnection
 
     public Object getConnection(Subject subject, ConnectionRequestInfo connectionRequestInfo) throws ResourceException
     {
-        Object handle = new ManagedConnectionHandle(this, amqConnection, amqDestination);
+        Object handle = new ConnectionHandle(this, amqConnection, amqDestination);
 
         handles.add(handle);
 
@@ -73,7 +73,7 @@ public class ActiveMQManagedConnection implements ManagedConnection
         Iterator iterator = handles.iterator();
         while (iterator.hasNext())
         {
-            ManagedConnectionHandle handle = (ManagedConnectionHandle) iterator.next();
+            ConnectionHandle handle = (ConnectionHandle) iterator.next();
             handle.cleanup();
         }
         handles.clear();
@@ -90,9 +90,9 @@ public class ActiveMQManagedConnection implements ManagedConnection
 
     public void associateConnection(Object object) throws ResourceException
     {
-        if (object instanceof ManagedConnectionHandle)
+        if (object instanceof ConnectionHandle)
         {
-            ManagedConnectionHandle handle = (ManagedConnectionHandle)object;
+            ConnectionHandle handle = (ConnectionHandle)object;
             ActiveMQManagedConnection owner = handle.getOwner();
 
             owner.removeConnection(handle);
@@ -104,7 +104,7 @@ public class ActiveMQManagedConnection implements ManagedConnection
         }
     }
 
-    void removeConnection(ManagedConnectionHandle handle) throws ResourceException
+    void removeConnection(ConnectionHandle handle) throws ResourceException
     {
         handles.remove(handle);
     }

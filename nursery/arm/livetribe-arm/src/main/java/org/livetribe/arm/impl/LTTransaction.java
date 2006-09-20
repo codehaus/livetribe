@@ -23,50 +23,56 @@ import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.AbstractIdentifiableObject;
-import org.livetribe.arm.GeneralErrorCodes;
-import org.livetribe.arm.Identifiable;
-import org.livetribe.arm.KnitPoint;
 import org.livetribe.arm.connection.Connection;
 import org.livetribe.arm.connection.StaticThreadBindMonitor;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
+class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction, ApplicationLifecycleListener
 {
+    private final Connection connection;
+    private final UUIDGen guidGenerator;
     private final ArmApplication application;
     private final ArmTransactionDefinition definition;
-    private final Connection connection = KnitPoint.getConnection();
     private ArmCorrelator parentCorrelator = null;
-    private ArmCorrelator correlator = ArmAPIUtil.newArmCorrelator(null);
+    private ArmCorrelator correlator;
     private int status = ArmConstants.STATUS_INVALID;
     private long start = 0;
     private long blocked = 1;
     private String contextURI;
-    private String[] contextValues = new String[20];
+    private final String[] contextValues = new String[20];
     private ArmUser user;
     private boolean trace = false;
 
     private State state;
 
-    LTTransaction(ArmApplication application, ArmTransactionDefinition definition)
+    LTTransaction(String oid, Connection connection, UUIDGen guidGenerator, ArmApplication application, ArmTransactionDefinition definition)
     {
+        super(oid);
+
+        this.connection = connection;
+        this.guidGenerator = guidGenerator;
         this.application = application;
         this.definition = definition;
 
         this.state = STOPPED;
 
-        connection.associateTransaction(getObjectId(),
-                                        ((Identifiable) application).getObjectId(),
-                                        ((Identifiable) definition).getObjectId());
+        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+    }
+
+    public synchronized void end()
+    {
+        state.reset();
+        setBad(true);
     }
 
     public int bindThread()
     {
-        StaticThreadBindMonitor.bind();
+        StaticThreadBindMonitor.bind(correlator.getBytes());
 
         return GeneralErrorCodes.SUCCESS;
     }
@@ -215,7 +221,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 
     public synchronized int unbindThread()
     {
-        StaticThreadBindMonitor.unbind();
+        StaticThreadBindMonitor.unbind(correlator.getBytes());
 
         return GeneralErrorCodes.SUCCESS;
     }
@@ -260,7 +266,8 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 
         State start(ArmCorrelator parent)
         {
-            correlator = ArmAPIUtil.newArmCorrelator(trace || parent.isAgentTrace() || parent.isApplicationTrace());
+            correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
+                                                           trace || parent.isAgentTrace() || parent.isApplicationTrace());
             if (start == 0) start = System.currentTimeMillis();
             parentCorrelator = parent;
 
@@ -296,6 +303,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
         State reset()
         {
             connection.reset(getObjectId(), correlator.getBytes());
+
             start = 0;
 
             unbindThread();
@@ -343,14 +351,14 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 
         void update()
         {
-            connection.update(getObjectId(), correlator.getBytes());
+            connection.update(getObjectId(), correlator.getBytes(), System.currentTimeMillis());
         }
 
         long blocked()
         {
             long handle = blocked++;
 
-            connection.block(getObjectId(), correlator.getBytes(), handle);
+            connection.block(getObjectId(), correlator.getBytes(), handle, System.currentTimeMillis());
 
             return handle;
         }
@@ -358,7 +366,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
         void unblocked(long handle)
         {
             blocked--;
-            connection.unblocked(getObjectId(), correlator.getBytes(), handle);
+            connection.unblocked(getObjectId(), correlator.getBytes(), handle, System.currentTimeMillis());
         }
 
         State reset()

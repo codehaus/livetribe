@@ -47,8 +47,6 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.AbstractFactoryBase;
-import org.livetribe.arm.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
@@ -140,13 +138,13 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
     public ArmMetricGroupDefinition newArmMetricGroupDefinition(ArmMetricDefinition[] definitions)
     {
-        if (definitions == null) definitions = new LTMetricDefinition[0];
+        if (definitions == null) definitions = new MetricDefinition[0];
 
-        LTMetricDefinition[] cleanDefinitions = new LTMetricDefinition[7];
+        MetricDefinition[] cleanDefinitions = new MetricDefinition[7];
 
         System.arraycopy(definitions, 0, cleanDefinitions, 0, Math.min(definitions.length, 7));
 
-        LTMetricGroupDefinition object = new LTMetricGroupDefinition(cleanDefinitions);
+        LTMetricGroupDefinition metricGroupDef = new LTMetricGroupDefinition(allocateOID(), cleanDefinitions);
 
         for (int i = 0; i < 6; i++)
         {
@@ -162,18 +160,32 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
             StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
         }
 
-        return object;
+        getConnection().declareMetricGroupDefinition(metricGroupDef.getObjectId(),
+                                                     ArmAPIUtil.extractObjectIds(cleanDefinitions),
+                                                     ArmAPIUtil.extractNames(cleanDefinitions),
+                                                     ArmAPIUtil.extractUnits(cleanDefinitions),
+                                                     ArmAPIUtil.extractUsage(cleanDefinitions),
+                                                     ArmAPIUtil.extractIds(cleanDefinitions));
+
+        return metricGroupDef;
     }
 
-    public ArmTransactionWithMetricsDefinition newArmTransactionWithMetricsDefinition(ArmApplicationDefinition appDef, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition definition, ArmID id)
+    public ArmTransactionWithMetricsDefinition newArmTransactionWithMetricsDefinition(ArmApplicationDefinition appDef, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition metricGroupDef, ArmID id)
     {
         appDef = ArmAPIUtil.checkRequired(appDef);
         name = ArmAPIUtil.checkRequiredName(name);
         identityProperties = ArmAPIUtil.checkOptional(identityProperties);
-        definition = ArmAPIUtil.checkOptional(definition);
+        metricGroupDef = ArmAPIUtil.checkOptional(metricGroupDef);
         id = ArmAPIUtil.checkOptional(id);
 
-        return new LTTransactionWithMetricsDefinition(appDef, name, identityProperties, definition, id);
+        LTTransactionWithMetricsDefinition transDef = new LTTransactionWithMetricsDefinition(allocateOID(), appDef, name, identityProperties, metricGroupDef, id);
+        getConnection().declareTransactionWithMetricsDefinition(transDef.getObjectId(),
+                                                                ((Identifiable) appDef).getObjectId(),
+                                                                name,
+                                                                ArmAPIUtil.extractOID((Identifiable) identityProperties),
+                                                                ArmAPIUtil.extractOID((Identifiable) metricGroupDef),
+                                                                ArmAPIUtil.extractArmId(id));
+        return transDef;
     }
 
     public ArmMetricCounter32 newArmMetricCounter32(ArmMetricCounter32Definition definition)
@@ -221,15 +233,15 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         return new LTMetricString32(ArmAPIUtil.checkRequired(definition));
     }
 
-    public synchronized ArmMetricGroup newArmMetricGroup(ArmMetricGroupDefinition groupDefinition, ArmMetric[] metrics)
+    public synchronized ArmMetricGroup newArmMetricGroup(ArmMetricGroupDefinition metricGroupDef, ArmMetric[] metrics)
     {
         if (metrics == null) metrics = new AbstractMetricBase[0];
 
-        LTMetric[] cleanMetrics = new LTMetric[7];
+        Metric[] cleanMetrics = new Metric[7];
 
         System.arraycopy(metrics, 0, cleanMetrics, 0, Math.min(metrics.length, 7));
 
-        LTMetricGroup object = new LTMetricGroup(groupDefinition, cleanMetrics);
+        LTMetricGroup metricGroup = new LTMetricGroup(allocateOID(), metricGroupDef, cleanMetrics);
 
         for (int i = 0; i < 6; i++)
         {
@@ -244,24 +256,41 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
         }
 
-        return object;
+        getConnection().declareMetricGroup(metricGroup.getObjectId(),
+                                           ((Identifiable) metricGroupDef).getObjectId());
+
+        return metricGroup;
     }
 
-    public ArmTranReportWithMetrics newArmTranReportWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
+    public ArmTranReportWithMetrics newArmTranReportWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition tranReportMetricsDef, ArmMetricGroup metricGroup)
     {
         app = ArmAPIUtil.checkRequired(app);
-        definition = ArmAPIUtil.checkRequired(definition);
-        group = ArmAPIUtil.checkRequired(group);
+        tranReportMetricsDef = ArmAPIUtil.checkRequired(tranReportMetricsDef);
+        metricGroup = ArmAPIUtil.checkRequired(metricGroup);
 
-        return new LTTranReportWithMetrics(app, definition, group);
+        LTTranReportWithMetrics tranReportMetrics = new LTTranReportWithMetrics(allocateOID(),
+                                                                                getConnection(), getGuidGenerator(),
+                                                                                app, tranReportMetricsDef, metricGroup);
+
+        getConnection().declareTranReportWithMetrics(tranReportMetrics.getObjectId(),
+                                                     ((Identifiable) tranReportMetricsDef).getObjectId(),
+                                                     ((Identifiable) metricGroup).getObjectId());
+
+        return tranReportMetrics;
     }
 
-    public ArmTransactionWithMetrics newArmTransactionWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
+    public ArmTransactionWithMetrics newArmTransactionWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition tranMetricsDef, ArmMetricGroup metricGroup)
     {
         app = ArmAPIUtil.checkRequired(app);
-        definition = ArmAPIUtil.checkRequired(definition);
-        group = ArmAPIUtil.checkRequired(group);
+        tranMetricsDef = ArmAPIUtil.checkRequired(tranMetricsDef);
+        metricGroup = ArmAPIUtil.checkRequired(metricGroup);
 
-        return new LTTransactionWithMetrics(app, definition, group);
+        LTTransactionWithMetrics tranMetrics = new LTTransactionWithMetrics(allocateOID(), getConnection(), getGuidGenerator(), app, tranMetricsDef, metricGroup);
+
+        getConnection().declareTranWithMetrics(tranMetrics.getObjectId(),
+                                               ((Identifiable) app).getObjectId(),
+                                               ((Identifiable) metricGroup).getObjectId());
+
+        return tranMetrics;
     }
 }

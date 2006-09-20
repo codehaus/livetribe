@@ -28,7 +28,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.opengroup.arm40.transaction.ArmInterface;
 import org.springframework.aop.Advisor;
 
-import org.livetribe.arm.GeneralErrorCodes;
+import org.livetribe.arm.impl.GeneralErrorCodes;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 import org.livetribe.util.WeakHashSet;
 
@@ -71,7 +71,6 @@ public class FactoryAdvice implements MethodInterceptor
         }
         catch (Throwable t)
         {
-            t.printStackTrace(System.err);
             StaticArmAPIMonitor.error(GeneralErrorCodes.UNEXPECTED_ERROR);
         }
         return rval;

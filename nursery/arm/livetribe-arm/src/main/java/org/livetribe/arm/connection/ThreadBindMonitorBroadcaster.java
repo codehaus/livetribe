@@ -41,14 +41,14 @@ public class ThreadBindMonitorBroadcaster implements ThreadBindMonitor
     /**
      * {@inheritDoc}
      */
-    public void bind()
+    public void bind(byte[] correlator)
     {
         for (Iterator iterator = threadMonitors.iterator(); iterator.hasNext();)
         {
             ThreadBindMonitor monitor = (ThreadBindMonitor) iterator.next();
             try
             {
-                monitor.bind();
+                monitor.bind(correlator);
             }
             catch (Throwable ignored)
             {
@@ -60,14 +60,14 @@ public class ThreadBindMonitorBroadcaster implements ThreadBindMonitor
     /**
      * {@inheritDoc}
      */
-    public void unbind()
+    public void unbind(byte[] correlator)
     {
         for (Iterator iterator = threadMonitors.iterator(); iterator.hasNext();)
         {
             ThreadBindMonitor monitor = (ThreadBindMonitor) iterator.next();
             try
             {
-                monitor.unbind();
+                monitor.unbind(correlator);
             }
             catch (Throwable ignored)
             {

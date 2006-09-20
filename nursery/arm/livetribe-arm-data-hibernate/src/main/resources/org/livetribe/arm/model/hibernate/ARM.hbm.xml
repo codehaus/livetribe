@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="org.livetribe.arm.connection.model.IdentityProperties" table="IDENTITY_PROPERTIES"
+           dynamic-update="true"  lazy="false">
+        <cache usage="read-write"/>
+        <id name="oid" column="OID" type="long" unsaved-value="0">
+            <generator class="sequence">
+                <param name="sequence">SEQ_ID</param>
+            </generator>
+        </id>
+
+        <property name="idName01" column="IDNAME01" type="string"/>
+        <property name="idName02" column="IDNAME02" type="string"/>
+        <property name="idName03" column="IDNAME03" type="string"/>
+        <property name="idName04" column="IDNAME04" type="string"/>
+        <property name="idName05" column="IDNAME05" type="string"/>
+        <property name="idName06" column="IDNAME06" type="string"/>
+        <property name="idName07" column="IDNAME07" type="string"/>
+        <property name="idName08" column="IDNAME08" type="string"/>
+        <property name="idName09" column="IDNAME09" type="string"/>
+        <property name="idName10" column="IDNAME10" type="string"/>
+        <property name="idName11" column="IDNAME11" type="string"/>
+        <property name="idName12" column="IDNAME12" type="string"/>
+        <property name="idName13" column="IDNAME13" type="string"/>
+        <property name="idName14" column="IDNAME14" type="string"/>
+        <property name="idName15" column="IDNAME15" type="string"/>
+        <property name="idName16" column="IDNAME16" type="string"/>
+        <property name="idName17" column="IDNAME17" type="string"/>
+        <property name="idName18" column="IDNAME18" type="string"/>
+        <property name="idName19" column="IDNAME19" type="string"/>
+        <property name="idName20" column="IDNAME20" type="string"/>
+        <property name="idValue01" column="IDVALUE01" type="string"/>
+        <property name="idValue02" column="IDVALUE02" type="string"/>
+        <property name="idValue03" column="IDVALUE03" type="string"/>
+        <property name="idValue04" column="IDVALUE04" type="string"/>
+        <property name="idValue05" column="IDVALUE05" type="string"/>
+        <property name="idValue06" column="IDVALUE06" type="string"/>
+        <property name="idValue07" column="IDVALUE07" type="string"/>
+        <property name="idValue08" column="IDVALUE08" type="string"/>
+        <property name="idValue09" column="IDVALUE09" type="string"/>
+        <property name="idValue10" column="IDVALUE10" type="string"/>
+        <property name="idValue11" column="IDVALUE11" type="string"/>
+        <property name="idValue12" column="IDVALUE12" type="string"/>
+        <property name="idValue13" column="IDVALUE13" type="string"/>
+        <property name="idValue14" column="IDVALUE14" type="string"/>
+        <property name="idValue15" column="IDVALUE15" type="string"/>
+        <property name="idValue16" column="IDVALUE16" type="string"/>
+        <property name="idValue17" column="IDVALUE17" type="string"/>
+        <property name="idValue18" column="IDVALUE18" type="string"/>
+        <property name="idValue19" column="IDVALUE19" type="string"/>
+        <property name="idValue20" column="IDVALUE20" type="string"/>
+        <property name="ctxName01" column="CTXVALUE01" type="string"/>
+        <property name="ctxName02" column="CTXVALUE02" type="string"/>
+        <property name="ctxName03" column="CTXVALUE03" type="string"/>
+        <property name="ctxName04" column="CTXVALUE04" type="string"/>
+        <property name="ctxName05" column="CTXVALUE05" type="string"/>
+        <property name="ctxName06" column="CTXVALUE06" type="string"/>
+        <property name="ctxName07" column="CTXVALUE07" type="string"/>
+        <property name="ctxName08" column="CTXVALUE08" type="string"/>
+        <property name="ctxName09" column="CTXVALUE09" type="string"/>
+        <property name="ctxName10" column="CTXVALUE10" type="string"/>
+        <property name="ctxName11" column="CTXVALUE11" type="string"/>
+        <property name="ctxName12" column="CTXVALUE12" type="string"/>
+        <property name="ctxName13" column="CTXVALUE13" type="string"/>
+        <property name="ctxName14" column="CTXVALUE14" type="string"/>
+        <property name="ctxName15" column="CTXVALUE15" type="string"/>
+        <property name="ctxName16" column="CTXVALUE16" type="string"/>
+        <property name="ctxName17" column="CTXVALUE17" type="string"/>
+        <property name="ctxName18" column="CTXVALUE18" type="string"/>
+        <property name="ctxName19" column="CTXVALUE19" type="string"/>
+        <property name="ctxName20" column="CTXVALUE20" type="string"/>
+    </class>
+
+    <!--class name="com.simula.jira.WorkLogEntry" table="WORKLOG_ENTRIES" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="id" column="ID" type="integer" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_WORKLOG_ENTRIES</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="integer"/>
+        <many-to-one name="issue" column="JIRA_ISSUE_ID" class="com.simula.jira.JiraIssue" cascade="none" not-null="true" index="IDX_WORKLOG_ENTRY_ON_JIRA_ISSUE_ID"/>
+        <property name="dbId" column="DB_ID" type="integer" not-null="true"/>
+        <many-to-one name="user" column="USER_ID" class="com.simula.user.User" cascade="none" not-null="true" index="IDX_WORKLOG_ENTRY_ON_USER_ID"/>
+        <property name="comment" column="COMMENT" type="string"/>
+        <property name="created" column="CREATED" type="timestamp"/>
+        <property name="minutes" column="MINUTES" type="integer"/>
+        <property name="trackingInfo" type="com.simula.util.hibernate.TrackingInfoUserType">
+            <column name="UPDATED_ON"/>
+            <column name="UPDATED_BY"/>
+            <column name="CREATED_ON"/>
+            <column name="CREATED_BY"/>
+        </property>
+    </class>
+
+    <class name="com.simula.timesheets.ProjectCategory" table="PROJECT_CATEGORIES" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="id" column="ID" type="integer" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_PROJECT_CATEGORIES</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="integer"/>
+        <property name="description" column="DESCRIPTION" type="string"/>
+        <set name="projectCodes" inverse="true" cascade="all,delete-orphan">
+            <cache usage="read-write"/>
+            <key column="PROJECT_CATEGORY_ID"/>
+            <one-to-many class="com.simula.timesheets.ProjectCode"/>
+        </set>
+        <property name="trackingInfo" type="com.simula.util.hibernate.TrackingInfoUserType">
+            <column name="UPDATED_ON"/>
+            <column name="UPDATED_BY"/>
+            <column name="CREATED_ON"/>
+            <column name="CREATED_BY"/>
+        </property>
+    </class>
+
+    <class name="com.simula.timesheets.ProjectCode" table="PROJECT_CODES" dynamic-update="true">
+        <cache usage="read-write"/>
+        <id name="id" column="ID" type="integer" unsaved-value="null">
+            <generator class="sequence">
+                <param name="sequence">SEQ_PROJECT_CODES</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="integer"/>
+        <many-to-one name="category" column="PROJECT_CATEGORY_ID" class="com.simula.timesheets.ProjectCategory" cascade="none" not-null="true" index="IDX_PROJECT_CODE_ON_PROJECT_CATEGORY_ID"/>
+        <property name="code" column="CODE" type="string"/>
+        <property name="description" column="DECSRIPTION" type="string"/>
+        <property name="trackingInfo" type="com.simula.util.hibernate.TrackingInfoUserType">
+            <column name="UPDATED_ON"/>
+            <column name="UPDATED_BY"/>
+            <column name="CREATED_ON"/>
+            <column name="CREATED_BY"/>
+        </property>
+    </class -->
+
+</hibernate-mapping>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-
-    <bean id="armKnitPoint" class="org.livetribe.arm.KnitPoint">
+<sdwdwdwd>
+    <!-- bean id="armKnitPoint"
+          class="org.livetribe.arm.bean.KnitPointBean"
+          init-method="init">
         <property name="connection">
             <ref local="amqConnector"/>
         </property>
@@ -36,6 +38,6 @@
         <constructor-arg>
             <value>org.livetribe.arm.queue</value>
         </constructor-arg>
-    </bean>
+    </bean -->
 
 </beans>

@@ -40,6 +40,11 @@ class LTMetricString32 extends AbstractMetricBase implements ArmMetricString32
     public int set(String s)
     {
         metric = s;
-        return 0;
+        return GeneralErrorCodes.SUCCESS;
+    }
+
+    public Object snapshot()
+    {
+        return (this.isValid() ? metric : null);
     }
 }

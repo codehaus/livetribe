@@ -44,7 +44,7 @@ public class ActiveMQActivationSpec implements ActivationSpec, Serializable
     {
         if (this.resourceAdapter != null) throw new ResourceException("ResourceAdapter already set");
 
-        if (!(resourceAdapter instanceof ActiveMQResourceAdapter)) throw new ResourceException("ResourceAdapter is not of type: " + ActiveMQResourceAdapter.class.getName());
+        if (!(resourceAdapter instanceof ActiveMQResourceAdapterWrapper)) throw new ResourceException("ResourceAdapter is not of type: " + ActiveMQResourceAdapterWrapper.class.getName());
 
         this.resourceAdapter = resourceAdapter;
     }

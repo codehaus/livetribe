@@ -23,7 +23,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 
-import org.livetribe.arm.ARMException;
+import org.livetribe.arm.util.ARMException;
 import org.livetribe.util.ByteArrayPropertyEditor;
 
 

@@ -54,7 +54,7 @@ public class IsolatingClassLoader extends MultiParentClassLoader
         internal = getParents()[0];
     }
 
-    public ClassLoader getInternal()
+    protected ClassLoader getInternal()
     {
         return internal;
     }
@@ -230,7 +230,7 @@ public class IsolatingClassLoader extends MultiParentClassLoader
             return "[" + getClass().getName() + ":" +
                    " name=" + getName() +
                    " urls=" + Arrays.asList(getURLs()) +
-                   " parents=" + parent +
+                   " parent=" + parent +
                    " ancestor=" + ancestor +
                    "]";
         }

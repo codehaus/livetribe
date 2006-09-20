@@ -6,7 +6,7 @@ import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 
-import org.livetribe.arm.LTObject;
+import org.livetribe.arm.impl.LTObject;
 
 
 /**

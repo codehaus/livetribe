@@ -19,7 +19,7 @@ package org.livetribe.arm.xbean;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
-import org.livetribe.arm.GeneralErrorCodes;
+import org.livetribe.arm.impl.GeneralErrorCodes;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 

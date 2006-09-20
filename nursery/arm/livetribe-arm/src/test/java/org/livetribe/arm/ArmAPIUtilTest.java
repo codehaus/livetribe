@@ -29,6 +29,7 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.springframework.context.ApplicationContext;
 
+import org.livetribe.arm.util.ARMException;
 import org.livetribe.arm.util.ARMUtil;
 
 

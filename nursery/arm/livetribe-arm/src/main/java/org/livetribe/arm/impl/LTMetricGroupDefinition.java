@@ -19,29 +19,19 @@ package org.livetribe.arm.impl;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 
-import org.livetribe.arm.AbstractIdentifiableObject;
-import org.livetribe.arm.KnitPoint;
-import org.livetribe.arm.connection.Connection;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
 class LTMetricGroupDefinition extends AbstractIdentifiableObject implements ArmMetricGroupDefinition
 {
-    private final Connection connection = KnitPoint.getConnection();
     private final ArmMetricDefinition[] definitions;
 
-    LTMetricGroupDefinition(ArmMetricDefinition[] definitions)
+    LTMetricGroupDefinition(String oid, ArmMetricDefinition[] definitions)
     {
-        this.definitions = definitions;
+        super(oid);
 
-        connection.introduceMetricGroupDefinition(getObjectId(),
-                                                  ArmAPIUtil.extractObjectIds((LTMetricDefinition[]) definitions),
-                                                  ArmAPIUtil.extractNames(definitions),
-                                                  ArmAPIUtil.extractUnits(definitions),
-                                                  ArmAPIUtil.extractUsage(definitions),
-                                                  ArmAPIUtil.extractIds(definitions));
+        this.definitions = definitions;
     }
 
     public ArmMetricDefinition getMetricDefinition(int index)

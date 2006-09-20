@@ -47,8 +47,6 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm.FacadeFactoryBase;
-
 
 /**
  * @version $Revision: $ $Date: $

@@ -40,6 +40,11 @@ class LTMetricGaugeFloat32 extends AbstractMetricBase implements ArmMetricGaugeF
     public int set(float value)
     {
         metric = value;
-        return 0;
+        return GeneralErrorCodes.SUCCESS;
+    }
+
+    public Object snapshot()
+    {
+        return (this.isValid() ? new Float(metric) : null);
     }
 }

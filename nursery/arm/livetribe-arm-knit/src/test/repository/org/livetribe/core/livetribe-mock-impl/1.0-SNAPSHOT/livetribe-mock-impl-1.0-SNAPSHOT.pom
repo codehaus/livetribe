@@ -1,0 +1,22 @@
+<?xml version="1.0"?><project>
+  <parent>
+    <artifactId>livetribe-root</artifactId>
+    <groupId>org.livetribe.core</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.livetribe.core</groupId>
+  <artifactId>livetribe-mock-impl</artifactId>
+  <name>LiveTribe :: Mock Implementation</name>
+  <version>1.0-SNAPSHOT</version>
+  <build />
+  <dependencies>
+    <dependency>
+      <groupId>org.livetribe.core</groupId>
+      <artifactId>livetribe-mock-iface</artifactId>
+    </dependency>
+  </dependencies>
+  <distributionManagement>
+    <status>deployed</status>
+  </distributionManagement>
+</project>

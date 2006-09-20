@@ -16,130 +16,211 @@
  */
 package org.livetribe.arm.impl;
 
+import java.util.List;
+
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmTranReportWithMetrics;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
 import org.opengroup.arm40.transaction.ArmApplication;
+import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm.AbstractObject;
+import org.livetribe.arm.connection.Connection;
+import org.livetribe.arm.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTranReportWithMetrics extends AbstractObject implements ArmTranReportWithMetrics
+class LTTranReportWithMetrics extends AbstractIdentifiableObject implements ArmTranReportWithMetrics, ApplicationLifecycleListener
 {
-    private final ArmApplication app;
-    private final ArmTransactionWithMetricsDefinition definition;
-    private final ArmMetricGroup group;
+    private final Connection connection;
+    private final UUIDGen guidGenerator;
+    private final ArmApplication application;
+    private final ArmTransactionWithMetricsDefinition transMetricsDef;
+    private final LTMetricGroup metricGroup;
+    private ArmCorrelator parentCorrelator;
+    private ArmCorrelator correlator;
+    private boolean fresh;
+    private String contextURI;
+    private final String[] contextValues = new String[20];
+    private ArmUser user;
 
-    public LTTranReportWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition definition, ArmMetricGroup group)
+    public LTTranReportWithMetrics(String oid, Connection connection, UUIDGen guidGenerator, ArmApplication application, ArmTransactionWithMetricsDefinition transMetricsDef, ArmMetricGroup metricGroup)
     {
-        this.app = app;
-        this.definition = definition;
-        this.group = group;
+        super(oid);
+
+        this.connection = connection;
+        this.guidGenerator = guidGenerator;
+        this.application = application;
+        this.transMetricsDef = transMetricsDef;
+        this.metricGroup = (LTMetricGroup) metricGroup;
+
+        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+    }
+
+    public void end()
+    {
+        setBad(true);
     }
 
     public ArmCorrelator generateCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        fresh = true;
+
+        return correlator;
     }
 
     public ArmApplication getApplication()
     {
-        return app;
+        return application;
     }
 
     public String getContextURIValue()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return contextURI;
     }
 
     public String getContextValue(int index)
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return (index < 20 ? contextValues[index] : null);
     }
 
     public ArmCorrelator getCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return correlator;
     }
 
     public ArmCorrelator getParentCorrelator()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return parentCorrelator;
     }
 
+    /**
+     * The ARM v4.0 spec does not explain what this method should return.  Return
+     * a "safe" value of 0;
+     *
+     * @return 0
+     */
     public long getResponseTime()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return 0;
     }
 
+    /**
+     * The ARM v4.0 spec does not explain what this method should return for
+     * ArmTranReports.  Return a "safe" value of <code>STATUS_GOOD</code>.
+     *
+     * @return STATUS_GOOD
+     */
     public int getStatus()
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return ArmConstants.STATUS_GOOD;
     }
 
     public ArmTransactionDefinition getDefinition()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return transMetricsDef;
     }
 
     public ArmUser getUser()
     {
-        return null;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return user;
     }
 
     public int report(int status, long respTime)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return report(status, respTime, "");
     }
 
     public int report(int status, long respTime, long stopTime)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        return report(status, respTime, stopTime, "");
     }
 
     public int report(int status, long respTime, String diagnosticDetail)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (fresh) fresh = false;
+        else correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+
+        metricGroup.start();
+        metricGroup.snapshot();
+        List[] metrics = metricGroup.stop();
+
+        connection.report(getObjectId(), (parentCorrelator != null ? parentCorrelator.getBytes() : null), correlator.getBytes(), status, respTime, diagnosticDetail, metrics);
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int report(int status, long respTime, long stopTime, String diagnosticDetail)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (fresh) fresh = false;
+        else correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+
+        metricGroup.start();
+        metricGroup.snapshot();
+        List[] metrics = metricGroup.stop();
+
+        connection.report(getObjectId(), (parentCorrelator != null ? parentCorrelator.getBytes() : null), correlator.getBytes(), status, respTime, stopTime, diagnosticDetail, metrics);
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setContextURIValue(String value)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        contextURI = value;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setContextValue(int index, String value)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        if (index > 20) return StaticArmAPIMonitor.error(TransactionErrorCodes.INDEX_OUT_OF_RANGE);
+
+        if (value != null)
+        {
+            int length = value.length();
+
+            if (length == 0) value = null;
+            if (length > 127) StaticArmAPIMonitor.warning(TransactionErrorCodes.ID_PROP_TOO_LONG);
+            if (transMetricsDef.getIdentityProperties().getContextName(index) != null)
+            {
+                contextValues[index] = value;
+            }
+            else
+            {
+                StaticArmAPIMonitor.warning(TransactionErrorCodes.ID_PROP_IGNORED);
+            }
+        }
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setParentCorrelator(ArmCorrelator parent)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        parentCorrelator = parent;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public int setUser(ArmUser user)
     {
-        return 0;  //TODO: change body of implemented methods use File | Settings | File Templates.
+        this.user = user;
+
+        return GeneralErrorCodes.SUCCESS;
     }
 
     public ArmTransactionWithMetricsDefinition getTransactionWithMetricsDefinition()
     {
-        return definition;
+        return transMetricsDef;
     }
 
     public ArmMetricGroup getMetricGroup()
     {
-        return group;
+        return metricGroup;
     }
 }

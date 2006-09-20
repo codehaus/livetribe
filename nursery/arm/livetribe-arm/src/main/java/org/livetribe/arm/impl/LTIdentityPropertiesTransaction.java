@@ -26,9 +26,9 @@ class LTIdentityPropertiesTransaction extends LTIdentityProperties implements Ar
 {
     private final String uri;
 
-    LTIdentityPropertiesTransaction(String[] identityNames, String[] identityValues, String[] contextNames, String uri)
+    LTIdentityPropertiesTransaction(String oid, String[] identityNames, String[] identityValues, String[] contextNames, String uri)
     {
-        super(identityNames, identityValues, contextNames);
+        super(oid, identityNames, identityValues, contextNames);
 
         this.uri = uri;
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="mock" class="org.livetribe.mock.MockImpl"/>
+
+</beans>

@@ -9,7 +9,6 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
-import org.livetribe.arm.AbstractFactoryBase;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
 
 
@@ -26,7 +25,14 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
         contextValues = ArmAPIUtil.checkOptional(appDef, contextValues);
         systemAddress = ArmAPIUtil.checkOptional(systemAddress);
 
-        return new LTApplicationRemote(appDef, group, instance, contextValues, systemAddress);
+        LTApplicationRemote appRemote = new LTApplicationRemote(allocateOID(), appDef, group, instance, contextValues, systemAddress);
+
+        getConnection().declareApplicationRemote(appRemote.getObjectId(),
+                                                 ((Identifiable) appDef).getObjectId(),
+                                                 group, instance, contextValues,
+                                                 ArmAPIUtil.extractArmSystemAddress(systemAddress));
+
+        return appRemote;
     }
 
     public ArmSystemAddress newArmSystemAddress(short format, byte[] addressBytes, ArmID id)
@@ -68,6 +74,6 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
         app = ArmAPIUtil.checkRequired(app);
         appTranDef = ArmAPIUtil.checkRequired(appTranDef);
 
-        return new LTTranReport(app, appTranDef);
+        return new LTTranReport(allocateOID(), getConnection(), getGuidGenerator(), app, appTranDef);
     }
 }

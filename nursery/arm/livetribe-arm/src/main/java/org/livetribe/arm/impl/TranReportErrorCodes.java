@@ -1,7 +1,5 @@
 package org.livetribe.arm.impl;
 
-import org.livetribe.arm.GeneralErrorCodes;
-
 
 /**
  * @version $Revision: $ $Date: $

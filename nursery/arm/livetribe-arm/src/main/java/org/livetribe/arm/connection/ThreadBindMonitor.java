@@ -22,7 +22,7 @@ package org.livetribe.arm.connection;
  */
 public interface ThreadBindMonitor
 {
-    public void bind();
+    public void bind(byte[] correlator);
 
-    public void unbind();
+    public void unbind(byte[] correlator);
 }

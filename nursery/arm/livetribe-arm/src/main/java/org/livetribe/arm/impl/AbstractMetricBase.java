@@ -18,14 +18,11 @@ package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 
-import org.livetribe.arm.AbstractObject;
-import org.livetribe.arm.GeneralErrorCodes;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
-abstract class AbstractMetricBase extends AbstractObject implements LTMetric
+abstract class AbstractMetricBase extends AbstractObject implements Metric
 {
     private final ArmMetricDefinition definition;
     private boolean valid;

@@ -34,7 +34,7 @@ public class AbstractHibernateContextTestCase extends TestCase
     {
     }
 
-    public void setUp()
+    public void XsetUp()
     {
         Properties props = new Properties();
 

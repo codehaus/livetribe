@@ -20,8 +20,6 @@ import java.util.Arrays;
 
 import org.opengroup.arm40.transaction.ArmToken;
 
-import org.livetribe.arm.AbstractObject;
-
 
 /**
  * @version $Revision: $ $Date: $
@@ -30,6 +28,8 @@ class LTToken extends AbstractObject implements ArmToken
 {
     private final byte[] id;
     private transient int cachedHash = 0;
+    protected byte one;
+    protected byte two;
 
     LTToken(byte[] id)
     {
@@ -81,7 +81,7 @@ class LTToken extends AbstractObject implements ArmToken
         int hash = cachedHash;
         if (hash == 0)
         {
-            for (int i = 0; i < id.length; i++) hash ^= id[i];
+            for (int i = 0; i < id.length; i++) hash = 29 * hash + id[i];
             cachedHash = hash;
         }
         return hash;

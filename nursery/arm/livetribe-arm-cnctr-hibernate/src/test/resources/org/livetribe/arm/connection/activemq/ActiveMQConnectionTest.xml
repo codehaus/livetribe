@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
-    <bean id="armKnitPoint" class="org.livetribe.arm.KnitPoint">
+    <!-- bean id="armKnitPoint" class="org.livetribe.arm.KnitPoint">
         <property name="connection">
             <ref local="amqConnector"/>
         </property>
@@ -12,7 +12,7 @@
     </bean>
 
     <bean id="amqConnector"
-          class="org.livetribe.arm.connection.hibernate.HybernateConnection"
+          class="org.livetribe.arm.ra.hibernate.HibernateConnection"
           init-method="init"
           destroy-method="destroy">
         <property name="factory">
@@ -23,7 +23,7 @@
         </property>
     </bean>
 
-    <bean id="consumer" class="org.livetribe.arm.connection.activemq.ConsumerBean">
+    <bean id="consumer" class="org.livetribe.arm.connection.hibernate.ConsumerBean">
         <property name="factory">
             <ref local="jmsFactory"/>
         </property>
@@ -36,6 +36,6 @@
         <constructor-arg>
             <value>org.livetribe.arm.queue</value>
         </constructor-arg>
-    </bean>
+    </bean -->
 
 </beans>
