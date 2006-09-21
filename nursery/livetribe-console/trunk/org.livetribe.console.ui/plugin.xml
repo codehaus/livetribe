@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="org.livetribe.console.ui.jmx.mbeanViewContents" name="Contents for MBeanView" schema="schema/mbeanViewContents.exsd"/>
+   <extension-point id="org.livetribe.console.ui.jmx.objectNameHandlers" name="Handlers for ObjectNames" schema="schema/objectNameHandlers.exsd"/>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="org.livetribe.console.ui.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="org.livetribe.console.ui.file.new"
+            label="New Actions"
+            visible="true">
+         <menu
+               id="file.new"
+               label="New"
+               path="file/new">
+         </menu>
+         <action
+               id="org.livetribe.console.ui.jmx.view.action.ShowJMXConnectionDialogAction"
+               label="JMX Connection..."
+               icon="icons/connect_to_network.png"
+               style="push"
+               menubarPath="file/file.new/additions"
+               toolbarPath="Normal/additions"
+               class="org.livetribe.console.ui.jmx.view.action.ShowJMXConnectionDialogAction">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="%perspective.jmx"
+            class="org.livetribe.console.ui.jmx.perspective.JMXPerspective"
+            id="org.livetribe.console.ui.jmx.perspective.JMXPerspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="%jmx.view.ObjectNameView"
+            class="org.livetribe.console.ui.jmx.view.ObjectNameView"
+            id="org.livetribe.console.ui.jmx.view.ObjectNameView">
+      </view>
+      <view
+            name="%jmx.view.JMXDiscoveryView"
+            class="org.livetribe.console.ui.jmx.view.JMXDiscoveryView"
+            id="org.livetribe.console.ui.jmx.view.JMXDiscoveryView">
+      </view>
+      <view
+            name="%jmx.view.MBeanView"
+            class="org.livetribe.console.ui.jmx.view.MBeanView"
+            id="org.livetribe.console.ui.jmx.view.MBeanView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="objectNameViewPullDownContributions"
+            targetID="org.livetribe.console.ui.jmx.view.ObjectNameView">
+         <action 
+               id="org.livetribe.console.ui.jmx.view.action.ShowObjectNameHandlerDialogAction"
+               label="Filters..."
+               class="org.livetribe.console.ui.jmx.view.action.ShowObjectNameHandlerDialogAction"
+               style="push"
+               menubarPath="content">
+         </action>
+      </viewContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="closeJMXConnectorContribution"
+            objectClass="org.livetribe.console.ui.jmx.JMXConnectorInfo">
+         <action 
+               id="org.livetribe.console.ui.jmx.view.action.CloseJMXConnectorAction"
+               label="Disconnect"
+               class="org.livetribe.console.ui.jmx.view.action.CloseJMXConnectorAction"
+               style="push"
+               menubarPath="content"
+               enablesFor="1">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

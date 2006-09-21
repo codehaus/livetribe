@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %plugin.name
+Bundle-SymbolicName: org.livetribe.console.ui;singleton:=true
+Bundle-Version: 0.1
+Bundle-Activator: org.livetribe.console.ui.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
+Import-Package: org.livetribe.ioc
+Export-Package: org.livetribe.console.ui.jmx,
+ org.livetribe.console.ui.widgets

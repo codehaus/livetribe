@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.livetribe.console.ui.jmx.objectNameHandlers">
+      <handler
+            className="org.livetribe.console.ui.jetty.jmx.Jetty6ObjectNameHandler"
+            description="The ObjectName handler for Jetty 6"
+            enabled="true"
+            id="jetty6ObjectNameHandler"
+            name="Jetty 6"/>
+   </extension>
+   <extension
+         point="org.livetribe.console.ui.jmx.mbeanViewContents">
+      <mapping
+            className="org.livetribe.console.ui.jetty.jmx.Jetty6MBeanViewContent"
+            id="jetty6MBeanViewContent">
+         <pattern>org.mortbay.jetty:*</pattern>
+      </mapping>
+   </extension>
+
+</plugin>
