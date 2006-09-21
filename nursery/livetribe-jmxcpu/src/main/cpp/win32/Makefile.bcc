@@ -1,0 +1,29 @@
+#
+# Makefile for Borland's 5.5 C++ compiler
+#
+CC=bcc32
+#
+# Flags 
+#       -tWM
+#       -tWD
+#
+CFLAGS=-tWM -tWD
+INCLUDES=-I$(JAVA_HOME)include -I$(JAVA_HOME)include\win32
+VERSION=1.0
+MODULE_NAME=Win32ProcessorUsage
+OUTPUT=$(MODULE_NAME).dll
+DESTINATION=-e$(OUTPUT)
+RESOURCE_DIR=..\..\resources
+
+deploy: Win32ProcessorUsageDLL
+        copy $(OUTPUT) $(RESOURCE_DIR)
+
+all: Win32ProcessorUsageDLL
+ 
+Win32ProcessorUsageDLL: $(MODULE_NAME).cpp
+                        $(CC) $(CFLAGS) $(INCLUDES) $(DESTINATION) $(MODULE_NAME).cpp
+ 
+clean:
+	del $(OUTPUT)
+	del $(MODULE_NAME).obj
+	del $(MODULE_NAME)-$(VERSION).tds
