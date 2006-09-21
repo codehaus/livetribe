@@ -24,7 +24,12 @@
 
     <licenses />
 
-    <scm />
+    <scm>
+        <connection>scm:svn:http://svn.codehaus.org/livetribe/nursery/</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/nursery/</developerConnection>
+        <url>http://svn.livetribe.codehaus.org/browse/livetribe/nursery/</url>
+    </scm>
+    
 
     <organization />
 
