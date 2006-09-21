@@ -78,7 +78,9 @@ public class MBeanViewContentManager
     	}
         
         // Return the default for now; to be removed when partial order sort is implemented
-    	return new MBeanViewContent();
+        IMBeanViewContent defaultResult = new MBeanViewContent();
+        Activator.getDefault().getContainer().resolve(defaultResult);
+    	return defaultResult;
     }
 
 	private void sort(List<MBeanViewContentInfo> mappings) 
