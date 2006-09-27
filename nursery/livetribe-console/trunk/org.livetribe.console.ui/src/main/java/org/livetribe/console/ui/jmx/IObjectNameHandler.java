@@ -20,7 +20,7 @@ package org.livetribe.console.ui.jmx;
  */
 public interface IObjectNameHandler
 {
-    public void setEnabled(boolean enabled);
+    public void setObjectNameHandlerInfo(ObjectNameHandlerInfo handlerInfo);
     
     /**
      * Returns whether the given element is handled by this handler.

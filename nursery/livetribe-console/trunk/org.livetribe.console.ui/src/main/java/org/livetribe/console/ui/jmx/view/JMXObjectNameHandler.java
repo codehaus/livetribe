@@ -15,27 +15,15 @@
  */
 package org.livetribe.console.ui.jmx.view;
 
-import org.livetribe.console.ui.jmx.IObjectNameHandler;
-import org.livetribe.console.ui.jmx.JMXNode;
+import org.livetribe.console.ui.jmx.AbstractObjectNameHandler;
 
 /**
  * @version $Revision$ $Date$
  */
-public class JMXObjectNameHandler implements IObjectNameHandler
+public class JMXObjectNameHandler extends AbstractObjectNameHandler
 {
-    public void setEnabled(boolean enabled)
-    {
-        // Do nothing, this handler is always enabled
-    }
-
     public Boolean accepts(Object element)
     {
         return Boolean.TRUE;
     }
-
-    public String getLabel(Object element)
-    {
-        return ((JMXNode)element).getName();
-    }
-
 }

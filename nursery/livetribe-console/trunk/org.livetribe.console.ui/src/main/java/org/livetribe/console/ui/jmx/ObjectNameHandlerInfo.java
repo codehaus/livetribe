@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.console.ui.jmx.view;
+package org.livetribe.console.ui.jmx;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 
@@ -34,6 +34,21 @@ public class ObjectNameHandlerInfo
         this.name = name;
         this.description = description;
         this.configurationElement = configurationElement;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        final ObjectNameHandlerInfo that = (ObjectNameHandlerInfo)obj;
+        return getId().equals(that.getId());
     }
 
     public String getId()

@@ -69,7 +69,7 @@ public class ObjectNameDomainInfo extends ObjectNameInfo
             if (child instanceof ObjectNameKeyInfo)
             {
                 ObjectNameKeyInfo keyInfo = (ObjectNameKeyInfo)child;
-                if (keyInfo.getProperty().equals(property)) return keyInfo;
+                if (keyInfo.getKeyName().equals(property)) return keyInfo;
             }
         }
         return null;

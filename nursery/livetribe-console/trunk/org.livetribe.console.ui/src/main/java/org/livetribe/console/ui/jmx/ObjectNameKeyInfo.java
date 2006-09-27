@@ -24,14 +24,16 @@ import javax.management.ObjectName;
  */
 public class ObjectNameKeyInfo extends ObjectNameInfo
 {
-    private final String value;
+    private final String keyName;
+    private final String keyValue;
     private final String property;
     
-    public ObjectNameKeyInfo(final ObjectName objectName, final String value, final String property)
+    public ObjectNameKeyInfo(final ObjectName objectName,final String key, final String value)
     {
         super(objectName);
-        this.value = value;
-        this.property = property;
+        this.keyName = key;
+        this.keyValue = value;
+        this.property = key + "=" + value;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class ObjectNameKeyInfo extends ObjectNameInfo
             if (child instanceof ObjectNameKeyInfo)
             {
                 ObjectNameKeyInfo keyInfo = (ObjectNameKeyInfo)child;
-                if (keyInfo.getProperty().equals(property)) return keyInfo;
+                if (keyInfo.property.equals(property)) return keyInfo;
             }
         }
         return null;
@@ -74,11 +76,11 @@ public class ObjectNameKeyInfo extends ObjectNameInfo
 
     public String getKeyValue()
     {
-        return value;
+        return keyValue;
     }
     
-    public String getProperty()
+    public String getKeyName()
     {
-        return property;
+        return keyName;
     }
 }

@@ -18,7 +18,9 @@ package org.livetribe.console.ui.jmx.view;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -36,6 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.livetribe.console.ui.Messages;
+import org.livetribe.console.ui.jmx.ObjectNameHandlerInfo;
 import org.livetribe.ioc.Inject;
 
 /**
@@ -62,7 +65,7 @@ public class ObjectNameHandlerDialog extends Dialog
         container.setLayout(layout);
         
         Label instructions = new Label(container, SWT.NONE);
-        instructions.setText("foo");
+        instructions.setText(Messages.LABEL_OBJECTNAME_HANDLERS_DESCRIPTION_TEXT);
         
         CheckboxTableViewer viewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER);
         GridData layoutData = new GridData();
@@ -98,12 +101,21 @@ public class ObjectNameHandlerDialog extends Dialog
                 }
             }
         });
+        viewer.addCheckStateListener(new ICheckStateListener() 
+        {
+            public void checkStateChanged(CheckStateChangedEvent event)
+            {
+                ObjectNameHandlerInfo info = (ObjectNameHandlerInfo)event.getElement();
+                info.setEnabled(event.getChecked());
+            }
+        });
         
         return container;
     }
     
     private static class ObjectNameHandlerContentProvider implements IStructuredContentProvider
     {
+        private static final Object[] EMPTY_ELEMENTS = new Object[0];
         private Object[] elements;
         
         public Object[] getElements(Object arg0)
@@ -115,13 +127,26 @@ public class ObjectNameHandlerDialog extends Dialog
         {
         }
 
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
+        public void inputChanged(final Viewer viewer, Object oldInput, Object newInput)
         {
-            List<ObjectNameHandlerInfo> input = (List<ObjectNameHandlerInfo>)newInput;
-            elements = input.toArray();
-
-            CheckboxTableViewer checkboxViewer = (CheckboxTableViewer)viewer;
-            for (ObjectNameHandlerInfo info : input) checkboxViewer.setChecked(info, info.isEnabled());
+            if (newInput == null)
+            {
+                elements = EMPTY_ELEMENTS;
+            }
+            else
+            {
+                final List<ObjectNameHandlerInfo> input = (List<ObjectNameHandlerInfo>)newInput;
+                elements = input.toArray();
+                
+                viewer.getControl().getDisplay().asyncExec(new Runnable() 
+                {
+                    public void run()
+                    {
+                        CheckboxTableViewer checkboxViewer = (CheckboxTableViewer)viewer;
+                        for (ObjectNameHandlerInfo info : input) checkboxViewer.setChecked(info, info.isEnabled());
+                    }
+                });
+            }
         }
     }
     

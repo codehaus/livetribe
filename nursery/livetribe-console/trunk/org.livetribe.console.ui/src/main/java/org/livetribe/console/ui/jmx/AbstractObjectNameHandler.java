@@ -13,12 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.console.ui.jmx.view;
+package org.livetribe.console.ui.jmx;
 
 /**
  * @version $Revision$ $Date$
  */
-public class ObjectNameFilterManager 
+public abstract class AbstractObjectNameHandler implements IObjectNameHandler
 {
+    private ObjectNameHandlerInfo info;
+    
+    public void setObjectNameHandlerInfo(ObjectNameHandlerInfo handlerInfo)
+    {
+        this.info = handlerInfo;
+    }
 
+    public Boolean accepts(Object element)
+    {
+        return null;
+    }
+
+    public String getLabel(Object element)
+    {
+        return ((JMXNode)element).getName();
+    }
+    
+    protected boolean isEnabled()
+    {
+        return info.isEnabled();
+    }
 }

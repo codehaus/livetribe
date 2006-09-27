@@ -4,7 +4,7 @@
    <extension
          point="org.livetribe.console.ui.jmx.objectNameHandlers">
       <handler
-            className="org.livetribe.console.ui.jetty.jmx.Jetty6ObjectNameHandler"
+            className="org.livetribe.console.ui.jetty.jmx.view.Jetty6ObjectNameHandler"
             description="The ObjectName handler for Jetty 6"
             enabled="true"
             id="jetty6ObjectNameHandler"
@@ -13,7 +13,7 @@
    <extension
          point="org.livetribe.console.ui.jmx.mbeanViewContents">
       <mapping
-            className="org.livetribe.console.ui.jetty.jmx.Jetty6MBeanViewContent"
+            className="org.livetribe.console.ui.jetty.jmx.view.Jetty6MBeanViewContent"
             id="jetty6MBeanViewContent">
          <pattern>org.mortbay.jetty:*</pattern>
       </mapping>

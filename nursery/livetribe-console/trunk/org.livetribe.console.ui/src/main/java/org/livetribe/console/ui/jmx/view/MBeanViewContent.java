@@ -16,9 +16,12 @@
 package org.livetribe.console.ui.jmx.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.management.InstanceNotFoundException;
+import javax.management.MBeanAttributeInfo;
 import javax.management.MBeanInfo;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -94,7 +97,13 @@ public class MBeanViewContent implements IMBeanViewContent
         try
         {
             MBeanInfo mbeanInfo = jmxConnectorManager.getMBeanInfo(connectorInfo, objectNameInfo);
-            Map<String, Object> attributes = jmxConnectorManager.getAttributes(connectorInfo, objectNameInfo, mbeanInfo.getAttributes());
+            List<String> attributeNames = new ArrayList<String>();
+            for (int i = 0; i < mbeanInfo.getAttributes().length; ++i)
+            {
+                MBeanAttributeInfo attributeInfo = mbeanInfo.getAttributes()[i];
+                if (attributeInfo.isReadable()) attributeNames.add(attributeInfo.getName());
+            }
+            Map<String, Object> attributes = jmxConnectorManager.getAttributes(connectorInfo, objectNameInfo.getObjectName(), attributeNames.toArray(new String[attributeNames.size()]));
             
             attributesViewer.setInput(attributes);
         }

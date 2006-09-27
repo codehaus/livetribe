@@ -27,10 +27,13 @@ import java.util.TreeMap;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
+import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.IntrospectionException;
 import javax.management.MBeanAttributeInfo;
+import javax.management.MBeanException;
 import javax.management.MBeanInfo;
+import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.management.remote.JMXConnector;
@@ -149,7 +152,7 @@ public class JMXConnectorManager
         JMXNode child = parent.find(property);
         if (child == null)
         {
-            child = new ObjectNameKeyInfo(objectName, value, property);
+            child = new ObjectNameKeyInfo(objectName, key, value);
             parent.add(child);
         }
         return child;
@@ -162,11 +165,16 @@ public class JMXConnectorManager
             return new ArrayList<JMXConnectorInfo>(connectorInfos);
         }        
     }
+    
+    private JMXConnector getJMXConnector(JMXConnectorInfo connectorInfo)
+    {
+        JMXServiceURL jmxServiceURL = connectorInfo.getJMXServiceURL();
+        return connectors.get(jmxServiceURL);
+    }
 
     public MBeanInfo getMBeanInfo(JMXConnectorInfo connectorInfo, ObjectNameInfo objectNameInfo) throws InstanceNotFoundException, IOException
     {
-        JMXServiceURL jmxServiceURL = connectorInfo.getJMXServiceURL();
-        JMXConnector connector = connectors.get(jmxServiceURL);
+        JMXConnector connector = getJMXConnector(connectorInfo);
         return getMBeanInfo(connector, objectNameInfo.getObjectName());
     }
     
@@ -186,17 +194,27 @@ public class JMXConnectorManager
         }
     }
 
-    public Map<String, Object> getAttributes(JMXConnectorInfo connectorInfo, ObjectNameInfo objectNameInfo, MBeanAttributeInfo[] attributeInfos) throws InstanceNotFoundException, IOException
+    public Object getAttribute(JMXConnectorInfo connectorInfo, ObjectName objectName, String attributeName) throws AttributeNotFoundException, InstanceNotFoundException, IOException
     {
-        JMXServiceURL jmxServiceURL = connectorInfo.getJMXServiceURL();
-        JMXConnector connector = connectors.get(jmxServiceURL);
-        List<String> attributeNames = new ArrayList<String>();
-        for (int i = 0; i < attributeInfos.length; ++i)
+        try
         {
-            MBeanAttributeInfo attributeInfo = attributeInfos[i];
-            if (attributeInfo.isReadable()) attributeNames.add(attributeInfo.getName());
+            JMXConnector connector = getJMXConnector(connectorInfo);
+            return connector.getMBeanServerConnection().getAttribute(objectName, attributeName);
         }
-        AttributeList attributes = getAttributes(connector, objectNameInfo.getObjectName(), attributeNames.toArray(new String[0]));
+        catch (MBeanException x)
+        {
+            throw new JMXRuntimeException(x);
+        }
+        catch (ReflectionException x)
+        {
+            throw new JMXRuntimeException(x);
+        }
+    }
+
+    public Map<String, Object> getAttributes(JMXConnectorInfo connectorInfo, ObjectName objectName, String[] attributeNames) throws InstanceNotFoundException, IOException
+    {
+        JMXConnector connector = getJMXConnector(connectorInfo);
+        AttributeList attributes = getAttributes(connector, objectName, attributeNames);
         Map<String, Object> result = new HashMap<String, Object>();
         for (int i = 0; i < attributes.size(); ++i)
         {

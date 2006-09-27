@@ -189,4 +189,10 @@ public class ObjectNameView extends ViewPart
             view.setInput(input);
         }
     }
+
+    public void refresh()
+    {
+        view.collapseAll();
+        view.refresh(true);
+    }
 }

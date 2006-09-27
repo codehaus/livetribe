@@ -21,17 +21,18 @@ import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.livetribe.console.ui.Activator;
 import org.livetribe.console.ui.jmx.view.ObjectNameHandlerDialog;
+import org.livetribe.console.ui.jmx.view.ObjectNameView;
 
 /**
  * @version $Revision$ $Date$
  */
 public class ShowObjectNameHandlerDialogAction implements IViewActionDelegate
 {
-    private IViewPart view;
+    private ObjectNameView view;
 
     public void init(IViewPart view)
     {
-        this.view = view;
+        this.view = (ObjectNameView)view;
     }
 
     public void run(IAction action)
@@ -39,6 +40,7 @@ public class ShowObjectNameHandlerDialogAction implements IViewActionDelegate
         ObjectNameHandlerDialog dialog = new ObjectNameHandlerDialog(view.getSite().getShell());
         Activator.getDefault().getContainer().resolve(dialog);
         dialog.open();
+        view.refresh();
     }
 
     public void selectionChanged(IAction action, ISelection selection)

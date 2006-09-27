@@ -86,7 +86,8 @@ public class MBeanView extends ViewPart
         {
             JMXNode current = (JMXNode)((IStructuredSelection)selection).getFirstElement();
             if (!(current instanceof ObjectNameInfo)) return;
-            if ((currentSelection == null && current != null) || (currentSelection != null && !currentSelection.equals(current)))
+            ObjectNameInfo newSelection = (ObjectNameInfo)current;
+            if ((currentSelection == null) || (!currentSelection.getObjectName().equals(newSelection.getObjectName())))
             {
                 show((ObjectNameInfo)current);
             }

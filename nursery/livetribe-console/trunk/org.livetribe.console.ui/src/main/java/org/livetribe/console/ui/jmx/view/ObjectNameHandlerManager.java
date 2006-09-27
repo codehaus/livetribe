@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
 import org.livetribe.console.ui.Activator;
 import org.livetribe.console.ui.jmx.IObjectNameHandler;
+import org.livetribe.console.ui.jmx.ObjectNameHandlerInfo;
 
 /**
  * @version $Revision$ $Date$
@@ -91,7 +92,7 @@ public class ObjectNameHandlerManager
                 try
                 {
                     IObjectNameHandler handler = (IObjectNameHandler)info.getConfigurationElement().createExecutableExtension(ATTRIBUTE_CLASS_NAME);
-                    handler.setEnabled(info.isEnabled());
+                    handler.setObjectNameHandlerInfo(info);
                     handlers.add(handler);
                 }
                 catch (CoreException x)

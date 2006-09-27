@@ -47,6 +47,8 @@ public class Messages
     public static final String LABEL_OBJECTNAME_HANDLER_DESCRIPTION_TEXT = "Handler Description:";
     public static final String LABEL_UNKNOWN_HOST_TEXT = "unknown";
 
+    public static final String LABEL_OBJECTNAME_HANDLERS_DESCRIPTION_TEXT = "Select the elements that filter the view:";
+
     private Messages()
     {
     }
