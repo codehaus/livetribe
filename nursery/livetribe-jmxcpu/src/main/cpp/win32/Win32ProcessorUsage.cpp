@@ -1,6 +1,5 @@
 
 #include <jni.h>
-#include <math.h>
 #include <stdio.h>
 #include <windows.h>
 #include "..\ProcessorUsage.h"
@@ -16,42 +15,19 @@ typedef BOOL _stdcall (*GetSystemTimesType) (LPFILETIME, LPFILETIME, LPFILETIME)
 static ULONGLONG
 FileTimeToInt64 (const FILETIME * time)
 {
-    ULARGE_INTEGER _time;
+    ULARGE_INTEGER ltime;
 
-    _time.LowPart = time->dwLowDateTime;
-    _time.HighPart = time->dwHighDateTime;
+    ltime.LowPart = time->dwLowDateTime;
+    ltime.HighPart = time->dwHighDateTime;
 
-    return _time.QuadPart;
+    return ltime.QuadPart;
 }
 
-/*
- * Code spidered from MySQL source code. 
- */
-int 
-RInt(double nr)
-{
-    double f = floor(nr);
-    double c = ceil(nr);
-    return (int)(((c-nr) >= (nr-f)) ? f :c);
-}
-
-/*
- * Code spidered from MySQL source code. 
- */
-double 
-ULongLong2Double(ULONGLONG value)
-{
-    LONGLONG nr=(LONGLONG) value;
-    if (nr >= 0)
-        return (double) nr;  
-    return (18446744073709551616.0 + (double) nr);
-}
-
-JNIEXPORT jintArray JNICALL 
-Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorAverageUsage(JNIEnv *env, jobject obj, jint sleepingTime)
+JNIEXPORT jlongArray JNICALL 
+Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorSnapshot(JNIEnv *env, jobject obj)
 {
 	DEBUGLOG(printf("JNI : -Entry-\n"));
-    jintArray retValue = NULL;
+    jlongArray retValue = NULL;
     // load the DLL
     HINSTANCE hKernel = LoadLibrary("Kernel32.dll");
     if( hKernel )
@@ -62,48 +38,26 @@ Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorAverageUsage(JNIEnv *e
         if( hGetSystemTimes )
         {
             DEBUGLOG(printf("GetProcAddress successful ... \n"));
-            FILETIME idleTime,kernelTime,userTime,idleTime2,kernelTime2,userTime2;
-            // (1) get first sample
+            FILETIME idleTime,kernelTime,userTime;
+            // Call the API
             BOOL res = hGetSystemTimes( &idleTime, &kernelTime, &userTime );
             if(res != 0)
             {
-                // (2) sleep a few milliseconds
-                Sleep(sleepingTime);
-                // (3) get second sample
-                BOOL res = hGetSystemTimes( &idleTime2, &kernelTime2, &userTime2 );
-                if(res != 0)
-                {
-                    // (4) Calculate
-                    ULONGLONG kernel = FileTimeToInt64(&kernelTime2) - FileTimeToInt64(&kernelTime);
-                    ULONGLONG idle = FileTimeToInt64(&idleTime2) - FileTimeToInt64(&idleTime);
-                    ULONGLONG user = FileTimeToInt64(&userTime2) - FileTimeToInt64(&userTime);
-                    ULONGLONG denominator = (FileTimeToInt64(&kernelTime2) + FileTimeToInt64(&idleTime2) + FileTimeToInt64(&userTime2)) -
-                                           (FileTimeToInt64(&kernelTime) + FileTimeToInt64(&idleTime) + FileTimeToInt64(&userTime));
-                    DEBUGLOG(printf("Kernel = %I64u\tUser = %I64u\tIdle = %I64u\tdenominator = %I64u \n",kernel,user,idle,denominator));
-                    DEBUGLOG(printf("Kernel = %f\tUser = %f \tIdle Usage = %f\n",(ULongLong2Double(kernel) / ULongLong2Double(denominator)) * 100,
-                                                                                 (ULongLong2Double(user) / ULongLong2Double(denominator)) * 100,
-                                                                                 (ULongLong2Double(idle) / ULongLong2Double(denominator)) * 100));
+                DEBUGLOG(printf("Kernel = %I64u\tUser = %I64u\tIdle = %I64u\n",
+                                FileTimeToInt64(&kernelTime),FileTimeToInt64(&userTime),FileTimeToInt64(&idleTime)));
+                                
+                retValue = env->NewLongArray(3);
+                
+                jlong tempArray[3];
+                // User snapshot
+                tempArray[0] = FileTimeToInt64(&userTime);
+                // System snapshot
+                tempArray[1] = FileTimeToInt64(&kernelTime);
+                // Idle snapshot
+                tempArray[2] = FileTimeToInt64(&idleTime);
                     
-                    retValue = env->NewIntArray(3);
-                    
-                    jint tempArray[3];
-                    
-                    // User Usage
-                    tempArray[0] = RInt((ULongLong2Double(user) / ULongLong2Double(denominator)) * 100);
-                    // System usage
-                    tempArray[1] = RInt((ULongLong2Double(kernel) / ULongLong2Double(denominator)) * 100);
-                    // Idle usage
-                    tempArray[2] = RInt((ULongLong2Double(idle) / ULongLong2Double(denominator)) * 100);
-                    
-                    DEBUGLOG(printf("Kernel Usage = %d \t User Usage = %d \t Idle Usage = %d\n", tempArray[1] , tempArray[0] , tempArray[2]));
-                    // Copy to array
-                    env->SetIntArrayRegion(retValue, 0, 3, tempArray);                    
-                }
-                else
-                {
-                    // TODO : Report error, should we throw Exception?
-                    DEBUGLOG(printf("Second GetSystemTimes failed.\n"));
-                }
+                // Copy to array
+                env->SetLongArrayRegion(retValue, 0, 3, tempArray);
             }
             else
             {

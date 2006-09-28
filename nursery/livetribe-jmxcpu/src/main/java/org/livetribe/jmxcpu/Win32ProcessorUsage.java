@@ -28,16 +28,11 @@ public class Win32ProcessorUsage extends SampleBasedProcessorUsage
     {
         return false;
     }
-
-    public int[] getProcessorUsage() throws Exception
-    {
-        return getProcessorAverageUsage(getSamplingTime());
-    }
     
-    public int[][] getProcessorsUsage() throws Exception
+    protected native long[] getProcessorSnapshot() throws Exception;
+    
+    protected long[][] getProcessorsSnapshot() throws Exception
     {
         return null;
     }
-    
-    private native int[] getProcessorAverageUsage(int samplingTime);
 }

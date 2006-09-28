@@ -37,66 +37,11 @@ public class ProcStatProcessorUsage extends SampleBasedProcessorUsage
         return true;
     }
     
-    public int[] getProcessorUsage() throws Exception
-    {
-        long[] snapshot1 = this.getProcessorAverageSnapshot();
-        Thread.sleep(getSamplingTime());
-        long[] snapshot2 = this.getProcessorAverageSnapshot();
-        
-        long userModeElapse = snapshot2[USER_INDEX] - snapshot1[USER_INDEX];
-        long kernelModeElapse = snapshot2[SYSTEM_INDEX] - snapshot1[SYSTEM_INDEX];
-        
-        long denominator = (snapshot2[USER_INDEX] + snapshot2[SYSTEM_INDEX] + snapshot2[IDLE_INDEX]) - 
-                           (snapshot1[USER_INDEX] + snapshot1[SYSTEM_INDEX] + snapshot1[IDLE_INDEX]);
-        
-        if (logger.isLoggable(Level.FINE))
-            logger.fine("User Process Usage : [" + ((float)userModeElapse / (float)denominator) * 100 + 
-                        "]\tKernel Process Usage[" + ((float)kernelModeElapse / (float)denominator) * 100 + "]");
-        
-        int[] info = new int[3];
-        info[SYSTEM_INDEX] = Math.round(((float)kernelModeElapse / (float)denominator) * 100);
-        info[USER_INDEX] = Math.round(((float)userModeElapse / (float)denominator) * 100);
-        info[IDLE_INDEX] = 100 - (info[SYSTEM_INDEX] + info[USER_INDEX]);
-        
-        return info;
-    }
-    
-    public int[][] getProcessorsUsage() throws Exception
-    {
-        long[] result1Temp, result2Temp;
-        long userModeElapse, kernelModeElapse, denominator;
-        
-        List snapshot1 = this.getProcessorsSnapshot();
-        Thread.sleep(getSamplingTime());
-        List snapshot2 = this.getProcessorsSnapshot();
-        
-        int numberOfCPUs = snapshot1.size() - 1;        
-        int[][] usages = new int[numberOfCPUs][3];
-        
-        for (int i = 1; i <= numberOfCPUs; i++)
-        {
-            result1Temp = (long[]) snapshot1.get(i);
-            result2Temp = (long[]) snapshot2.get(i);
-            
-            userModeElapse = result2Temp[USER_INDEX] - result1Temp[USER_INDEX];
-            kernelModeElapse = result2Temp[SYSTEM_INDEX] - result1Temp[SYSTEM_INDEX];
-            
-            denominator = (result2Temp[USER_INDEX] + result2Temp[SYSTEM_INDEX] + result2Temp[IDLE_INDEX]) - 
-                          (result1Temp[USER_INDEX] + result1Temp[SYSTEM_INDEX] + result1Temp[IDLE_INDEX]);
-            
-            usages[i-1][SYSTEM_INDEX] = Math.round(((float)kernelModeElapse / (float)denominator) * 100);
-            usages[i-1][USER_INDEX] = Math.round(((float)userModeElapse / (float)denominator) * 100);
-            usages[i-1][IDLE_INDEX] = 100 - (usages[i-1][SYSTEM_INDEX] + usages[i-1][USER_INDEX]);
-        }
-        
-        return usages;
-    }
-    
     /**
      * Returns the first element of the List returned by 
      * retrieveCPUUsageSnapshot().
      */
-    private long[] getProcessorAverageSnapshot() throws Exception
+    protected long[] getProcessorSnapshot() throws Exception
     {
         List usage = retrieveCPUUsageSnapshot();
         return (long[]) usage.get(0);
@@ -106,11 +51,23 @@ public class ProcStatProcessorUsage extends SampleBasedProcessorUsage
      * Returns a slice of the List returned by retrieveCPUUsageSnapshot().
      * The slice starts from 1 to the last index
      */
-    private List getProcessorsSnapshot() throws Exception
+    protected long[][] getProcessorsSnapshot() throws Exception
     {
         List usage = retrieveCPUUsageSnapshot();
-        // return the second up to the last element
-        return usage.subList(1, usage.size());
+        long [][] cpusInfo = null;
+        int size = usage.size();
+        if((usage != null) && (size > 1))
+        {
+            // The slice starts from 1 to the last element,  
+            // so our array needs to be less 1
+            cpusInfo = new long[size-1][3];
+            for(int i=1; i < usage.size(); i++)
+            {
+                cpusInfo[i-1] = (long []) usage.get(i); 
+            }
+        }
+        
+        return cpusInfo;
     }
     
     /**
@@ -164,7 +121,7 @@ public class ProcStatProcessorUsage extends SampleBasedProcessorUsage
         usage[IDLE_INDEX] = Integer.parseInt(tokenizer.nextToken());
         
         if (logger.isLoggable(Level.FINE))
-            logger.fine("CPU Usage(" + processor + ") == " + usage[0] + " " + usage[1] + " " + usage[2]+"]");
+            logger.fine("CPU Usage(" + processor + ") == [" + usage[0] + "] [" + usage[1] + "] [" + usage[2]+"]");
         
         return usage;
     }

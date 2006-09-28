@@ -15,11 +15,11 @@ extern "C" {
 #define org_livetribe_jmxcpu_Win32ProcessorUsage_IDLE_INDEX 2L
 /*
  * Class:     org_livetribe_jmxcpu_Win32ProcessorUsage
- * Method:    getProcessorAverageUsage
- * Signature: (I)[I
+ * Method:    getProcessorSnapshot
+ * Signature: ()[J
  */
-JNIEXPORT jintArray JNICALL Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorAverageUsage
-  (JNIEnv *, jobject, jint);
+JNIEXPORT jlongArray JNICALL Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorSnapshot
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }
