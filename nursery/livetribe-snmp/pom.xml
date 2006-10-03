@@ -97,5 +97,18 @@
             </plugin>
         </plugins>
     </reporting>
-
+    
+    <repositories>
+        <repository>
+            <id>livetribe</id>
+            <name>LiveTribe Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2</url>
+        </repository>
+        <repository>
+            <id>livetribe-snapshots</id>
+            <name>LiveTribe Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
+        </repository>
+    </repositories>
+    
 </project>
