@@ -67,29 +67,11 @@
         </dependency>
     </dependencies>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </reporting>
-    
     <repositories>
         <repository>
             <id>livetribe</id>
             <name>LiveTribe Repository</name>
             <url>http://dist.codehaus.org/livetribe/maven/m2</url>
-        </repository>
-        <repository>
-            <id>livetribe-snapshots</id>
-            <name>LiveTribe Repository</name>
-            <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
         </repository>
     </repositories>
 </project>

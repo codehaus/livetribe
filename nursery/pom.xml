@@ -1,6 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <parent>
+        <groupId>org.livetribe</groupId>
+        <artifactId>nursery</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.livetribe.nursery</groupId>
     <artifactId>nursery</artifactId>
@@ -10,37 +16,7 @@
     <description>LiveTribe Nursery</description>
     <url>http://livetribe.codehaus.org</url>
 
-    <issueManagement />
-
-    <ciManagement />
-
-    <inceptionYear>2006</inceptionYear>
-
-    <mailingLists />
-
-    <developers />
-
-    <contributors />
-
-    <licenses />
-
-    <scm>
-        <connection>scm:svn:http://svn.codehaus.org/livetribe/nursery/</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/nursery/</developerConnection>
-        <url>http://svn.livetribe.codehaus.org/browse/livetribe/nursery/</url>
-    </scm>
-    
-
-    <organization />
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav</artifactId>
-                <version>1.0-beta-1</version>
-            </extension>
-        </extensions>
+     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
@@ -62,9 +38,8 @@
         </plugins>
     </build>
 
-    <profiles />
-
     <modules>
+        <module>arm</module>
         <module>livetribe-ioc</module>
         <module>livetribe-mock</module>
     </modules>
@@ -75,57 +50,6 @@
             <name>LiveTribe Repository</name>
             <url>http://dist.codehaus.org/livetribe/maven/m2</url>
         </repository>
-        <repository>
-            <id>livetribe-snapshots</id>
-            <name>LiveTribe Repository</name>
-            <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <name>Maven Central Repository</name>
-            <url>http://repo.mergere.com/maven2</url>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <name>Maven Snapshots Repository</name>
-            <url>http://snapshots.maven.codehaus.org/maven2</url>
-        </repository>
-        <repository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshots Repository</name>
-            <url>http://svn.apache.org/maven-snapshot-repository</url>
-        </repository>
     </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>snapshots</id>
-            <name>Maven Plugins Repository</name>
-            <url>http://snapshots.maven.codehaus.org/maven2</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <dependencies />
-
-    <reporting />
-
-    <dependencyManagement />
-
-    <distributionManagement>
-        <repository>
-            <id>livetribe-repo</id>
-            <name>LiveTribe Central Repository</name>
-            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2</url>
-        </repository>
-        <snapshotRepository>
-            <id>livetribe-snapshots</id>
-            <name>LiveTribe Central Development Repository</name>
-            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2-snapshots</url>
-        </snapshotRepository>
-        <site>
-            <id>livetribe-website</id>
-            <url>dav:https://dav.codehaus.org/livetribe</url>
-        </site>
-    </distributionManagement>
 
 </project>
