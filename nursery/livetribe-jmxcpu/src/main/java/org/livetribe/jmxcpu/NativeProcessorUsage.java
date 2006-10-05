@@ -17,22 +17,14 @@
 
 package org.livetribe.jmxcpu;
 
-public class Win32ProcessorUsage extends SampleBasedProcessorUsage
+public class NativeProcessorUsage extends SampleBasedProcessorUsage
 {
     static 
     {
-        System.loadLibrary("Win32ProcessorUsage");
+        System.loadLibrary("ProcessorUsage");
     }
     
-    public boolean supportsMultiprocessorUsageQuery()
-    {
-        return false;
-    }
-    
-    protected native long[] getProcessorSnapshot() throws Exception;
-    
-    protected long[][] getProcessorsSnapshot() throws Exception
-    {
-        return null;
-    }
+    public    native boolean  supportsMultiprocessorUsageQuery();
+    protected native long[]   getProcessorSnapshot() throws Exception;
+    protected native long[][] getProcessorsSnapshot() throws Exception;
 }

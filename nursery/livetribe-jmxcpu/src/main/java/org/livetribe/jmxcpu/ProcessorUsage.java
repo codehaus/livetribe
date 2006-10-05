@@ -42,7 +42,7 @@ public abstract class ProcessorUsage implements ProcessorUsageMBean
         if(System.getProperty("os.name").equals(OS_LINUX))
             return new ProcStatProcessorUsage();
         if(System.getProperty("os.name").equals(OS_WINXP))
-            return new Win32ProcessorUsage();
+            return new NativeProcessorUsage();
         // TODO : return the correct subclass for other OS's
         return null;
     }

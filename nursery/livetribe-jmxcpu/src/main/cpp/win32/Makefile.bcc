@@ -12,23 +12,23 @@ INCLUDES=-I$(JAVA_HOME)include -I$(JAVA_HOME)include\win32
 DEBUG=-DDEBUG_BUILD
 VERSION=1.0
 MODULE_NAME=Win32ProcessorUsage
-OUTPUT=$(MODULE_NAME).dll
+OUTPUT=ProcessorUsage.dll
 DESTINATION=-e$(OUTPUT)
 RESOURCE_DIR=..\..\resources
 
-deploy: Win32ProcessorUsageDLL
+deploy: ProcessorUsageDLL
         copy $(OUTPUT) $(RESOURCE_DIR)
 
-debug: Win32ProcessorUsageDLL-debug
+debug: ProcessorUsageDLL-debug
        copy $(OUTPUT) $(RESOURCE_DIR)
  
-Win32ProcessorUsageDLL: $(MODULE_NAME).cpp
-                        $(CC) $(CFLAGS) $(INCLUDES) $(DESTINATION) $(MODULE_NAME).cpp
+ProcessorUsageDLL: $(MODULE_NAME).cpp
+                   $(CC) $(CFLAGS) $(INCLUDES) $(DESTINATION) $(MODULE_NAME).cpp
                         
-Win32ProcessorUsageDLL-debug: $(MODULE_NAME).cpp
-	                          $(CC) $(CFLAGS) $(INCLUDES) $(DESTINATION) $(DEBUG) $(MODULE_NAME).cpp
+ProcessorUsageDLL-debug: $(MODULE_NAME).cpp
+                         $(CC) $(CFLAGS) $(INCLUDES) $(DESTINATION) $(DEBUG) $(MODULE_NAME).cpp
 	   
 clean:
 	del $(OUTPUT)
 	del $(MODULE_NAME).obj
-	del $(MODULE_NAME).tds
+	del ProcessorUsage.tds

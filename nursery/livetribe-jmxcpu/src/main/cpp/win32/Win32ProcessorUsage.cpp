@@ -23,8 +23,24 @@ FileTimeToInt64 (const FILETIME * time)
     return ltime.QuadPart;
 }
 
+/*
+ * Class:     org_livetribe_jmxcpu_NativeProcessorUsage
+ * Method:    supportsMultiprocessorUsageQuery
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL 
+Java_org_livetribe_jmxcpu_NativeProcessorUsage_supportsMultiprocessorUsageQuery(JNIEnv *env, jobject obj)
+{
+    return JNI_FALSE;
+}
+
+/*
+ * Class:     org_livetribe_jmxcpu_NativeProcessorUsage
+ * Method:    getProcessorSnapshot
+ * Signature: ()[J
+ */
 JNIEXPORT jlongArray JNICALL 
-Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorSnapshot(JNIEnv *env, jobject obj)
+Java_org_livetribe_jmxcpu_NativeProcessorUsage_getProcessorSnapshot(JNIEnv *env, jobject obj)
 {
 	DEBUGLOG(printf("JNI : -Entry-\n"));
     jlongArray retValue = NULL;
@@ -79,4 +95,15 @@ Java_org_livetribe_jmxcpu_Win32ProcessorUsage_getProcessorSnapshot(JNIEnv *env, 
     
     DEBUGLOG(printf("JNI : -Exit-\n\n"));
 	return retValue;
+}
+
+/*
+ * Class:     org_livetribe_jmxcpu_NativeProcessorUsage
+ * Method:    getProcessorsSnapshot
+ * Signature: ()[[J
+ */
+JNIEXPORT jobjectArray JNICALL 
+Java_org_livetribe_jmxcpu_NativeProcessorUsage_getProcessorsSnapshot(JNIEnv *env, jobject obj)
+{
+    return NULL;
 }
