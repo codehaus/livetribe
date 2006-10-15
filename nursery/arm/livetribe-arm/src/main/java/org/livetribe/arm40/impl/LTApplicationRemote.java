@@ -27,7 +27,7 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTApplicationRemote extends AbstractIdentifiableObject implements ArmApplicationRemote, ApplicationLifecycleSupport
+class LTApplicationRemote extends AbstractIdentifiableObject implements ArmApplicationRemote
 {
     private final Vector listeners = new Vector();
     private final ArmApplicationDefinition definition;
@@ -56,7 +56,7 @@ class LTApplicationRemote extends AbstractIdentifiableObject implements ArmAppli
         {
             try
             {
-                ((ApplicationLifecycleListener) iter.next()).end();
+                ((AbstractTransactionBase) iter.next()).end();
             }
             catch (Exception ignore)
             {
@@ -90,7 +90,7 @@ class LTApplicationRemote extends AbstractIdentifiableObject implements ArmAppli
         return systemAddress;
     }
 
-    public void addApplicationLifecycleListener(ApplicationLifecycleListener listener)
+    public void addApplicationLifecycleListener(AbstractTransactionBase listener)
     {
         listeners.add(listener);
     }

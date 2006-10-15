@@ -16,6 +16,9 @@
  */
 package org.livetribe.arm40.impl;
 
+import org.livetribe.arm40.connection.Connection;
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 import org.opengroup.arm40.tranreport.ArmTranReport;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmConstants;
@@ -23,15 +26,11 @@ import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 
-import org.livetribe.arm40.connection.Connection;
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
-import org.livetribe.util.uuid.UUIDGen;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTranReport extends AbstractIdentifiableObject implements ArmTranReport, ApplicationLifecycleListener
+class LTTranReport extends AbstractTransactionBase implements ArmTranReport
 {
     private final Connection connection;
     private final UUIDGen guidGenerator;
@@ -53,7 +52,7 @@ class LTTranReport extends AbstractIdentifiableObject implements ArmTranReport, 
         this.application = application;
         this.tranDef = tranDef;
 
-        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+        ((LTApplication) APIUtil.obtainTarget(application)).addApplicationLifecycleListener(this);
     }
 
     public void end()

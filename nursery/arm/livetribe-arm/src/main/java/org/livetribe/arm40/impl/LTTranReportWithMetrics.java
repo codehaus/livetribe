@@ -35,7 +35,7 @@ import org.livetribe.util.uuid.UUIDGen;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTranReportWithMetrics extends AbstractIdentifiableObject implements ArmTranReportWithMetrics, ApplicationLifecycleListener
+class LTTranReportWithMetrics extends AbstractTransactionBase implements ArmTranReportWithMetrics
 {
     private final Connection connection;
     private final UUIDGen guidGenerator;
@@ -59,7 +59,7 @@ class LTTranReportWithMetrics extends AbstractIdentifiableObject implements ArmT
         this.transMetricsDef = transMetricsDef;
         this.metricGroup = (LTMetricGroup) metricGroup;
 
-        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+        ((LTApplication) APIUtil.obtainTarget(application)).addApplicationLifecycleListener(this);
     }
 
     public void end()

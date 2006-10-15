@@ -19,7 +19,12 @@ package org.livetribe.arm40.impl;
 /**
  * @version $Revision$ $Date$
  */
-public interface ApplicationLifecycleSupport
+public abstract class AbstractTransactionBase extends AbstractIdentifiableObject
 {
-    void addApplicationLifecycleListener(ApplicationLifecycleListener listener);
+    AbstractTransactionBase(String id)
+    {
+        super(id);
+    }
+
+    public abstract void end();
 }

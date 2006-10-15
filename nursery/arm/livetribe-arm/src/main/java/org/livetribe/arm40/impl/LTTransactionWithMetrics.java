@@ -35,7 +35,7 @@ import org.opengroup.arm40.transaction.ArmUser;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransactionWithMetrics extends AbstractIdentifiableObject implements ArmTransactionWithMetrics, ApplicationLifecycleListener
+class LTTransactionWithMetrics extends AbstractTransactionBase implements ArmTransactionWithMetrics
 {
     private final Connection connection;
     private final UUIDGen guidGenerator;
@@ -69,7 +69,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
 
         this.state = STOPPED;
 
-        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+        ((LTApplication) APIUtil.obtainTarget(application)).addApplicationLifecycleListener(this);
     }
 
     public synchronized void end()

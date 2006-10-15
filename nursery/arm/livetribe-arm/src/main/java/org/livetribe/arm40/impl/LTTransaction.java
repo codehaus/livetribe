@@ -32,7 +32,7 @@ import org.livetribe.util.uuid.UUIDGen;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction, ApplicationLifecycleListener
+class LTTransaction extends AbstractTransactionBase implements ArmTransaction
 {
     private final Connection connection;
     private final UUIDGen guidGenerator;
@@ -61,7 +61,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 
         this.state = STOPPED;
 
-        ((ApplicationLifecycleSupport) application).addApplicationLifecycleListener(this);
+        ((LTApplication) APIUtil.obtainTarget(application)).addApplicationLifecycleListener(this);
     }
 
     public synchronized void end()
