@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
@@ -749,9 +749,7 @@ public class IdentityProperties extends Model
         if (idValue17 != null ? !idValue17.equals(that.idValue17) : that.idValue17 != null) return false;
         if (idValue18 != null ? !idValue18.equals(that.idValue18) : that.idValue18 != null) return false;
         if (idValue19 != null ? !idValue19.equals(that.idValue19) : that.idValue19 != null) return false;
-        if (idValue20 != null ? !idValue20.equals(that.idValue20) : that.idValue20 != null) return false;
-
-        return true;
+        return !(idValue20 != null ? !idValue20.equals(that.idValue20) : that.idValue20 != null);
     }
 
     public int hashCode()

@@ -197,7 +197,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 
     public int start(byte[] parentCorr, int offset)
     {
-        return start(ArmAPIUtil.newArmCorrelator(parentCorr, offset));
+        return start(APIUtil.newArmCorrelator(parentCorr, offset));
     }
 
     public synchronized int start(ArmCorrelator parent)
@@ -266,7 +266,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
 
         State start(ArmCorrelator parent)
         {
-            correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
+            correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
                                                            trace || parent.isAgentTrace() || parent.isApplicationTrace());
             if (start == 0) start = System.currentTimeMillis();
             parentCorrelator = parent;
@@ -275,7 +275,7 @@ class LTTransaction extends AbstractIdentifiableObject implements ArmTransaction
                              correlator.getBytes(),
                              start,
                              (parent != null ? parent.getBytes() : null),
-                             user,
+                             APIUtil.extractUser(user),
                              contextValues,
                              contextURI);
 

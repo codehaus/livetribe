@@ -19,18 +19,18 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
 {
     public ArmApplicationRemote newArmApplicationRemote(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        group = ArmAPIUtil.checkOptional255(group);
-        instance = ArmAPIUtil.checkOptional255(instance);
-        contextValues = ArmAPIUtil.checkOptional(appDef, contextValues);
-        systemAddress = ArmAPIUtil.checkOptional(systemAddress);
+        appDef = APIUtil.checkRequired(appDef);
+        group = APIUtil.checkOptional255(group);
+        instance = APIUtil.checkOptional255(instance);
+        contextValues = APIUtil.checkOptional(appDef, contextValues);
+        systemAddress = APIUtil.checkOptional(systemAddress);
 
         LTApplicationRemote appRemote = new LTApplicationRemote(allocateOID(), appDef, group, instance, contextValues, systemAddress);
 
         getConnection().declareApplicationRemote(appRemote.getObjectId(),
                                                  ((Identifiable) appDef).getObjectId(),
                                                  group, instance, contextValues,
-                                                 ArmAPIUtil.extractArmSystemAddress(systemAddress));
+                                                 APIUtil.extractArmSystemAddress(systemAddress));
 
         return appRemote;
     }
@@ -48,7 +48,7 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
     public ArmSystemAddress newArmSystemAddress(short format, byte[] addressBytes, int offset, int length, ArmID id)
     {
         if (format == 0) StaticArmAPIMonitor.error(FORMAT_ZERO);
-        id = ArmAPIUtil.checkOptional(id);
+        id = APIUtil.checkOptional(id);
 
         if (addressBytes == null)
         {
@@ -71,8 +71,8 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
 
     public ArmTranReport newArmTranReport(ArmApplication app, ArmTransactionDefinition appTranDef)
     {
-        app = ArmAPIUtil.checkRequired(app);
-        appTranDef = ArmAPIUtil.checkRequired(appTranDef);
+        app = APIUtil.checkRequired(app);
+        appTranDef = APIUtil.checkRequired(appTranDef);
 
         return new LTTranReport(allocateOID(), getConnection(), getGuidGenerator(), app, appTranDef);
     }

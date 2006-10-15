@@ -16,8 +16,6 @@
  */
 package org.livetribe.arm.connection.messages;
 
-import org.opengroup.arm40.transaction.ArmUser;
-
 
 /**
  * @version $Revision: $ $Date: $
@@ -28,11 +26,11 @@ public class StartMessage implements Message
     private final byte[] correlator;
     private final long start;
     private final byte[] parent;
-    private final ArmUser user;
+    private final String user;
     private final String[] contextValues;
     private final String contextURI;
 
-    public StartMessage(String transIdOID, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
+    public StartMessage(String transIdOID, byte[] correlator, long start, byte[] parent, String user, String[] contextValues, String contextURI)
     {
         this.transIdOID = transIdOID;
         this.correlator = correlator;
@@ -63,7 +61,7 @@ public class StartMessage implements Message
         return parent;
     }
 
-    public ArmUser getUser()
+    public String getUser()
     {
         return user;
     }

@@ -33,14 +33,14 @@ import org.livetribe.arm.util.StaticArmAPIMonitor;
 /**
  * @version $Revision: $ $Date: $
  */
-public class LTTransactionFactoryImpl extends AbstractFactoryBase implements ArmTransactionFactory, TransactionErrorCodes
+public class LTTransactionFactoryImpl extends AbstractFactoryBase implements ArmTransactionFactory
 {
     public ArmApplication newArmApplication(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        group = ArmAPIUtil.checkOptional255(group);
-        instance = ArmAPIUtil.checkOptional255(instance);
-        contextValues = ArmAPIUtil.checkOptional(appDef, contextValues);
+        appDef = APIUtil.checkRequired(appDef);
+        group = APIUtil.checkOptional255(group);
+        instance = APIUtil.checkOptional255(instance);
+        contextValues = APIUtil.checkOptional(appDef, contextValues);
 
         LTApplication app = new LTApplication(allocateOID(), appDef, group, instance, contextValues);
 
@@ -55,16 +55,16 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
     public ArmApplicationDefinition newArmApplicationDefinition(String name, ArmIdentityProperties identityProperties, ArmID id)
     {
-        name = ArmAPIUtil.checkRequiredName(name);
-        identityProperties = ArmAPIUtil.checkOptional(identityProperties);
-        id = ArmAPIUtil.checkOptional(id);
+        name = APIUtil.checkRequiredName(name);
+        identityProperties = APIUtil.checkOptional(identityProperties);
+        id = APIUtil.checkOptional(id);
 
         LTApplicationDefinition appDef = new LTApplicationDefinition(allocateOID(), name, identityProperties, id);
 
         getConnection().declareApplicationDefinition(appDef.getObjectId(),
                                                      name,
-                                                     ArmAPIUtil.extractOID((Identifiable) identityProperties),
-                                                     ArmAPIUtil.extractArmId(id));
+                                                     APIUtil.extractOID((Identifiable) identityProperties),
+                                                     APIUtil.extractArmId(id));
 
         return appDef;
     }
@@ -76,7 +76,7 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
     public ArmCorrelator newArmCorrelator(byte[] corrBytes, int offset)
     {
-        return ArmAPIUtil.newArmCorrelator(corrBytes, offset);
+        return APIUtil.newArmCorrelator(corrBytes, offset);
     }
 
     public ArmID newArmID(byte[] idBytes)
@@ -91,10 +91,10 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
             offset = 0;
             idBytes = new byte[0];
 
-            StaticArmAPIMonitor.error(ID_NULL);
+            StaticArmAPIMonitor.error(TransactionErrorCodes.ID_NULL);
         }
 
-        if (idBytes.length < offset + 16) StaticArmAPIMonitor.warning(ID_TOO_SHORT);
+        if (idBytes.length < offset + 16) StaticArmAPIMonitor.warning(TransactionErrorCodes.ID_TOO_SHORT);
 
         int length = Math.min(idBytes.length - offset, 16);
 
@@ -106,9 +106,9 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
     public ArmIdentityProperties newArmIdentityProperties(String[] identityNames, String[] identityValues, String[] contextNames)
     {
-        String[] cleanIdNames = ArmAPIUtil.cleanIdProps(identityNames);
-        String[] cleanIdValues = ArmAPIUtil.cleanIdProps(identityValues);
-        String[] cleanCtxNames = ArmAPIUtil.cleanIdProps(contextNames);
+        String[] cleanIdNames = APIUtil.cleanIdProps(identityNames);
+        String[] cleanIdValues = APIUtil.cleanIdProps(identityValues);
+        String[] cleanCtxNames = APIUtil.cleanIdProps(contextNames);
 
         for (int i = 0; i < 20; i++)
         {
@@ -136,9 +136,9 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
     public ArmIdentityPropertiesTransaction newArmIdentityPropertiesTransaction(String[] identityNames, String[] identityValues, String[] contextNames, String uriValue)
     {
-        String[] cleanIdNames = ArmAPIUtil.cleanIdProps(identityNames);
-        String[] cleanIdValues = ArmAPIUtil.cleanIdProps(identityValues);
-        String[] cleanCtxNames = ArmAPIUtil.cleanIdProps(contextNames);
+        String[] cleanIdNames = APIUtil.cleanIdProps(identityNames);
+        String[] cleanIdValues = APIUtil.cleanIdProps(identityValues);
+        String[] cleanCtxNames = APIUtil.cleanIdProps(contextNames);
 
         for (int i = 0; i < 20; i++)
         {
@@ -154,7 +154,7 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
             }
         }
 
-        if (uriValue != null && uriValue.length() > 4096) StaticArmAPIMonitor.warning(URI_TOO_LONG);
+        if (uriValue != null && uriValue.length() > 4096) StaticArmAPIMonitor.warning(TransactionErrorCodes.URI_TOO_LONG);
 
         LTIdentityPropertiesTransaction idPropsTrans = new LTIdentityPropertiesTransaction(allocateOID(), cleanIdNames, cleanIdValues, cleanCtxNames, uriValue);
 
@@ -169,8 +169,8 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
     public ArmTransaction newArmTransaction(ArmApplication app, ArmTransactionDefinition definition)
     {
-        app = ArmAPIUtil.checkRequired(app);
-        definition = ArmAPIUtil.checkRequired(definition);
+        app = APIUtil.checkRequired(app);
+        definition = APIUtil.checkRequired(definition);
 
         LTTransaction transaction = new LTTransaction(allocateOID(), getConnection(), getGuidGenerator(), app, definition);
 
@@ -183,25 +183,25 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
     public ArmTransactionDefinition newArmTransactionDefinition(ArmApplicationDefinition app, String name, ArmIdentityPropertiesTransaction identityProperties, ArmID id)
     {
-        app = ArmAPIUtil.checkRequired(app);
-        name = ArmAPIUtil.checkRequiredName(name);
-        identityProperties = ArmAPIUtil.checkOptional(identityProperties);
-        id = ArmAPIUtil.checkOptional(id);
+        app = APIUtil.checkRequired(app);
+        name = APIUtil.checkRequiredName(name);
+        identityProperties = APIUtil.checkOptional(identityProperties);
+        id = APIUtil.checkOptional(id);
 
         LTTransactionDefinition transDef = new LTTransactionDefinition(allocateOID(), app, name, identityProperties, id);
 
         getConnection().declareTransactionDefinition(transDef.getObjectId(),
                                                      name,
-                                                     ArmAPIUtil.extractOID((Identifiable) identityProperties),
-                                                     ArmAPIUtil.extractArmId(id));
+                                                     APIUtil.extractOID((Identifiable) identityProperties),
+                                                     APIUtil.extractArmId(id));
 
         return transDef;
     }
 
     public ArmUser newArmUser(String name, ArmID id)
     {
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
         return new LTUser(name, id);
     }

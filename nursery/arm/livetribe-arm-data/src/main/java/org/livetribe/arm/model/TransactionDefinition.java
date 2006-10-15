@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
@@ -22,9 +22,7 @@ package org.livetribe.arm.connection.model;
 public class TransactionDefinition extends Model
 {
     private String name;
-    private String[] idNames;
-    private String[] idValues;
-    private String[] ctxNames;
+    private IdentityProperties identityProperties;
     private String uri;
     private byte[] id;
 
@@ -38,34 +36,14 @@ public class TransactionDefinition extends Model
         this.name = name;
     }
 
-    public String[] getIdNames()
+    public IdentityProperties getIdentityProperties()
     {
-        return idNames;
+        return identityProperties;
     }
 
-    public void setIdNames(String[] idNames)
+    public void setIdentityProperties(IdentityProperties identityProperties)
     {
-        this.idNames = idNames;
-    }
-
-    public String[] getIdValues()
-    {
-        return idValues;
-    }
-
-    public void setIdValues(String[] idValues)
-    {
-        this.idValues = idValues;
-    }
-
-    public String[] getCtxNames()
-    {
-        return ctxNames;
-    }
-
-    public void setCtxNames(String[] ctxNames)
-    {
-        this.ctxNames = ctxNames;
+        this.identityProperties = identityProperties;
     }
 
     public String getUri()

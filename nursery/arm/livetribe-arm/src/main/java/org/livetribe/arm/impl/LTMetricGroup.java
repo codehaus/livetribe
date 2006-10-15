@@ -19,8 +19,10 @@ package org.livetribe.arm.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.livetribe.arm.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
+import org.springframework.aop.framework.Advised;
 
 
 /**
@@ -29,17 +31,31 @@ import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 class LTMetricGroup extends AbstractIdentifiableObject implements MetricGroup
 {
     private final ArmMetricGroupDefinition groupDefinition;
-    private final Metric[] metrics;
+    private final ArmMetric[] metrics;
+    private final AbstractMetricBase[] metricsTargets;
     private final List[] data;
 
 
-    LTMetricGroup(String oid, ArmMetricGroupDefinition groupDefinition, Metric[] metrics)
+    LTMetricGroup(String oid, ArmMetricGroupDefinition groupDefinition, ArmMetric[] metrics)
     {
         super(oid);
 
         this.groupDefinition = groupDefinition;
         this.metrics = metrics;
         this.data = new List[metrics.length];
+
+        metricsTargets = new AbstractMetricBase[metrics.length];
+        for (int i = 0; i < metrics.length; i++)
+        {
+            try
+            {
+                metricsTargets[i] = (AbstractMetricBase) ((Advised) metrics[i]).getTargetSource().getTarget();
+            }
+            catch (Exception e)
+            {
+                metricsTargets[i] = null;
+            }
+        }
 
         clear();
     }
@@ -56,12 +72,26 @@ class LTMetricGroup extends AbstractIdentifiableObject implements MetricGroup
 
     public boolean isMetricValid(int index)
     {
-        return metrics[index].isValid();
+        if (index < 0 || metricsTargets.length <= index)
+        {
+            StaticArmAPIMonitor.error(GeneralErrorCodes.INDEX_OUT_OF_RANGE);
+            return false;
+        }
+
+        if (metricsTargets[index] != null) return metricsTargets[index].isValid();
+        else return false;
     }
 
     public int setMetricValid(int index, boolean value)
     {
-        return metrics[index].setValid(value);
+        if (index < 0 || metricsTargets.length <= index)
+        {
+            StaticArmAPIMonitor.error(GeneralErrorCodes.INDEX_OUT_OF_RANGE);
+            return GeneralErrorCodes.INDEX_OUT_OF_RANGE;
+        }
+
+        if (metricsTargets[index] != null) return metricsTargets[index].setValid(value);
+        else return GeneralErrorCodes.INDEX_OUT_OF_RANGE;
     }
 
     public void clear()
@@ -76,7 +106,8 @@ class LTMetricGroup extends AbstractIdentifiableObject implements MetricGroup
 
     public void snapshot()
     {
-        for (int i = 0; i < metrics.length; i++) data[i].add(metrics[i].snapshot());
+        for (int i = 0; i < metrics.length; i++)
+            data[i].add(metricsTargets[i] != null ? metricsTargets[i].snapshot() : null);
     }
 
     public List[] stop()

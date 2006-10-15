@@ -14,25 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
-
-import java.util.Set;
-
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
-public class Transaction extends Model
+public class Update extends Model
 {
-    private Set transactionNodes;
+    private long ts;
 
-    public Set getTransactionNodes()
+    public long getTs()
     {
-        return transactionNodes;
+        return ts;
     }
 
-    public void setTransactionNodes(Set transactionNodes)
+    public void setTs(long ts)
     {
-        this.transactionNodes = transactionNodes;
+        this.ts = ts;
     }
 }

@@ -69,7 +69,7 @@ class LTTranReportWithMetrics extends AbstractIdentifiableObject implements ArmT
 
     public ArmCorrelator generateCorrelator()
     {
-        correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
         fresh = true;
 
         return correlator;
@@ -145,7 +145,7 @@ class LTTranReportWithMetrics extends AbstractIdentifiableObject implements ArmT
     public int report(int status, long respTime, String diagnosticDetail)
     {
         if (fresh) fresh = false;
-        else correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        else correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
 
         metricGroup.start();
         metricGroup.snapshot();
@@ -159,7 +159,7 @@ class LTTranReportWithMetrics extends AbstractIdentifiableObject implements ArmT
     public int report(int status, long respTime, long stopTime, String diagnosticDetail)
     {
         if (fresh) fresh = false;
-        else correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        else correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
 
         metricGroup.start();
         metricGroup.snapshot();

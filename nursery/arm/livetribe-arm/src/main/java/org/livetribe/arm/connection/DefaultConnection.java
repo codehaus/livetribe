@@ -18,8 +18,6 @@ package org.livetribe.arm.connection;
 
 import java.util.List;
 
-import org.opengroup.arm40.transaction.ArmUser;
-
 
 /**
  * A simple "do nothing" connection.
@@ -58,7 +56,43 @@ public class DefaultConnection implements Connection
     {
     }
 
-    public void declareMetricGroupDefinition(String metricGroupDefOID, String[] appDef, String[] name, String[] units, short[] usage, byte[][]id)
+    public void declareMetricCounter32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricCounter64Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricCounterFloat32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricGauge32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricGauge64Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricGaugeFloat32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricNumericId32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricNumericId64Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricString32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
+    {
+    }
+
+    public void declareMetricGroupDefinition(String metricGroupDefOID, String[] metricDefOIDs)
     {
     }
 
@@ -78,7 +112,7 @@ public class DefaultConnection implements Connection
     {
     }
 
-    public void start(String transOID, byte[] correlator, long start, byte[] parent, ArmUser user, String[] contextValues, String contextURI)
+    public void start(String transOID, byte[] correlator, long start, byte[] parent, String user, String[] contextValues, String contextURI)
     {
     }
 

@@ -18,10 +18,10 @@ package org.livetribe.arm.xbean;
 
 import junit.framework.TestCase;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
-import org.opengroup.arm40.metric.ArmMetricFactory;
-
+import org.livetribe.arm.impl.AbstractObject;
 import org.livetribe.arm.impl.LTMetricFactory;
-import org.livetribe.arm.impl.LTObject;
+import org.opengroup.arm40.metric.ArmMetricFactory;
+import org.springframework.aop.framework.Advised;
 
 
 /**
@@ -37,9 +37,9 @@ public class ConfigurationTest extends TestCase
             ArmMetricFactory factory = (ArmMetricFactory) context.getBean("metricFactory");
             assertNotNull(factory);
 
-            LTObject result = (LTObject) factory.newArmMetricCounter32(null);
+            Object result = factory.newArmMetricCounter32(null);
             assertNotNull(result);
-            assertTrue(result.isBad());
+            assertTrue(((AbstractObject) obtainTarget(result)).isBad());
         }
         finally
         {
@@ -47,12 +47,17 @@ public class ConfigurationTest extends TestCase
         }
     }
 
-    public void testLTMetricFactory()
+    public void testLTMetricFactory() throws Exception
     {
         LTMetricFactory factory = new LTMetricFactory();
 
-        LTObject result = (LTObject) factory.newArmMetricCounter32(null);
+        Object result = factory.newArmMetricCounter32(null);
         assertNotNull(result);
-        assertTrue(result.isBad());
+        assertTrue(((AbstractObject) obtainTarget(result)).isBad());
+    }
+
+    static Object obtainTarget(Object object) throws Exception
+    {
+        return (object instanceof Advised ? ((Advised) object).getTargetSource().getTarget() : object);
     }
 }

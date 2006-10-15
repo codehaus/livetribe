@@ -28,8 +28,5 @@ public class JencksTest extends TestCase
     public void testConfig()
     {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("org/livetribe/arm/ra/hibernate/jencks.xml");
-
-//        Object foo = context.getBean("jencks");
-
     }
 }

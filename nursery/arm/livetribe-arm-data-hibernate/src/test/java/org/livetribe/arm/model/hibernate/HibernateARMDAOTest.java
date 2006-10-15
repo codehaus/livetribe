@@ -22,8 +22,8 @@ import junit.framework.TestCase;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import org.livetribe.arm.connection.model.ARMDAO;
-import org.livetribe.arm.connection.model.IdentityProperties;
+import org.livetribe.arm.model.ARMDAO;
+import org.livetribe.arm.model.IdentityProperties;
 
 
 /**
@@ -68,14 +68,19 @@ public class HibernateARMDAOTest extends TestCase
 
         dao.deleteIdentityProperties(copy);
 
-        IdentityProperties shouldBeNull = dao.getIdentityPropertiesByOID(original.getOid());
-
-        assertTrue(null == shouldBeNull);
+        try
+        {
+            dao.getIdentityPropertiesByOID(original.getOid());
+            fail("Should not find this deleted object");
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     public void setUp()
     {
-        context = new ClassPathXmlApplicationContext("org/livetribe/arm/model/hibernate/TestContext.xml");
+        context = new ClassPathXmlApplicationContext("org/livetribe/arm/model/hibernate/HibernateARMDAOTest.xml");
     }
 
     public void tearDown()

@@ -57,83 +57,136 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 {
     public ArmMetricCounter32Definition newArmMetricCounter32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricCounter32Definition(appDef, name, units, usage, id);
+        LTMetricCounter32Definition definition = new LTMetricCounter32Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricCounter32Definition(definition.getObjectId(),
+                                                         ((Identifiable) appDef).getObjectId(),
+                                                         name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricCounter64Definition newArmMetricCounter64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricCounter64Definition(appDef, name, units, usage, id);
+        LTMetricCounter64Definition definition = new LTMetricCounter64Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricCounter64Definition(definition.getObjectId(),
+                                                         ((Identifiable) appDef).getObjectId(),
+                                                         name, units, usage, APIUtil.extractArmId(id));
+        return definition;
     }
 
     public ArmMetricCounterFloat32Definition newArmMetricCounterFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricCounterFloat32Definition(appDef, name, units, usage, id);
+        LTMetricCounterFloat32Definition definition = new LTMetricCounterFloat32Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricCounterFloat32Definition(definition.getObjectId(),
+                                                              ((Identifiable) appDef).getObjectId(),
+                                                              name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricGauge32Definition newArmMetricGauge32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricGauge32Definition(appDef, name, units, usage, id);
+        LTMetricGauge32Definition definition = new LTMetricGauge32Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricGauge32Definition(definition.getObjectId(),
+                                                       ((Identifiable) appDef).getObjectId(),
+                                                       name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricGauge64Definition newArmMetricGauge64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricGauge64Definition(appDef, name, units, usage, id);
+        LTMetricGauge64Definition definition = new LTMetricGauge64Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricGauge64Definition(definition.getObjectId(),
+                                                       ((Identifiable) appDef).getObjectId(),
+                                                       name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricGaugeFloat32Definition newArmMetricGaugeFloat32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricGaugeFloat32Definition(appDef, name, units, usage, id);
+        LTMetricGaugeFloat32Definition definition = new LTMetricGaugeFloat32Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricGaugeFloat32Definition(definition.getObjectId(),
+                                                            ((Identifiable) appDef).getObjectId(),
+                                                            name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricNumericId32Definition newArmMetricNumericId32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricNumericId32Definition(appDef, name, units, usage, id);
+        LTMetricNumericId32Definition definition = new LTMetricNumericId32Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricNumericId32Definition(definition.getObjectId(),
+                                                           ((Identifiable) appDef).getObjectId(),
+                                                           name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricNumericId64Definition newArmMetricNumericId64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricNumericId64Definition(appDef, name, units, usage, id);
+        LTMetricNumericId64Definition definition = new LTMetricNumericId64Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricNumericId64Definition(definition.getObjectId(),
+                                                           ((Identifiable) appDef).getObjectId(),
+                                                           name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricString32Definition newArmMetricString32Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        id = APIUtil.checkOptional(id);
 
-        return new LTMetricString32Definition(appDef, name, units, usage, id);
+        LTMetricString32Definition definition = new LTMetricString32Definition(allocateOID(), appDef, name, units, usage, id);
+
+        getConnection().declareMetricString32Definition(definition.getObjectId(),
+                                                        ((Identifiable) appDef).getObjectId(),
+                                                        name, units, usage, APIUtil.extractArmId(id));
+
+        return definition;
     }
 
     public ArmMetricGroupDefinition newArmMetricGroupDefinition(ArmMetricDefinition[] definitions)
@@ -148,96 +201,94 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
         for (int i = 0; i < 6; i++)
         {
-            if (cleanDefinitions[i] != null && (cleanDefinitions[i] instanceof ArmMetricString32Definition || ((LTObject) cleanDefinitions[i]).isBad()))
+            if (cleanDefinitions[i] != null && (cleanDefinitions[i] instanceof ArmMetricString32Definition || ((AbstractObject) APIUtil.obtainTarget(cleanDefinitions[i])).isBad()))
             {
                 StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
                 break;
             }
         }
 
-        if (cleanDefinitions[6] != null && !(cleanDefinitions[6] instanceof ArmMetricString32Definition || ((LTObject) cleanDefinitions[6]).isBad()))
+        if (cleanDefinitions[6] != null && !(cleanDefinitions[6] instanceof ArmMetricString32Definition || ((AbstractObject) APIUtil.obtainTarget(cleanDefinitions[6])).isBad()))
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.GRP_DEF_ARRAY_INVALID);
         }
 
         getConnection().declareMetricGroupDefinition(metricGroupDef.getObjectId(),
-                                                     ArmAPIUtil.extractObjectIds(cleanDefinitions),
-                                                     ArmAPIUtil.extractNames(cleanDefinitions),
-                                                     ArmAPIUtil.extractUnits(cleanDefinitions),
-                                                     ArmAPIUtil.extractUsage(cleanDefinitions),
-                                                     ArmAPIUtil.extractIds(cleanDefinitions));
+                                                     APIUtil.extractObjectIds(cleanDefinitions));
 
         return metricGroupDef;
     }
 
     public ArmTransactionWithMetricsDefinition newArmTransactionWithMetricsDefinition(ArmApplicationDefinition appDef, String name, ArmIdentityPropertiesTransaction identityProperties, ArmMetricGroupDefinition metricGroupDef, ArmID id)
     {
-        appDef = ArmAPIUtil.checkRequired(appDef);
-        name = ArmAPIUtil.checkRequiredName(name);
-        identityProperties = ArmAPIUtil.checkOptional(identityProperties);
-        metricGroupDef = ArmAPIUtil.checkOptional(metricGroupDef);
-        id = ArmAPIUtil.checkOptional(id);
+        appDef = APIUtil.checkRequired(appDef);
+        name = APIUtil.checkRequiredName(name);
+        identityProperties = APIUtil.checkOptional(identityProperties);
+        metricGroupDef = APIUtil.checkOptional(metricGroupDef);
+        id = APIUtil.checkOptional(id);
 
         LTTransactionWithMetricsDefinition transDef = new LTTransactionWithMetricsDefinition(allocateOID(), appDef, name, identityProperties, metricGroupDef, id);
         getConnection().declareTransactionWithMetricsDefinition(transDef.getObjectId(),
                                                                 ((Identifiable) appDef).getObjectId(),
                                                                 name,
-                                                                ArmAPIUtil.extractOID((Identifiable) identityProperties),
-                                                                ArmAPIUtil.extractOID((Identifiable) metricGroupDef),
-                                                                ArmAPIUtil.extractArmId(id));
+                                                                APIUtil.extractOID((Identifiable) identityProperties),
+                                                                APIUtil.extractOID((Identifiable) metricGroupDef),
+                                                                APIUtil.extractArmId(id));
         return transDef;
     }
 
     public ArmMetricCounter32 newArmMetricCounter32(ArmMetricCounter32Definition definition)
     {
-        return new LTMetricCounter32(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricCounter32(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricCounter64 newArmMetricCounter64(ArmMetricCounter64Definition definition)
     {
-        return new LTMetricCounter64(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricCounter64(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricCounterFloat32 newArmMetricCounterFloat32(ArmMetricCounterFloat32Definition definition)
     {
-        return new LTMetricCounterFloat32(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricCounterFloat32(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricGauge32 newArmMetricGauge32(ArmMetricGauge32Definition definition)
     {
-        return new LTMetricGauge32(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricGauge32(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricGauge64 newArmMetricGauge64(ArmMetricGauge64Definition definition)
     {
-        return new LTMetricGauge64(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricGauge64(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricGaugeFloat32 newArmMetricGaugeFloat32(ArmMetricGaugeFloat32Definition definition)
     {
-        return new LTMetricGaugeFloat32(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricGaugeFloat32(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricNumericId32 newArmMetricNumericId32(ArmMetricNumericId32Definition definition)
     {
-        return new LTMetricNumericId32(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricNumericId32(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricNumericId64 newArmMetricNumericId64(ArmMetricNumericId64Definition definition)
     {
-        return new LTMetricNumericId64(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricNumericId64(APIUtil.checkRequired(definition));
     }
 
     public ArmMetricString32 newArmMetricString32(ArmMetricString32Definition definition)
     {
-        return new LTMetricString32(ArmAPIUtil.checkRequired(definition));
+        return new LTMetricString32(APIUtil.checkRequired(definition));
     }
 
     public synchronized ArmMetricGroup newArmMetricGroup(ArmMetricGroupDefinition metricGroupDef, ArmMetric[] metrics)
     {
-        if (metrics == null) metrics = new AbstractMetricBase[0];
+        metricGroupDef = APIUtil.checkRequired(metricGroupDef);
 
-        Metric[] cleanMetrics = new Metric[7];
+        if (metrics == null) metrics = new ArmMetric[0];
+
+        ArmMetric[] cleanMetrics = new ArmMetric[7];
 
         System.arraycopy(metrics, 0, cleanMetrics, 0, Math.min(metrics.length, 7));
 
@@ -245,13 +296,13 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
         for (int i = 0; i < 6; i++)
         {
-            if (cleanMetrics[i] != null && (cleanMetrics[i] instanceof ArmMetricString32 || ((LTObject) cleanMetrics[i]).isBad()))
+            if (cleanMetrics[i] != null && (cleanMetrics[i] instanceof ArmMetricString32 || ((AbstractObject) APIUtil.obtainTarget(cleanMetrics[i])).isBad()))
             {
                 StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
             }
         }
 
-        if (cleanMetrics[6] != null && !(cleanMetrics[6] instanceof ArmMetricString32 || ((LTObject) cleanMetrics[6]).isBad()))
+        if (cleanMetrics[6] != null && !(cleanMetrics[6] instanceof ArmMetricString32 || ((AbstractObject) APIUtil.obtainTarget(cleanMetrics[6])).isBad()))
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GRP_ARRAY_INVALID);
         }
@@ -264,9 +315,9 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
     public ArmTranReportWithMetrics newArmTranReportWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition tranReportMetricsDef, ArmMetricGroup metricGroup)
     {
-        app = ArmAPIUtil.checkRequired(app);
-        tranReportMetricsDef = ArmAPIUtil.checkRequired(tranReportMetricsDef);
-        metricGroup = ArmAPIUtil.checkRequired(metricGroup);
+        app = APIUtil.checkRequired(app);
+        tranReportMetricsDef = APIUtil.checkRequired(tranReportMetricsDef);
+        metricGroup = APIUtil.checkRequired(metricGroup);
 
         LTTranReportWithMetrics tranReportMetrics = new LTTranReportWithMetrics(allocateOID(),
                                                                                 getConnection(), getGuidGenerator(),
@@ -281,9 +332,9 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
     public ArmTransactionWithMetrics newArmTransactionWithMetrics(ArmApplication app, ArmTransactionWithMetricsDefinition tranMetricsDef, ArmMetricGroup metricGroup)
     {
-        app = ArmAPIUtil.checkRequired(app);
-        tranMetricsDef = ArmAPIUtil.checkRequired(tranMetricsDef);
-        metricGroup = ArmAPIUtil.checkRequired(metricGroup);
+        app = APIUtil.checkRequired(app);
+        tranMetricsDef = APIUtil.checkRequired(tranMetricsDef);
+        metricGroup = APIUtil.checkRequired(metricGroup);
 
         LTTransactionWithMetrics tranMetrics = new LTTransactionWithMetrics(allocateOID(), getConnection(), getGuidGenerator(), app, tranMetricsDef, metricGroup);
 

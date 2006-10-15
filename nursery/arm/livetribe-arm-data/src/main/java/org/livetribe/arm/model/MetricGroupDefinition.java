@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
 public class MetricGroupDefinition extends Model
 {
-    private ApplicationDefinition[] applicationDefinitions;
+    private AbstractMetricDefinition[] metricDefinitions;
     private String[] name;
     private String[] units;
     private short[] usage;
     private byte[][] id;
 
-    public ApplicationDefinition[] getApplicationDefinitions()
+    public AbstractMetricDefinition[] getMetricDefinitions()
     {
-        return applicationDefinitions;
+        return metricDefinitions;
     }
 
-    public void setApplicationDefinitions(ApplicationDefinition[] applicationDefinitions)
+    public void setMetricDefinitions(AbstractMetricDefinition[] metricDefinitions)
     {
-        this.applicationDefinitions = applicationDefinitions;
+        this.metricDefinitions = metricDefinitions;
     }
 
     public String[] getName()

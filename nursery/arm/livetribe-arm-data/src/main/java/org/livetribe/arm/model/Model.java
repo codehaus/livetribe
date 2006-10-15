@@ -14,29 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
-
-import java.util.Set;
-import java.util.List;
-
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
-public class TransactionNode extends Model
+public class Model
 {
-    private TransactionNode parent;
-    private Set children;
-    private Correlator correlator;
-    private String user;
-    private String[] contextValues;
-    private String contextURI;
-    private int status;
-    private String message;
-    private long start;
-    private long end;
-    private boolean reset;
-    private List blocks;
-    private List updates;
+    protected long oid;
 
+    public long getOid()
+    {
+        return oid;
+    }
+
+    protected void setOid(long oid)
+    {
+        this.oid = oid;
+    }
+
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Model model = (Model) o;
+
+        return oid == model.oid;
+    }
+
+    public int hashCode()
+    {
+        return (int) (oid ^ (oid >>> 32));
+    }
 }

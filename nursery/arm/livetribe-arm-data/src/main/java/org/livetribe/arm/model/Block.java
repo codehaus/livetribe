@@ -14,27 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
 public class Block extends Model
 {
-    private TransactionNode transactionNode;
     private long handle;
     private long start;
     private long end;
-
-    public TransactionNode getTransactionNode()
-    {
-        return transactionNode;
-    }
-
-    public void setTransactionNode(TransactionNode transactionNode)
-    {
-        this.transactionNode = transactionNode;
-    }
 
     public long getHandle()
     {

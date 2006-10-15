@@ -7,10 +7,12 @@ import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 
-import org.livetribe.arm.impl.LTObject;
-
 
 /**
+ * The pointcut of this advisor is used to ensure that <code>ErrorCheckingAdvice</code>
+ * is not used for methods that obtain the error code since <code>ErrorCheckingAdvice</code>
+ * "clears" the error code.
+ *
  * @version $Revision: $ $Date: $
  */
 public class ErrorCheckingAdvisor extends DefaultPointcutAdvisor
@@ -21,9 +23,7 @@ public class ErrorCheckingAdvisor extends DefaultPointcutAdvisor
         {
             Class methodClass = method.getDeclaringClass();
 
-            if (methodClass == ArmInterface.class || methodClass == LTObject.class) return false;
-
-            return true;
+            return methodClass != ArmInterface.class;
         }
     };
 

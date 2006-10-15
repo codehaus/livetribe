@@ -24,7 +24,7 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
-abstract class AbstractMetricDefinition extends AbstractObject implements ArmMetricDefinition, MetricDefinition
+abstract class AbstractMetricDefinition extends AbstractIdentifiableObject implements ArmMetricDefinition, MetricDefinition
 {
     private final ArmApplicationDefinition appDef;
     private final String name;
@@ -32,8 +32,10 @@ abstract class AbstractMetricDefinition extends AbstractObject implements ArmMet
     private final short usage;
     private final ArmID id;
 
-    AbstractMetricDefinition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
+    AbstractMetricDefinition(String oid, ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
+        super(oid);
+
         this.appDef = appDef;
         this.name = name;
         this.units = units;

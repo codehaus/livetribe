@@ -14,37 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
-public class Model
+public class IdentityPropertiesTransaction extends IdentityProperties
 {
-    protected Long oid;
+    private String uriValue;
 
-    public Long getOid()
+    public String getUriValue()
     {
-        return oid;
+        return uriValue;
     }
 
-    protected void setOid(Long oid)
+    public void setUriValue(String uriValue)
     {
-        this.oid = oid;
-    }
-
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final Model model = (Model) o;
-
-        return !(oid != null ? !oid.equals(model.oid) : model.oid != null);
-    }
-
-    public int hashCode()
-    {
-        return (oid != null ? oid.hashCode() : 0);
+        this.uriValue = uriValue;
     }
 }

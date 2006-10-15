@@ -44,7 +44,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
     private final ArmTransactionWithMetricsDefinition tranMetricsDef;
     private final MetricGroup metricGroup;
     private ArmCorrelator parentCorrelator = null;
-    private ArmCorrelator correlator = ArmAPIUtil.newArmCorrelator(null);
+    private ArmCorrelator correlator;
     private int status = ArmConstants.STATUS_INVALID;
     private long start = 0;
     private long blocked = 1;
@@ -214,7 +214,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
 
     public int start(byte[] parentCorr, int offset)
     {
-        return start(ArmAPIUtil.newArmCorrelator(parentCorr, offset));
+        return start(APIUtil.newArmCorrelator(parentCorr, offset));
     }
 
     public synchronized int start(ArmCorrelator parentCorr)
@@ -283,7 +283,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
 
         State start(ArmCorrelator parent)
         {
-            correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
+            correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
                                                            trace || parent.isAgentTrace() || parent.isApplicationTrace());
             if (start == 0) start = System.currentTimeMillis();
             parentCorrelator = parent;
@@ -295,7 +295,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
                              correlator.getBytes(),
                              start,
                              (parent != null ? parent.getBytes() : null),
-                             user,
+                             APIUtil.extractUser(user),
                              contextValues,
                              contextURI);
 
@@ -323,6 +323,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
         State reset()
         {
             connection.reset(getObjectId(), correlator.getBytes());
+
             start = 0;
 
             unbindThread();

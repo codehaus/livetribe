@@ -14,33 +14,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
+
+import java.util.List;
+
 
 /**
  * @version $Revision$ $Date$
  */
-public class Update extends Model
+public class TransactionTreeNode extends Model
 {
-    private TransactionNode transactionNode;
-    private long ts;
+    private Transaction transaction;
+    private TransactionTreeNode parent;
+    private List children;
 
-    public TransactionNode getTransactionNode()
+    public Transaction getTransaction()
     {
-        return transactionNode;
+        return transaction;
     }
 
-    public void setTransactionNode(TransactionNode transactionNode)
+    public void setTransaction(Transaction transaction)
     {
-        this.transactionNode = transactionNode;
+        this.transaction = transaction;
     }
 
-    public long getTs()
+    public TransactionTreeNode getParent()
     {
-        return ts;
+        return parent;
     }
 
-    public void setTs(long ts)
+    public void setParent(TransactionTreeNode parent)
     {
-        this.ts = ts;
+        this.parent = parent;
+    }
+
+    public List getChildren()
+    {
+        return children;
+    }
+
+    public void setChildren(List children)
+    {
+        this.children = children;
     }
 }

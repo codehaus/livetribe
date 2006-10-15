@@ -18,10 +18,12 @@ package org.livetribe.arm.impl;
 
 import java.util.Arrays;
 
+import org.livetribe.arm.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
+import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
@@ -31,21 +33,21 @@ import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityProperties;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
-
-import org.livetribe.arm.util.StaticArmAPIMonitor;
+import org.opengroup.arm40.transaction.ArmUser;
+import org.springframework.aop.framework.Advised;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-class ArmAPIUtil implements GeneralErrorCodes
+class APIUtil implements GeneralErrorCodes
 {
     private static final LTApplicationDefinition BAD_APP_DEF;
     private static final AbstractMetricDefinition BAD_METRIC_DEF;
     private static final LTApplication BAD_APP;
     private static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
     private static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
-    private static final AbstractMetricBase[] BAD_METRICS;
+    private static final ArmMetric[] BAD_METRICS;
     private static final LTMetricGroup BAD_METRIC_GROUP;
     private static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
     private static final LTTransactionDefinition BAD_TRANS_DEF;
@@ -60,7 +62,7 @@ class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC_DEF = new AbstractMetricDefinition(BAD_APP_DEF, "", null, (short) 0, null)
+        BAD_METRIC_DEF = new AbstractMetricDefinition("org.livetribe.arm.OID.BadMetricDefinition", BAD_APP_DEF, "", null, (short) 0, null)
         {
             public boolean isBad()
             {
@@ -110,7 +112,7 @@ class ArmAPIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRICS = new AbstractMetricBase[7];
+        BAD_METRICS = new ArmMetric[7];
         Arrays.fill(BAD_METRICS, BAD_METRIC);
 
         BAD_METRIC_GROUP = new LTMetricGroup("org.livetribe.arm.OID.BadMetricGroup", BAD_METRIC_GRP_DEF, BAD_METRICS)
@@ -148,8 +150,21 @@ class ArmAPIUtil implements GeneralErrorCodes
         };
     }
 
-    private ArmAPIUtil()
+    private APIUtil()
     {
+    }
+
+    static Object obtainTarget(Object object)
+    {
+        try
+        {
+            return (object instanceof Advised ? ((Advised) object).getTargetSource().getTarget() : object);
+        }
+        catch (Exception e)
+        {
+            StaticArmAPIMonitor.error(GeneralErrorCodes.ERROR_OBTAINING_TARGET);
+            return object;
+        }
     }
 
     static String checkRequiredName(String name)
@@ -168,121 +183,138 @@ class ArmAPIUtil implements GeneralErrorCodes
         return name;
     }
 
-    static ArmApplicationDefinition checkRequired(ArmApplicationDefinition appDef)
+    static ArmMetricGroupDefinition checkRequired(ArmMetricGroupDefinition metricGroupDef)
     {
-        LTObject base = (LTObject) appDef;
+        AbstractObject base = (AbstractObject) obtainTarget(metricGroupDef);
         if (base == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.APPLICATION_DEFINIITON_NULL);
-            base = BAD_APP_DEF;
+            metricGroupDef = BAD_METRIC_GRP_DEF;
         }
         else
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return (ArmApplicationDefinition) base;
+        return metricGroupDef;
+    }
+
+    static ArmApplicationDefinition checkRequired(ArmApplicationDefinition appDef)
+    {
+        AbstractObject base = (AbstractObject) obtainTarget(appDef);
+        if (base == null)
+        {
+            StaticArmAPIMonitor.error(MetricErrorCodes.APPLICATION_DEFINIITON_NULL);
+            appDef = BAD_APP_DEF;
+        }
+        else
+        {
+            if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        }
+        return appDef;
     }
 
     static ArmMetricDefinition checkRequired(ArmMetricDefinition metricDef)
     {
-        LTObject base = (LTObject) metricDef;
+        AbstractObject base = (AbstractObject) obtainTarget(metricDef);
         if (base == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_DEFINIITON_NULL);
-            base = BAD_METRIC_DEF;
+            metricDef = BAD_METRIC_DEF;
         }
         else
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return (ArmMetricDefinition) base;
+        return metricDef;
     }
 
     static ArmApplication checkRequired(ArmApplication app)
     {
-        LTObject base = (LTObject) app;
+        AbstractObject base = (AbstractObject) obtainTarget(app);
         if (app == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.APPLICATION_NULL);
-            base = BAD_APP;
+            app = BAD_APP;
         }
         else
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return (ArmApplication) base;
+        return app;
     }
 
     static ArmTransactionDefinition checkRequired(ArmTransactionDefinition definition)
     {
-        LTObject base = (LTObject) definition;
+        AbstractObject base = (AbstractObject) obtainTarget(definition);
         if (base == null)
         {
             StaticArmAPIMonitor.error(TransactionErrorCodes.TRANS_DEF_NULL);
-            base = BAD_TRANS_DEF;
+            definition = BAD_TRANS_DEF;
         }
         else
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return (ArmTransactionDefinition) base;
+        return definition;
     }
 
     static ArmTransactionWithMetricsDefinition checkRequired(ArmTransactionWithMetricsDefinition definition)
     {
-        LTObject base = (LTObject) definition;
+        AbstractObject base = (AbstractObject) obtainTarget(definition);
         if (definition == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.TRN_W_METRICS_DEFINITION_NULL);
-            base = BAD_TRANS_W_METRICS_DEF;
+            definition = BAD_TRANS_W_METRICS_DEF;
         }
         else
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return (ArmTransactionWithMetricsDefinition) base;
+        return definition;
     }
 
     static ArmMetricGroup checkRequired(ArmMetricGroup group)
     {
-        LTObject base = (LTObject) group;
+        AbstractObject base = (AbstractObject) obtainTarget(group);
         if (group == null)
         {
             StaticArmAPIMonitor.error(MetricErrorCodes.METRIC_GROUP_NULL);
-            base = BAD_METRIC_GROUP;
+            group = BAD_METRIC_GROUP;
         }
         else
         {
             if (base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
         }
-        return (ArmMetricGroup) base;
+        return group;
+    }
+
+    static void checkBadStatus(Object object)
+    {
+        AbstractObject base = (AbstractObject) obtainTarget(object);
+        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
     }
 
     static ArmID checkOptional(ArmID id)
     {
-        LTObject base = (LTObject) id;
-        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        checkBadStatus(id);
         return id;
     }
 
     static ArmIdentityProperties checkOptional(ArmIdentityProperties id)
     {
-        LTObject base = (LTObject) id;
-        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        checkBadStatus(id);
         return id;
     }
 
     static ArmIdentityPropertiesTransaction checkOptional(ArmIdentityPropertiesTransaction id)
     {
-        LTObject base = (LTObject) id;
-        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        checkBadStatus(id);
         return id;
     }
 
     static ArmMetricGroupDefinition checkOptional(ArmMetricGroupDefinition metricGroupDef)
     {
-        LTObject base = (LTObject) metricGroupDef;
-        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        checkBadStatus(metricGroupDef);
         return metricGroupDef;
     }
 
@@ -319,8 +351,7 @@ class ArmAPIUtil implements GeneralErrorCodes
 
     static ArmSystemAddress checkOptional(ArmSystemAddress systemAddress)
     {
-        LTObject base = (LTObject) systemAddress;
-        if (base != null && base.isBad()) StaticArmAPIMonitor.error(GeneralErrorCodes.USING_INVALID_OBJECT);
+        checkBadStatus(systemAddress);
         return systemAddress;
     }
 
@@ -365,12 +396,11 @@ class ArmAPIUtil implements GeneralErrorCodes
     {
         if (corrBytes == null || corrBytes.length < offset + 4)
         {
-            offset = 0;
+            if (corrBytes != null) StaticArmAPIMonitor.error(TransactionErrorCodes.TOKEN_TOO_SHORT);
 
+            offset = 0;
             corrBytes = new byte[4];
             corrBytes[1] = 4;
-
-            StaticArmAPIMonitor.error(TransactionErrorCodes.TOKEN_TOO_SHORT);
         }
 
         int length = corrBytes[offset] << 8 | corrBytes[offset + 1];
@@ -506,4 +536,10 @@ class ArmAPIUtil implements GeneralErrorCodes
 
         return result;
     }
+
+    static String extractUser(ArmUser user)
+    {
+        return (user != null ? user.toString() : null);
+    }
 }
+

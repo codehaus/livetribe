@@ -34,7 +34,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 {
     private ApplicationContext applicationContext;
     private LTMetricFactory factory;
-    private ArmApplicationDefinition app;
+    private ArmApplicationDefinition appDef;
 
     public void testNewArmMetricCounter32Definition() throws Exception
     {
@@ -42,7 +42,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject) bad).isBad());
+        assertTrue(((AbstractObject) APIUtil.obtainTarget(bad)).isBad());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);
@@ -56,12 +56,13 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         bad.getUsage();
         assertFalse(bad.getErrorCode() == 0);
 
-        bad = factory.newArmMetricCounter32Definition(app, "", null, (short) 0, null);
+        bad = factory.newArmMetricCounter32Definition(appDef, "", null, (short) 0, null);
 
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject) bad).isBad());
-        assertSame(app, ((MetricDefinition) bad).getAppDef());
+        assertTrue(((AbstractObject) APIUtil.obtainTarget(bad)).isBad());
+
+        assertSame(appDef, ((MetricDefinition) bad).getAppDef());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);
@@ -89,7 +90,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         assertEquals("newArmMetricCounter32Definition", result[0]);
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject) bad).isBad());
+        assertTrue(((AbstractObject) APIUtil.obtainTarget(bad)).isBad());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);
@@ -108,7 +109,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         assertEquals("getUsage", result[0]);
     }
 
-    public void testNewArmMetricGroupDefinition()
+    public void testNewArmMetricGroupDefinition() throws Exception
     {
         ArmMetricGroupDefinition bad = factory.newArmMetricGroupDefinition(null);
 
@@ -126,35 +127,35 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
 
         ArmMetricDefinition[] definitions = new ArmMetricDefinition[7];
 
-        definitions[0] = new LTMetricString32Definition(null, null, null, (short) 0, null);
+        definitions[0] = new LTMetricString32Definition(null, null, null, null, (short) 0, null);
 
         bad = factory.newArmMetricGroupDefinition(definitions);
 
         assertEquals("newArmMetricGroupDefinition", result[0]);
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject) bad).isBad());
+        assertTrue(((AbstractObject) APIUtil.obtainTarget(bad)).isBad());
 
         bad.getMetricDefinition(0);
         assertFalse(bad.getErrorCode() == 0);
         assertEquals("getMetricDefinition", result[0]);
 
-        definitions[0] = new LTMetricCounter32Definition(null, null, null, (short) 0, null);
+        definitions[0] = new LTMetricCounter32Definition(null, null, null, null, (short) 0, null);
 
         ArmMetricGroupDefinition good = factory.newArmMetricGroupDefinition(definitions);
 
         assertTrue(good.getErrorCode() == 0);
         assertTrue(factory.getErrorCode() == 0);
-        assertFalse(((LTObject) good).isBad());
+        assertFalse(((AbstractObject) APIUtil.obtainTarget(good)).isBad());
 
-        definitions[6] = new LTMetricCounter32Definition(null, null, null, (short) 0, null);
+        definitions[6] = new LTMetricCounter32Definition(null, null, null, null, (short) 0, null);
 
         bad = factory.newArmMetricGroupDefinition(definitions);
 
         assertEquals("newArmMetricGroupDefinition", result[0]);
         assertFalse(bad.getErrorCode() == 0);
         assertFalse(factory.getErrorCode() == 0);
-        assertTrue(((LTObject) bad).isBad());
+        assertTrue(((AbstractObject) APIUtil.obtainTarget(bad)).isBad());
 
         bad.getMetricDefinition(0);
         assertFalse(bad.getErrorCode() == 0);
@@ -166,6 +167,11 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         applicationContext = new ClassPathXmlApplicationContext("org/livetribe/arm/ArmAPIUtilTest.xml");
 
         factory = new LTMetricFactory();
-        app = (new LTTransactionFactory()).newArmApplicationDefinition("TEST", null, null);
+        appDef = (new LTTransactionFactory()).newArmApplicationDefinition("TEST", null, null);
+    }
+
+    public void tearDown()
+    {
+        applicationContext = null;
     }
 }

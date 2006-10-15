@@ -17,12 +17,13 @@
 package org.livetribe.arm.impl;
 
 import org.opengroup.arm40.metric.ArmMetricDefinition;
+import org.opengroup.arm40.metric.ArmMetric;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-abstract class AbstractMetricBase extends AbstractObject implements Metric
+abstract class AbstractMetricBase extends AbstractObject implements ArmMetric
 {
     private final ArmMetricDefinition definition;
     private boolean valid;
@@ -47,4 +48,6 @@ abstract class AbstractMetricBase extends AbstractObject implements Metric
         this.valid = valid;
         return GeneralErrorCodes.SUCCESS;
     }
+
+    public abstract Object snapshot();
 }

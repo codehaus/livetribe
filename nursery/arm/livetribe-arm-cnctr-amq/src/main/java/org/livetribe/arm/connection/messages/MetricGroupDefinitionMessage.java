@@ -22,20 +22,12 @@ package org.livetribe.arm.connection.messages;
 public class MetricGroupDefinitionMessage implements Message
 {
     private final String metricGroupDefOID;
-    private final String[] appDefOID;
-    private final String[] name;
-    private final String[] units;
-    private final short[] usage;
-    private final byte[][] id;
+    private final String[] metricDefOIDs;
 
-    public MetricGroupDefinitionMessage(String metricGroupDefOID, String[] appDefOID, String[] name, String[] units, short[] usage, byte[][] id)
+    public MetricGroupDefinitionMessage(String metricGroupDefOID, String[] metricDefOIDs)
     {
         this.metricGroupDefOID = metricGroupDefOID;
-        this.appDefOID = appDefOID;
-        this.name = name;
-        this.units = units;
-        this.usage = usage;
-        this.id = id;
+        this.metricDefOIDs = metricDefOIDs;
     }
 
     public String getMetricGroupDefOID()
@@ -43,28 +35,8 @@ public class MetricGroupDefinitionMessage implements Message
         return metricGroupDefOID;
     }
 
-    public String[] getAppDefOID()
+    public String[] getMetricDefOIDs()
     {
-        return appDefOID;
-    }
-
-    public String[] getName()
-    {
-        return name;
-    }
-
-    public String[] getUnits()
-    {
-        return units;
-    }
-
-    public short[] getUsage()
-    {
-        return usage;
-    }
-
-    public byte[][] getId()
-    {
-        return id;
+        return metricDefOIDs;
     }
 }

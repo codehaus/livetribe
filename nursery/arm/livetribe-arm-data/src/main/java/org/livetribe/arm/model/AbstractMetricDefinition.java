@@ -14,29 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
-
-import java.util.Set;
-
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
-public class ApplicationDefinition extends Model
+abstract public class AbstractMetricDefinition extends Model
 {
-    private Set applications;
+    private ApplicationDefinition applicationDefinition;
     private String name;
-    private IdentityProperties identityProperties;
+    private String units;
+    private short uage;
     private byte[] id;
 
-    public Set getApplications()
+    public ApplicationDefinition getApplicationDefinition()
     {
-        return applications;
+        return applicationDefinition;
     }
 
-    public void setApplications(Set applications)
+    public void setApplicationDefinition(ApplicationDefinition applicationDefinition)
     {
-        this.applications = applications;
+        this.applicationDefinition = applicationDefinition;
     }
 
     public String getName()
@@ -49,14 +47,24 @@ public class ApplicationDefinition extends Model
         this.name = name;
     }
 
-    public IdentityProperties getIdentityProperties()
+    public String getUnits()
     {
-        return identityProperties;
+        return units;
     }
 
-    public void setIdentityProperties(IdentityProperties identityProperties)
+    public void setUnits(String units)
     {
-        this.identityProperties = identityProperties;
+        this.units = units;
+    }
+
+    public short getUage()
+    {
+        return uage;
+    }
+
+    public void setUage(short uage)
+    {
+        this.uage = uage;
     }
 
     public byte[] getId()

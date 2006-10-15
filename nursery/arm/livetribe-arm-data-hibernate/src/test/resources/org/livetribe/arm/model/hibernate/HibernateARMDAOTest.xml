@@ -36,7 +36,7 @@
         </property>
     </bean>
 
-    <bean id="testDAO" class="org.livetribe.arm.connection.model.hibernate.HibernateARMDAO">
+    <bean id="testDAO" class="org.livetribe.arm.model.hibernate.HibernateARMDAO">
         <property name="sessionFactory">
             <ref local="sessionFactory"/>
         </property>

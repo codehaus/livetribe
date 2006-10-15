@@ -14,38 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model;
+package org.livetribe.arm.model;
 
 /**
  * @version $Revision$ $Date$
  */
-public class Correlator
+public class ApplicationRemote extends Application
 {
-    private final boolean agentTrace;
-    private final boolean applicationTrace;
-    private final byte[] correlator;
+    private byte[] systemAddres;
 
-    public Correlator(byte[] correlator)
+    public byte[] getSystemAddres()
     {
-        assert correlator.length >= 4;
-
-        this.agentTrace = (correlator[3] & 0x40) != 0;
-        this.applicationTrace = (correlator[3] & 0x20) != 0;
-        this.correlator = correlator;
+        return systemAddres;
     }
 
-    public boolean isAgentTrace()
+    public void setSystemAddres(byte[] systemAddres)
     {
-        return agentTrace;
-    }
-
-    public boolean isApplicationTrace()
-    {
-        return applicationTrace;
-    }
-
-    public byte[] getCorrelator()
-    {
-        return correlator;
+        this.systemAddres = systemAddres;
     }
 }

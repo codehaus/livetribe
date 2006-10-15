@@ -2,10 +2,10 @@ package org.livetribe.arm.xbean;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-
+import org.livetribe.arm.impl.AbstractObject;
 import org.livetribe.arm.impl.GeneralErrorCodes;
-import org.livetribe.arm.impl.LTObject;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
+import org.springframework.aop.framework.Advised;
 
 
 /**
@@ -15,7 +15,7 @@ public class InvalidObjectAdvice implements MethodInterceptor
 {
     public Object invoke(MethodInvocation invocation) throws Throwable
     {
-        LTObject target = (LTObject) invocation.getThis();
+        AbstractObject target = (AbstractObject) obtainTarget(invocation.getThis());
 
         if (target.isBad())
         {
@@ -23,5 +23,10 @@ public class InvalidObjectAdvice implements MethodInterceptor
         }
 
         return invocation.proceed();
+    }
+
+    static Object obtainTarget(Object object) throws Exception
+    {
+        return (object instanceof Advised ? ((Advised) object).getTargetSource().getTarget() : object);
     }
 }

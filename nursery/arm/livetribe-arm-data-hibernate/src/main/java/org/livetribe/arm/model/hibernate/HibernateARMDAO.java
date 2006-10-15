@@ -14,20 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.arm.connection.model.hibernate;
+package org.livetribe.arm.model.hibernate;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.hibernate.ObjectNotFoundException;
 
-import org.livetribe.arm.connection.model.ARMDAO;
-import org.livetribe.arm.connection.model.ApplicationDefinition;
-import org.livetribe.arm.connection.model.IdentityProperties;
-import org.livetribe.arm.connection.model.ARMDAOException;
+import org.livetribe.arm.model.ARMDAO;
+import org.livetribe.arm.model.ApplicationDefinition;
+import org.livetribe.arm.model.IdentityProperties;
 
 
 /**
@@ -113,59 +110,28 @@ public class HibernateARMDAO extends HibernateDaoSupport implements ARMDAO
         }
 
 
-        try
-        {
-            return getHibernateTemplate().findByNamedParam(query.toString(),
-                                                           (String[]) names.toArray(new String[names.size()]),
-                                                           values.toArray());
-        }
-        catch (DataAccessException dae)
-        {
-            throw new ARMDAOException(dae);
-        }
+        return getHibernateTemplate().findByNamedParam(query.toString(),
+                                                       (String[]) names.toArray(new String[names.size()]),
+                                                       values.toArray());
     }
 
-    public IdentityProperties getIdentityPropertiesByOID(Long oid)
+    public IdentityProperties getIdentityPropertiesByOID(long oid)
     {
-        if (oid == null) throw new IllegalArgumentException("OID is null");
-
-        try
-        {
-            return (IdentityProperties) getHibernateTemplate().load(IdentityProperties.class, oid);
-        }
-        catch (DataAccessException dae)
-        {
-            if (dae.getCause() instanceof ObjectNotFoundException) return null;
-            else throw new ARMDAOException(dae);
-        }
+        return (IdentityProperties) getHibernateTemplate().load(IdentityProperties.class, new Long(oid));
     }
 
     public void saveIdentityProperties(IdentityProperties identityProperties)
     {
         if (identityProperties == null) throw new IllegalArgumentException("IdentityProperties is null");
 
-        try
-        {
-            getHibernateTemplate().saveOrUpdate(identityProperties);
-        }
-        catch (DataAccessException dae)
-        {
-                throw new ARMDAOException(dae);
-        }
+        getHibernateTemplate().saveOrUpdate(identityProperties);
     }
 
     public void deleteIdentityProperties(IdentityProperties identityProperties)
     {
         if (identityProperties == null) throw new IllegalArgumentException("IdentityProperties is null");
 
-        try
-        {
-            getHibernateTemplate().delete(identityProperties);
-        }
-        catch (DataAccessException dae)
-        {
-            throw new ARMDAOException(dae);
-        }
+        getHibernateTemplate().delete(identityProperties);
     }
 
     private static String[] cleanParams(String[] params)

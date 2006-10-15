@@ -63,7 +63,7 @@ class LTTranReport extends AbstractIdentifiableObject implements ArmTranReport, 
 
     public ArmCorrelator generateCorrelator()
     {
-        correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
         fresh = true;
 
         return correlator;
@@ -139,7 +139,7 @@ class LTTranReport extends AbstractIdentifiableObject implements ArmTranReport, 
     public int report(int status, long respTime, String diagnosticDetail)
     {
         if (fresh) fresh = false;
-        else correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        else correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
 
         connection.report(getObjectId(), (parentCorrelator != null ? parentCorrelator.getBytes() : null), correlator.getBytes(), status, respTime, diagnosticDetail);
 
@@ -149,7 +149,7 @@ class LTTranReport extends AbstractIdentifiableObject implements ArmTranReport, 
     public int report(int status, long respTime, long stopTime, String diagnosticDetail)
     {
         if (fresh) fresh = false;
-        else correlator = ArmAPIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
+        else correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(), false);
 
         connection.report(getObjectId(), (parentCorrelator != null ? parentCorrelator.getBytes() : null), correlator.getBytes(), status, respTime, stopTime, diagnosticDetail);
 

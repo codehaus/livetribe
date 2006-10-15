@@ -6,7 +6,7 @@ import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 
-import org.livetribe.arm.impl.LTObject;
+import org.livetribe.arm.impl.AbstractObject;
 
 
 /**
@@ -18,7 +18,7 @@ public class InvalidObjectAdvisor extends DefaultPointcutAdvisor
     {
         public boolean matches(Method method, Class targetClass)
         {
-            return LTObject.class.isAssignableFrom(targetClass);
+            return AbstractObject.class.isAssignableFrom(targetClass);
         }
     };
 

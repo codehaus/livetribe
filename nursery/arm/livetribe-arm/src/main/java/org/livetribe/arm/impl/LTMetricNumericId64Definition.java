@@ -26,8 +26,8 @@ import org.opengroup.arm40.transaction.ArmID;
  */
 class LTMetricNumericId64Definition extends AbstractMetricDefinition implements ArmMetricNumericId64Definition
 {
-    LTMetricNumericId64Definition(ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
+    LTMetricNumericId64Definition(String oid, ArmApplicationDefinition appDef, String name, String units, short usage, ArmID id)
     {
-        super(appDef, name, units, usage, id);
+        super(oid, appDef, name, units, usage, id);
     }
 }

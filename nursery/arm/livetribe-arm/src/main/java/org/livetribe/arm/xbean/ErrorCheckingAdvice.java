@@ -4,16 +4,14 @@ import java.util.Stack;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.opengroup.arm40.transaction.ArmErrorCallback;
-import org.opengroup.arm40.transaction.ArmInterface;
-import org.springframework.aop.framework.Advised;
-
 import org.livetribe.arm.impl.AbstractFactoryBase;
 import org.livetribe.arm.impl.AbstractObject;
 import org.livetribe.arm.impl.GeneralErrorCodes;
-import org.livetribe.arm.impl.LTObject;
 import org.livetribe.arm.util.ArmAPIMonitor;
 import org.livetribe.arm.util.StaticArmAPIMonitor;
+import org.opengroup.arm40.transaction.ArmErrorCallback;
+import org.opengroup.arm40.transaction.ArmInterface;
+import org.springframework.aop.framework.Advised;
 
 
 /**
@@ -46,9 +44,11 @@ public class ErrorCheckingAdvice implements MethodInterceptor
                 int errorCode = getErrorCode();
 
                 target.setErrorCode(errorCode);
-                if (rval instanceof LTObject)
+
+                Object test = (rval instanceof Advised ? ((Advised) rval).getTargetSource().getTarget() : rval);
+                if (test != null && AbstractObject.class.isAssignableFrom(test.getClass()))
                 {
-                    AbstractObject result = (AbstractObject) (rval instanceof Advised ? ((Advised) rval).getTargetSource().getTarget() : rval);
+                    AbstractObject result = (AbstractObject) test;
 
                     result.setBad(true);
                     result.setErrorCode(errorCode);
