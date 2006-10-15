@@ -19,7 +19,7 @@ package org.livetribe.arm40.impl;
 /**
  * @version $Revision$ $Date$
  */
-public abstract class AbstractTransactionBase extends AbstractIdentifiableObject
+abstract class AbstractTransactionBase extends AbstractIdentifiableObject
 {
     AbstractTransactionBase(String id)
     {
