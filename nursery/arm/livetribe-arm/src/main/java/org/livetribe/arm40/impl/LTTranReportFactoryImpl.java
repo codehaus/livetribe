@@ -28,7 +28,7 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
         LTApplicationRemote appRemote = new LTApplicationRemote(allocateOID(), appDef, group, instance, contextValues, systemAddress);
 
         getConnection().declareApplicationRemote(appRemote.getObjectId(),
-                                                 ((Identifiable) appDef).getObjectId(),
+                                                 APIUtil.extractOID(appDef),
                                                  group, instance, contextValues,
                                                  APIUtil.extractArmSystemAddress(systemAddress));
 

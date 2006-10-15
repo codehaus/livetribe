@@ -465,9 +465,9 @@ class APIUtil implements GeneralErrorCodes
         return (props == null ? null : props.getURIValue());
     }
 
-    static String extractOID(Identifiable object)
+    static String extractOID(Object object)
     {
-        return (object == null ? null : object.getObjectId());
+        return (object == null ? null : ((AbstractIdentifiableObject) APIUtil.obtainTarget(object)).getObjectId());
     }
 
     static String[] extractObjectIds(ArmMetricDefinition[] definitions)
@@ -477,7 +477,7 @@ class APIUtil implements GeneralErrorCodes
         for (int i = 0; i < 7; i++)
         {
             AbstractMetricDefinition def = (AbstractMetricDefinition) obtainTarget(definitions[i]);
-            Identifiable appDef = (def != null ? (Identifiable) def.getAppDef() : null);
+            AbstractIdentifiableObject appDef = (def != null ? (AbstractIdentifiableObject) obtainTarget(def.getAppDef()) : null);
             result[i] = (appDef != null ? appDef.getObjectId() : null);
         }
 

@@ -16,6 +16,7 @@
  */
 package org.livetribe.arm40.impl;
 
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricCounter32;
 import org.opengroup.arm40.metric.ArmMetricCounter32Definition;
@@ -47,8 +48,6 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
-
 
 /**
  * @version $Revision: $ $Date: $
@@ -64,7 +63,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricCounter32Definition definition = new LTMetricCounter32Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricCounter32Definition(definition.getObjectId(),
-                                                         ((Identifiable) appDef).getObjectId(),
+                                                         APIUtil.extractOID(appDef),
                                                          name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -79,7 +78,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricCounter64Definition definition = new LTMetricCounter64Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricCounter64Definition(definition.getObjectId(),
-                                                         ((Identifiable) appDef).getObjectId(),
+                                                         APIUtil.extractOID(appDef),
                                                          name, units, usage, APIUtil.extractArmId(id));
         return definition;
     }
@@ -93,7 +92,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricCounterFloat32Definition definition = new LTMetricCounterFloat32Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricCounterFloat32Definition(definition.getObjectId(),
-                                                              ((Identifiable) appDef).getObjectId(),
+                                                              APIUtil.extractOID(appDef),
                                                               name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -108,7 +107,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricGauge32Definition definition = new LTMetricGauge32Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricGauge32Definition(definition.getObjectId(),
-                                                       ((Identifiable) appDef).getObjectId(),
+                                                       APIUtil.extractOID(appDef),
                                                        name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -123,7 +122,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricGauge64Definition definition = new LTMetricGauge64Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricGauge64Definition(definition.getObjectId(),
-                                                       ((Identifiable) appDef).getObjectId(),
+                                                       APIUtil.extractOID(appDef),
                                                        name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -138,7 +137,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricGaugeFloat32Definition definition = new LTMetricGaugeFloat32Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricGaugeFloat32Definition(definition.getObjectId(),
-                                                            ((Identifiable) appDef).getObjectId(),
+                                                            APIUtil.extractOID(appDef),
                                                             name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -153,7 +152,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricNumericId32Definition definition = new LTMetricNumericId32Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricNumericId32Definition(definition.getObjectId(),
-                                                           ((Identifiable) appDef).getObjectId(),
+                                                           APIUtil.extractOID(appDef),
                                                            name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -168,7 +167,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricNumericId64Definition definition = new LTMetricNumericId64Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricNumericId64Definition(definition.getObjectId(),
-                                                           ((Identifiable) appDef).getObjectId(),
+                                                           APIUtil.extractOID(appDef),
                                                            name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -183,7 +182,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTMetricString32Definition definition = new LTMetricString32Definition(allocateOID(), appDef, name, units, usage, id);
 
         getConnection().declareMetricString32Definition(definition.getObjectId(),
-                                                        ((Identifiable) appDef).getObjectId(),
+                                                        APIUtil.extractOID(appDef),
                                                         name, units, usage, APIUtil.extractArmId(id));
 
         return definition;
@@ -229,10 +228,10 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
         LTTransactionWithMetricsDefinition transDef = new LTTransactionWithMetricsDefinition(allocateOID(), appDef, name, identityProperties, metricGroupDef, id);
         getConnection().declareTransactionWithMetricsDefinition(transDef.getObjectId(),
-                                                                ((Identifiable) appDef).getObjectId(),
+                                                                APIUtil.extractOID(appDef),
                                                                 name,
-                                                                APIUtil.extractOID((Identifiable) identityProperties),
-                                                                APIUtil.extractOID((Identifiable) metricGroupDef),
+                                                                APIUtil.extractOID(identityProperties),
+                                                                APIUtil.extractOID(metricGroupDef),
                                                                 APIUtil.extractArmId(id));
         return transDef;
     }
@@ -308,7 +307,7 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         }
 
         getConnection().declareMetricGroup(metricGroup.getObjectId(),
-                                           ((Identifiable) metricGroupDef).getObjectId());
+                                           APIUtil.extractOID(metricGroupDef));
 
         return metricGroup;
     }
@@ -324,8 +323,8 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
                                                                                 app, tranReportMetricsDef, metricGroup);
 
         getConnection().declareTranReportWithMetrics(tranReportMetrics.getObjectId(),
-                                                     ((Identifiable) tranReportMetricsDef).getObjectId(),
-                                                     ((Identifiable) metricGroup).getObjectId());
+                                                     APIUtil.extractOID(tranReportMetricsDef),
+                                                     APIUtil.extractOID(metricGroup));
 
         return tranReportMetrics;
     }
@@ -339,8 +338,8 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
         LTTransactionWithMetrics tranMetrics = new LTTransactionWithMetrics(allocateOID(), getConnection(), getGuidGenerator(), app, tranMetricsDef, metricGroup);
 
         getConnection().declareTranWithMetrics(tranMetrics.getObjectId(),
-                                               ((Identifiable) app).getObjectId(),
-                                               ((Identifiable) metricGroup).getObjectId());
+                                               APIUtil.extractOID(metricGroup),
+                                               APIUtil.extractOID(metricGroup));
 
         return tranMetrics;
     }

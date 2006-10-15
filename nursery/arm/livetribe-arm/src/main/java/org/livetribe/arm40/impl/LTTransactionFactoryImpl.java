@@ -16,6 +16,7 @@
  */
 package org.livetribe.arm40.impl;
 
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmCorrelator;
@@ -26,8 +27,6 @@ import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
-
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
 
 
 /**
@@ -45,7 +44,7 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
         LTApplication app = new LTApplication(allocateOID(), appDef, group, instance, contextValues);
 
         getConnection().declareApplication(app.getObjectId(),
-                                           ((Identifiable) appDef).getObjectId(),
+                                           APIUtil.extractOID(appDef),
                                            group,
                                            instance,
                                            contextValues);
@@ -63,7 +62,7 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
         getConnection().declareApplicationDefinition(appDef.getObjectId(),
                                                      name,
-                                                     APIUtil.extractOID((Identifiable) identityProperties),
+                                                     APIUtil.extractOID(identityProperties),
                                                      APIUtil.extractArmId(id));
 
         return appDef;
@@ -154,7 +153,8 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
             }
         }
 
-        if (uriValue != null && uriValue.length() > 4096) StaticArmAPIMonitor.warning(TransactionErrorCodes.URI_TOO_LONG);
+        if (uriValue != null && uriValue.length() > 4096)
+            StaticArmAPIMonitor.warning(TransactionErrorCodes.URI_TOO_LONG);
 
         LTIdentityPropertiesTransaction idPropsTrans = new LTIdentityPropertiesTransaction(allocateOID(), cleanIdNames, cleanIdValues, cleanCtxNames, uriValue);
 
@@ -175,8 +175,8 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
         LTTransaction transaction = new LTTransaction(allocateOID(), getConnection(), getGuidGenerator(), app, definition);
 
         getConnection().associateTransaction(transaction.getObjectId(),
-                                             ((Identifiable) app).getObjectId(),
-                                             ((Identifiable) definition).getObjectId());
+                                             APIUtil.extractOID(definition),
+                                             APIUtil.extractOID(definition));
 
         return transaction;
     }
@@ -192,7 +192,7 @@ public class LTTransactionFactoryImpl extends AbstractFactoryBase implements Arm
 
         getConnection().declareTransactionDefinition(transDef.getObjectId(),
                                                      name,
-                                                     APIUtil.extractOID((Identifiable) identityProperties),
+                                                     APIUtil.extractOID(identityProperties),
                                                      APIUtil.extractArmId(id));
 
         return transDef;
