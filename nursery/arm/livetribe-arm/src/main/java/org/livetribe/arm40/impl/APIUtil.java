@@ -19,11 +19,11 @@ package org.livetribe.arm40.impl;
 import java.util.Arrays;
 
 import org.livetribe.arm40.util.StaticArmAPIMonitor;
+import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
-import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.tranreport.ArmSystemAddress;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
@@ -78,7 +78,7 @@ class APIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_METRIC_GRP_DEF = new LTMetricGroupDefinition("org.livetribe.arm40.OID.BadMetricGroupDefinition", new MetricDefinition[7])
+        BAD_METRIC_GRP_DEF = new LTMetricGroupDefinition("org.livetribe.arm40.OID.BadMetricGroupDefinition", new ArmMetricDefinition[7])
         {
             public boolean isBad()
             {
@@ -470,13 +470,13 @@ class APIUtil implements GeneralErrorCodes
         return (object == null ? null : object.getObjectId());
     }
 
-    static String[] extractObjectIds(MetricDefinition[] definitions)
+    static String[] extractObjectIds(ArmMetricDefinition[] definitions)
     {
         String[] result = new String[7];
 
         for (int i = 0; i < 7; i++)
         {
-            MetricDefinition def = definitions[i];
+            AbstractMetricDefinition def = (AbstractMetricDefinition) obtainTarget(definitions[i]);
             Identifiable appDef = (def != null ? (Identifiable) def.getAppDef() : null);
             result[i] = (appDef != null ? appDef.getObjectId() : null);
         }

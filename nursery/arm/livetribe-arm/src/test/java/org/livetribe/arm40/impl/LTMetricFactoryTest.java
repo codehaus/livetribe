@@ -62,7 +62,7 @@ public class LTMetricFactoryTest extends TestCase implements MetricErrorCodes
         assertFalse(factory.getErrorCode() == 0);
         assertTrue(((AbstractObject) APIUtil.obtainTarget(bad)).isBad());
 
-        assertSame(appDef, ((MetricDefinition) bad).getAppDef());
+        assertSame(appDef, ((AbstractMetricDefinition) APIUtil.obtainTarget(bad)).getAppDef());
 
         bad.getID();
         assertFalse(bad.getErrorCode() == 0);

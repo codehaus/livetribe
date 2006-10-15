@@ -24,7 +24,7 @@ import org.opengroup.arm40.transaction.ArmID;
 /**
  * @version $Revision: $ $Date: $
  */
-abstract class AbstractMetricDefinition extends AbstractIdentifiableObject implements ArmMetricDefinition, MetricDefinition
+abstract class AbstractMetricDefinition extends AbstractIdentifiableObject implements ArmMetricDefinition
 {
     private final ArmApplicationDefinition appDef;
     private final String name;

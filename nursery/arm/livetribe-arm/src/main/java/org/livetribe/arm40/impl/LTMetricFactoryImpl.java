@@ -191,9 +191,9 @@ public class LTMetricFactoryImpl extends AbstractFactoryBase implements ArmMetri
 
     public ArmMetricGroupDefinition newArmMetricGroupDefinition(ArmMetricDefinition[] definitions)
     {
-        if (definitions == null) definitions = new MetricDefinition[0];
+        if (definitions == null) definitions = new ArmMetricDefinition[0];
 
-        MetricDefinition[] cleanDefinitions = new MetricDefinition[7];
+        ArmMetricDefinition[] cleanDefinitions = new ArmMetricDefinition[7];
 
         System.arraycopy(definitions, 0, cleanDefinitions, 0, Math.min(definitions.length, 7));
 
