@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
+import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.springframework.aop.framework.Advised;
 
@@ -28,7 +29,7 @@ import org.springframework.aop.framework.Advised;
 /**
  * @version $Revision: $ $Date: $
  */
-class LTMetricGroup extends AbstractIdentifiableObject implements MetricGroup
+class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
 {
     private final ArmMetricGroupDefinition groupDefinition;
     private final ArmMetric[] metrics;

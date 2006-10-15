@@ -18,6 +18,10 @@ package org.livetribe.arm40.impl;
 
 import java.util.List;
 
+import org.livetribe.arm40.connection.Connection;
+import org.livetribe.arm40.connection.StaticThreadBindMonitor;
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmTransactionWithMetrics;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
@@ -26,11 +30,6 @@ import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
-
-import org.livetribe.arm40.connection.Connection;
-import org.livetribe.arm40.connection.StaticThreadBindMonitor;
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
-import org.livetribe.util.uuid.UUIDGen;
 
 
 /**
@@ -42,7 +41,8 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
     private final UUIDGen guidGenerator;
     private final ArmApplication application;
     private final ArmTransactionWithMetricsDefinition tranMetricsDef;
-    private final MetricGroup metricGroup;
+    private final ArmMetricGroup proxiedMetricGroup;
+    private final LTMetricGroup metricGroup;
     private ArmCorrelator parentCorrelator = null;
     private ArmCorrelator correlator;
     private int status = ArmConstants.STATUS_INVALID;
@@ -64,7 +64,8 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
         this.guidGenerator = guidGenerator;
         this.application = application;
         this.tranMetricsDef = tranMetricsDef;
-        this.metricGroup = (MetricGroup) metricGroup;
+        this.proxiedMetricGroup = metricGroup;
+        this.metricGroup = (LTMetricGroup) APIUtil.obtainTarget(metricGroup);
 
         this.state = STOPPED;
 
@@ -84,7 +85,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
 
     public ArmMetricGroup getMetricGroup()
     {
-        return metricGroup;
+        return proxiedMetricGroup;
     }
 
     public int bindThread()
@@ -284,7 +285,7 @@ class LTTransactionWithMetrics extends AbstractIdentifiableObject implements Arm
         State start(ArmCorrelator parent)
         {
             correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
-                                                           trace || parent.isAgentTrace() || parent.isApplicationTrace());
+                                                        trace || parent.isAgentTrace() || parent.isApplicationTrace());
             if (start == 0) start = System.currentTimeMillis();
             parentCorrelator = parent;
 
