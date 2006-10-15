@@ -32,8 +32,8 @@ import org.springframework.aop.framework.Advised;
 class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
 {
     private final ArmMetricGroupDefinition groupDefinition;
-    private final ArmMetric[] metrics;
-    private final AbstractMetricBase[] metricsTargets;
+    private final ArmMetric[] proxiedMetrics;
+    private final AbstractMetricBase[] metrics;
     private final List[] data;
 
 
@@ -42,19 +42,19 @@ class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
         super(oid);
 
         this.groupDefinition = groupDefinition;
-        this.metrics = metrics;
+        this.proxiedMetrics = metrics;
         this.data = new List[metrics.length];
 
-        metricsTargets = new AbstractMetricBase[metrics.length];
+        this.metrics = new AbstractMetricBase[metrics.length];
         for (int i = 0; i < metrics.length; i++)
         {
             try
             {
-                metricsTargets[i] = (AbstractMetricBase) ((Advised) metrics[i]).getTargetSource().getTarget();
+                this.metrics[i] = (AbstractMetricBase) ((Advised) metrics[i]).getTargetSource().getTarget();
             }
             catch (Exception e)
             {
-                metricsTargets[i] = null;
+                this.metrics[i] = null;
             }
         }
 
@@ -68,30 +68,30 @@ class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
 
     public ArmMetric getMetric(int index)
     {
-        return metrics[index];
+        return proxiedMetrics[index];
     }
 
     public boolean isMetricValid(int index)
     {
-        if (index < 0 || metricsTargets.length <= index)
+        if (index < 0 || metrics.length <= index)
         {
             StaticArmAPIMonitor.error(GeneralErrorCodes.INDEX_OUT_OF_RANGE);
             return false;
         }
 
-        if (metricsTargets[index] != null) return metricsTargets[index].isValid();
+        if (metrics[index] != null) return metrics[index].isValid();
         else return false;
     }
 
     public int setMetricValid(int index, boolean value)
     {
-        if (index < 0 || metricsTargets.length <= index)
+        if (index < 0 || metrics.length <= index)
         {
             StaticArmAPIMonitor.error(GeneralErrorCodes.INDEX_OUT_OF_RANGE);
             return GeneralErrorCodes.INDEX_OUT_OF_RANGE;
         }
 
-        if (metricsTargets[index] != null) return metricsTargets[index].setValid(value);
+        if (metrics[index] != null) return metrics[index].setValid(value);
         else return GeneralErrorCodes.INDEX_OUT_OF_RANGE;
     }
 
@@ -108,7 +108,7 @@ class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
     public void snapshot()
     {
         for (int i = 0; i < metrics.length; i++)
-            data[i].add(metricsTargets[i] != null ? metricsTargets[i].snapshot() : null);
+            data[i].add(metrics[i] != null ? metrics[i].snapshot() : null);
     }
 
     public List[] stop()
