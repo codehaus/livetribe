@@ -68,6 +68,12 @@ class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
 
     public ArmMetric getMetric(int index)
     {
+        if (index < 0 || proxiedMetrics.length <= index)
+        {
+            StaticArmAPIMonitor.error(GeneralErrorCodes.INDEX_OUT_OF_RANGE);
+            return null;
+        }
+
         return proxiedMetrics[index];
     }
 
@@ -95,23 +101,23 @@ class LTMetricGroup extends AbstractIdentifiableObject implements ArmMetricGroup
         else return GeneralErrorCodes.INDEX_OUT_OF_RANGE;
     }
 
-    public void clear()
+    void clear()
     {
         for (int i = 0; i < data.length; i++) data[i] = new ArrayList();
     }
 
-    public void start()
+    void start()
     {
         clear();
     }
 
-    public void snapshot()
+    void snapshot()
     {
         for (int i = 0; i < metrics.length; i++)
             data[i].add(metrics[i] != null ? metrics[i].snapshot() : null);
     }
 
-    public List[] stop()
+    List[] stop()
     {
         List[] result = new List[data.length];
 
