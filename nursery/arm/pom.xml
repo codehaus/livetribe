@@ -8,7 +8,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.livetribe.arm</groupId>
+    <groupId>org.livetribe.arm40</groupId>
     <artifactId>livetribe-temproot</artifactId>
     <name>LiveTribe :: ARM</name>
     <version>1.0-SNAPSHOT</version>
@@ -289,43 +289,43 @@
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm-data</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm-data-hibernate</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm-knit</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm-util</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm-web</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.arm</groupId>
+                <groupId>org.livetribe.arm40</groupId>
                 <artifactId>livetribe-arm-xbean</artifactId>
                 <version>${pom.version}</version>
             </dependency>

@@ -133,11 +133,11 @@ public class AtmCustomerTest extends TestCase implements ArmErrorCallback
 
     public void setUp() throws Exception
     {
-        applicationContext = new ClassPathXmlApplicationContext("org/livetribe/arm/ArmAPIUtilTest.xml");
+        applicationContext = new ClassPathXmlApplicationContext("org/livetribe/arm40/ArmAPIUtilTest.xml");
 
         Properties p = System.getProperties();
-        p.setProperty(ArmTransactionFactory.propertyKey, "org.livetribe.arm.impl.LTTransactionFactory");
-        p.setProperty(ArmMetricFactory.propertyKey, "org.livetribe.arm.impl.LTMetricFactory");
+        p.setProperty(ArmTransactionFactory.propertyKey, "org.livetribe.arm40.impl.LTTransactionFactory");
+        p.setProperty(ArmMetricFactory.propertyKey, "org.livetribe.arm40.impl.LTMetricFactory");
 
         initFactories();
         armInit();
@@ -254,7 +254,7 @@ public class AtmCustomerTest extends TestCase implements ArmErrorCallback
 
         /**
          *  The real check_customer transaction starts here. But currently
-         * we don't know the customer (arm user) so get a time stamp from
+         * we don't know the customer (arm40 user) so get a time stamp from
          * ARM and set it as actual arrival time that is used for the
          * call of the start() method later on.
          */

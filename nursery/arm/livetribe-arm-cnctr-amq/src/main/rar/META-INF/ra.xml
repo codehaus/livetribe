@@ -47,7 +47,7 @@
     </license>
 
     <resourceadapter>
-        <resourceadapter-class>org.livetribe.arm.ra.activemq.ActiveMQResourceAdapterWrapper</resourceadapter-class>
+        <resourceadapter-class>org.livetribe.arm40.ra.activemq.ActiveMQResourceAdapterWrapper</resourceadapter-class>
         <config-property>
             <description>
                 The URL to the ActiveMQ server that you want this connection to connect to. If using
@@ -113,7 +113,7 @@
         <outbound-resourceadapter>
             <connection-definition>
                 <managedconnectionfactory-class>
-                    org.livetribe.arm.ra.activemq.ActiveMQManagedConnectionFactory</managedconnectionfactory-class>
+                    org.livetribe.arm40.ra.activemq.ActiveMQManagedConnectionFactory</managedconnectionfactory-class>
                 <config-property>
                     <description>
                         The destination URL, e.g. queue:///FOO or topic:///bar.
@@ -121,10 +121,10 @@
                     <config-property-name>destinationURL</config-property-name>
                     <config-property-type>java.lang.String</config-property-type>
                 </config-property>
-                <connectionfactory-interface>org.livetribe.arm.connection.ConnectionFactory</connectionfactory-interface>
-                <connectionfactory-impl-class>org.livetribe.arm.ra.activemq.ActiveMQConnectionFactory</connectionfactory-impl-class>
-                <connection-interface>org.livetribe.arm.connection.Connection</connection-interface>
-                <connection-impl-class>org.livetribe.arm.ra.activemq.ConnectionHandle</connection-impl-class>
+                <connectionfactory-interface>org.livetribe.arm40.connection.ConnectionFactory</connectionfactory-interface>
+                <connectionfactory-impl-class>org.livetribe.arm40.ra.activemq.ActiveMQConnectionFactory</connectionfactory-impl-class>
+                <connection-interface>org.livetribe.arm40.connection.Connection</connection-interface>
+                <connection-impl-class>org.livetribe.arm40.ra.activemq.ConnectionHandle</connection-impl-class>
             </connection-definition>
             <transaction-support>XATransaction</transaction-support>
             <authentication-mechanism>
@@ -137,7 +137,7 @@
         <inbound-resourceadapter>
             <messageadapter>
                 <messagelistener>
-                    <messagelistener-type>org.livetribe.arm.connection.Connection</messagelistener-type>
+                    <messagelistener-type>org.livetribe.arm40.connection.Connection</messagelistener-type>
                     <activationspec>
                         <activationspec-class>org.apache.activemq.ra.ActiveMQActivationSpec</activationspec-class>
 

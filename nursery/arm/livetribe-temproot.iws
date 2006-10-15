@@ -116,7 +116,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/ArmAPIUtilTest.java" line="66" class="org.livetribe.arm.ArmAPIUtilTest" package="org.livetribe.arm">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/ArmAPIUtilTest.java" line="66" class="org.livetribe.arm.ArmAPIUtilTest" package="org.livetribe.arm">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -129,7 +129,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/ArmAPIUtilTest.java" line="49" class="org.livetribe.arm.ArmAPIUtilTest" package="org.livetribe.arm">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/ArmAPIUtilTest.java" line="49" class="org.livetribe.arm.ArmAPIUtilTest" package="org.livetribe.arm">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -142,7 +142,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/impl/LTMetricFactoryTest.java" line="83" class="Class at LTMetricFactoryTest.java:84" package="org.livetribe.arm.impl">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/impl/LTMetricFactoryTest.java" line="83" class="Class at LTMetricFactoryTest.java:84" package="org.livetribe.arm.impl">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -155,7 +155,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/impl/LTMetricFactoryTest.java" line="78" class="org.livetribe.arm.impl.LTMetricFactoryTest" package="org.livetribe.arm.impl">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/impl/LTMetricFactoryTest.java" line="78" class="org.livetribe.arm.impl.LTMetricFactoryTest" package="org.livetribe.arm.impl">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -168,7 +168,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/impl/LTMetricFactoryTest.java" line="89" class="org.livetribe.arm.impl.LTMetricFactoryTest" package="org.livetribe.arm.impl">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/impl/LTMetricFactoryTest.java" line="89" class="org.livetribe.arm.impl.LTMetricFactoryTest" package="org.livetribe.arm.impl">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -181,7 +181,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/ErrorCheckingAdvice.java" line="43" class="org.livetribe.arm.xbean.ErrorCheckingAdvice" package="org.livetribe.arm.xbean">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/ErrorCheckingAdvice.java" line="43" class="org.livetribe.arm.xbean.ErrorCheckingAdvice" package="org.livetribe.arm.xbean">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -207,7 +207,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/ErrorCheckingAdvice.java" line="100" class="Class at ErrorCheckingAdvice.java:100" package="org.livetribe.arm.xbean">
+      <breakpoint url="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/ErrorCheckingAdvice.java" line="100" class="Class at ErrorCheckingAdvice.java:100" package="org.livetribe.arm.xbean">
         <option name="ENABLED" value="true" />
         <option name="SUSPEND_POLICY" value="SuspendAll" />
         <option name="LOG_ENABLED" value="false" />
@@ -333,82 +333,55 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LTMetricGaugeFloat32.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricGaugeFloat32.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="11" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.70208335">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LTMetricNumericId32.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricNumericId32.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="11" selection-start="1195" selection-end="1195" vertical-scroll-proportion="0.70208335">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LTMetricNumericId64.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricNumericId64.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="11" selection-start="1198" selection-end="1198" vertical-scroll-proportion="0.70208335">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="LTMetricString32.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricString32.java">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricString32.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="11" selection-start="1184" selection-end="1184" vertical-scroll-proportion="0.70208335">
+            <state line="45" column="11" selection-start="1186" selection-end="1186" vertical-scroll-proportion="0.78541666">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="LTToken.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTToken.java">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTToken.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="26" selection-start="1613" selection-end="1613" vertical-scroll-proportion="0.33333334">
+            <state line="68" column="26" selection-start="1615" selection-end="1615" vertical-scroll-proportion="0.8333333">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Metric.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/Metric.java">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/Metric.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="11" selection-start="871" selection-end="871" vertical-scroll-proportion="0.40625">
+            <state line="30" column="11" selection-start="873" selection-end="873" vertical-scroll-proportion="0.40625">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="ConfigurationTest.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/xbean/ConfigurationTest.java">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/xbean/ConfigurationTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="31" selection-start="1967" selection-end="1967" vertical-scroll-proportion="0.70208335">
+            <state line="58" column="31" selection-start="1975" selection-end="1975" vertical-scroll-proportion="1.0291667">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="ConnectorAdvice.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/ConnectorAdvice.java">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/ConnectorAdvice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="31" selection-start="712" selection-end="712" vertical-scroll-proportion="0.56875">
+            <state line="24" column="31" selection-start="716" selection-end="716" vertical-scroll-proportion="0.56875">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="ErrorCheckingAdvice.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/ErrorCheckingAdvice.java">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/ErrorCheckingAdvice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="11" selection-start="853" selection-end="853" vertical-scroll-proportion="0.33333334">
+            <state line="29" column="11" selection-start="865" selection-end="865" vertical-scroll-proportion="0.33333334">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -416,10 +389,37 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InvalidObjectAdvice.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/InvalidObjectAdvice.java">
+      <file leaf-file-name="InvalidObjectAdvice.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/InvalidObjectAdvice.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="5" selection-start="954" selection-end="954" vertical-scroll-proportion="0.6770833">
+            <state line="11" column="20" selection-start="367" selection-end="367" vertical-scroll-proportion="0.1625">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ARMUtilTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/util/ARMUtilTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="5" selection-start="1450" selection-end="1450" vertical-scroll-proportion="0.55">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HibernateARMDAOTest.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe/arm40/model/hibernate/HibernateARMDAOTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="31" column="29" selection-start="1071" selection-end="1071" vertical-scroll-proportion="-0.16458334">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HibernateARMDAOTest.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe/arm40/model/hibernate/HibernateARMDAOTest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="38" selection-start="913" selection-end="913" vertical-scroll-proportion="0.325">
               <folding />
             </state>
           </provider>
@@ -585,6 +585,208 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe/arm40" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe/arm40/model" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe/arm40/model/hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe/arm40" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe/arm40/model" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe/arm40/model/hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm-data-hibernate/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
         <option name="myItemId" value="livetribe-arm-cnctr-hibernate" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
       </PATH_ELEMENT>
@@ -740,6 +942,150 @@
         <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/util" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/test/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
     </PATH>
     <PATH>
       <PATH_ELEMENT>
@@ -775,7 +1121,41 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/org/livetribe/arm" />
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/org/livetribe/arm40" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/org/livetribe" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
     </PATH>
@@ -817,11 +1197,11 @@
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/META-INF/org/livetribe/arm" />
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/META-INF/org/livetribe/arm40" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/META-INF/org/livetribe/arm/impl" />
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/resources/META-INF/org/livetribe/arm40/impl" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
     </PATH>
@@ -848,6 +1228,52 @@
       </PATH_ELEMENT>
       <PATH_ELEMENT>
         <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-temproot.ipr" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java/org" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="PsiDirectory:$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm" />
         <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
       </PATH_ELEMENT>
     </PATH>
@@ -896,6 +1322,24 @@
   <component name="RestoreUpdateTree" />
   <component name="RunManager">
     <activeType name="JUnit" />
+    <tempConfiguration selected="true" default="false" name="HibernateARMDAOTest" type="JUnit" factoryName="JUnit">
+      <module name="livetribe-arm-data-hibernate" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="org.livetribe.arm40.model.hibernate" />
+      <option name="MAIN_CLASS_NAME" value="org.livetribe.arm40.model.hibernate.HibernateARMDAOTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+    </tempConfiguration>
     <configuration selected="false" default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -940,12 +1384,12 @@
         <value defaultName="wholeProject" />
       </option>
     </configuration>
-    <configuration selected="true" default="false" name="LTMetricFactoryTest" type="JUnit" factoryName="JUnit">
-      <module name="livetribe-arm-xbean" />
+    <configuration selected="false" default="false" name="LTMetricFactoryTest" type="JUnit" factoryName="JUnit">
+      <module name="livetribe-arm" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="org.livetribe.arm.impl" />
-      <option name="MAIN_CLASS_NAME" value="org.livetribe.arm.impl.LTMetricFactoryTest" />
+      <option name="PACKAGE_NAME" value="org.livetribe.arm40.impl" />
+      <option name="MAIN_CLASS_NAME" value="org.livetribe.arm40.impl.LTMetricFactoryTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
@@ -965,11 +1409,11 @@
       <ConfigurationWrapper RunnerId="Run" />
     </configuration>
     <configuration selected="false" default="false" name="ArmAPIUtilTest" type="JUnit" factoryName="JUnit">
-      <module name="livetribe-arm-xbean" />
+      <module name="livetribe-arm" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="org.livetribe.arm" />
-      <option name="MAIN_CLASS_NAME" value="org.livetribe.arm.ArmAPIUtilTest" />
+      <option name="PACKAGE_NAME" value="org.livetribe.arm40" />
+      <option name="MAIN_CLASS_NAME" value="org.livetribe.arm40.ArmAPIUtilTest" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="" />
@@ -1058,12 +1502,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="896" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="7" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.2679083" order="0" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.32958803" order="1" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.2679083" order="0" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32958803" order="1" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.25" order="1" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32991013" order="8" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.4" order="6" />
@@ -1071,7 +1515,7 @@
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="8" />
       <window_info id="Favorites" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.25" order="1" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.32958803" order="2" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="docked" type="docked" visible="true" weight="0.32958803" order="2" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.25" order="2" />
       <window_info id="File View" active="false" anchor="right" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
       <window_info id="Clover" active="false" anchor="left" auto_hide="false" internal_type="docked" type="docked" visible="false" weight="0.33" order="3" />
@@ -1153,111 +1597,109 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricCounter64.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="11" selection-start="1190" selection-end="1190" vertical-scroll-proportion="0.70208335">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricCounterFloat32.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="11" selection-start="1213" selection-end="1213" vertical-scroll-proportion="0.70208335">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/impl/LTMetricFactoryTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="0" selection-start="2337" selection-end="2337" vertical-scroll-proportion="-2.2229166">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricGauge32.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricGauge32.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="45" column="11" selection-start="1179" selection-end="1179" vertical-scroll-proportion="0.70208335">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricGauge64.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricGauge64.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="45" column="11" selection-start="1182" selection-end="1182" vertical-scroll-proportion="0.70208335">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricGaugeFloat32.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricGaugeFloat32.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="11" selection-start="1205" selection-end="1205" vertical-scroll-proportion="0.70208335">
+        <state line="45" column="11" selection-start="1207" selection-end="1207" vertical-scroll-proportion="0.78541666">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricNumericId32.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricNumericId32.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="11" selection-start="1195" selection-end="1195" vertical-scroll-proportion="0.70208335">
+        <state line="45" column="11" selection-start="1197" selection-end="1197" vertical-scroll-proportion="0.78541666">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricNumericId64.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricNumericId64.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="11" selection-start="1198" selection-end="1198" vertical-scroll-proportion="0.70208335">
+        <state line="45" column="11" selection-start="1200" selection-end="1200" vertical-scroll-proportion="0.78541666">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTMetricString32.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTMetricString32.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="11" selection-start="1184" selection-end="1184" vertical-scroll-proportion="0.70208335">
+        <state line="45" column="11" selection-start="1186" selection-end="1186" vertical-scroll-proportion="0.78541666">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/LTToken.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/LTToken.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="26" selection-start="1613" selection-end="1613" vertical-scroll-proportion="0.33333334">
+        <state line="68" column="26" selection-start="1615" selection-end="1615" vertical-scroll-proportion="0.8333333">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/impl/Metric.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/impl/Metric.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="11" selection-start="871" selection-end="871" vertical-scroll-proportion="0.40625">
+        <state line="30" column="11" selection-start="873" selection-end="873" vertical-scroll-proportion="0.40625">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm/xbean/ConfigurationTest.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/xbean/ConfigurationTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="31" selection-start="1967" selection-end="1967" vertical-scroll-proportion="0.70208335">
+        <state line="58" column="31" selection-start="1975" selection-end="1975" vertical-scroll-proportion="1.0291667">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/ConnectorAdvice.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/ConnectorAdvice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="31" selection-start="712" selection-end="712" vertical-scroll-proportion="0.56875">
+        <state line="24" column="31" selection-start="716" selection-end="716" vertical-scroll-proportion="0.56875">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/ErrorCheckingAdvice.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/ErrorCheckingAdvice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="11" selection-start="853" selection-end="853" vertical-scroll-proportion="0.33333334">
+        <state line="29" column="11" selection-start="865" selection-end="865" vertical-scroll-proportion="0.33333334">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm/xbean/InvalidObjectAdvice.java">
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/main/java/org/livetribe/arm40/xbean/InvalidObjectAdvice.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="5" selection-start="954" selection-end="954" vertical-scroll-proportion="0.6770833">
+        <state line="11" column="20" selection-start="367" selection-end="367" vertical-scroll-proportion="0.1625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/livetribe-arm/src/test/java/org/livetribe/arm40/util/ARMUtilTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="5" selection-start="1450" selection-end="1450" vertical-scroll-proportion="0.55">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/java/org/livetribe/arm40/model/hibernate/HibernateARMDAOTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="29" selection-start="1071" selection-end="1071" vertical-scroll-proportion="-0.16458334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/livetribe-arm-data-hibernate/src/test/resources/org/livetribe/arm40/model/hibernate/HibernateARMDAOTest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="38" selection-start="913" selection-end="913" vertical-scroll-proportion="0.325">
           <folding />
         </state>
       </provider>

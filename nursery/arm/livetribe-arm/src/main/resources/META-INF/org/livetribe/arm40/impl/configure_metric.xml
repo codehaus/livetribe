@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="armAPIMonitorAdvisor" class="org.livetribe.arm40.xbean.ArmAPIMonitorAdvisor"/>
+    <bean id="errorCheckingAdvisor" class="org.livetribe.arm40.xbean.ErrorCheckingAdvisor"/>
+    <bean id="invalidObjectAdvisor" class="org.livetribe.arm40.xbean.InvalidObjectAdvisor"/>
+    <bean id="objectAdvisor" class="org.livetribe.arm40.xbean.ObjectAdvisor"/>
+
+    <bean id="factoryAdvisor" class="org.livetribe.arm40.xbean.FactoryAdvisor">
+        <property name="advisors">
+            <list>
+                <ref local="armAPIMonitorAdvisor"/>
+                <ref local="errorCheckingAdvisor"/>
+                <ref local="invalidObjectAdvisor"/>
+                <ref local="objectAdvisor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="metricFactory" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces">
+            <value>org.opengroup.arm40.metric.ArmMetricFactory</value>
+        </property>
+        <property name="target">
+            <bean class="org.livetribe.arm40.impl.LTMetricFactoryImpl"/>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>armAPIMonitorAdvisor</value>
+                <value>errorCheckingAdvisor</value>
+                <value>factoryAdvisor</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

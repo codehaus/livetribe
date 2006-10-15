@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.livetribe.arm</groupId>
+        <groupId>org.livetribe.arm40</groupId>
         <artifactId>livetribe-temproot</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.livetribe.arm</groupId>
+    <groupId>org.livetribe.arm40</groupId>
     <artifactId>livetribe-arm-james</artifactId>
     <name>LiveTribe :: ARM :: James</name>
     <packaging>jar</packaging>

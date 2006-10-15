@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="org.livetribe.arm.connection.messages.ApplicationDefinitionMessage" table="APPLICATION_DEFINITIONS"
+    <class name="org.livetribe.arm40.connection.messages.ApplicationDefinitionMessage" table="APPLICATION_DEFINITIONS"
            dynamic-update="true">
         <cache usage="read-write"/>
         <!-- TODO unsaved value should be null? -->
@@ -34,7 +34,7 @@
         <property name="id" column="ID" type="string"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.ApplicationMessage" table="APPLICATIONS" dynamic-update="true">
+    <class name="org.livetribe.arm40.connection.messages.ApplicationMessage" table="APPLICATIONS" dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="APPLICATION_OID" type="long" unsaved-value="null">
             <generator class="sequence">
@@ -53,7 +53,7 @@
         </list>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.ApplicationRemoteMessage" table="APPLICATION_REMOTES"
+    <class name="org.livetribe.arm40.connection.messages.ApplicationRemoteMessage" table="APPLICATION_REMOTES"
            dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="APPLICATION_REMOTE_OID" type="long" unsaved-value="null">
@@ -74,7 +74,7 @@
         <property name="systemAddress" column="SYSTEM_ADDRESS" type="string"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.BlockMessage" table="BLOCKS" dynamic-update="true">
+    <class name="org.livetribe.arm40.connection.messages.BlockMessage" table="BLOCKS" dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="BLOCK_OID" type="long" unsaved-value="null">
             <generator class="sequence">
@@ -86,7 +86,7 @@
         <property name="handle" column="HANDLE" type="long"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.MetricGroupDefinitionMessage" table="METRIC_GROUP_DEFINITIONS"
+    <class name="org.livetribe.arm40.connection.messages.MetricGroupDefinitionMessage" table="METRIC_GROUP_DEFINITIONS"
            dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="METRIC_GROUP_DEFINITION_OID" type="long" unsaved-value="null">
@@ -127,7 +127,7 @@
         </list>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.ResetMessage" table="RESETS"
+    <class name="org.livetribe.arm40.connection.messages.ResetMessage" table="RESETS"
            dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="RESET_OID" type="long" unsaved-value="null">
@@ -139,7 +139,7 @@
         <property name="correlator" column="CORRELATOR" type="string" not-null="true"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.StartMessage" table="STARTS"
+    <class name="org.livetribe.arm40.connection.messages.StartMessage" table="STARTS"
            dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="START_OID" type="long" unsaved-value="null">
@@ -160,7 +160,7 @@
         <property name="contextURI" column="CONTEXT_URI" type="string"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.StopMessage" table="STOPS"
+    <class name="org.livetribe.arm40.connection.messages.StopMessage" table="STOPS"
            dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="STOP_OID" type="long" unsaved-value="null">
@@ -175,7 +175,7 @@
         <property name="message" column="MESSAGE" type="string"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.TransactionDefinitionMessage" table="TRANSACTION_DEFINITIONS"
+    <class name="org.livetribe.arm40.connection.messages.TransactionDefinitionMessage" table="TRANSACTION_DEFINITIONS"
            dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="TRANSACTION_DEFINITION_OID" type="long" unsaved-value="null">
@@ -207,7 +207,7 @@
         <property name="id" column="ID" type="string"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.TransactionMessage" table="TRANSACTIONS" dynamic-update="true">
+    <class name="org.livetribe.arm40.connection.messages.TransactionMessage" table="TRANSACTIONS" dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="TRANSACTION_OID" type="long" unsaved-value="null">
             <generator class="sequence">
@@ -219,7 +219,7 @@
         <property name="transDefId" column="TRANS_DEF_IF" type="string" not-null="true"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.UnblockedMessage" table="UNBLOCKS" dynamic-update="true">
+    <class name="org.livetribe.arm40.connection.messages.UnblockedMessage" table="UNBLOCKS" dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="UNBLOCKED_OID" type="long" unsaved-value="null">
             <generator class="sequence">
@@ -231,7 +231,7 @@
         <property name="handle" column="HANDLE" type="long"/>
     </class>
 
-    <class name="org.livetribe.arm.connection.messages.UpdateMessage" table="UPDATES" dynamic-update="true">
+    <class name="org.livetribe.arm40.connection.messages.UpdateMessage" table="UPDATES" dynamic-update="true">
         <cache usage="read-write"/>
         <id name="oid" column="UPDATE_OID" type="long" unsaved-value="null">
             <generator class="sequence">

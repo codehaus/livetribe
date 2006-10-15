@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="knitPoint" class="org.livetribe.arm40.bean.MockKnitPointBean">
+        <property name="uuidgen">
+            <ref local="uuidGenBean"/>
+        </property>
+        <!--property name="connection">
+            <ref local="connection"/>
+        </property-->
+    </bean>
+
+    <bean id="uuidGenBean" class="org.livetribe.util.uuid.UUIDGenDefault"/>
+    <bean id="connection" class="org.livetribe.arm40.connection.DefaultConnection"/>
+
+</beans>

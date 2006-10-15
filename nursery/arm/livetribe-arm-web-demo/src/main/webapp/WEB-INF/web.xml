@@ -4,17 +4,17 @@
          version="2.4">
 
     <listener>
-        <listener-class>org.livetribe.arm.web.ArmFramework</listener-class>
+        <listener-class>org.livetribe.arm40.web.ArmFramework</listener-class>
     </listener>
 
     <filter>
         <filter-name>Correlation Filter</filter-name>
-        <filter-class>org.livetribe.arm.web.ArmCorrelationFilter</filter-class>
+        <filter-class>org.livetribe.arm40.web.ArmCorrelationFilter</filter-class>
     </filter>
 
     <filter>
         <filter-name>Descision Filter</filter-name>
-        <filter-class>org.livetribe.arm.web.ArmTransactionFilter</filter-class>
+        <filter-class>org.livetribe.arm40.web.ArmTransactionFilter</filter-class>
     </filter>
 
     <filter-mapping>

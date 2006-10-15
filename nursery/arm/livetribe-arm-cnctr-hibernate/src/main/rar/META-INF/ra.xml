@@ -48,7 +48,7 @@
 
     <resourceadapter>
 
-        <resourceadapter-class>org.livetribe.arm.ra.hibernate.HibernateResourceAdapter</resourceadapter-class>
+        <resourceadapter-class>org.livetribe.arm40.ra.hibernate.HibernateResourceAdapter</resourceadapter-class>
 
         <config-property>
             <description>
@@ -60,11 +60,11 @@
 
         <outbound-resourceadapter>
             <connection-definition>
-                <managedconnectionfactory-class>org.livetribe.arm.ra.hibernate.HibernateManagedConnectionFactory</managedconnectionfactory-class>
-                <connectionfactory-interface>org.livetribe.arm.connection.ConnectionFactory</connectionfactory-interface>
-                <connectionfactory-impl-class>org.livetribe.arm.ra.hibernate.HibernateConnectionFactory</connectionfactory-impl-class>
-                <connection-interface>org.livetribe.arm.connection.Connection</connection-interface>
-                <connection-impl-class>org.livetribe.arm.ra.hibernate.HibernateConnection</connection-impl-class>
+                <managedconnectionfactory-class>org.livetribe.arm40.ra.hibernate.HibernateManagedConnectionFactory</managedconnectionfactory-class>
+                <connectionfactory-interface>org.livetribe.arm40.connection.ConnectionFactory</connectionfactory-interface>
+                <connectionfactory-impl-class>org.livetribe.arm40.ra.hibernate.HibernateConnectionFactory</connectionfactory-impl-class>
+                <connection-interface>org.livetribe.arm40.connection.Connection</connection-interface>
+                <connection-impl-class>org.livetribe.arm40.ra.hibernate.HibernateConnection</connection-impl-class>
             </connection-definition>
             <transaction-support>XATransaction</transaction-support>
             <authentication-mechanism>
