@@ -74,6 +74,12 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
         app = APIUtil.checkRequired(app);
         appTranDef = APIUtil.checkRequired(appTranDef);
 
-        return new LTTranReport(allocateOID(), getConnection(), getGuidGenerator(), app, appTranDef);
+        LTTranReport tranReport = new LTTranReport(allocateOID(), getConnection(), getGuidGenerator(), app, appTranDef);
+
+        getConnection().declareTranReport(tranReport.getObjectId(),
+                                          APIUtil.extractOID(app),
+                                          APIUtil.extractOID(appTranDef));
+
+        return tranReport;
     }
 }

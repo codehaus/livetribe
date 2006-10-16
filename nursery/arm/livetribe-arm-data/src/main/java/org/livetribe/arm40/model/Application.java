@@ -23,9 +23,9 @@ package org.livetribe.arm40.model;
 public class Application extends Model
 {
     private ApplicationDefinition appDef;
-    private  String group;
-    private  String instance;
-    private  String[] contextValues;
+    private String group;
+    private String instance;
+    private String[] contextValues;
 
     public ApplicationDefinition getAppDef()
     {

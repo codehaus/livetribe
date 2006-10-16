@@ -24,47 +24,197 @@ import java.util.List;
  */
 public interface Connection
 {
+    /**
+     * @param idPropOID
+     * @param idNames
+     * @param idValues
+     * @param ctxNames
+     */
     public void declareIdentityProperties(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames);
 
+    /**
+     * @param idPropOID
+     * @param idNames
+     * @param idValues
+     * @param ctxNames
+     * @param uriValue
+     */
     public void declareIdentityPropertiesTransaction(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames, String uriValue);
 
+    /**
+     * @param appDefOID
+     * @param name
+     * @param idPropOID
+     * @param id
+     */
     public void declareApplicationDefinition(String appDefOID, String name, String idPropOID, byte[] id);
 
+    /**
+     * @param appOID
+     * @param appDefOID
+     * @param group
+     * @param instance
+     * @param contextValues
+     */
     public void declareApplication(String appOID, String appDefOID, String group, String instance, String[] contextValues);
 
+    /**
+     * @param appOID
+     * @param appDefOID
+     * @param group
+     * @param instance
+     * @param contextValues
+     * @param systemAddress
+     */
     public void declareApplicationRemote(String appOID, String appDefOID, String group, String instance, String[] contextValues, byte[] systemAddress);
 
+    /**
+     * @param transDefOID
+     * @param name
+     * @param idPropTranOID
+     * @param id
+     */
     public void declareTransactionDefinition(String transDefOID, String name, String idPropTranOID, byte[] id);
 
+    /**
+     * @param transOID
+     * @param appOID
+     * @param transDefOID
+     */
     public void associateTransaction(String transOID, String appOID, String transDefOID);
 
+    /**
+     * @param tranReportOID
+     * @param appOID
+     * @param tranDefOID
+     */
+    public void declareTranReport(String tranReportOID, String appOID, String tranDefOID);
+
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricCounter32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricCounter64Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricCounterFloat32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricGauge32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricGauge64Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricGaugeFloat32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricNumericId32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricNumericId64Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricDefOID
+     * @param appDefOID
+     * @param name
+     * @param units
+     * @param usage
+     * @param id
+     */
     public void declareMetricString32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id);
 
+    /**
+     * @param metricGroupDefOID
+     * @param metricDefOIDs
+     */
     public void declareMetricGroupDefinition(String metricGroupDefOID, String[] metricDefOIDs);
 
+    /**
+     * @param transDefOID
+     * @param appDefOID
+     * @param name
+     * @param idPropOID
+     * @param metricGroupDefOID
+     * @param id
+     */
     public void declareTransactionWithMetricsDefinition(String transDefOID, String appDefOID, String name, String idPropOID, String metricGroupDefOID, byte[] id);
 
+    /**
+     * @param metricGroupOID
+     * @param metricGroupDefOID
+     */
     public void declareMetricGroup(String metricGroupOID, String metricGroupDefOID);
 
+    /**
+     * @param tranReportMetricsOID
+     * @param tranReportMetricsDefOID
+     * @param metricGroupOID
+     */
     public void declareTranReportWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID);
 
-    public void declareTranWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID);
+    /**
+     * @param tranMetricsOID
+     * @param tranReportMetricsDefOID
+     * @param metricGroupOID
+     */
+    public void declareTranWithMetrics(String tranMetricsOID, String tranReportMetricsDefOID, String metricGroupOID);
 
     public void start(String transOID, byte[] correlator, long start, byte[] parent, String user, String[] contextValues, String contextURI);
 

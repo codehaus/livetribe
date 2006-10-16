@@ -56,6 +56,10 @@ public class DefaultConnection implements Connection
     {
     }
 
+    public void declareTranReport(String tranReportOID, String appOID, String tranDefOID)
+    {
+    }
+
     public void declareMetricCounter32Definition(String metricDefOID, String appDefOID, String name, String units, short usage, byte[] id)
     {
     }
@@ -108,7 +112,7 @@ public class DefaultConnection implements Connection
     {
     }
 
-    public void declareTranWithMetrics(String tranReportMetricsOID, String tranReportMetricsDefOID, String metricGroupOID)
+    public void declareTranWithMetrics(String tranMetricsOID, String tranReportMetricsDefOID, String metricGroupOID)
     {
     }
 
