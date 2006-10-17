@@ -17,6 +17,20 @@
     <url>http://livetribe.codehaus.org</url>
 
 
+    <ciManagement>
+        <system>continuum</system>
+        <notifiers>
+            <notifier>
+            <type>mail</type>
+            <sendOnError />
+            <sendOnFailure />
+            <configuration>
+                <address>dev@livetribe.codehaus.org</address>
+            </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+    
     <scm>
         <connection>scm:svn:http://svn.codehaus.org/livetribe/nursery/</connection>
         <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/nursery/</developerConnection>

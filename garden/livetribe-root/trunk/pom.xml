@@ -22,7 +22,9 @@
                 <type>mail</type>
                 <sendOnError />
                 <sendOnFailure />
-                <address>dev@livetribe.codehaus.org</address>
+                <configuration>
+                  <address>dev@livetribe.codehaus.org</address>
+                </configuration>
             </notifier>
         </notifiers>
     </ciManagement>
