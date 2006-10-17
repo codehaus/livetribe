@@ -17,6 +17,9 @@
 package org.livetribe.util.uuid;
 
 
+/**
+ * @version $Revision: $ $Date: $
+ */
 public interface UUIDGen
 {
     /**
