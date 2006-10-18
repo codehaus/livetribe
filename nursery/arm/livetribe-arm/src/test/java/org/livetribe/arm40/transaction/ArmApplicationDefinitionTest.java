@@ -87,60 +87,95 @@ public class ArmApplicationDefinitionTest extends TestCase
     public void testName()
     {
         ArmApplicationDefinition appDef = tranFactory.newArmApplicationDefinition(LONG_NAME, null, null);
-
+        
         assertTrue("Name is too long. A warning should have been given.", warning);
         assertEquals("Name is too long. A proper warning code should have been given.", GeneralErrorCodes.NAME_LENGTH_LARGE, warningCode);
         assertFalse("A name that is too long is not an error.", error);
-        assertEquals("", GeneralErrorCodes.SUCCESS, errorCode);
-        assertEquals("", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
-        assertFalse("", callbackCalled);
-        assertNull("", callbackTarget);
-        assertNull("", callbackInterfaceName);
-        assertNull("", callbackMethodName);
+        assertEquals("A name that is too long is not an error. Error code must be set to success.", GeneralErrorCodes.SUCCESS, errorCode);
+        assertEquals("A name that is too long is not an error. Error code must be set to success in application definition.", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
+        assertFalse("A name that is too long is not an error. Error callback should not have been called.", callbackCalled);
+        assertNull("A name that is too long is not an error. Callback target should not have been set.", callbackTarget);
+        assertNull("A name that is too long is not an error. Callback interface name should not have been set.", callbackInterfaceName);
+        assertNull("A name that is too long is not an error. Callback method name should not have been set.", callbackMethodName);
 
         reset();
         appDef = tranFactory.newArmApplicationDefinition(ZERO_LENGTH_NAME, null, null);
 
-        assertFalse("", warning);
-        assertEquals("", 0, warningCode);
-        assertTrue("", error);
-        assertEquals("", GeneralErrorCodes.NAME_NULL_OR_EMPTY, errorCode);
-        assertEquals("", GeneralErrorCodes.NAME_NULL_OR_EMPTY, appDef.getErrorCode());
-        assertTrue("", callbackCalled);
-        assertSame("", tranFactory, callbackTarget);
-        assertEquals("", "org.opengroup.arm40.transaction.ArmTransactionFactory", callbackInterfaceName);
-        assertEquals("", "newArmApplicationDefinition", callbackMethodName);
-
+        assertFalse("Received a warning but a zero length name is an error.", warning);
+        assertEquals("A zero length name is an error. Warning code must be zero.", 0, warningCode);
+        assertTrue("Name is zero length. An error should have been given.", error);
+        assertEquals("Name is zero length. Error code should have been set appropriately by callback.", GeneralErrorCodes.NAME_NULL_OR_EMPTY, errorCode);
+        assertEquals("Name is zero length. Error code should have been set appropriately in application definition.", GeneralErrorCodes.NAME_NULL_OR_EMPTY, appDef.getErrorCode());
+        assertTrue("Name is zero length. Error callback should have been called.", callbackCalled);
+        assertSame("Incorrect object passed as callback target.", tranFactory, callbackTarget);
+        assertEquals("Incorrect interface name passed to callback.", "org.opengroup.arm40.transaction.ArmTransactionFactory", callbackInterfaceName);
+        assertEquals("Incorrect method name passed to callback.", "newArmApplicationDefinition", callbackMethodName);
         assertTrue("Name is zero length. Error code should be non-zero.", appDef.getErrorCode() != 0);
 
         reset();
         appDef = tranFactory.newArmApplicationDefinition(null, null, null);
-
+        assertFalse("Received a warning but a null name is an error.", warning);
+        assertEquals("A null is an error. Warning code must be zero.", 0, warningCode);
+        assertTrue("Name is null. An error should have been given.", error);
+        assertEquals("Name is null. Error code should have been set appropriately by callback.", GeneralErrorCodes.NAME_NULL_OR_EMPTY, errorCode);
+        assertEquals("Name is null. Error code should have been set appropriately in application definition.", GeneralErrorCodes.NAME_NULL_OR_EMPTY, appDef.getErrorCode());
+        assertTrue("Name is null. Error callback should have been called.", callbackCalled);
+        assertSame("Incorrect object passed as callback target.", tranFactory, callbackTarget);
+        assertEquals("Incorrect interface name passed to callback.", "org.opengroup.arm40.transaction.ArmTransactionFactory", callbackInterfaceName);
+        assertEquals("Incorrect method name passed to callback.", "newArmApplicationDefinition", callbackMethodName);
         assertTrue("Name is null. Error code should be non-zero.", appDef.getErrorCode() != 0);
 
         reset();
         appDef = tranFactory.newArmApplicationDefinition(VALID_NAME, null, null);
 
-        assertTrue("Error code should be zero (0).", appDef.getErrorCode() == 0);
+        assertFalse("Name is valid. Should not have gotten a warning.", warning);
+        assertEquals("Name is valid. A warning code should not have been given.", GeneralErrorCodes.SUCCESS, warningCode);
+        assertFalse("Name is valid. An error should not have been set.", error);
+        assertEquals("Name is valid. Error code must be set to success.", GeneralErrorCodes.SUCCESS, errorCode);
+        assertEquals("Name is valid. Error code must be set to success in application definition.", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
+        assertFalse("Name is valid. Error callback should not have been called.", callbackCalled);
+        assertNull("Name is valid. Callback target should not have been set.", callbackTarget);
+        assertNull("Name is valid. Callback interface name should not have been set.", callbackInterfaceName);
+        assertNull("Name is valid. Callback method name should not have been set.", callbackMethodName);
+        assertTrue("Name is valid. Error code should be zero (0).", appDef.getErrorCode() == 0);
     }
 
     /**
-     * Test that the the identity properties method is equal to that passed into the factory method.
+     * Test that a valid identity properties parameter does not produce any errors or warnings.
      */
     public void testIdentityProperties()
     {
         ArmApplicationDefinition appDef = tranFactory.newArmApplicationDefinition(VALID_NAME, armIdProperties, null);
 
-        assertTrue("Error code should be zero (0).", appDef.getErrorCode() == 0);
+        assertFalse("Both name and ARM ID properties are valid. A warning should not have been given.", warning);
+        assertEquals("Both name and ARM ID properties are valid. A warning code should not have been given.", GeneralErrorCodes.SUCCESS, warningCode);
+        assertFalse("Both name and ARM ID properties are valid. An error should not have been set.", error);
+        assertEquals("Both name and ARM ID properties are valid. Error code must be set to success.", GeneralErrorCodes.SUCCESS, errorCode);
+        assertEquals("Both name and ARM ID properties are valid. Error code must be set to success in application definition.", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
+        assertFalse("Both name and ARM ID properties are valid. Error callback should not have been called.", callbackCalled);
+        assertNull("Both name and ARM ID properties are valid. Callback target should not have been set.", callbackTarget);
+        assertNull("Both name and ARM ID properties are valid. Callback interface name should not have been set.", callbackInterfaceName);
+        assertNull("Both name and ARM ID properties are valid. Callback method name should not have been set.", callbackMethodName);
+        assertTrue("Both name and ARM ID properties are valid. Error code should be zero (0).", appDef.getErrorCode() == 0);
     }
 
     /**
-     * Test that the id parameter is equal to that passed to the factory method.
+     * Test that a valid id parameter does not produce any errors or warnings.
      */
     public void testId()
     {
+        reset();
         ArmApplicationDefinition appDef = tranFactory.newArmApplicationDefinition(VALID_NAME, null, armId);
 
+        assertFalse("Both name and ARM ID are valid. A warning should not have been given.", warning);
+        assertEquals("Both name and ARM ID are valid. A warning code should not have been given.", GeneralErrorCodes.SUCCESS, warningCode);
+        assertFalse("Both name and ARM ID are valid. An error should not have been set.", error);
+        assertEquals("Both name and ARM ID are valid. Error code must be set to success.", GeneralErrorCodes.SUCCESS, errorCode);
+        assertEquals("Both name and ARM ID are valid. Error code must be set to success in application definition.", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
+        assertFalse("Both name and ARM ID are valid. Error callback should not have been called.", callbackCalled);
+        assertNull("Both name and ARM ID are valid. Callback target should not have been set.", callbackTarget);
+        assertNull("Both name and ARM ID are valid. Callback interface name should not have been set.", callbackInterfaceName);
+        assertNull("Both name and ARM ID are valid. Callback method name should not have been set.", callbackMethodName);
         assertTrue("Error code should be zero (0).", appDef.getErrorCode() == 0);
     }
 
@@ -151,7 +186,16 @@ public class ArmApplicationDefinitionTest extends TestCase
     {
         ArmApplicationDefinition appDef = tranFactory.newArmApplicationDefinition(VALID_NAME, armIdProperties, armId);
 
-        assertTrue("Error code should be zero (0).", appDef.getErrorCode() == 0);
+        assertFalse("All parameters are valid. A warning should not have been given.", warning);
+        assertEquals("All parameters are valid. A warning code should not have been given.", GeneralErrorCodes.SUCCESS, warningCode);
+        assertFalse("All parameters are valid. An error should not have been set.", error);
+        assertEquals("All parameters are valid. Error code must be set to success.", GeneralErrorCodes.SUCCESS, errorCode);
+        assertEquals("All parameters are valid. Error code must be set to success in application definition.", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
+        assertFalse("All parameters are valid. Error callback should not have been called.", callbackCalled);
+        assertNull("All parameters are valid. Callback target should not have been set.", callbackTarget);
+        assertNull("All parameters are valid. Callback interface name should not have been set.", callbackInterfaceName);
+        assertNull("All parameters are valid. Callback method name should not have been set.", callbackMethodName);
+        assertTrue("All parameters are valid. Error code should be zero (0).", appDef.getErrorCode() == 0);
 
         assertTrue("Name should be equal to what was passed to newArmApplicationDefinition", appDef.getName().equals(VALID_NAME));
 
@@ -170,7 +214,17 @@ public class ArmApplicationDefinitionTest extends TestCase
 
         appDef.destroy();
 
-        assertTrue("Error code should be zero (0).", appDef.getErrorCode() == 0);
+        assertFalse("Calling destroy should not set a warning.", warning);
+        assertEquals("Calling destroy should not have set a warning code.", GeneralErrorCodes.SUCCESS, warningCode);
+        assertFalse("Calling destroy should not have set an error.", error);
+        assertEquals("Destroy called. Error code must be set to success.", GeneralErrorCodes.SUCCESS, errorCode);
+        assertEquals("Destroy called. Error code must be set to success in application definition.", GeneralErrorCodes.SUCCESS, appDef.getErrorCode());
+        assertFalse("Destroy called. Error callback should not have been called.", callbackCalled);
+        assertNull("Destroy called. Callback target should not have been set.", callbackTarget);
+        assertNull("Destroy called. Callback interface name should not have been set.", callbackInterfaceName);
+        assertNull("Destroy called. Callback method name should not have been set.", callbackMethodName);
+        assertTrue("Destroy called. Error code should be zero (0).", appDef.getErrorCode() == 0);
+        assertTrue("Destroy called. Error code should be zero (0).", appDef.getErrorCode() == 0);
     }
 
     public void setUp() throws ARMException
