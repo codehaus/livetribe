@@ -47,6 +47,8 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
 
+import org.livetribe.arm40.xbean.ErrorCheckingAdvice;
+
 
 /**
  * @version $Revision: $ $Date: $
@@ -58,6 +60,7 @@ public class LTMetricFactory extends FacadeFactoryBase implements ArmMetricFacto
     public LTMetricFactory()
     {
         factoryProxy = (ArmMetricFactory) getApplicationContext().getBean("metricFactory");
+        ErrorCheckingAdvice.registerProxy(factoryProxy, this);
     }
 
     protected String getFactoryType()

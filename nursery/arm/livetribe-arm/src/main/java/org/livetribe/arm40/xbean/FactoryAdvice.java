@@ -67,6 +67,8 @@ public class FactoryAdvice implements MethodInterceptor
                 pf.setTarget(rval);
 
                 rval = pf.getProxy();
+                
+                ErrorCheckingAdvice.registerProxy(rval, rval);
             }
         }
         catch (Throwable t)
@@ -76,11 +78,11 @@ public class FactoryAdvice implements MethodInterceptor
         return rval;
     }
 
-    private final static Map interfaceCache = Collections.synchronizedMap(new WeakHashMap());
+    private final static Map INTERFACE_CACHE = Collections.synchronizedMap(new WeakHashMap());
 
     private Set collectInterfaces(Class clazz)
     {
-        Set result = (Set) interfaceCache.get(clazz);
+        Set result = (Set) INTERFACE_CACHE.get(clazz);
 
         if (result == null)
         {
@@ -97,7 +99,7 @@ public class FactoryAdvice implements MethodInterceptor
                 result.addAll(collectInterfaces(clazz.getSuperclass()));
             }
 
-            interfaceCache.put(clazz, result);
+            INTERFACE_CACHE.put(clazz, result);
         }
 
         return result;

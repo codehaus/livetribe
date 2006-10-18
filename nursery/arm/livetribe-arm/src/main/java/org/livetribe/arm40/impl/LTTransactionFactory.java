@@ -27,6 +27,8 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
 
+import org.livetribe.arm40.xbean.ErrorCheckingAdvice;
+
 
 /**
  * @version $Revision: $ $Date: $
@@ -38,6 +40,7 @@ public class LTTransactionFactory extends FacadeFactoryBase implements ArmTransa
     public LTTransactionFactory()
     {
         factoryProxy = (ArmTransactionFactory) getApplicationContext().getBean("transactionFactory");
+        ErrorCheckingAdvice.registerProxy(factoryProxy, this);
     }
 
     protected String getFactoryType()

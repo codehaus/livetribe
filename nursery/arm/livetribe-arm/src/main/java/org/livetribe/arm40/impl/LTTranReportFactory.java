@@ -25,6 +25,8 @@ import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 
+import org.livetribe.arm40.xbean.ErrorCheckingAdvice;
+
 
 /**
  * @version $Revision: $ $Date: $
@@ -36,6 +38,7 @@ public class LTTranReportFactory extends FacadeFactoryBase implements ArmTranRep
     public LTTranReportFactory()
     {
         factoryProxy = (ArmTranReportFactory) getApplicationContext().getBean("tranReportFactory");
+        ErrorCheckingAdvice.registerProxy(factoryProxy, this);
     }
 
     protected String getFactoryType()

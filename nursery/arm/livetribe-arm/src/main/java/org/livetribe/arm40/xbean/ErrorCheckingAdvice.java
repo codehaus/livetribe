@@ -1,6 +1,9 @@
 package org.livetribe.arm40.xbean;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Stack;
+import java.util.WeakHashMap;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -60,7 +63,7 @@ public class ErrorCheckingAdvice implements MethodInterceptor
                 {
                     try
                     {
-                        callback.errorCodeSet(target,
+                        callback.errorCodeSet((ArmInterface) getRegisteredProxy(target),
                                               invocation.getMethod().getDeclaringClass().getName(),
                                               invocation.getMethod().getName());
                     }
@@ -72,6 +75,46 @@ public class ErrorCheckingAdvice implements MethodInterceptor
             }
         }
         return rval;
+    }
+
+    /**
+     * A mapping from a target object and the proxy that the application receives.
+     */
+    private final static Map OBJECTS_PROXIES = Collections.synchronizedMap(new WeakHashMap());
+
+    /**
+     * Obtain the proxy of a target object.
+     * <p/>
+     * All of this is so that if there is an error, we can return the proper
+     * target object in the error callback.
+     *
+     * @param key the target pbject
+     * @return the proxy
+     * @see ErrorCheckingAdvice#invoke(org.aopalliance.intercept.MethodInvocation)
+     */
+    private static Object getRegisteredProxy(Object key)
+    {
+        return OBJECTS_PROXIES.get(key);
+    }
+
+    /**
+     * Register a proxy using the target object as a key.
+     * <p/>
+     * All of this is so that if there is an error, we can return the proper
+     * target object in the error callback.
+     *
+     * @param key   the target object that is currently wrapped in a Spring proxy
+     * @param value the proxy to be registered
+     */
+    public static void registerProxy(Object key, Object value)
+    {
+        try
+        {
+            OBJECTS_PROXIES.put(((Advised) key).getTargetSource().getTarget(), value);
+        }
+        catch (Exception doNothing)
+        {
+        }
     }
 
     static boolean isError()
