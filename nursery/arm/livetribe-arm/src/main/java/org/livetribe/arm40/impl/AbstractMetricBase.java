@@ -16,8 +16,8 @@
  */
 package org.livetribe.arm40.impl;
 
-import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetric;
+import org.opengroup.arm40.metric.ArmMetricDefinition;
 
 
 /**

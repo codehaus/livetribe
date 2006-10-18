@@ -19,11 +19,12 @@ package org.livetribe.arm40.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmMetricGroupDefinition;
 import org.springframework.aop.framework.Advised;
+
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
 
 
 /**

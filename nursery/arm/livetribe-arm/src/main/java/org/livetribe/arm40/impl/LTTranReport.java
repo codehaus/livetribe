@@ -16,15 +16,16 @@
  */
 package org.livetribe.arm40.impl;
 
-import org.livetribe.arm40.connection.Connection;
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
-import org.livetribe.util.uuid.UUIDGen;
 import org.opengroup.arm40.tranreport.ArmTranReport;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
+
+import org.livetribe.arm40.connection.Connection;
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 
 
 /**

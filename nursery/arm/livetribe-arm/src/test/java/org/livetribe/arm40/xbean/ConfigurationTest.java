@@ -18,10 +18,11 @@ package org.livetribe.arm40.xbean;
 
 import junit.framework.TestCase;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
-import org.livetribe.arm40.impl.AbstractObject;
-import org.livetribe.arm40.impl.LTMetricFactory;
 import org.opengroup.arm40.metric.ArmMetricFactory;
 import org.springframework.aop.framework.Advised;
+
+import org.livetribe.arm40.impl.AbstractObject;
+import org.livetribe.arm40.impl.LTMetricFactory;
 
 
 /**

@@ -267,7 +267,7 @@ class LTTransaction extends AbstractTransactionBase implements ArmTransaction
         State start(ArmCorrelator parent)
         {
             correlator = APIUtil.constructArmCorrelator(guidGenerator.uuidgen(),
-                                                           trace || parent.isAgentTrace() || parent.isApplicationTrace());
+                                                        trace || parent.isAgentTrace() || parent.isApplicationTrace());
             if (start == 0) start = System.currentTimeMillis();
             parentCorrelator = parent;
 

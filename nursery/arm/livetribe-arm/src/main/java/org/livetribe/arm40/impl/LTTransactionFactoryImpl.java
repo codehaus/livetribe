@@ -16,7 +16,6 @@
  */
 package org.livetribe.arm40.impl;
 
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmCorrelator;
@@ -27,6 +26,8 @@ import org.opengroup.arm40.transaction.ArmTransaction;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmTransactionFactory;
 import org.opengroup.arm40.transaction.ArmUser;
+
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
 
 
 /**

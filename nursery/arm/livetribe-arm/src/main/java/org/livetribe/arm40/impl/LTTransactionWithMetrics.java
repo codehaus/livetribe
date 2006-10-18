@@ -18,10 +18,6 @@ package org.livetribe.arm40.impl;
 
 import java.util.List;
 
-import org.livetribe.arm40.connection.Connection;
-import org.livetribe.arm40.connection.StaticThreadBindMonitor;
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
-import org.livetribe.util.uuid.UUIDGen;
 import org.opengroup.arm40.metric.ArmMetricGroup;
 import org.opengroup.arm40.metric.ArmTransactionWithMetrics;
 import org.opengroup.arm40.metric.ArmTransactionWithMetricsDefinition;
@@ -30,6 +26,11 @@ import org.opengroup.arm40.transaction.ArmConstants;
 import org.opengroup.arm40.transaction.ArmCorrelator;
 import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
+
+import org.livetribe.arm40.connection.Connection;
+import org.livetribe.arm40.connection.StaticThreadBindMonitor;
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
+import org.livetribe.util.uuid.UUIDGen;
 
 
 /**

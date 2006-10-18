@@ -2,10 +2,11 @@ package org.livetribe.arm40.xbean;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.framework.Advised;
+
 import org.livetribe.arm40.impl.AbstractObject;
 import org.livetribe.arm40.impl.GeneralErrorCodes;
 import org.livetribe.arm40.util.StaticArmAPIMonitor;
-import org.springframework.aop.framework.Advised;
 
 
 /**

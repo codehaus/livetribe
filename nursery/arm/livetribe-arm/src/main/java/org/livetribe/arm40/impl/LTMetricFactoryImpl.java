@@ -16,7 +16,6 @@
  */
 package org.livetribe.arm40.impl;
 
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricCounter32;
 import org.opengroup.arm40.metric.ArmMetricCounter32Definition;
@@ -47,6 +46,8 @@ import org.opengroup.arm40.transaction.ArmApplication;
 import org.opengroup.arm40.transaction.ArmApplicationDefinition;
 import org.opengroup.arm40.transaction.ArmID;
 import org.opengroup.arm40.transaction.ArmIdentityPropertiesTransaction;
+
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
 
 
 /**
