@@ -19,18 +19,27 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
 {
     public ArmApplicationRemote newArmApplicationRemote(ArmApplicationDefinition appDef, String group, String instance, String[] contextValues, ArmSystemAddress systemAddress)
     {
-        appDef = APIUtil.checkRequired(appDef);
-        group = APIUtil.checkOptional255(group);
-        instance = APIUtil.checkOptional255(instance);
-        contextValues = APIUtil.checkOptional(appDef, contextValues);
-        systemAddress = APIUtil.checkOptional(systemAddress);
+        LTApplicationRemote appRemote;
+        try
+        {
+            appDef = APIUtil.checkRequired(appDef);
+            group = APIUtil.checkOptional255(group);
+            instance = APIUtil.checkOptional255(instance);
+            contextValues = APIUtil.checkOptional(appDef, contextValues);
+            systemAddress = APIUtil.checkOptional(systemAddress);
 
-        LTApplicationRemote appRemote = new LTApplicationRemote(allocateOID(), appDef, group, instance, contextValues, systemAddress);
+            appRemote = new LTApplicationRemote(allocateOID(), appDef, group, instance, contextValues, systemAddress);
 
-        getConnection().declareApplicationRemote(appRemote.getObjectId(),
-                                                 APIUtil.extractOID(appDef),
-                                                 group, instance, contextValues,
-                                                 APIUtil.extractArmSystemAddress(systemAddress));
+            getConnection().declareApplicationRemote(appRemote.getObjectId(),
+                                                     APIUtil.extractOID(appDef),
+                                                     group, instance, contextValues,
+                                                     APIUtil.extractArmSystemAddress(systemAddress));
+        }
+        catch (Throwable t)
+        {
+            StaticArmAPIMonitor.error(GeneralErrorCodes.UNEXPECTED_ERROR);
+            appRemote = APIUtil.BAD_APP_REMOTE;
+        }
 
         return appRemote;
     }
@@ -71,14 +80,23 @@ public class LTTranReportFactoryImpl extends AbstractFactoryBase implements ArmT
 
     public ArmTranReport newArmTranReport(ArmApplication app, ArmTransactionDefinition appTranDef)
     {
-        app = APIUtil.checkRequired(app);
-        appTranDef = APIUtil.checkRequired(appTranDef);
+        LTTranReport tranReport;
+        try
+        {
+            app = APIUtil.checkRequired(app);
+            appTranDef = APIUtil.checkRequired(appTranDef);
 
-        LTTranReport tranReport = new LTTranReport(allocateOID(), getConnection(), getGuidGenerator(), app, appTranDef);
+            tranReport = new LTTranReport(allocateOID(), getConnection(), getGuidGenerator(), app, appTranDef);
 
-        getConnection().declareTranReport(tranReport.getObjectId(),
-                                          APIUtil.extractOID(app),
-                                          APIUtil.extractOID(appTranDef));
+            getConnection().declareTranReport(tranReport.getObjectId(),
+                                              APIUtil.extractOID(app),
+                                              APIUtil.extractOID(appTranDef));
+        }
+        catch (Throwable t)
+        {
+            StaticArmAPIMonitor.error(GeneralErrorCodes.UNEXPECTED_ERROR);
+            tranReport = APIUtil.BAD_TRAN_REPORT;
+        }
 
         return tranReport;
     }

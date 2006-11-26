@@ -18,6 +18,8 @@ package org.livetribe.arm40.impl;
 
 import java.util.Arrays;
 
+import org.livetribe.arm40.connection.DefaultConnection;
+import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
 import org.opengroup.arm40.metric.ArmMetricGroup;
@@ -35,23 +37,37 @@ import org.opengroup.arm40.transaction.ArmTransactionDefinition;
 import org.opengroup.arm40.transaction.ArmUser;
 import org.springframework.aop.framework.Advised;
 
-import org.livetribe.arm40.util.StaticArmAPIMonitor;
-
 
 /**
  * @version $Revision: $ $Date: $
  */
 class APIUtil implements GeneralErrorCodes
 {
-    private static final LTApplicationDefinition BAD_APP_DEF;
-    private static final AbstractMetricDefinition BAD_METRIC_DEF;
-    private static final LTApplication BAD_APP;
-    private static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
-    private static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
-    private static final ArmMetric[] BAD_METRICS;
-    private static final LTMetricGroup BAD_METRIC_GROUP;
-    private static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
-    private static final LTTransactionDefinition BAD_TRANS_DEF;
+    static final LTApplicationDefinition BAD_APP_DEF;
+    static final AbstractMetricDefinition BAD_METRIC_DEF;
+    static final LTApplication BAD_APP;
+    static final LTApplicationRemote BAD_APP_REMOTE;
+    static final LTMetricGroupDefinition BAD_METRIC_GRP_DEF;
+    static final LTTransactionWithMetricsDefinition BAD_TRANS_W_METRICS_DEF;
+    static final ArmMetric[] BAD_METRICS;
+    static final LTMetricGroup BAD_METRIC_GROUP;
+    static final LTIdentityProperties BAD_ID_PROPS;
+    static final LTIdentityPropertiesTransaction BAD_ID_PROPS_TRANS;
+    static final LTTransactionDefinition BAD_TRANS_DEF;
+    static final LTTransaction BAD_TRANS;
+    static final LTTranReport BAD_TRAN_REPORT;
+    static final LTMetricCounter32Definition BAD_COUNTER32_DEF;
+    static final LTMetricCounter64Definition BAD_COUNTER64_DEF;
+    static final LTMetricCounterFloat32Definition BAD_COUNTER_FLOAT32_DEF;
+    static final LTMetricGauge32Definition BAD_GAUGE32_DEF;
+    static final LTMetricGauge64Definition BAD_GAUGE64_DEF;
+    static final LTMetricGaugeFloat32Definition BAD_GAUGE_FLOAT32_DEF;
+    static final LTMetricNumericId32Definition BAD_NUMERICID32_DEF;
+    static final LTMetricNumericId64Definition BAD_NUMERICID64_DEF;
+    static final LTMetricString32Definition BAD_STRING32_DEF;
+    static final LTMetricGroupDefinition BAD_METRIC_GROUP_DEF;
+    static final LTTranReportWithMetrics BAD_TRAN_REPORT_W_METRICS;
+    static final LTTransactionWithMetrics BAD_TRAN_W_METRICS;
 
     static
     {
@@ -72,6 +88,14 @@ class APIUtil implements GeneralErrorCodes
         };
 
         BAD_APP = new LTApplication("org.livetribe.arm40.OID.BadApplication", BAD_APP_DEF, "", null, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_APP_REMOTE = new LTApplicationRemote("org.livetribe.arm40.OID.BadApplicationRemote", BAD_APP_DEF, "", null, null, null)
         {
             public boolean isBad()
             {
@@ -124,7 +148,7 @@ class APIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction("org.livetribe.arm40.OID.BadIdentityPropertiesTransaction", cleanIdProps(null), cleanIdProps(null), cleanIdProps(null), null)
+        BAD_ID_PROPS = new LTIdentityProperties("org.livetribe.arm40.OID.BadIdentityProperties", cleanIdProps(null), cleanIdProps(null), cleanIdProps(null))
         {
             public boolean isBad()
             {
@@ -134,6 +158,14 @@ class APIUtil implements GeneralErrorCodes
             public boolean isValid()
             {
                 return false;
+            }
+        };
+
+        BAD_ID_PROPS_TRANS = new LTIdentityPropertiesTransaction("org.livetribe.arm40.OID.BadIdentityPropertiesTransaction", cleanIdProps(null), cleanIdProps(null), cleanIdProps(null), null)
+        {
+            public boolean isBad()
+            {
+                return true;
             }
         };
 
@@ -143,18 +175,545 @@ class APIUtil implements GeneralErrorCodes
             {
                 return true;
             }
+        };
 
-            public boolean isValid()
+        BAD_TRANS = new LTTransaction("org.livetribe.arm40.OID.BadTransaction", new DefaultConnection(), null, BAD_APP, BAD_TRANS_DEF)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public synchronized void end()
+            {
+            }
+
+            public int bindThread()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized long blocked()
+            {
+                return 0;
+            }
+
+            public String getContextURIValue()
+            {
+                return null;
+            }
+
+            public String getContextValue(int index)
+            {
+                return null;
+            }
+
+            public ArmCorrelator getCorrelator()
+            {
+                return null;
+            }
+
+            public ArmCorrelator getParentCorrelator()
+            {
+                return null;
+            }
+
+            public int getStatus()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public ArmUser getUser()
+            {
+                return null;
+            }
+
+            public boolean isTraceRequested()
             {
                 return false;
             }
+
+            public synchronized int reset()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int setArrivalTime()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextURIValue(String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextValue(int index, String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setTraceRequested(boolean traceState)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setUser(ArmUser user)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int start()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int start(byte[] parentCorr)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int start(byte[] parentCorr, int offset)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int start(ArmCorrelator parent)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int stop(int status)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int stop(int code, String diagnosticDetail)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int unbindThread()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int unblocked(long handle)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int update()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
         };
+
+        BAD_TRAN_REPORT = new LTTranReport("org.livetribe.arm40.OID.BadTransaction", new DefaultConnection(), null, BAD_APP, BAD_TRANS_DEF)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public ArmCorrelator generateCorrelator()
+            {
+                return null;
+            }
+
+            public String getContextURIValue()
+            {
+                return null;
+            }
+
+            public String getContextValue(int index)
+            {
+                return null;
+            }
+
+            public ArmCorrelator getCorrelator()
+            {
+                return null;
+            }
+
+            public ArmCorrelator getParentCorrelator()
+            {
+                return null;
+            }
+
+            public long getResponseTime()
+            {
+                return 0;
+            }
+
+            public int getStatus()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public ArmUser getUser()
+            {
+                return null;
+            }
+
+            public int report(int status, long respTime)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int report(int status, long respTime, long stopTime)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int report(int status, long respTime, String diagnosticDetail)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int report(int status, long respTime, long stopTime, String diagnosticDetail)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextURIValue(String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextValue(int index, String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setParentCorrelator(ArmCorrelator parent)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setUser(ArmUser user)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+        };
+
+        BAD_COUNTER32_DEF = new LTMetricCounter32Definition("org.livetribe.arm40.OID.BadMetricCounter32Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_COUNTER64_DEF = new LTMetricCounter64Definition("org.livetribe.arm40.OID.BadMetricCounter64Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_COUNTER_FLOAT32_DEF = new LTMetricCounterFloat32Definition("org.livetribe.arm40.OID.BadMetricCounterFloat32Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_GAUGE32_DEF = new LTMetricGauge32Definition("org.livetribe.arm40.OID.BadMetricGauge32Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_GAUGE64_DEF = new LTMetricGauge64Definition("org.livetribe.arm40.OID.BadMetricGauge64Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_GAUGE_FLOAT32_DEF = new LTMetricGaugeFloat32Definition("org.livetribe.arm40.OID.BadMetricGaugeFloat32Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_NUMERICID32_DEF = new LTMetricNumericId32Definition("org.livetribe.arm40.OID.BadMetricNumericId32Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_NUMERICID64_DEF = new LTMetricNumericId64Definition("org.livetribe.arm40.OID.BadMetricNumericId64Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_STRING32_DEF = new LTMetricString32Definition("org.livetribe.arm40.OID.BadMetricString32Definition", BAD_APP_DEF, "", "", (short) 0, null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+        };
+
+        BAD_METRIC_GROUP_DEF = new LTMetricGroupDefinition("org.livetribe.arm40.OID.BadMetricGroupDefinition", null)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public ArmMetricDefinition getMetricDefinition(int index)
+            {
+                return null;
+            }
+        };
+
+        BAD_TRAN_REPORT_W_METRICS = new LTTranReportWithMetrics("org.livetribe.arm40.OID.BadTranReportWithMetrics", new DefaultConnection(), null, BAD_APP, BAD_TRANS_W_METRICS_DEF, BAD_METRIC_GROUP)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public ArmCorrelator generateCorrelator()
+            {
+                return null;
+            }
+
+            public String getContextURIValue()
+            {
+                return null;
+            }
+
+            public String getContextValue(int index)
+            {
+                return null;
+            }
+
+            public ArmCorrelator getCorrelator()
+            {
+                return null;
+            }
+
+            public ArmCorrelator getParentCorrelator()
+            {
+                return null;
+            }
+
+            public long getResponseTime()
+            {
+                return 0;
+            }
+
+            public int getStatus()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public ArmUser getUser()
+            {
+                return null;
+            }
+
+            public int report(int status, long respTime)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int report(int status, long respTime, long stopTime)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int report(int status, long respTime, String diagnosticDetail)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int report(int status, long respTime, long stopTime, String diagnosticDetail)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextURIValue(String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextValue(int index, String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setParentCorrelator(ArmCorrelator parent)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setUser(ArmUser user)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+        };
+
+        BAD_TRAN_W_METRICS = new LTTransactionWithMetrics("org.livetribe.arm40.OID.BadTransaction", new DefaultConnection(), null, BAD_APP, BAD_TRANS_W_METRICS_DEF, BAD_METRIC_GROUP)
+        {
+            public boolean isBad()
+            {
+                return true;
+            }
+
+            public synchronized void end()
+            {
+            }
+
+            public int bindThread()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized long blocked()
+            {
+                return 0;
+            }
+
+            public String getContextURIValue()
+            {
+                return null;
+            }
+
+            public String getContextValue(int index)
+            {
+                return null;
+            }
+
+            public ArmCorrelator getCorrelator()
+            {
+                return null;
+            }
+
+            public ArmCorrelator getParentCorrelator()
+            {
+                return null;
+            }
+
+            public int getStatus()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public ArmUser getUser()
+            {
+                return null;
+            }
+
+            public boolean isTraceRequested()
+            {
+                return false;
+            }
+
+            public synchronized int reset()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int setArrivalTime()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextURIValue(String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setContextValue(int index, String value)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setTraceRequested(boolean traceState)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int setUser(ArmUser user)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int start()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int start(byte[] parentCorr)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int start(byte[] parentCorr, int offset)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int start(ArmCorrelator parent)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public int stop(int status)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int stop(int code, String diagnosticDetail)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int unbindThread()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int unblocked(long handle)
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+
+            public synchronized int update()
+            {
+                return GeneralErrorCodes.USING_INVALID_OBJECT;
+            }
+        };
+
     }
 
     private APIUtil()
     {
     }
 
+    /**
+     * If the object is an instance of an AOP proxy then obtain its target.
+     *
+     * @param object the possible AOP proxy
+     * @return the target of the AOP proxy or the object itself
+     */
     static Object obtainTarget(Object object)
     {
         try
@@ -456,6 +1015,14 @@ class APIUtil implements GeneralErrorCodes
         return (id == null ? null : id.getBytes());
     }
 
+    /**
+     * A simple convenience function which obtains the bytes of the system
+     * address or null, if a null is passed.
+     *
+     * @param addr the <code>ArmSystemAddress</code> whose bytes are to be
+     *             obtained.
+     * @return the bytes of the system address.
+     */
     static byte[] extractArmSystemAddress(ArmSystemAddress addr)
     {
         return (addr == null ? null : addr.getBytes());
@@ -466,6 +1033,14 @@ class APIUtil implements GeneralErrorCodes
         return (props == null ? null : props.getURIValue());
     }
 
+    /**
+     * Extract the object id from the object byt first obtaining the target
+     * object since the <code>getObjectId()</code> method is not member of an
+     * interface that is exposed by the AOP proxy.
+     *
+     * @param object the object whose OID is to be obtained
+     * @return the object id of the object
+     */
     static String extractOID(Object object)
     {
         return (object == null ? null : ((AbstractIdentifiableObject) APIUtil.obtainTarget(object)).getObjectId());
