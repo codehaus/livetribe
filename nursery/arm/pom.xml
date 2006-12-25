@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.livetribe.arm40</groupId>
-    <artifactId>livetribe-temproot</artifactId>
+    <artifactId>livetribe-arm-root</artifactId>
     <name>LiveTribe :: ARM</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>

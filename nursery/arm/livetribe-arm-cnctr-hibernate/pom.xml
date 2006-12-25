@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>org.livetribe.arm40</groupId>
-        <artifactId>livetribe-temproot</artifactId>
+        <artifactId>livetribe-arm-root</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
