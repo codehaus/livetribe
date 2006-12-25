@@ -18,7 +18,7 @@ package org.livetribe.arm40.impl;
 
 import java.util.Arrays;
 
-import org.livetribe.arm40.connection.DefaultConnection;
+import org.livetribe.arm40.connection.DoNothingConnection;
 import org.livetribe.arm40.util.StaticArmAPIMonitor;
 import org.opengroup.arm40.metric.ArmMetric;
 import org.opengroup.arm40.metric.ArmMetricDefinition;
@@ -177,7 +177,7 @@ class APIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_TRANS = new LTTransaction("org.livetribe.arm40.OID.BadTransaction", new DefaultConnection(), null, BAD_APP, BAD_TRANS_DEF)
+        BAD_TRANS = new LTTransaction("org.livetribe.arm40.OID.BadTransaction", new DoNothingConnection(), null, BAD_APP, BAD_TRANS_DEF)
         {
             public boolean isBad()
             {
@@ -309,7 +309,7 @@ class APIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_TRAN_REPORT = new LTTranReport("org.livetribe.arm40.OID.BadTransaction", new DefaultConnection(), null, BAD_APP, BAD_TRANS_DEF)
+        BAD_TRAN_REPORT = new LTTranReport("org.livetribe.arm40.OID.BadTransaction", new DoNothingConnection(), null, BAD_APP, BAD_TRANS_DEF)
         {
             public boolean isBad()
             {
@@ -482,7 +482,7 @@ class APIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_TRAN_REPORT_W_METRICS = new LTTranReportWithMetrics("org.livetribe.arm40.OID.BadTranReportWithMetrics", new DefaultConnection(), null, BAD_APP, BAD_TRANS_W_METRICS_DEF, BAD_METRIC_GROUP)
+        BAD_TRAN_REPORT_W_METRICS = new LTTranReportWithMetrics("org.livetribe.arm40.OID.BadTranReportWithMetrics", new DoNothingConnection(), null, BAD_APP, BAD_TRANS_W_METRICS_DEF, BAD_METRIC_GROUP)
         {
             public boolean isBad()
             {
@@ -570,7 +570,7 @@ class APIUtil implements GeneralErrorCodes
             }
         };
 
-        BAD_TRAN_W_METRICS = new LTTransactionWithMetrics("org.livetribe.arm40.OID.BadTransaction", new DefaultConnection(), null, BAD_APP, BAD_TRANS_W_METRICS_DEF, BAD_METRIC_GROUP)
+        BAD_TRAN_W_METRICS = new LTTransactionWithMetrics("org.livetribe.arm40.OID.BadTransaction", new DoNothingConnection(), null, BAD_APP, BAD_TRANS_W_METRICS_DEF, BAD_METRIC_GROUP)
         {
             public boolean isBad()
             {

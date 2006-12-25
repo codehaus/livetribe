@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @version $Revision: $ $Date: $
  */
-public class DefaultConnection implements Connection
+public class DoNothingConnection implements Connection
 {
     public void declareIdentityProperties(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames)
     {

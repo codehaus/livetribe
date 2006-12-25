@@ -11,6 +11,6 @@
     </bean>
 
     <bean id="uuidGenBean" class="org.livetribe.util.uuid.UUIDGenDefault"/>
-    <bean id="connection" class="org.livetribe.arm40.connection.DefaultConnection"/>
+    <bean id="connection" class="org.livetribe.arm40.connection.DoNothingConnection"/>
 
 </beans>

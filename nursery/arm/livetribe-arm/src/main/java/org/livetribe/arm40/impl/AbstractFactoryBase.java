@@ -20,7 +20,7 @@ import org.opengroup.arm40.transaction.ArmErrorCallback;
 
 import org.livetribe.arm40.KnitPoint;
 import org.livetribe.arm40.connection.Connection;
-import org.livetribe.arm40.connection.DefaultConnection;
+import org.livetribe.arm40.connection.DoNothingConnection;
 import org.livetribe.util.HexSupport;
 import org.livetribe.util.uuid.UUIDGen;
 import org.livetribe.util.uuid.UUIDGenDefault;
@@ -40,7 +40,7 @@ public abstract class AbstractFactoryBase extends AbstractBase
         Connection connection = (Connection) KnitPoint.get(Connection.class.getName());
         if (connection == null)
         {
-            connection = new DefaultConnection();
+            connection = new DoNothingConnection();
         }
         this.connection = connection;
 
