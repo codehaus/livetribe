@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.livetribe</groupId>
     <artifactId>livetribe-jsr223</artifactId>
+    <version>2.0-SNAPSHOT</version>
     <name>LiveTribe :: JSR 223</name>
     <packaging>jar</packaging>
 
@@ -20,20 +21,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.4</source>
-                    <target>1.4</target>
+                    <source>1.5</source>
+                    <target>1.5</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.4</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -54,5 +49,5 @@
             <url>http://snapshots.repository.codehaus.org</url>
         </repository>
     </repositories>
-    
+
 </project>

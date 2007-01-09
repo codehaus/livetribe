@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2005 (C) The original author or authors
+ * Copyright 2006 - 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ public abstract class CompiledScript
         return eval(getEngine().getContext());
     }
 
-    public Object eval(Namespace namespace) throws ScriptException
+    public Object eval(Bindings bindings) throws ScriptException
     {
         ScriptEngine engine = getEngine();
-        GenericScriptContext context = new GenericScriptContext();
+        SimpleScriptContext context = new SimpleScriptContext();
 
-        context.setNamespace(namespace, ScriptContext.ENGINE_SCOPE);
-        context.setNamespace(engine.getNamespace(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
+        context.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+        context.setBindings(engine.getBindings(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
 
         context.setReader(engine.getContext().getReader());
         context.setWriter(engine.getContext().getWriter());

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2006 (C) The original author or authors
+ * Copyright 2006 - 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -34,29 +33,30 @@ import java.util.Stack;
  */
 public class ScriptEngineManager
 {
-    private final Set engineSpis = new HashSet();
-    private final Map byName = new HashMap();
-    private final Map registeredByName = new HashMap();
-    private final Map byExtension = new HashMap();
-    private final Map registeredByExtension = new HashMap();
-    private final Map byMimeType = new HashMap();
-    private final Map registeredByMimeType = new HashMap();
-    private Namespace globalScope;
+    private final Set<ScriptEngineFactory> engineSpis = new HashSet<ScriptEngineFactory>();
+    private final Map<String, ScriptEngineFactory> byName = new HashMap<String, ScriptEngineFactory>();
+    private final Map<String, ScriptEngineFactory> registeredByName = new HashMap<String, ScriptEngineFactory>();
+    private final Map<String, ScriptEngineFactory> byExtension = new HashMap<String, ScriptEngineFactory>();
+    private final Map<String, ScriptEngineFactory> registeredByExtension = new HashMap<String, ScriptEngineFactory>();
+    private final Map<String, ScriptEngineFactory> byMimeType = new HashMap<String, ScriptEngineFactory>();
+    private final Map<String, ScriptEngineFactory> registeredByMimeType = new HashMap<String, ScriptEngineFactory>();
+    private Bindings globalScope;
 
     public ScriptEngineManager()
     {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        this(Thread.currentThread().getContextClassLoader());
+    }
 
+    public ScriptEngineManager(ClassLoader classLoader)
+    {
         try
         {
             Enumeration factoryResources = classLoader.getResources("META-INF/services/javax.script.ScriptEngineFactory");
             while (factoryResources.hasMoreElements())
             {
                 URL url = (URL) factoryResources.nextElement();
-                Iterator classNames = getClassNames(url);
-                while (classNames.hasNext())
+                for (String className : getClassNames(url))
                 {
-                    String className = (String) classNames.next();
                     try
                     {
                         Class factoryClass = classLoader.loadClass(className);
@@ -68,11 +68,9 @@ public class ScriptEngineManager
 
                             byName.put(factory.getEngineName(), factory);
 
-                            String[] extensions = factory.getExtensions();
-                            for (int i = 0; i < extensions.length; i++) byExtension.put(extensions[i], factory);
+                            for (String extension : factory.getExtensions()) byExtension.put(extension, factory);
 
-                            String[] mimeTypes = factory.getMimeTypes();
-                            for (int i = 0; i < mimeTypes.length; i++) byMimeType.put(mimeTypes[i], factory);
+                            for (String mimeType : factory.getMimeTypes()) byMimeType.put(mimeType, factory);
 
                             engineSpis.add(factory);
                         }
@@ -95,22 +93,22 @@ public class ScriptEngineManager
         }
     }
 
-    public Namespace getGlobalScope()
+    public Bindings getGlobalScope()
     {
         return globalScope;
     }
 
-    public void setGlobalScope(Namespace globalScope)
+    public void setGlobalScope(Bindings globalScope)
     {
         this.globalScope = globalScope;
     }
 
-    public void put(Object key, Object value)
+    public void put(String key, Object value)
     {
         if (globalScope != null) globalScope.put(key, value);
     }
 
-    public Object get(Object key)
+    public Object get(String key)
     {
         if (globalScope != null)
         {
@@ -121,49 +119,49 @@ public class ScriptEngineManager
 
     public ScriptEngine getEngineByName(String shortName)
     {
-        ScriptEngineFactory factory = (ScriptEngineFactory) registeredByName.get(shortName);
+        ScriptEngineFactory factory = registeredByName.get(shortName);
 
-        if (factory == null) factory = (ScriptEngineFactory) byName.get(shortName);
+        if (factory == null) factory = byName.get(shortName);
         if (factory == null) return null;
 
         ScriptEngine engine = factory.getScriptEngine();
 
-        engine.setNamespace(globalScope, ScriptContext.GLOBAL_SCOPE);
+        engine.setBindings(globalScope, ScriptContext.GLOBAL_SCOPE);
 
         return engine;
     }
 
     public ScriptEngine getEngineByExtension(String extension)
     {
-        ScriptEngineFactory factory = (ScriptEngineFactory) registeredByExtension.get(extension);
+        ScriptEngineFactory factory = registeredByExtension.get(extension);
 
-        if (factory == null) factory = (ScriptEngineFactory) byExtension.get(extension);
+        if (factory == null) factory = byExtension.get(extension);
         if (factory == null) return null;
 
         ScriptEngine engine = factory.getScriptEngine();
 
-        engine.setNamespace(globalScope, ScriptContext.GLOBAL_SCOPE);
+        engine.setBindings(globalScope, ScriptContext.GLOBAL_SCOPE);
 
         return engine;
     }
 
     public ScriptEngine getEngineByMimeType(String mimeType)
     {
-        ScriptEngineFactory factory = (ScriptEngineFactory) registeredByMimeType.get(mimeType);
+        ScriptEngineFactory factory = registeredByMimeType.get(mimeType);
 
-        if (factory == null) factory = (ScriptEngineFactory) byMimeType.get(mimeType);
+        if (factory == null) factory = byMimeType.get(mimeType);
         if (factory == null) return null;
 
         ScriptEngine engine = factory.getScriptEngine();
 
-        engine.setNamespace(globalScope, ScriptContext.GLOBAL_SCOPE);
+        engine.setBindings(globalScope, ScriptContext.GLOBAL_SCOPE);
 
         return engine;
     }
 
     public ScriptEngineFactory[] getEngineFactories()
     {
-        return (ScriptEngineFactory[]) engineSpis.toArray(new ScriptEngineFactory[engineSpis.size()]);
+        return engineSpis.toArray(new ScriptEngineFactory[engineSpis.size()]);
     }
 
     public void registerEngineName(String name, ScriptEngineFactory factory)
@@ -181,9 +179,9 @@ public class ScriptEngineManager
         registeredByExtension.put(extension, factory);
     }
 
-    private Iterator getClassNames(URL url)
+    private Iterable<String> getClassNames(URL url)
     {
-        Stack stack = new Stack();
+        Stack<String> stack = new Stack<String>();
 
         try
         {
@@ -202,6 +200,6 @@ public class ScriptEngineManager
         {
         }
 
-        return stack.iterator();
+        return stack;
     }
 }

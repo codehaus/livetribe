@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2006 (C) The original author or authors
+ * Copyright 2006 - 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,19 @@ import java.io.Reader;
 /**
  * @version $Revision: $ $Date$
  */
-public abstract class GenericScriptEngine implements ScriptEngine
+public abstract class AbstractScriptEngine implements ScriptEngine
 {
     protected ScriptContext context;
 
-    public GenericScriptEngine()
+    public AbstractScriptEngine()
     {
-        context = new GenericScriptContext();
+        context = new SimpleScriptContext();
     }
 
-    public GenericScriptEngine(Namespace namespace)
+    public AbstractScriptEngine(Bindings bindings)
     {
-        context = new GenericScriptContext();
-        context.setNamespace(namespace, ScriptContext.ENGINE_SCOPE);
+        context = new SimpleScriptContext();
+        context.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
     }
 
     public ScriptContext getContext()
@@ -47,26 +47,26 @@ public abstract class GenericScriptEngine implements ScriptEngine
         this.context = context;
     }
 
-    public Namespace getNamespace(int scope)
+    public Bindings getBindings(int scope)
     {
-        return context.getNamespace(scope);
+        return context.getBindings(scope);
     }
 
-    public void setNamespace(Namespace namespace, int scope)
+    public void setBindings(Bindings bindings, int scope)
     {
-        context.setNamespace(namespace, scope);
+        context.setBindings(bindings, scope);
     }
 
     public Object get(String key)
     {
-        return context.getNamespace(ScriptContext.ENGINE_SCOPE).get(key);
+        return context.getBindings(ScriptContext.ENGINE_SCOPE).get(key);
     }
 
     public void put(String key, Object value)
     {
         if (key == null) throw new IllegalArgumentException("Key is null");
 
-        context.getNamespace(ScriptContext.ENGINE_SCOPE).put(key, value);
+        context.getBindings(ScriptContext.ENGINE_SCOPE).put(key, value);
     }
 
     public Object eval(Reader reader) throws ScriptException
@@ -74,9 +74,9 @@ public abstract class GenericScriptEngine implements ScriptEngine
         return eval(reader, context);
     }
 
-    public Object eval(String script, Namespace namespace) throws ScriptException
+    public Object eval(String script, Bindings bindings) throws ScriptException
     {
-        return eval(script, getScriptContext(namespace));
+        return eval(script, getScriptContext(bindings));
     }
 
     public Object eval(String script) throws ScriptException
@@ -84,17 +84,17 @@ public abstract class GenericScriptEngine implements ScriptEngine
         return eval(script, context);
     }
 
-    public Object eval(Reader reader, Namespace namespace) throws ScriptException
+    public Object eval(Reader reader, Bindings bindings) throws ScriptException
     {
-        return eval(reader, getScriptContext(namespace));
+        return eval(reader, getScriptContext(bindings));
     }
 
-    protected ScriptContext getScriptContext(Namespace namespace)
+    protected ScriptContext getScriptContext(Bindings bindings)
     {
-        ScriptContext result = new GenericScriptContext();
+        ScriptContext result = new SimpleScriptContext();
 
-        result.setNamespace(namespace, ScriptContext.ENGINE_SCOPE);
-        result.setNamespace(context.getNamespace(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
+        result.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+        result.setBindings(context.getBindings(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
 
         result.setReader(context.getReader());
         result.setWriter(context.getWriter());

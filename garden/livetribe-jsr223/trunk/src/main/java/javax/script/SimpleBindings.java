@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2006 (C) The original author or authors
+ * Copyright 2006 - 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package javax.script;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,33 +25,31 @@ import java.util.Set;
 /**
  * @version $Revision$ $Date$
  */
-public class SimpleNamespace implements Namespace
+public class SimpleBindings implements Bindings
 {
-    private final Map map;
+    private final Map<String, Object> map;
 
-    public SimpleNamespace()
+    public SimpleBindings()
     {
-        this(new HashMap());
+        this(new HashMap<String, Object>());
     }
 
-    public SimpleNamespace(Map map)
+    public SimpleBindings(Map<String, Object> map)
     {
         this.map = map;
     }
 
-    public Object put(Object name, Object value)
+    public Object put(String name, Object value)
     {
         if (name == null) throw new NullPointerException("Name is null");
 
         return map.put((String) name, value);
     }
 
-    public void putAll(Map toMerge)
+    public void putAll(Map<? extends String, ? extends Object> toMerge)
     {
-        Iterator keys = toMerge.keySet().iterator();
-        while (keys.hasNext())
+        for (String key : toMerge.keySet())
         {
-            String key = (String) keys.next();
             if (key == null) throw new NullPointerException("Key is null");
         }
 
@@ -94,17 +91,17 @@ public class SimpleNamespace implements Namespace
         map.clear();
     }
 
-    public Set keySet()
+    public Set<String> keySet()
     {
         return map.keySet();
     }
 
-    public Collection values()
+    public Collection<Object> values()
     {
         return map.values();
     }
 
-    public Set entrySet()
+    public Set<Map.Entry<String,Object>> entrySet()
     {
         return map.entrySet();
     }

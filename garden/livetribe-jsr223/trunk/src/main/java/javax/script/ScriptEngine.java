@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2005 (C) The original author or authors
+ * Copyright 2006 - 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,17 +40,17 @@ public interface ScriptEngine
 
     public Object eval(Reader reader) throws ScriptException;
 
-    public Object eval(String script, Namespace namespace) throws ScriptException;
+    public Object eval(String script, Bindings bindings) throws ScriptException;
 
-    public Object eval(Reader reader, Namespace namespace) throws ScriptException;
+    public Object eval(Reader reader, Bindings bindings) throws ScriptException;
 
     public Object get(String key);
 
-    public Namespace getNamespace(int scope);
+    public Bindings getBindings(int scope);
 
-    public void setNamespace(Namespace namespace, int scope);
+    public void setBindings(Bindings bindings, int scope);
 
-    public Namespace createNamespace();
+    public Bindings createBindings();
 
     public ScriptContext getContext();
 

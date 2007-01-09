@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2005 (C) The original author or authors
+ * Copyright 2006 - 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package javax.script;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.util.List;
 
 
 /**
@@ -28,29 +29,32 @@ public interface ScriptContext
     public final static int ENGINE_SCOPE = 0;
     public final static int GLOBAL_SCOPE = 1;
 
-    public void setNamespace(Namespace namespace, int scope);
-
-    public Namespace getNamespace(int scope);
-
-    public void setAttribute(String name, Object value, int scope);
-
-    public Object getAttribute(String name, int scope);
-
-    public Object removeAttribute(String name, int scope);
 
     public Object getAttribute(String name);
 
+    public Object getAttribute(String name, int scope);
+
     public int getAttributeScope(String name);
 
-    public Writer getWriter();
+    public Bindings getBindings(int scope);
 
     public Writer getErrorWriter();
 
-    public void setWriter(Writer writer);
+    public Reader getReader();
+
+    public List<Integer> getScopes();
+
+    public Writer getWriter();
+
+    public Object removeAttribute(String name, int scope);
+
+    public void setAttribute(String name, Object value, int scope);
+
+    public void setBindings(Bindings bindings, int scope);
 
     public void setErrorWriter(Writer writer);
 
-    public Reader getReader();
-
     public void setReader(Reader reader);
+
+    public void setWriter(Writer writer);
 }
