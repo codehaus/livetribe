@@ -16,8 +16,10 @@
  */
 package javax.script;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +40,10 @@ public class SimpleScriptContext implements ScriptContext
 
     public SimpleScriptContext()
     {
+        engineScope = new SimpleBindings();
+        reader = new InputStreamReader(System.in);
+        writer = new PrintWriter(System.out, true);
+        errorWriter = new PrintWriter(System.err, true);
     }
 
     public void setBindings(Bindings bindings, int scope)
@@ -85,9 +91,9 @@ public class SimpleScriptContext implements ScriptContext
             default:
                 throw new IllegalArgumentException("Invaild scope");
         }
-        if (bindings == null) throw new IllegalArgumentException("Bindings not defined");
-
-        bindings.put(name, value);
+        if (bindings != null) {
+            bindings.put(name, value);
+        }
     }
 
     public Object getAttribute(String name, int scope)
@@ -106,9 +112,8 @@ public class SimpleScriptContext implements ScriptContext
             default:
                 throw new IllegalArgumentException("Invaild scope");
         }
-        if (bindings == null) throw new IllegalArgumentException("Bindings not defined");
 
-        return bindings.get(name);
+        return (bindings != null) ? bindings.get(name) : null;
     }
 
     public Object removeAttribute(String name, int scope)
@@ -125,11 +130,10 @@ public class SimpleScriptContext implements ScriptContext
                 bindings = globalScope;
                 break;
             default:
-                throw new IllegalArgumentException("Invaild scope");
+                throw new IllegalArgumentException("Invalid scope");
         }
-        if (bindings == null) throw new IllegalArgumentException("Bindings not defined");
 
-        return bindings.remove(name);
+        return (bindings != null) ? bindings.remove(name) : null;
     }
 
     public Object getAttribute(String name)
@@ -142,13 +146,13 @@ public class SimpleScriptContext implements ScriptContext
         return null;
     }
 
-    public int getAttributeScope(String name)
+    public int getAttributesScope(String name)
     {
         if (name == null) throw new IllegalArgumentException("Name is null");
 
         for (int scope : getScopes())
         {
-            if (getBindings(scope).containsKey(name))
+            if (getBindings(scope) != null && getBindings(scope).containsKey(name))
             {
                 return scope;
             }

@@ -21,11 +21,11 @@ package javax.script;
  */
 public interface Invocable
 {
-    public Object call(Object thiz, String name, Object[] args) throws ScriptException, NoSuchMethodException;
+    public Object invokeMethod(Object thiz, String name, Object... args) throws ScriptException, NoSuchMethodException;
 
-    public Object call(String name, Object[] args) throws ScriptException, NoSuchMethodException;
+    public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException;
 
-    public Object getInterface(Class clazz);
+    public <T> T getInterface(Class<T> clazz);
 
-    public Object getInterface(Object thizz, Class clazz);
+    public <T> T getInterface(Object thiz, Class<T> clazz);
 }

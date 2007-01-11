@@ -34,7 +34,7 @@ public interface ScriptContext
 
     public Object getAttribute(String name, int scope);
 
-    public int getAttributeScope(String name);
+    public int getAttributesScope(String name);
 
     public Bindings getBindings(int scope);
 

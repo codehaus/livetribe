@@ -16,6 +16,9 @@
  */
 package javax.script;
 
+import java.util.List;
+
+
 /**
  * @version $Revision: $ $Date: $
  */
@@ -25,11 +28,11 @@ public interface ScriptEngineInfo
 
     public String getEngineVersion();
 
-    public String[] getExtensions();
+    public List<String> getExtensions();
 
-    public String[] getMimeTypes();
+    public List<String> getMimeTypes();
 
-    public String[] getNames();
+    public List<String> getNames();
 
     public String getLanguageName();
 
@@ -37,9 +40,9 @@ public interface ScriptEngineInfo
 
     public Object getParameter(String key);
 
-    public String getMethodCallSyntax(String obj, String m, String[] args);
+    public String getMethodCallSyntax(String obj, String m, String... args);
 
     public String getOutputStatement(String toDisplay);
 
-    public String getProgram(String[] statements);
+    public String getProgram(String... statements);
 }

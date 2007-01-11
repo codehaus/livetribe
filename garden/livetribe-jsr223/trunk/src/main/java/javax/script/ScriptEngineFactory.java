@@ -17,10 +17,35 @@
  */
 package javax.script;
 
+import java.util.List;
+
+
 /**
  * @version $Revision: $ $Date: $
  */
-public interface ScriptEngineFactory extends ScriptEngineInfo
+public interface ScriptEngineFactory
 {
+    public String getEngineName();
+
+    public String getEngineVersion();
+
+    public List<String> getExtensions();
+
+    public String getLanguageName();
+
+    public String getLanguageVersion();
+
+    public String getMethodCallSyntax(String obj, String m, String... args);
+
+    public List<String> getMimeTypes();
+
+    public List<String> getNames();
+
+    public String getOutputStatement(String toDisplay);
+
+    public Object getParameter(String key);
+
+    public String getProgram(String... statements);
+
     public ScriptEngine getScriptEngine();
 }

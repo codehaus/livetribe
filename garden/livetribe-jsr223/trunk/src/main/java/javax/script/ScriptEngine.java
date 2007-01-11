@@ -46,6 +46,8 @@ public interface ScriptEngine
 
     public Object get(String key);
 
+    public void put(String key, Object value);
+
     public Bindings getBindings(int scope);
 
     public void setBindings(Bindings bindings, int scope);

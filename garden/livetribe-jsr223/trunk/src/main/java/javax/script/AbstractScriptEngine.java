@@ -93,11 +93,18 @@ public abstract class AbstractScriptEngine implements ScriptEngine
     {
         ScriptContext result = new SimpleScriptContext();
 
-        result.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
-        result.setBindings(context.getBindings(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
+        if (bindings != null)
+        {
+            result.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+        }
+        if (context.getBindings(ScriptContext.GLOBAL_SCOPE) != null)
+        {
+            result.setBindings(context.getBindings(ScriptContext.GLOBAL_SCOPE), ScriptContext.GLOBAL_SCOPE);
+        }
 
         result.setReader(context.getReader());
         result.setWriter(context.getWriter());
+        result.setErrorWriter(context.getErrorWriter());
 
         return result;
     }
