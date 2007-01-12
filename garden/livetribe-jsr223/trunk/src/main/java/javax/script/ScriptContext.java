@@ -26,8 +26,8 @@ import java.util.List;
  */
 public interface ScriptContext
 {
-    public final static int ENGINE_SCOPE = 0;
-    public final static int GLOBAL_SCOPE = 1;
+    public final static int ENGINE_SCOPE = 100;
+    public final static int GLOBAL_SCOPE = 200;
 
 
     public Object getAttribute(String name);
