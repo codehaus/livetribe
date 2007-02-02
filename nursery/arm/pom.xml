@@ -277,13 +277,13 @@
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.mock</groupId>
+                <groupId>org.livetribe.test</groupId>
                 <artifactId>livetribe-mock-interface</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe.mock</groupId>
+                <groupId>org.livetribe.test</groupId>
                 <artifactId>livetribe-mock-one</artifactId>
                 <version>${pom.version}</version>
             </dependency>

@@ -76,13 +76,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.livetribe.mock</groupId>
+            <groupId>org.livetribe.test</groupId>
             <artifactId>livetribe-mock-interface</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.livetribe.mock</groupId>
+            <groupId>org.livetribe.test</groupId>
             <artifactId>livetribe-mock-one</artifactId>
             <scope>test</scope>
         </dependency>
