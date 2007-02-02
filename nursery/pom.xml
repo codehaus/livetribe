@@ -41,7 +41,7 @@
     <modules>
         <module>arm</module>
         <module>livetribe-ioc</module>
-        <module>livetribe-mock</module>
+        <module>livetribe-test-util</module>
     </modules>
 
     <repositories>

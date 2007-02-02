@@ -2,20 +2,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.livetribe.mock</groupId>
-        <artifactId>livetribe-root</artifactId>
+        <groupId>org.livetribe.test</groupId>
+        <artifactId>livetribe-test-root</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.livetribe.mock</groupId>
-    <artifactId>livetribe-mock-interface</artifactId>
-    <name>LiveTribe :: Mock Interfaces</name>
+    <artifactId>livetribe-mock-four</artifactId>
+    <name>LiveTribe :: Test :: Mock Implementation Four</name>
     <packaging>jar</packaging>
 
     <build/>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.livetribe.test</groupId>
+            <artifactId>livetribe-mock-interface</artifactId>
+        </dependency>
 
     </dependencies>
 

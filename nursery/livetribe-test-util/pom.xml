@@ -8,9 +8,9 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.livetribe.mock</groupId>
-    <artifactId>livetribe-root</artifactId>
-    <name>LiveTribe :: Mock</name>
+    <groupId>org.livetribe.test</groupId>
+    <artifactId>livetribe-test-root</artifactId>
+    <name>LiveTribe :: Test</name>
     <packaging>pom</packaging>
     <description>LiveTribe</description>
 
@@ -52,7 +52,7 @@
         <dependencies>
 
             <dependency>
-                <groupId>org.livetribe.mock</groupId>
+                <groupId>org.livetribe.test</groupId>
                 <artifactId>livetribe-mock-interface</artifactId>
                 <version>${pom.version}</version>
             </dependency>
