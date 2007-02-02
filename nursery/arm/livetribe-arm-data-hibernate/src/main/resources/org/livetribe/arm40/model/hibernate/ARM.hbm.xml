@@ -2,10 +2,10 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="org.livetribe.arm40.model.IdentityProperties" table="IDENTITY_PROPERTIES"
-           dynamic-update="true"  lazy="false">
+    <class name="org.livetribe.arm40.model.IdentityProperties" table="IDENTITY_PROPERTIES" dynamic-update="true"  lazy="false">
         <cache usage="read-write"/>
-        <id name="oid" column="OID" type="long" unsaved-value="0">
+
+        <id name="oid" column="IDENTITY_PROPERTIES_OID" type="long" unsaved-value="0">
             <generator class="sequence">
                 <param name="sequence">SEQ_ID</param>
             </generator>

@@ -17,6 +17,10 @@
 package org.livetribe.arm40.model;
 
 /**
+ * Base class for model heirarchy.  The variable name id was perferred but the
+ * name "id" is used too often in the ARM specification so "oid" is used
+ * instead.
+ *
  * @version $Revision$ $Date$
  */
 public class Model

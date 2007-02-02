@@ -17,6 +17,10 @@
 package org.livetribe.arm40.model;
 
 /**
+ * Identity properties are being saved via a rather large set of member
+ * variables instead of arrays of strings to make the retreaval of identity
+ * properties performant.
+ *
  * @version $Revision$ $Date$
  */
 public class IdentityProperties extends Model
