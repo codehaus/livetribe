@@ -34,13 +34,6 @@ import org.apache.xbean.classloader.NamedClassLoader;
  */
 public class IsolatingClassLoader extends MultiParentClassLoader
 {
-    private final static ThreadLocal inside = new ThreadLocal()
-    {
-        protected Object initialValue()
-        {
-            return Boolean.FALSE;
-        }
-    };
     private final ClassLoader internal;
 
     public IsolatingClassLoader(String name, URL[] urls, ClassLoader parent, ClassLoader ancestor)
