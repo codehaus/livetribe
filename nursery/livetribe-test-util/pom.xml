@@ -37,13 +37,18 @@
         <module>livetribe-mock-two</module>
         <module>livetribe-mock-three</module>
         <module>livetribe-mock-four</module>
+        <module>livetribe-test-base</module>
     </modules>
+
+    <properties>
+        <junitVersion>3.8.1</junitVersion>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>${junitVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -52,9 +57,27 @@
         <dependencies>
 
             <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junitVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate</artifactId>
+                <version>3.1.3</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.livetribe.test</groupId>
                 <artifactId>livetribe-mock-interface</artifactId>
                 <version>${pom.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring</artifactId>
+                <version>1.2.8</version>
             </dependency>
 
         </dependencies>
