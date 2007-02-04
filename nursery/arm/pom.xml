@@ -78,7 +78,7 @@
 
     <properties>
         <mx4jVersion>3.0.1</mx4jVersion>
-        <xbeanVersion>2.6</xbeanVersion>
+        <xbeanVersion>2.8</xbeanVersion>
     </properties>
 
     <dependencyManagement>
@@ -147,7 +147,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate</artifactId>
-                <version>3.0.5</version>
+                <version>3.1.3</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
@@ -285,6 +285,12 @@
             <dependency>
                 <groupId>org.livetribe.test</groupId>
                 <artifactId>livetribe-mock-one</artifactId>
+                <version>${pom.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.test</groupId>
+                <artifactId>livetribe-test-base</artifactId>
                 <version>${pom.version}</version>
             </dependency>
 

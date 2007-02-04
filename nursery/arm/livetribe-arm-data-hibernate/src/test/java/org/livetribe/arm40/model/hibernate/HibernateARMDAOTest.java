@@ -18,24 +18,19 @@ package org.livetribe.arm40.model.hibernate;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import org.livetribe.arm40.model.ARMDAO;
 import org.livetribe.arm40.model.IdentityProperties;
+import org.livetribe.test.AbstractHibernateTestCase;
 
 
 /**
  * @version $Revision$ $Date$
  */
-public class HibernateARMDAOTest extends TestCase
+public class HibernateARMDAOTest extends AbstractHibernateTestCase
 {
-    private ApplicationContext context;
-
     public void testRun()
     {
-        ARMDAO dao = (ARMDAO) context.getBean("testDAO");
+        ARMDAO dao = (ARMDAO) getApplicationContext().getBean("testDAO");
 
         IdentityProperties original = new IdentityProperties();
 
@@ -78,13 +73,8 @@ public class HibernateARMDAOTest extends TestCase
         }
     }
 
-    public void setUp()
+    protected String[] getApplicationContextResources()
     {
-        context = new ClassPathXmlApplicationContext("org/livetribe/arm40/model/hibernate/HibernateARMDAOTest.xml");
-    }
-
-    public void tearDown()
-    {
-        context = null;
+        return new String[]{"org/livetribe/arm40/model/hibernate/HibernateARMDAOTest.xml"};
     }
 }

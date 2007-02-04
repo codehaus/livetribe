@@ -20,6 +20,7 @@
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
+            <scope>testing</scope>
         </dependency>
 
         <dependency>
@@ -42,6 +43,12 @@
         <dependency>
             <groupId>org.livetribe.arm40</groupId>
             <artifactId>livetribe-arm-data</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.test</groupId>
+            <artifactId>livetribe-test-base</artifactId>
+            <scope>testing</scope>
         </dependency>
 
         <dependency>
