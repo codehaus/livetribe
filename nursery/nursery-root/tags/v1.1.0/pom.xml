@@ -21,4 +21,13 @@
         <url>http://svn.livetribe.codehaus.org/browse/livetribe/nursery/</url>
     </scm>
     
+    
+    <repositories>
+        <repository>
+            <id>codehaus-repo</id>
+            <name>CodeHaus Central Repository</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+    </repositories>
+    
 </project>
