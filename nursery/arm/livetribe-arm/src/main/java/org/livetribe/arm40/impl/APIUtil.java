@@ -41,7 +41,7 @@ import org.springframework.aop.framework.Advised;
 /**
  * @version $Revision: $ $Date: $
  */
-class APIUtil implements GeneralErrorCodes
+final class APIUtil implements GeneralErrorCodes
 {
     static final LTApplicationDefinition BAD_APP_DEF;
     static final AbstractMetricDefinition BAD_METRIC_DEF;
@@ -1034,7 +1034,7 @@ class APIUtil implements GeneralErrorCodes
     }
 
     /**
-     * Extract the object id from the object byt first obtaining the target
+     * Extract the object id from the object by first obtaining the target
      * object since the <code>getObjectId()</code> method is not member of an
      * interface that is exposed by the AOP proxy.
      *
