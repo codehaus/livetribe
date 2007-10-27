@@ -40,6 +40,7 @@
 
     <modules>
         <module>arm</module>
+        <module>livetribe-bootagent</module>
         <module>livetribe-ioc</module>
         <module>livetribe-test-util</module>
     </modules>
