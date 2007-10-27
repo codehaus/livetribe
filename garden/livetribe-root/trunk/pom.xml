@@ -65,6 +65,11 @@
             <timezone>-8</timezone>
         </developer>
         <developer>
+            <id>jgenender</id>
+            <name>Jeff Genender</name>
+            <timezone>-7</timezone>
+        </developer>
+        <developer>
             <id>hogstrom</id>
             <name>Matt Hogstrom</name>
             <timezone>-5</timezone>
@@ -166,6 +171,11 @@
     <modules />
 
     <repositories>
+        <repository>
+            <id>livetribe</id>
+            <name>LiveTribe Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2</url>
+        </repository>
         <repository>
             <id>central</id>
             <name>Maven Central Repository</name>
