@@ -5,7 +5,7 @@
     <groupId>org.livetribe</groupId>
     <artifactId>livetribe</artifactId>
     <name>LiveTribe</name>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
     <description>LiveTribe Systems Management Project</description>
     <url>http://livetribe.codehaus.org</url>
