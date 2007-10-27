@@ -20,7 +20,7 @@ package org.livetribe.arm40.model;
 /**
  * @version $Revision$ $Date$
  */
-public class Application extends Model
+public class Application extends ModelGuidIdBase
 {
     private ApplicationDefinition appDef;
     private String group;

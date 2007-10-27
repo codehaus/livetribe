@@ -22,22 +22,12 @@ import java.util.Set;
 /**
  * @version $Revision$ $Date$
  */
-public class ApplicationDefinition extends Model
+public class ApplicationDefinition extends ModelGuidIdBase
 {
-    private Set applications;
     private String name;
     private IdentityProperties identityProperties;
+    private Set applications;
     private byte[] id;
-
-    public Set getApplications()
-    {
-        return applications;
-    }
-
-    public void setApplications(Set applications)
-    {
-        this.applications = applications;
-    }
 
     public String getName()
     {
@@ -57,6 +47,16 @@ public class ApplicationDefinition extends Model
     public void setIdentityProperties(IdentityProperties identityProperties)
     {
         this.identityProperties = identityProperties;
+    }
+
+    public Set getApplications()
+    {
+        return applications;
+    }
+
+    public void setApplications(Set applications)
+    {
+        this.applications = applications;
     }
 
     public byte[] getId()

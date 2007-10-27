@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2006 (C) The original author or authors
+ * Copyright 2007 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,39 +19,41 @@ package org.livetribe.arm40.model;
 /**
  * @version $Revision$ $Date$
  */
-public class Block extends ModelLongIdBase
+public class ModelGuidIdBase implements Model
 {
-    private long handle;
-    private long start;
-    private long end;
+    protected String oid;
 
-    public long getHandle()
+    protected ModelGuidIdBase()
     {
-        return handle;
     }
 
-    public void setHandle(long handle)
+    protected ModelGuidIdBase(String oid)
     {
-        this.handle = handle;
+        this.oid = oid;
     }
 
-    public long getStart()
+    public String getOid()
     {
-        return start;
+        return oid;
     }
 
-    public void setStart(long start)
+    public void setOid(String oid)
     {
-        this.start = start;
+        this.oid = oid;
     }
 
-    public long getEnd()
+    public boolean equals(Object o)
     {
-        return end;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final ModelGuidIdBase model = (ModelGuidIdBase) o;
+
+        return oid.equals(model.oid);
     }
 
-    public void setEnd(long end)
+    public int hashCode()
     {
-        this.end = end;
+        return oid.hashCode();
     }
 }

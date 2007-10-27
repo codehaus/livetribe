@@ -19,7 +19,7 @@ package org.livetribe.arm40.model;
 /**
  * @version $Revision$ $Date$
  */
-abstract public class AbstractMetricDefinition extends Model
+abstract public class AbstractMetricDefinition extends ModelGuidIdBase
 {
     private ApplicationDefinition applicationDefinition;
     private String name;

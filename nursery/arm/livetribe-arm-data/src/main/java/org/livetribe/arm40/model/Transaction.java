@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @version $Revision$ $Date$
  */
-public class Transaction extends Model
+public class Transaction extends ModelGuidIdBase
 {
     private Application application;
     private TransactionDefinition transactionDefinition;

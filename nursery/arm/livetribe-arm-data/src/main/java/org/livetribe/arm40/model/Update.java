@@ -19,7 +19,7 @@ package org.livetribe.arm40.model;
 /**
  * @version $Revision$ $Date$
  */
-public class Update extends Model
+public class Update extends ModelLongIdBase
 {
     private long ts;
 

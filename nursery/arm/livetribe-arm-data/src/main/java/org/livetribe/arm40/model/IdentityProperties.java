@@ -23,7 +23,7 @@ package org.livetribe.arm40.model;
  *
  * @version $Revision$ $Date$
  */
-public class IdentityProperties extends Model
+public class IdentityProperties extends ModelGuidIdBase
 {
     private String idName01;
     private String idName02;
@@ -85,6 +85,76 @@ public class IdentityProperties extends Model
     private String ctxName18;
     private String ctxName19;
     private String ctxName20;
+
+    public IdentityProperties()
+    {
+    }
+
+    public IdentityProperties(String idPropOID, String[] idNames, String[] idValues, String[] ctxNames)
+    {
+        super(idPropOID);
+
+        this.idName01 = idNames[1];
+        this.idName02 = idNames[2];
+        this.idName03 = idNames[3];
+        this.idName04 = idNames[4];
+        this.idName05 = idNames[5];
+        this.idName06 = idNames[6];
+        this.idName07 = idNames[7];
+        this.idName08 = idNames[8];
+        this.idName09 = idNames[9];
+        this.idName10 = idNames[10];
+        this.idName11 = idNames[11];
+        this.idName12 = idNames[12];
+        this.idName13 = idNames[13];
+        this.idName14 = idNames[14];
+        this.idName15 = idNames[15];
+        this.idName16 = idNames[16];
+        this.idName17 = idNames[17];
+        this.idName18 = idNames[18];
+        this.idName19 = idNames[19];
+        this.idName20 = idNames[20];
+        this.idValue01 = idValues[1];
+        this.idValue02 = idValues[2];
+        this.idValue03 = idValues[3];
+        this.idValue04 = idValues[4];
+        this.idValue05 = idValues[5];
+        this.idValue06 = idValues[6];
+        this.idValue07 = idValues[7];
+        this.idValue08 = idValues[8];
+        this.idValue09 = idValues[9];
+        this.idValue10 = idValues[10];
+        this.idValue11 = idValues[11];
+        this.idValue12 = idValues[12];
+        this.idValue13 = idValues[13];
+        this.idValue14 = idValues[14];
+        this.idValue15 = idValues[15];
+        this.idValue16 = idValues[16];
+        this.idValue17 = idValues[17];
+        this.idValue18 = idValues[18];
+        this.idValue19 = idValues[19];
+        this.idValue20 = idValues[20];
+        this.ctxName01 = ctxNames[1];
+        this.ctxName02 = ctxNames[2];
+        this.ctxName03 = ctxNames[3];
+        this.ctxName04 = ctxNames[4];
+        this.ctxName05 = ctxNames[5];
+        this.ctxName06 = ctxNames[6];
+        this.ctxName07 = ctxNames[7];
+        this.ctxName08 = ctxNames[8];
+        this.ctxName09 = ctxNames[9];
+        this.ctxName10 = ctxNames[10];
+        this.ctxName11 = ctxNames[11];
+        this.ctxName12 = ctxNames[12];
+        this.ctxName13 = ctxNames[13];
+        this.ctxName14 = ctxNames[14];
+        this.ctxName15 = ctxNames[15];
+        this.ctxName16 = ctxNames[16];
+        this.ctxName17 = ctxNames[17];
+        this.ctxName18 = ctxNames[18];
+        this.ctxName19 = ctxNames[19];
+        this.ctxName20 = ctxNames[20];
+    }
 
     public String getIdName01()
     {
@@ -684,6 +754,24 @@ public class IdentityProperties extends Model
     public void setCtxName20(String ctxName20)
     {
         this.ctxName20 = ctxName20;
+    }
+
+    public String[] getIdNames()
+    {
+        return new String[]{idName01, idName02, idName03, idName04, idName05, idName06, idName07, idName08, idName09, idName10,
+                            idName11, idName12, idName13, idName14, idName15, idName16, idName17, idName18, idName19, idName20};
+    }
+
+    public String[] getIdValues()
+    {
+        return new String[]{idValue01, idValue02, idValue03, idValue04, idValue05, idValue06, idValue07, idValue08, idValue09, idValue10,
+                            idValue11, idValue12, idValue13, idValue14, idValue15, idValue16, idValue17, idValue18, idValue19, idValue20};
+    }
+
+    public String[] getCtxNames()
+    {
+        return new String[]{ctxName01, ctxName02, ctxName03, ctxName04, ctxName05, ctxName06, ctxName07, ctxName08, ctxName09, ctxName10,
+                            ctxName11, ctxName12, ctxName13, ctxName14, ctxName15, ctxName16, ctxName17, ctxName18, ctxName19, ctxName20};
     }
 
     public boolean equals(Object o)

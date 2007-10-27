@@ -24,19 +24,29 @@ import java.util.List;
  */
 public interface ARMDAO
 {
+    public List getIdentityPropertiesByName(String[] idNames, String[] idValues, String[] ctxNames);
+
+    public IdentityProperties getIdentityPropertiesByOID(String oid);
+
+    public void saveIdentityProperties(IdentityProperties identityProperties);
+
+    public void deleteIdentityProperties(IdentityProperties identityProperties);
+
+    public List getIdentityPropertiesTransactionByName(String[] idNames, String[] idValues, String[] ctxNames, String uriValue);
+
+    public IdentityPropertiesTransaction getIdentityPropertiesTransactionByOID(String oid);
+
+    public void saveIdentityPropertiesTransaction(IdentityPropertiesTransaction identityPropertiesTransaction);
+
+    public void deleteIdentityPropertiesTransaction(IdentityPropertiesTransaction identityPropertiesTransaction);
+
     public ApplicationDefinition getApplicationDefinitionByName(String name, IdentityProperties identityProperties);
+
+    public ApplicationDefinition getApplicationDefinitionByOID(String oid);
 
     public ApplicationDefinition getApplicationDefinitionById(byte[] id);
 
     public void saveApplicaitonDefinition(ApplicationDefinition applicationDefinition);
 
     public void deleteApplicaitonDefinition(ApplicationDefinition applicationDefinition);
-
-    public List getIdentityPropertiesByName(String[] idNames, String[] idValues, String[] ctxNames);
-
-    public IdentityProperties getIdentityPropertiesByOID(long oid);
-
-    public void saveIdentityProperties(IdentityProperties identityProperties);
-
-    public void deleteIdentityProperties(IdentityProperties identityProperties);
 }

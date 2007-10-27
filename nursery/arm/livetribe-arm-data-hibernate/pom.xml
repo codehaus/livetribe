@@ -58,7 +58,7 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>spring-hibernate3</artifactId>
         </dependency>
 
     </dependencies>

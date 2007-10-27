@@ -19,7 +19,7 @@ package org.livetribe.arm40.model;
 /**
  * @version $Revision$ $Date$
  */
-public class TransactionWithMetricsDefinition extends Model
+public class TransactionWithMetricsDefinition extends ModelGuidIdBase
 {
     private Application application;
     private String name;

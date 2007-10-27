@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @version $Revision$ $Date$
  */
-public class TransactionDataNode extends Model
+public class TransactionDataNode extends ModelLongIdBase
 {
     private Transaction transaction;
     private TransactionDataNode parent;

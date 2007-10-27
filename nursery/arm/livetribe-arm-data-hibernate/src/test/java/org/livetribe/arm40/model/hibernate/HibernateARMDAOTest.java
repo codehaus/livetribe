@@ -20,7 +20,11 @@ import java.util.List;
 
 import org.livetribe.arm40.model.ARMDAO;
 import org.livetribe.arm40.model.IdentityProperties;
+import org.livetribe.arm40.model.IdentityPropertiesTransaction;
 import org.livetribe.test.AbstractHibernateTestCase;
+import org.livetribe.util.HexSupport;
+import org.livetribe.util.uuid.UUIDGen;
+import org.livetribe.util.uuid.UUIDGenDefault;
 
 
 /**
@@ -28,29 +32,25 @@ import org.livetribe.test.AbstractHibernateTestCase;
  */
 public class HibernateARMDAOTest extends AbstractHibernateTestCase
 {
-    public void testRun()
+    private final UUIDGen guidGenerator = new UUIDGenDefault();
+
+    public void testIdentityProperties()
     {
         ARMDAO dao = (ARMDAO) getApplicationContext().getBean("testDAO");
 
         IdentityProperties original = new IdentityProperties();
 
+        original.setOid(HexSupport.toHexFromBytes(guidGenerator.uuidgen()));
         original.setIdName01("FOO");
         original.setIdValue01("BAR");
+        original.setIdName02("DOG");
+        original.setIdValue02("CAT");
 
         dao.saveIdentityProperties(original);
 
         IdentityProperties copy = dao.getIdentityPropertiesByOID(original.getOid());
 
         assertTrue("FOO".equals(copy.getIdName01()));
-
-        copy.setIdName02("DOG");
-        copy.setIdValue02("CAT");
-
-        dao.saveIdentityProperties(copy);
-
-        IdentityProperties savedCopy = dao.getIdentityPropertiesByOID(original.getOid());
-
-        assertTrue("DOG".equals(savedCopy.getIdName02()));
 
         List list = dao.getIdentityPropertiesByName(new String[]{"FOO", "DOG"}, new String[]{"BAR", "CAT"}, null);
 
@@ -62,6 +62,47 @@ public class HibernateARMDAOTest extends AbstractHibernateTestCase
         assertTrue("DOG".equals(found.getIdName02()));
 
         dao.deleteIdentityProperties(copy);
+
+        try
+        {
+            dao.getIdentityPropertiesByOID(original.getOid());
+            fail("Should not find this deleted object");
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    public void testIdentityPropertiesTransaction()
+    {
+        ARMDAO dao = (ARMDAO) getApplicationContext().getBean("testDAO");
+
+        IdentityPropertiesTransaction original = new IdentityPropertiesTransaction();
+
+        original.setOid(HexSupport.toHexFromBytes(guidGenerator.uuidgen()));
+        original.setIdName01("FOO");
+        original.setIdValue01("BAR");
+        original.setIdName02("DOG");
+        original.setIdValue02("CAT");
+        original.setUriValue("http://livetribe.codehaus.org");
+
+        dao.saveIdentityProperties(original);
+
+        IdentityPropertiesTransaction copy = dao.getIdentityPropertiesTransactionByOID(original.getOid());
+
+        assertTrue("FOO".equals(copy.getIdName01()));
+        assertTrue("http://livetribe.codehaus.org".equals(copy.getUriValue()));
+
+        List list = dao.getIdentityPropertiesTransactionByName(new String[]{"FOO", "DOG"}, new String[]{"BAR", "CAT"}, null, "http://livetribe.codehaus.org");
+
+        assertTrue(list.size() == 1);
+
+        IdentityPropertiesTransaction found = (IdentityPropertiesTransaction) list.get(0);
+
+        assertNotNull(found);
+        assertTrue("DOG".equals(found.getIdName02()));
+
+        dao.deleteIdentityPropertiesTransaction(copy);
 
         try
         {

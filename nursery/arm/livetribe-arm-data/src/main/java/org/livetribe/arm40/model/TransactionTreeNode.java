@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @version $Revision$ $Date$
  */
-public class TransactionTreeNode extends Model
+public class TransactionTreeNode extends ModelLongIdBase
 {
     private Transaction transaction;
     private TransactionTreeNode parent;

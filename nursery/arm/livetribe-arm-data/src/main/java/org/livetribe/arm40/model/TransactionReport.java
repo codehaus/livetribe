@@ -6,7 +6,7 @@ package org.livetribe.arm40.model;
 /**
  * @version $Revision$ $Date$
  */
-public class TransactionReport extends Model
+public class TransactionReport extends ModelGuidIdBase
 {
     private Application application;
     private TransactionDefinition transactionDefinition;

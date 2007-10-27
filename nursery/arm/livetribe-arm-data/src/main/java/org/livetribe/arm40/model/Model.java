@@ -23,32 +23,6 @@ package org.livetribe.arm40.model;
  *
  * @version $Revision$ $Date$
  */
-public class Model
+public interface Model
 {
-    protected long oid;
-
-    public long getOid()
-    {
-        return oid;
-    }
-
-    protected void setOid(long oid)
-    {
-        this.oid = oid;
-    }
-
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final Model model = (Model) o;
-
-        return oid == model.oid;
-    }
-
-    public int hashCode()
-    {
-        return (int) (oid ^ (oid >>> 32));
-    }
 }
