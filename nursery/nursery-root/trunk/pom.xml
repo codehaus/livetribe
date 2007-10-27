@@ -4,30 +4,14 @@
     <parent>
         <groupId>org.livetribe</groupId>
         <artifactId>livetribe</artifactId>
-        <version>1.0.1</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>nursery</artifactId>
     <name>LiveTribe Nursery</name>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>LiveTribe Nursery</description>
-
-
-    <scm>
-        <connection>scm:svn:http://svn.codehaus.org/livetribe/nursery/</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/nursery/</developerConnection>
-        <url>http://svn.livetribe.codehaus.org/browse/livetribe/nursery/</url>
-    </scm>
-    
-
-    <repositories>
-        <repository>
-            <id>codehaus-repo</id>
-            <name>CodeHaus Central Repository</name>
-            <url>http://repository.codehaus.org</url>
-        </repository>
-    </repositories>
 
 </project>
