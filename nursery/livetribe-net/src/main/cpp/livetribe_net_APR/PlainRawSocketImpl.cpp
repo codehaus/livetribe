@@ -169,18 +169,18 @@ Java_org_livetribe_net_PlainRawSocketImpl_receive (JNIEnv * env, jobject obj, jo
  */
 JNIEXPORT void JNICALL
 Java_org_livetribe_net_PlainRawSocketImpl_rawSocketCreate (JNIEnv * env, jobject obj, jint protocol) {
-	int fd = 0;
+        int fd = 0;
 
-	LiveTribe::Raw_Socket raw_socket((int) protocol);
-	fd = (int)raw_socket.get_handle();
+    LiveTribe::Raw_Socket raw_socket((int) protocol);
+    fd = (int)raw_socket.get_handle();
 
-	jobject fdObj = env->GetObjectField(obj, prsi_fileDescriptorID);
-	if (IS_NULL(fdObj)) {
-		LiveTribe::ThrowByName(env, "java/net/SocketException", "Socket closed");
-		return;
-	} else {
-		env->SetIntField(fdObj, fd_fdID, fd);
-	}
+    jobject fdObj = env->GetObjectField(obj, prsi_fileDescriptorID);
+    if (IS_NULL(fdObj)) {
+        LiveTribe::ThrowByName(env, "java/net/SocketException", "Socket closed");
+        return;
+    } else {
+        env->SetIntField(fdObj, fd_fdID, fd);
+    }
 }
 
 /*
@@ -191,7 +191,7 @@ Java_org_livetribe_net_PlainRawSocketImpl_rawSocketCreate (JNIEnv * env, jobject
 JNIEXPORT void JNICALL
 Java_org_livetribe_net_PlainRawSocketImpl_rawSocketClose (JNIEnv * env, jobject obj) {
 
-	jobject fdObj = env->GetObjectField(obj, prsi_fileDescriptorID);
+    jobject fdObj = env->GetObjectField(obj, prsi_fileDescriptorID);
     int fd;
 
     if (IS_NULL(fdObj)) {
@@ -200,13 +200,13 @@ Java_org_livetribe_net_PlainRawSocketImpl_rawSocketClose (JNIEnv * env, jobject 
     } else {
         fd = env->GetIntField(fdObj, fd_fdID);
     }
-	LiveTribe::Raw_Socket raw_socket((ACE_HANDLE)fd);
+    LiveTribe::Raw_Socket raw_socket((ACE_HANDLE)fd);
 
-	if (raw_socket.close() < 0) {
-		LiveTribe::ThrowByName(env, "java/net/SocketException", "Error closing socket");
-	}
+    if (raw_socket.close() < 0) {
+    	LiveTribe::ThrowByName(env, "java/net/SocketException", "Error closing socket");
+    }
 
-	env->SetIntField(fdObj, fd_fdID, -1);
+    env->SetIntField(fdObj, fd_fdID, -1);
 }
 
 /*
@@ -225,7 +225,7 @@ Java_org_livetribe_net_PlainRawSocketImpl_socketSetOption (JNIEnv * env, jobject
  */
 JNIEXPORT jbyteArray JNICALL
 Java_org_livetribe_net_PlainRawSocketImpl_socketGetOption (JNIEnv * env, jobject obj, jint opt) {
-	return NULL;
+    return NULL;
 }
 
 /*
@@ -255,9 +255,9 @@ Java_org_livetribe_net_PlainRawSocketImpl_init (JNIEnv *env, jclass cls) {
     CHECK_NULL(ia_addressID);
     ia_familyID = env->GetFieldID(class_ia, "family", "I");
     CHECK_NULL(ia_familyID);
-	ia_getAddressID = env->GetMethodID(class_ia, "getAddress", "()[B");
+    ia_getAddressID = env->GetMethodID(class_ia, "getAddress", "()[B");
     CHECK_NULL(ia_getAddressID);
 
-	class_packet = env->FindClass("org/livetribe/net/RawPacket");
+      class_packet = env->FindClass("org/livetribe/net/RawPacket");
     CHECK_NULL(class_packet);
 }
