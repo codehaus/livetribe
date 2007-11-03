@@ -5,7 +5,7 @@
     <groupId>org.livetribe</groupId>
     <artifactId>livetribe</artifactId>
     <name>LiveTribe</name>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>LiveTribe Systems Management Project</description>
     <url>http://livetribe.codehaus.org</url>
@@ -226,21 +226,11 @@
         <repository>
             <id>livetribe-repo</id>
             <name>LiveTribe Central Repository</name>
-            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2/</url>
+            <url>dav:https://dav.codehaus.org/repository/livetribe/</url>
         </repository>
         <snapshotRepository>
             <id>livetribe-snapshots</id>
             <name>LiveTribe Central Snapshots Repository</name>
-            <url>dav:https://dav.codehaus.org/dist/livetribe/maven/m2-snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>codehaus-repo</id>
-            <name>CodeHaus Central Repository</name>
-            <url>dav:https://dav.codehaus.org/repository/livetribe/</url>
-        </repository>
-        <snapshotRepository>
-            <id>codehaus-snapshots</id>
-            <name>CodeHaus Central Snapshots Repository</name>
             <url>dav:https://dav.codehaus.org/snapshots.repository/livetribe/</url>
         </snapshotRepository>
         <site>
