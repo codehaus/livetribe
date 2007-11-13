@@ -14,32 +14,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.client;
+package org.livetribe.boot.protocol;
 
-import net.jcip.annotations.Immutable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
-public class ProvisionPair
+public class YouShould
 {
-    private final String name;
-    private final long version;
-
-    public ProvisionPair(String name, long version)
-    {
-        this.name = name;
-        this.version = version;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
+    private long version;
+    private String bootClass;
+    private List<ProvisionEntry> entries = new ArrayList<ProvisionEntry>();
 
     public long getVersion()
     {
         return version;
+    }
+
+    public void setVersion(long version)
+    {
+        this.version = version;
+    }
+
+    public String getBootClass()
+    {
+        return bootClass;
+    }
+
+    public void setBootClass(String bootClass)
+    {
+        this.bootClass = bootClass;
+    }
+
+    public List<ProvisionEntry> getEntries()
+    {
+        return entries;
+    }
+
+    public void setEntries(List<ProvisionEntry> entries)
+    {
+        this.entries = entries;
     }
 }

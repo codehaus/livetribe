@@ -16,15 +16,14 @@
  */
 package org.livetribe.boot.server;
 
-import java.io.OutputStream;
-import java.util.List;
+import java.io.InputStream;
 
 /**
  * @version $Revision$ $Date$
  */
 public interface ProvisionManager
 {
-    List<ProvisionPair> obtain(String uuid);
+    ProvisionDirective obtain(String uuid);
 
-    OutputStream obtainOutputStream(String uuid, String name, long version);
+    InputStream obtainInputStream(String uuid, String name, long version);
 }

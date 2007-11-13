@@ -16,14 +16,47 @@
  */
 package org.livetribe.boot.client;
 
+import java.net.InetSocketAddress;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 import junit.framework.TestCase;
+import org.livetribe.boot.server.Server;
 
 /**
  * @version $Revision$ $Date$
  */
 public class ClientTest extends TestCase
 {
+    public final static int PORT = 12345;
+    private Server server;
+    ScheduledThreadPoolExecutor executor;
+
     public void test() throws Exception
     {
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
+        try
+        {
+            Client client = new Client(InetSocketAddress.createUnresolved("localhost", PORT), executor, new MockProvisionStore());
+
+            client.start();
+
+            client.stop();
+        }
+        finally
+        {
+            executor.shutdown();
+        }
+    }
+
+    public void setUp() throws Exception
+    {
+        executor = new ScheduledThreadPoolExecutor(5);
+        server = new Server(PORT, executor, new MockProvisionManager());
+    }
+
+    public void tearDown() throws Exception
+    {
+        server.stop();
+        executor.shutdown();
     }
 }

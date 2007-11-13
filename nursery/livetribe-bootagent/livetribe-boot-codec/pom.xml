@@ -8,8 +8,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>livetribe-boot-server</artifactId>
-    <name>LiveTribe :: Boot Agent :: Server</name>
+    <artifactId>livetribe-boot-codec</artifactId>
+    <name>LiveTribe :: Boot Agent :: Codec</name>
     <packaging>jar</packaging>
 
     <build/>
@@ -17,8 +17,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
+            <groupId>net.sf.beep4j</groupId>
+            <artifactId>beep4j</artifactId>
         </dependency>
 
         <dependency>

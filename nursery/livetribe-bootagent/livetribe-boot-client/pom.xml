@@ -16,6 +16,22 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-server</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

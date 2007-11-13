@@ -52,8 +52,14 @@
 
     <modules>
         <module>livetribe-boot-client</module>
+        <module>livetribe-boot-codec</module>
+        <module>livetribe-boot-protocol</module>
         <module>livetribe-boot-server</module>
     </modules>
+
+    <properties>
+        <bootAgentVersion>1.0-SNAPSHOT</bootAgentVersion>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -64,9 +70,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
 
@@ -74,6 +77,30 @@
                 <groupId>net.jcip</groupId>
                 <artifactId>jcip-annotations</artifactId>
                 <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sf.beep4j</groupId>
+                <artifactId>beep4j</artifactId>
+                <version>0.1.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.mina</groupId>
+                <artifactId>mina-core</artifactId>
+                <version>1.1.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-protocol</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-server</artifactId>
+                <version>${bootAgentVersion}</version>
             </dependency>
 
         </dependencies>

@@ -14,7 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.client;
+package org.livetribe.boot.server;
+
+import java.util.Collections;
+import java.util.List;
 
 import net.jcip.annotations.Immutable;
 
@@ -22,24 +25,38 @@ import net.jcip.annotations.Immutable;
  * @version $Revision$ $Date$
  */
 @Immutable
-public class ProvisionPair
+public class ProvisionDirective
 {
-    private final String name;
     private final long version;
+    private final boolean required;
+    private final String bootClass;
+    private final List<ProvisionPair> entries;
 
-    public ProvisionPair(String name, long version)
+    public ProvisionDirective(long version, boolean required, String bootClass, List<ProvisionPair> entries)
     {
-        this.name = name;
         this.version = version;
-    }
-
-    public String getName()
-    {
-        return name;
+        this.required = required;
+        this.bootClass = bootClass;
+        this.entries = Collections.unmodifiableList(entries);
     }
 
     public long getVersion()
     {
         return version;
+    }
+
+    public boolean isRequired()
+    {
+        return required;
+    }
+
+    public String getBootClass()
+    {
+        return bootClass;
+    }
+
+    public List<ProvisionPair> getEntries()
+    {
+        return entries;
     }
 }

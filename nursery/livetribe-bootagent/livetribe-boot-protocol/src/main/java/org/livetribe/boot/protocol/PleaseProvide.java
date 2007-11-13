@@ -14,32 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.client;
-
-import net.jcip.annotations.Immutable;
+package org.livetribe.boot.protocol;
 
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
-public class ProvisionPair
+public class PleaseProvide
 {
-    private final String name;
-    private final long version;
-
-    public ProvisionPair(String name, long version)
-    {
-        this.name = name;
-        this.version = version;
-    }
+    private String name;
+    private long version;
 
     public String getName()
     {
         return name;
     }
 
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
     public long getVersion()
     {
         return version;
+    }
+
+    public void setVersion(long version)
+    {
+        this.version = version;
     }
 }

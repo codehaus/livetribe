@@ -16,30 +16,27 @@
  */
 package org.livetribe.boot.client;
 
-import net.jcip.annotations.Immutable;
-
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
-public class ProvisionPair
+public class ProvisionStoreException extends Exception
 {
-    private final String name;
-    private final long version;
-
-    public ProvisionPair(String name, long version)
+    public ProvisionStoreException()
     {
-        this.name = name;
-        this.version = version;
     }
 
-    public String getName()
+    public ProvisionStoreException(String message)
     {
-        return name;
+        super(message);
     }
 
-    public long getVersion()
+    public ProvisionStoreException(String message, Throwable cause)
     {
-        return version;
+        super(message, cause);
+    }
+
+    public ProvisionStoreException(Throwable cause)
+    {
+        super(cause);
     }
 }

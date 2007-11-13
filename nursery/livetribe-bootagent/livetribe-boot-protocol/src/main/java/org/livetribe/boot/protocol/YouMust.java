@@ -14,32 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.client;
-
-import net.jcip.annotations.Immutable;
+package org.livetribe.boot.protocol;
 
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
-public class ProvisionPair
+public class YouMust extends YouShould
 {
-    private final String name;
-    private final long version;
+    private boolean restart;
 
-    public ProvisionPair(String name, long version)
+    public boolean isRestart()
     {
-        this.name = name;
-        this.version = version;
+        return restart;
     }
 
-    public String getName()
+    public void setRestart(boolean restart)
     {
-        return name;
-    }
-
-    public long getVersion()
-    {
-        return version;
+        this.restart = restart;
     }
 }

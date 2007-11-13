@@ -16,6 +16,7 @@
  */
 package org.livetribe.boot.client;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -24,13 +25,19 @@ import java.util.List;
  */
 public interface ProvisionStore
 {
-    String getUuid();
+    String getUuid() throws ProvisionStoreException;
 
-    void setUuid();
+    void setUuid(String uuid) throws ProvisionStoreException;
 
-    void setProvisionList(List<ProvisionPair> list);
+    ProvisionDirective getCurrentProvisionDirective() throws ProvisionStoreException;
 
-    List<ProvisionPair> getUpdateList();
+    ProvisionDirective getNextProvisionDirective() throws ProvisionStoreException;
 
-    URL getClasspath();
+    void setNextProvisionDirective(ProvisionDirective provisionDirective) throws ProvisionStoreException;
+
+    void store(ProvisionPair provisionPair, InputStream stream) throws ProvisionStoreException;
+
+    void prepareNext() throws ProvisionStoreException;
+
+    List<URL> getClasspath() throws ProvisionStoreException;
 }

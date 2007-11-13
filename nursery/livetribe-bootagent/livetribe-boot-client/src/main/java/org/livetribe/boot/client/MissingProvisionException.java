@@ -16,30 +16,33 @@
  */
 package org.livetribe.boot.client;
 
-import net.jcip.annotations.Immutable;
-
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
-public class ProvisionPair
+public class MissingProvisionException extends ProvisionStoreException
 {
-    private final String name;
-    private final long version;
+    private final ProvisionPair missing;
 
-    public ProvisionPair(String name, long version)
+    public MissingProvisionException(ProvisionPair missing)
     {
-        this.name = name;
-        this.version = version;
+        this.missing = missing;
     }
 
-    public String getName()
+    public MissingProvisionException(ProvisionPair missing, String message)
     {
-        return name;
+        super(message);
+        this.missing = missing;
     }
 
-    public long getVersion()
+    public MissingProvisionException(ProvisionPair missing, String message, Throwable cause)
     {
-        return version;
+        super(message, cause);
+        this.missing = missing;
+    }
+
+    public MissingProvisionException(ProvisionPair missing, Throwable cause)
+    {
+        super(cause);
+        this.missing = missing;
     }
 }

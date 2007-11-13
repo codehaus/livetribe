@@ -44,7 +44,11 @@ public class Client
         this(serverAddress, null, scheduledExecutorService, provisionStore);
     }
 
-    public void start() { }
+    public void start()
+    {
+    }
 
-    public void stop() { }
+    public void stop()
+    {
+    }
 }

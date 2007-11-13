@@ -72,13 +72,12 @@ public class Server
      */
     public Server(InetAddress nic, int port, ScheduledExecutorService scheduledExecutorService, ProvisionManager provisionManager)
     {
-        if (nic == null) throw new IllegalArgumentException("NIC must not be null");
         if (scheduledExecutorService == null) throw new IllegalArgumentException("Sceduled executor service must not be null");
         if (provisionManager == null) throw new IllegalArgumentException("Provisioning DAO must not be null");
 
         if (logger.isLoggable(Level.CONFIG))
         {
-            logger.config("NIC: " + nic);
+            logger.config("NIC: " + (nic == null ? "DEFAULT" : nic));
             logger.config("port: " + port);
             logger.config("ScheduledExecutorService: " + scheduledExecutorService);
             logger.config("ProvisionManager: " + provisionManager);
