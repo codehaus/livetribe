@@ -52,7 +52,7 @@
 
     <modules>
         <module>livetribe-boot-client</module>
-        <module>livetribe-boot-codec</module>
+        <module>livetribe-boot-beep</module>
         <module>livetribe-boot-protocol</module>
         <module>livetribe-boot-server</module>
     </modules>

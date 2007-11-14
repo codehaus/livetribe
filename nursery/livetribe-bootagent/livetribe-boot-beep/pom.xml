@@ -8,8 +8,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>livetribe-boot-codec</artifactId>
-    <name>LiveTribe :: Boot Agent :: Codec</name>
+    <artifactId>livetribe-boot-beep</artifactId>
+    <name>LiveTribe :: Boot Agent :: Beep</name>
     <packaging>jar</packaging>
 
     <build/>
