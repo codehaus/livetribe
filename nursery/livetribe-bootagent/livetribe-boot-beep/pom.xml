@@ -10,27 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>livetribe-boot-beep</artifactId>
     <name>LiveTribe :: Boot Agent :: Beep</name>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <build/>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>net.sf.beep4j</groupId>
-            <artifactId>beep4j</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.mina</groupId>
-            <artifactId>mina-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-protocol</artifactId>
-        </dependency>
-
-    </dependencies>
+    <modules>
+        <module>livetribe-boot-beep-client</module>
+        <module>livetribe-boot-beep-server</module>
+    </modules>
 
 </project>
