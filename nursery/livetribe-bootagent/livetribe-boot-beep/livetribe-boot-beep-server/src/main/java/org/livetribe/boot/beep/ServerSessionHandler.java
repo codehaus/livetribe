@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.livetribe.boot.beep;
+package org.livetribe.boot.beep;
 
 import net.sf.beep4j.StartChannelRequest;
 import net.sf.beep4j.StartSessionRequest;
 import net.sf.beep4j.ext.SessionHandlerAdapter;
+
 import org.livetribe.boot.protocol.BootServer;
+
 
 /**
  * @version $Revision$ $Date$
