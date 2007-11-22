@@ -112,6 +112,11 @@
             <name>LiveTribe Repository</name>
             <url>http://dist.codehaus.org/livetribe/maven/m2</url>
         </repository>
+        <repository>
+            <id>livetribe-snapshots</id>
+            <name>LiveTribe Snapshot Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
+        </repository>
     </repositories>
 
 </project>
