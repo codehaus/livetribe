@@ -16,20 +16,24 @@
  */
 package org.livetribe.boot.protocol;
 
+import java.util.Set;
+
+
 /**
  * @version $Revision$ $Date$
  */
 public class YouMust extends YouShould
 {
-    private boolean restart;
+    private final boolean restart;
+
+    public YouMust(long version, String bootClass, Set<ProvisionEntry> entries, boolean restart)
+    {
+        super(version, bootClass, entries);
+        this.restart = restart;
+    }
 
     public boolean isRestart()
     {
         return restart;
-    }
-
-    public void setRestart(boolean restart)
-    {
-        this.restart = restart;
     }
 }

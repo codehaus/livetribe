@@ -14,33 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.protocol;
+package org.livetribe.boot.mock;
+
+import org.livetribe.boot.LifeCycle;
+
 
 /**
  * @version $Revision$ $Date$
  */
-public class PleaseProvide
+public class MockLifecycle implements LifeCycle
 {
-    private String name;
-    private long version;
+    private static long started = 0;
+    private static long stopped = 0;
 
-    public String getName()
+    public static long getStarted()
     {
-        return name;
+        return started;
     }
 
-    public void setName(String name)
+    public static long getStopped()
     {
-        this.name = name;
+        return stopped;
     }
 
-    public long getVersion()
+    public void start()
     {
-        return version;
+        started++;
     }
 
-    public void setVersion(long version)
+    public void stop()
     {
-        this.version = version;
+        stopped++;
     }
 }

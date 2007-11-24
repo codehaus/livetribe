@@ -14,44 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.protocol;
+package org.livetribe.boot;
 
 /**
  * @version $Revision$ $Date$
  */
-public class Resource
+public interface LifeCycle
 {
-    private String name;
-    private long version;
-    private byte[] data;
+    void start();
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public long getVersion()
-    {
-        return version;
-    }
-
-    public void setVersion(long version)
-    {
-        this.version = version;
-    }
-
-    public byte[] getData()
-    {
-        return data;
-    }
-
-    public void setData(byte[] data)
-    {
-        this.data = data;
-    }
+    void stop();
 }

@@ -51,8 +51,10 @@
     </build>
 
     <modules>
-        <module>livetribe-boot-client</module>
+        <module>livetribe-boot-api</module>
         <module>livetribe-boot-beep</module>
+        <module>livetribe-boot-client</module>
+        <module>livetribe-boot-mock</module>
         <module>livetribe-boot-protocol</module>
         <module>livetribe-boot-server</module>
     </modules>
@@ -93,6 +95,24 @@
 
             <dependency>
                 <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-api</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-client</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-mock</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
                 <artifactId>livetribe-boot-protocol</artifactId>
                 <version>${bootAgentVersion}</version>
             </dependency>
@@ -101,6 +121,12 @@
                 <groupId>org.livetribe.boot</groupId>
                 <artifactId>livetribe-boot-server</artifactId>
                 <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>1.4.3</version>
             </dependency>
 
         </dependencies>

@@ -16,39 +16,237 @@
  */
 package org.livetribe.boot.client;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.util.concurrent.ScheduledExecutorService;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+
+import net.jcip.annotations.ThreadSafe;
+
+import org.livetribe.boot.LifeCycle;
+import org.livetribe.boot.protocol.BootServer;
+import org.livetribe.boot.protocol.BootServerException;
+import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.YouMust;
+import org.livetribe.boot.protocol.YouShould;
 
 
 /**
  * @version $Revision$ $Date$
  */
+@ThreadSafe
 public class Client
 {
-    private final InetSocketAddress serverAddress;
-    private final InetAddress nic;
-    private final ScheduledExecutorService scheduledExecutorService;
+    private final Object LOCK = new Object();
+    private final Semaphore semaphore = new Semaphore(1);
+    private final ClientListenerHelper listeners = new ClientListenerHelper();
+    private final BootServer bootServer;
+    private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
     private final ProvisionStore provisionStore;
+    private volatile State state = State.STOPPED;
+    private volatile long period = 900;
+    private volatile Runnable handle;
+    private volatile LifeCycle lifeCycleInstance;
 
-    public Client(InetSocketAddress serverAddress, InetAddress nic, ScheduledExecutorService scheduledExecutorService, ProvisionStore provisionStore)
+
+    public Client(BootServer bootServer, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore)
     {
-        this.serverAddress = serverAddress;
-        this.nic = nic;
-        this.scheduledExecutorService = scheduledExecutorService;
+        if (bootServer == null) throw new IllegalArgumentException("bootServer is null");
+        if (scheduledThreadPoolExecutor == null) throw new IllegalArgumentException("scheduledThreadPoolExecutor is null");
+        if (provisionStore == null) throw new IllegalArgumentException("provisionStore is null");
+
+        this.bootServer = bootServer;
+        this.scheduledThreadPoolExecutor = scheduledThreadPoolExecutor;
         this.provisionStore = provisionStore;
     }
 
-    public Client(InetSocketAddress serverAddress, ScheduledExecutorService scheduledExecutorService, ProvisionStore provisionStore)
+    public State getState()
     {
-        this(serverAddress, null, scheduledExecutorService, provisionStore);
+        return state;
+    }
+
+    protected void setState(State state)
+    {
+        listeners.stateChange(this.state, State.STARTED);
+        this.state = state;
+    }
+
+    public long getPeriod()
+    {
+        return period;
+    }
+
+    public void setPeriod(long period)
+    {
+        this.period = period;
+    }
+
+    public void addListener(ClientListener listener)
+    {
+        listeners.addListener(listener);
+    }
+
+    public void removeListener(ClientListener listener)
+    {
+        listeners.removeListener(listener);
     }
 
     public void start()
     {
+        synchronized (LOCK)
+        {
+            if (state == State.STARTED || state == State.RUNNING) return;
+
+            setState(State.STARTED);
+
+            ProvisionCheck provisionCheck = new ProvisionCheck();
+
+            provisionCheck.run();
+
+            handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
+
+            setState(State.RUNNING);
+        }
     }
 
     public void stop()
     {
+        synchronized (LOCK)
+        {
+            if (state == State.STOPPING || state == State.STOPPED) return;
+            setState(State.STOPPING);
+
+            scheduledThreadPoolExecutor.remove(handle);
+            handle = null;
+
+            try
+            {
+                semaphore.acquire();
+            }
+            catch (InterruptedException ie)
+            {
+                listeners.warning("Stop interrupted");
+            }
+            finally
+            {
+                semaphore.release();
+            }
+
+            shutdown();
+
+            setState(State.STOPPED);
+        }
+    }
+
+    @SuppressWarnings({"unchecked"})
+    private void startup()
+    {
+        ClassLoader saved = Thread.currentThread().getContextClassLoader();
+        try
+        {
+            List<URL> urls = provisionStore.getClasspath();
+            URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), saved);
+            Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
+            lifeCycleInstance = bootClass.newInstance();
+
+            Thread.currentThread().setContextClassLoader(classLoader);
+
+            lifeCycleInstance.start();
+        }
+        catch (ProvisionStoreException pse)
+        {
+            listeners.error("Provision check error", pse);
+        }
+        catch (ClassNotFoundException cnde)
+        {
+            listeners.error("Provision check error", cnde);
+        }
+        catch (IllegalAccessException iae)
+        {
+            listeners.error("Provision check error", iae);
+        }
+        catch (InstantiationException ie)
+        {
+            listeners.error("Provision check error", ie);
+        }
+        finally
+        {
+            Thread.currentThread().setContextClassLoader(saved);
+        }
+    }
+
+    private void shutdown()
+    {
+        if (lifeCycleInstance != null) lifeCycleInstance.stop();
+        lifeCycleInstance = null;
+    }
+
+    private class ProvisionCheck implements Runnable
+    {
+        public void run()
+        {
+            try
+            {
+                semaphore.acquire();
+
+                long currentVersion = provisionStore.getCurrentProvisionDirective().getVersion();
+                String uuid = provisionStore.getUuid();
+
+                listeners.provisionCheck(uuid, currentVersion);
+
+                YouShould response = bootServer.hello(provisionStore.getUuid(), currentVersion);
+
+                if (response.getVersion() == currentVersion) return;
+
+                listeners.provisionDirective(response);
+
+                Set<ProvisionEntry> currentEntries = provisionStore.getCurrentProvisionDirective().getEntries();
+                for (ProvisionEntry entry : response.getEntries())
+                {
+                    if (!currentEntries.contains(entry))
+                    {
+                        provisionStore.store(entry, bootServer.pleaseProvide(entry.getName(), entry.getVersion()));
+                    }
+                }
+
+                provisionStore.setNextProvisionDirective(new ProvisionDirective(response.getVersion(), response.getBootClass(), response.getEntries()));
+
+                provisionStore.prepareNext();
+
+                if (response instanceof YouMust)
+                {
+                    YouMust must = (YouMust) response;
+
+                    if (must.isRestart())
+                    {
+                        if (state == State.RUNNING) shutdown();
+                        startup();
+                    }
+                }
+                else if (state == State.STARTED)
+                {
+                    startup();
+                }
+            }
+            catch (BootServerException bse)
+            {
+                listeners.error("Provision check error", bse);
+            }
+            catch (ProvisionStoreException pse)
+            {
+                listeners.error("Provision check error", pse);
+            }
+            catch (InterruptedException ie)
+            {
+                listeners.error("Provision check error", ie);
+            }
+            finally
+            {
+                semaphore.release();
+            }
+        }
     }
 }

@@ -16,31 +16,34 @@
  */
 package org.livetribe.boot.client;
 
+import org.livetribe.boot.protocol.ProvisionEntry;
+
+
 /**
  * @version $Revision$ $Date$
  */
 public class MissingProvisionException extends ProvisionStoreException
 {
-    private final ProvisionPair missing;
+    private final ProvisionEntry missing;
 
-    public MissingProvisionException(ProvisionPair missing)
+    public MissingProvisionException(ProvisionEntry missing)
     {
         this.missing = missing;
     }
 
-    public MissingProvisionException(ProvisionPair missing, String message)
+    public MissingProvisionException(ProvisionEntry missing, String message)
     {
         super(message);
         this.missing = missing;
     }
 
-    public MissingProvisionException(ProvisionPair missing, String message, Throwable cause)
+    public MissingProvisionException(ProvisionEntry missing, String message, Throwable cause)
     {
         super(message, cause);
         this.missing = missing;
     }
 
-    public MissingProvisionException(ProvisionPair missing, Throwable cause)
+    public MissingProvisionException(ProvisionEntry missing, Throwable cause)
     {
         super(cause);
         this.missing = missing;

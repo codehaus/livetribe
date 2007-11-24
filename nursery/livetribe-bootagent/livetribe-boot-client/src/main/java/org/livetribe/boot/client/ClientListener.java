@@ -14,33 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.protocol;
+package org.livetribe.boot.client;
+
+import org.livetribe.boot.protocol.YouShould;
+
 
 /**
  * @version $Revision$ $Date$
  */
-public class Hello
+public interface ClientListener
 {
-    private String uuid;
-    private long version;
+    public void stateChange(State oldState, State newState);
 
-    public String getUuid()
-    {
-        return uuid;
-    }
+    public void provisionCheck(String uuid, long version);
 
-    public void setUuid(String uuid)
-    {
-        this.uuid = uuid;
-    }
+    public void provisionDirective(YouShould directive);
 
-    public long getVersion()
-    {
-        return version;
-    }
+    public void warning(String message);
 
-    public void setVersion(long version)
-    {
-        this.version = version;
-    }
+    public void error(String message);
+
+    public void error(String message, Throwable throwable);
 }

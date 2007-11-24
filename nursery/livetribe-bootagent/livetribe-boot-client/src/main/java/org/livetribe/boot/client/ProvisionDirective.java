@@ -17,9 +17,12 @@
 package org.livetribe.boot.client;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import net.jcip.annotations.Immutable;
+
+import org.livetribe.boot.protocol.ProvisionEntry;
+
 
 /**
  * @version $Revision$ $Date$
@@ -29,13 +32,13 @@ public class ProvisionDirective
 {
     private final long version;
     private final String bootClass;
-    private final List<ProvisionPair> entries;
+    private final Set<ProvisionEntry> entries;
 
-    public ProvisionDirective(long version, String bootClass, List<ProvisionPair> entries)
+    public ProvisionDirective(long version, String bootClass, Set<ProvisionEntry> entries)
     {
         this.version = version;
         this.bootClass = bootClass;
-        this.entries = Collections.unmodifiableList(entries);
+        this.entries = Collections.unmodifiableSet(entries);
     }
 
     public long getVersion()
@@ -48,7 +51,7 @@ public class ProvisionDirective
         return bootClass;
     }
 
-    public List<ProvisionPair> getEntries()
+    public Set<ProvisionEntry> getEntries()
     {
         return entries;
     }

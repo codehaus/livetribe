@@ -16,26 +16,29 @@
  */
 package org.livetribe.boot.protocol;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
+
 
 /**
  * @version $Revision$ $Date$
  */
 public class YouShould
 {
-    private long version;
-    private String bootClass;
-    private List<ProvisionEntry> entries = new ArrayList<ProvisionEntry>();
+    private final long version;
+    private final String bootClass;
+    private final Set<ProvisionEntry> entries;
+
+    public YouShould(long version, String bootClass, Set<ProvisionEntry> entries)
+    {
+        this.version = version;
+        this.bootClass = bootClass;
+        this.entries = Collections.unmodifiableSet(entries);
+    }
 
     public long getVersion()
     {
         return version;
-    }
-
-    public void setVersion(long version)
-    {
-        this.version = version;
     }
 
     public String getBootClass()
@@ -43,18 +46,8 @@ public class YouShould
         return bootClass;
     }
 
-    public void setBootClass(String bootClass)
-    {
-        this.bootClass = bootClass;
-    }
-
-    public List<ProvisionEntry> getEntries()
+    public Set<ProvisionEntry> getEntries()
     {
         return entries;
-    }
-
-    public void setEntries(List<ProvisionEntry> entries)
-    {
-        this.entries = entries;
     }
 }

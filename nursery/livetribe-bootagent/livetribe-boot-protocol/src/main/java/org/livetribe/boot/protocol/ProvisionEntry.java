@@ -21,17 +21,18 @@ package org.livetribe.boot.protocol;
  */
 public class ProvisionEntry
 {
-    private String name;
-    private long version;
+    private final String name;
+    private final long version;
+
+    public ProvisionEntry(String name, long version)
+    {
+        this.name = name;
+        this.version = version;
+    }
 
     public String getName()
     {
         return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     public long getVersion()
@@ -39,8 +40,23 @@ public class ProvisionEntry
         return version;
     }
 
-    public void setVersion(long version)
+    @Override
+    public boolean equals(Object o)
     {
-        this.version = version;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProvisionEntry that = (ProvisionEntry) o;
+
+        return name.equals(that.name) && version == that.version;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result;
+        result = name.hashCode();
+        result = 31 * result + (int) (version ^ (version >>> 32));
+        return result;
     }
 }

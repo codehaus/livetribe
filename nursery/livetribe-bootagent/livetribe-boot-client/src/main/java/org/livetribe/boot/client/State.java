@@ -16,30 +16,13 @@
  */
 package org.livetribe.boot.client;
 
-import net.jcip.annotations.Immutable;
-
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
-public class ProvisionPair
+public enum State
 {
-    private final String name;
-    private final long version;
-
-    public ProvisionPair(String name, long version)
-    {
-        this.name = name;
-        this.version = version;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public long getVersion()
-    {
-        return version;
-    }
+    STARTED,
+    RUNNING,
+    STOPPING,
+    STOPPED
 }

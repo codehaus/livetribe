@@ -8,8 +8,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>livetribe-boot-beep-client</artifactId>
-    <name>LiveTribe :: Boot Agent :: Beep Client</name>
+    <artifactId>livetribe-boot-mock</artifactId>
+    <name>LiveTribe :: Boot Agent :: Mock Test Classes</name>
     <packaging>jar</packaging>
 
     <build/>
@@ -17,8 +17,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>net.sf.beep4j</groupId>
-            <artifactId>beep4j</artifactId>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
         </dependency>
 
         <dependency>
@@ -28,25 +28,17 @@
 
         <dependency>
             <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
             <artifactId>livetribe-boot-client</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-mock</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-protocol</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <scope>test</scope>
+            <artifactId>livetribe-boot-server</artifactId>
         </dependency>
 
     </dependencies>
