@@ -16,23 +16,14 @@
  */
 package org.livetribe.boot.client;
 
-import java.io.File;
-
-
 /**
  * @version $Revision$ $Date$
  */
-public class MockProvisionStore extends DefaultProvisionStore
+public interface Listener
 {
-    public MockProvisionStore()
-    {
-        super(prepareRoot());
-    }
+    public void warning(String message);
 
-    protected static File prepareRoot()
-    {
-        File root = new File("./target/provision");
-        root.mkdirs();
-        return root;
-    }
+    public void error(String message);
+
+    public void error(String message, Throwable throwable);
 }

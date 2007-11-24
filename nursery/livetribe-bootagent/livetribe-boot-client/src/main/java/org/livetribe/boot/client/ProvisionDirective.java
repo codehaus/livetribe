@@ -17,6 +17,7 @@
 package org.livetribe.boot.client;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import net.jcip.annotations.Immutable;
@@ -34,11 +35,18 @@ public class ProvisionDirective
     private final String bootClass;
     private final Set<ProvisionEntry> entries;
 
+    public ProvisionDirective()
+    {
+        this(0, "", Collections.<ProvisionEntry>emptySet());
+    }
+
     public ProvisionDirective(long version, String bootClass, Set<ProvisionEntry> entries)
     {
+        if (bootClass == null) throw new IllegalArgumentException("Boot class cannot be null");
+
         this.version = version;
         this.bootClass = bootClass;
-        this.entries = Collections.unmodifiableSet(entries);
+        this.entries = Collections.unmodifiableSet(new HashSet<ProvisionEntry>(entries));
     }
 
     public long getVersion()

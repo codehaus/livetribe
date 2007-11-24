@@ -22,17 +22,11 @@ import org.livetribe.boot.protocol.YouShould;
 /**
  * @version $Revision$ $Date$
  */
-public interface ClientListener
+public interface ClientListener extends Listener
 {
     public void stateChange(State oldState, State newState);
 
     public void provisionCheck(String uuid, long version);
 
     public void provisionDirective(YouShould directive);
-
-    public void warning(String message);
-
-    public void error(String message);
-
-    public void error(String message, Throwable throwable);
 }

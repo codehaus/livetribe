@@ -18,6 +18,7 @@ package org.livetribe.boot.protocol;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.HashSet;
 
 
 /**
@@ -33,7 +34,7 @@ public class YouShould
     {
         this.version = version;
         this.bootClass = bootClass;
-        this.entries = Collections.unmodifiableSet(entries);
+        this.entries = Collections.unmodifiableSet(new HashSet<ProvisionEntry>(entries));
     }
 
     public long getVersion()

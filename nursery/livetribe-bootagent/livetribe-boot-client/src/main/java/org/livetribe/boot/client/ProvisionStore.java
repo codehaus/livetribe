@@ -38,7 +38,7 @@ public interface ProvisionStore
 
     void setNextProvisionDirective(ProvisionDirective provisionDirective) throws ProvisionStoreException;
 
-    void store(ProvisionEntry provisionEntry, InputStream stream) throws ProvisionStoreException;
+    void store(ProvisionEntry provisionEntry, InputStream inputStream) throws ProvisionStoreException;
 
     void prepareNext() throws ProvisionStoreException;
 
