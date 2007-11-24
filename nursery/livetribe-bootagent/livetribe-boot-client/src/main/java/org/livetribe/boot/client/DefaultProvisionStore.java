@@ -119,7 +119,11 @@ public class DefaultProvisionStore implements ProvisionStore
 
     public void prepareNext() throws ProvisionStoreException
     {
-        if (nextProvisionDirective.getVersion() < 1) throw new ProvisionStoreException("Next provision directive has bad version " + nextProvisionDirective.getVersion());
+        long currentVersion = currentProvisionDirective.getVersion();
+        long nextVersion = nextProvisionDirective.getVersion();
+
+        if (nextVersion < 1) throw new ProvisionStoreException("Next provision directive has bad version " + nextVersion);
+        if (nextVersion <= currentVersion) throw new ProvisionStoreException("Next provision directive has bad version " + nextVersion + " which is less than or equal to current " + nextVersion);
         if (nextProvisionDirective.getBootClass().trim().length() == 0) throw new ProvisionStoreException("Next provision directive has empty boot class");
 
         for (ProvisionEntry entry : nextProvisionDirective.getEntries())

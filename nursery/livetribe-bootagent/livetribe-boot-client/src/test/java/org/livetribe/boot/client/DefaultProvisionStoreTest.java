@@ -18,8 +18,11 @@ package org.livetribe.boot.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -62,7 +65,7 @@ public class DefaultProvisionStoreTest extends TestCase
         {
         }
 
-        store.setNextProvisionDirective(new ProvisionDirective(1234, "", Collections.<ProvisionEntry>emptySet()));
+        store.setNextProvisionDirective(new ProvisionDirective(454, "", Collections.<ProvisionEntry>emptySet()));
 
         try
         {
@@ -73,14 +76,14 @@ public class DefaultProvisionStoreTest extends TestCase
         {
         }
 
-        store.setNextProvisionDirective(new ProvisionDirective(1234, "good", Collections.<ProvisionEntry>emptySet()));
+        store.setNextProvisionDirective(new ProvisionDirective(454, "good", Collections.<ProvisionEntry>emptySet()));
 
         store.prepareNext();
 
         Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
-        entries.add(new ProvisionEntry("missing", 456));
+        entries.add(new ProvisionEntry("missing", 32));
 
-        store.setNextProvisionDirective(new ProvisionDirective(1234, "good", entries));
+        store.setNextProvisionDirective(new ProvisionDirective(455, "good", entries));
 
         try
         {
@@ -91,9 +94,43 @@ public class DefaultProvisionStoreTest extends TestCase
         {
         }
 
-        store.store(new ProvisionEntry("missing", 456), new ByteArrayInputStream(new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe}));
+        store.store(new ProvisionEntry("missing", 32), new ByteArrayInputStream(new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe}));
 
         store.prepareNext();
+
+        List<URL> classpath = store.getClasspath();
+
+        assertEquals(1, classpath.size());
+
+        InputStream inputStream = classpath.get(0).openConnection().getInputStream();
+        byte[] buffer = new byte[1024];
+
+        assertEquals(4, inputStream.read(buffer));
+        assertEquals((byte)0xca, buffer[0]);
+        assertEquals((byte)0xfe, buffer[1]);
+        assertEquals((byte)0xba, buffer[2]);
+        assertEquals((byte)0xbe, buffer[3]);
+
+        entries = new HashSet<ProvisionEntry>();
+        entries.add(new ProvisionEntry("nextgen", 21));
+
+        store.setNextProvisionDirective(new ProvisionDirective(456, "new", entries));
+
+        store.store(new ProvisionEntry("nextgen", 21), new ByteArrayInputStream(new byte[]{(byte) 0xba, (byte) 0xbe, (byte) 0xca, (byte) 0xfe}));
+
+        store.prepareNext();
+
+        classpath = store.getClasspath();
+
+        assertEquals(1, classpath.size());
+
+        inputStream = classpath.get(0).openConnection().getInputStream();
+
+        assertEquals(4, inputStream.read(buffer));
+        assertEquals((byte)0xba, buffer[0]);
+        assertEquals((byte)0xbe, buffer[1]);
+        assertEquals((byte)0xca, buffer[2]);
+        assertEquals((byte)0xfe, buffer[3]);
     }
 
     public void setUp()
