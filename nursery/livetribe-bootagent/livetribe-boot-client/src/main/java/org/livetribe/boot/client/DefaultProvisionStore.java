@@ -129,12 +129,12 @@ public class DefaultProvisionStore implements ProvisionStore
         for (ProvisionEntry entry : nextProvisionDirective.getEntries())
         {
             File directory = new File(resources, entry.getName());
-            if (!directory.exists()) throw new ProvisionStoreException("Resource directory" + directory + " does not exist");
-            else if (!directory.isDirectory()) throw new ProvisionStoreException("Resource directory " + directory + " is not a directory");
+            if (!directory.exists()) throw new MissingProvisionException(entry, "Resource directory" + directory + " does not exist");
+            else if (!directory.isDirectory()) throw new MissingProvisionException(entry, "Resource directory " + directory + " is not a directory");
 
             File resource = new File(directory, Long.toString(entry.getVersion()));
-            if (!resource.exists()) throw new ProvisionStoreException("Resource verison " + entry.getVersion() + " does not exist");
-            else if (!resource.isFile()) throw new ProvisionStoreException("Resource verison " + entry.getVersion() + " is not a file");
+            if (!resource.exists()) throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " does not exist");
+            else if (!resource.isFile()) throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " is not a file");
         }
 
         Set<ProvisionEntry> removeSet = new HashSet<ProvisionEntry>(currentProvisionDirective.getEntries());
