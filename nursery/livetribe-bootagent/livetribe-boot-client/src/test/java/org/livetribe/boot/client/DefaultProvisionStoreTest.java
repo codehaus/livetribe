@@ -54,7 +54,7 @@ public class DefaultProvisionStoreTest extends TestCase
         {
         }
 
-        store.setNextProvisionDirective(new ProvisionDirective(0, "good", Collections.<ProvisionEntry>emptySet()));
+        store.setNextProvisionDirective(new ProvisionDirective(0, "com.acme.boot.LifeCycleImpl", Collections.<ProvisionEntry>emptySet()));
 
         try
         {
@@ -76,14 +76,14 @@ public class DefaultProvisionStoreTest extends TestCase
         {
         }
 
-        store.setNextProvisionDirective(new ProvisionDirective(454, "good", Collections.<ProvisionEntry>emptySet()));
+        store.setNextProvisionDirective(new ProvisionDirective(454, "com.acme.boot.LifeCycleImpl", Collections.<ProvisionEntry>emptySet()));
 
         store.prepareNext();
 
         Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
         entries.add(new ProvisionEntry("missing", 32));
 
-        store.setNextProvisionDirective(new ProvisionDirective(455, "good", entries));
+        store.setNextProvisionDirective(new ProvisionDirective(455, "com.acme.boot.LifeCycleImpl", entries));
 
         try
         {
@@ -114,7 +114,7 @@ public class DefaultProvisionStoreTest extends TestCase
         entries = new HashSet<ProvisionEntry>();
         entries.add(new ProvisionEntry("nextgen", 21));
 
-        store.setNextProvisionDirective(new ProvisionDirective(456, "new", entries));
+        store.setNextProvisionDirective(new ProvisionDirective(456, "com.acme.boot.ServiceLifeCycle", entries));
 
         store.store(new ProvisionEntry("nextgen", 21), new ByteArrayInputStream(new byte[]{(byte) 0xba, (byte) 0xbe, (byte) 0xca, (byte) 0xfe}));
 
