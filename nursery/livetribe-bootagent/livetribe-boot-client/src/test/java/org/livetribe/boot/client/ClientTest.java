@@ -20,8 +20,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import junit.framework.TestCase;
 
-import org.livetribe.boot.server.Server;
-
 
 /**
  * @version $Revision$ $Date$
@@ -29,7 +27,6 @@ import org.livetribe.boot.server.Server;
 public class ClientTest extends TestCase
 {
     public final static int PORT = 12345;
-    private Server server;
     ScheduledThreadPoolExecutor executor;
 
     public void test() throws Exception
@@ -52,12 +49,10 @@ public class ClientTest extends TestCase
     public void setUp() throws Exception
     {
         executor = new ScheduledThreadPoolExecutor(5);
-        server = new Server(PORT, executor, new MockProvisionManager());
     }
 
     public void tearDown() throws Exception
     {
-        server.stop();
         executor.shutdown();
     }
 }
