@@ -54,6 +54,7 @@
         <module>livetribe-boot-api</module>
         <module>livetribe-boot-beep</module>
         <module>livetribe-boot-client</module>
+        <module>livetribe-boot-http</module>
         <module>livetribe-boot-mock</module>
         <module>livetribe-boot-protocol</module>
         <module>livetribe-boot-server</module>
@@ -85,6 +86,12 @@
                 <groupId>net.sf.beep4j</groupId>
                 <artifactId>beep4j</artifactId>
                 <version>0.1.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.ahc</groupId>
+                <artifactId>ahc</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
