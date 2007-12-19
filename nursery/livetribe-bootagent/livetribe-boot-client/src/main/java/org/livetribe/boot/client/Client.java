@@ -70,7 +70,7 @@ public class Client
 
     protected void setState(State state)
     {
-        listeners.stateChange(this.state, State.STARTED);
+        listeners.stateChange(this.state, state);
         this.state = state;
     }
 
@@ -117,6 +117,7 @@ public class Client
         synchronized (LOCK)
         {
             if (state == State.STOPPING || state == State.STOPPED) return;
+
             setState(State.STOPPING);
 
             scheduledThreadPoolExecutor.remove(handle);
