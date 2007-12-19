@@ -180,7 +180,19 @@ public class Client
 
     private void shutdown()
     {
-        if (lifeCycleInstance != null) lifeCycleInstance.stop();
+        if (lifeCycleInstance != null)
+        {
+            ClassLoader saved = Thread.currentThread().getContextClassLoader();
+            try
+            {
+                Thread.currentThread().setContextClassLoader(lifeCycleInstance.getClass().getClassLoader());
+                lifeCycleInstance.stop();
+            }
+            finally
+            {
+                Thread.currentThread().setContextClassLoader(saved);
+            }
+        }
         lifeCycleInstance = null;
     }
 
