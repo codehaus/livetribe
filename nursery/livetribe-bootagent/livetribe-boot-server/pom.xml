@@ -12,7 +12,36 @@
     <name>LiveTribe :: Boot Agent :: Server</name>
     <packaging>jar</packaging>
 
-    <build/>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.livetribe.boot</groupId>
+                                    <artifactId>livetribe-boot-mock</artifactId>
+                                    <version>${bootAgentVersion}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/test-classes/boot/resources/mock</outputDirectory>
+                                    <destFileName>1.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
 
@@ -22,8 +51,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.mina</groupId>
-            <artifactId>mina-core</artifactId>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

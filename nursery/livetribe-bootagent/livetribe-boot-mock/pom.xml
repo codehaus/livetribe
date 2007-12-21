@@ -22,11 +22,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.mina</groupId>
-            <artifactId>mina-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.livetribe.boot</groupId>
             <artifactId>livetribe-boot-api</artifactId>
         </dependency>
@@ -34,11 +29,6 @@
         <dependency>
             <groupId>org.livetribe.boot</groupId>
             <artifactId>livetribe-boot-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-server</artifactId>
         </dependency>
 
     </dependencies>

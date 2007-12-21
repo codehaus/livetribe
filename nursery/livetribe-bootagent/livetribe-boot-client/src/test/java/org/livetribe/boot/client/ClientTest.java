@@ -31,7 +31,6 @@ public class ClientTest extends TestCase
 
     public void test() throws Exception
     {
-        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(5);
         try
         {
             Client client = new Client(new MockBootServer(), executor, new MockProvisionStore());

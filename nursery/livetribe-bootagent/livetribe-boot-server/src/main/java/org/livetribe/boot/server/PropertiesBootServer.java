@@ -60,9 +60,9 @@ public class PropertiesBootServer implements BootServer
 
     public YouShould hello(String uuid, long version) throws BootServerException
     {
-        if (properties.contains(uuid + "." + VERSION_KEY)) return load(uuid + ".");
+        if (properties.containsKey(uuid + "." + VERSION_KEY)) return load(uuid + ".");
 
-        if (properties.contains(VERSION_KEY)) return load("");
+        if (properties.containsKey(VERSION_KEY)) return load("");
 
         throw new BootServerException("No directives found for " + uuid);
     }
@@ -77,7 +77,7 @@ public class PropertiesBootServer implements BootServer
         {
             String key = prefix + DIRECTIVE_BASE_KEY + count++;
 
-            if (!properties.contains(key)) break;
+            if (!properties.containsKey(key)) break;
 
             String[] tokens = ((String) properties.get(key)).split(":");
 
@@ -86,7 +86,7 @@ public class PropertiesBootServer implements BootServer
             entries.add(new ProvisionEntry(tokens[0], Long.valueOf(tokens[1])));
         }
 
-        if (properties.contains(prefix + REQUIRED_KEY)) return new YouMust(v, bootClass, entries, properties.contains(prefix + RESTART_KEY));
+        if (properties.containsKey(prefix + REQUIRED_KEY)) return new YouMust(v, bootClass, entries, properties.containsKey(prefix + RESTART_KEY));
         else return new YouShould(v, bootClass, entries);
     }
 
