@@ -17,9 +17,11 @@
 package org.livetribe.boot.server;
 
 import java.io.File;
+import java.io.InputStream;
 
 import junit.framework.TestCase;
 
+import org.livetribe.boot.protocol.BootServer;
 import org.livetribe.boot.protocol.ProvisionEntry;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
@@ -36,34 +38,45 @@ public class PropertiesBootServerTest extends TestCase
 
         assertTrue(bootDirectory.isDirectory());
 
-        PropertiesBootServer bootServer = new PropertiesBootServer(bootDirectory);
+        BootServer bootServer = new PropertiesBootServer(bootDirectory);
 
         YouShould directive = bootServer.hello("", 6);
 
         assertNotNull(directive);
         assertEquals(10, directive.getVersion());
-        assertEquals("org.livetribe.boot.mock.MockLifecycle", directive.getBootClass());
+        assertEquals("com.acme.mock.c.MockLifecycle", directive.getBootClass());
         assertFalse(directive instanceof YouMust);
-        assertEquals(1, directive.getEntries().size());
+        assertEquals(3, directive.getEntries().size());
 
-        ProvisionEntry entry = directive.getEntries().iterator().next();
-
-        assertNotNull(entry);
-        assertEquals("mock", entry.getName());
-        assertEquals(1, entry.getVersion());
+        for (ProvisionEntry entry : directive.getEntries())
+        {
+            long count = 0;
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
+            assertNotNull(inputStream);
+            while ((len = inputStream.read()) != -1) count += len;
+            assertTrue(count > 0);
+        }
 
         directive = bootServer.hello("special", 2);
 
         assertNotNull(directive);
         assertEquals(5, directive.getVersion());
-        assertEquals("org.livetribe.boot.mock.MockLifecycle", directive.getBootClass());
+        assertEquals("com.acme.mock.c.MockLifecycle", directive.getBootClass());
         assertTrue(directive instanceof YouMust);
-        assertEquals(1, directive.getEntries().size());
+        assertEquals(3, directive.getEntries().size());
 
-        entry = directive.getEntries().iterator().next();
+        for (ProvisionEntry entry : directive.getEntries())
+        {
+            long count = 0;
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
+            assertNotNull(inputStream);
+            while ((len = inputStream.read()) != -1) count += len;
+            assertTrue(count > 0);
+        }
 
-        assertNotNull(entry);
-        assertEquals("mock", entry.getName());
-        assertEquals(1, entry.getVersion());
     }
 }

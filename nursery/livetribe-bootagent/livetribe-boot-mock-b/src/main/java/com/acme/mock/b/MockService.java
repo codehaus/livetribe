@@ -14,36 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.mock;
+package com.acme.mock.b;
 
-import org.livetribe.boot.LifeCycle;
+import com.acme.mock.Service;
 
 
 /**
  * @version $Revision$ $Date$
  */
-public class MockLifecycle implements LifeCycle
+public class MockService implements Service
 {
-    private static long started = 0;
-    private static long stopped = 0;
-
-    public static long getStarted()
+    public String test(String argument)
     {
-        return started;
-    }
-
-    public static long getStopped()
-    {
-        return stopped;
-    }
-
-    public void start()
-    {
-        started++;
-    }
-
-    public void stop()
-    {
-        stopped++;
+        return argument + " mocked by B";
     }
 }

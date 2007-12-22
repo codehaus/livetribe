@@ -56,6 +56,9 @@
         <module>livetribe-boot-client</module>
         <module>livetribe-boot-http</module>
         <module>livetribe-boot-mock</module>
+        <module>livetribe-boot-mock-a</module>
+        <module>livetribe-boot-mock-b</module>
+        <module>livetribe-boot-mock-c</module>
         <module>livetribe-boot-protocol</module>
         <module>livetribe-boot-server</module>
     </modules>
@@ -115,6 +118,24 @@
             <dependency>
                 <groupId>org.livetribe.boot</groupId>
                 <artifactId>livetribe-boot-mock</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-mock-a</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-mock-b</artifactId>
+                <version>${bootAgentVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-mock-c</artifactId>
                 <version>${bootAgentVersion}</version>
             </dependency>
 

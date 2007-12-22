@@ -96,7 +96,7 @@ public class PropertiesBootServer implements BootServer
 
         if (!directory.exists() || !directory.isDirectory()) throw new BootServerException("Directory for resource does not exist");
 
-        File resource = new File(directory, Long.toString(version));
+        File resource = new File(directory, Long.toString(version) + ".jar");
 
         if (!resource.exists() || !resource.isFile()) throw new BootServerException("Version for resource does not exist");
 
