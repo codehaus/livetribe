@@ -32,4 +32,24 @@ public abstract class FutureReplyListener<V> implements ReplyListener
     {
         owner.setValue(value);
     }
+
+    public void receiveANS(Message message)
+    {
+        throw new UnsupportedOperationException("Should not receive an ANS");
+    }
+
+    public void receiveNUL()
+    {
+        throw new UnsupportedOperationException("Should not receive an NUL");
+    }
+
+    public void receiveERR(Message message)
+    {
+        throw new UnsupportedOperationException("Should not receive a ERR");
+    }
+
+    public void receiveRPY(Message message)
+    {
+        throw new UnsupportedOperationException("Should not receive an RPY");
+    }
 }
