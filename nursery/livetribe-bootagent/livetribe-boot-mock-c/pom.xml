@@ -31,6 +31,12 @@
             <artifactId>livetribe-boot-mock-a</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock-b</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

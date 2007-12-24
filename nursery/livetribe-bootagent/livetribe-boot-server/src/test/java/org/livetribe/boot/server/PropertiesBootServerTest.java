@@ -55,7 +55,7 @@ public class PropertiesBootServerTest extends TestCase
             byte[] buffer = new byte[1024];
             InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
             assertNotNull(inputStream);
-            while ((len = inputStream.read()) != -1) count += len;
+            while ((len = inputStream.read(buffer)) != -1) count += len;
             assertTrue(count > 0);
         }
 
@@ -74,7 +74,7 @@ public class PropertiesBootServerTest extends TestCase
             byte[] buffer = new byte[1024];
             InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
             assertNotNull(inputStream);
-            while ((len = inputStream.read()) != -1) count += len;
+            while ((len = inputStream.read(buffer)) != -1) count += len;
             assertTrue(count > 0);
         }
 

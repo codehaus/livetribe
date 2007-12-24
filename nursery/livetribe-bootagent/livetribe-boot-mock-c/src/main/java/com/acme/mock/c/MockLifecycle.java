@@ -16,6 +16,7 @@
  */
 package com.acme.mock.c;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.acme.mock.Service;
@@ -49,19 +50,19 @@ public class MockLifecycle implements LifeCycle
             service = (Service) Class.forName("com.acme.mock.b.MockService").newInstance();
             started = "test mocked by B".equals(service.test("test"));
         }
-        catch (InstantiationException e)
+        catch (InstantiationException ie)
         {
-            logger.severe("Unable to instantiate com.acme.mock.b.MockService");
+            logger.log(Level.SEVERE, "Unable to instantiate com.acme.mock.b.MockService", ie);
             started = false;
         }
-        catch (IllegalAccessException e)
+        catch (IllegalAccessException iae)
         {
-            logger.severe("Unable to instantiate com.acme.mock.b.MockService");
+            logger.log(Level.SEVERE, "Unable to instantiate com.acme.mock.b.MockService", iae);
             started = false;
         }
-        catch (ClassNotFoundException e)
+        catch (ClassNotFoundException cnfe)
         {
-            logger.severe("Unable to instantiate com.acme.mock.b.MockService");
+            logger.log(Level.SEVERE, "Unable to instantiate com.acme.mock.b.MockService", cnfe);
             started = false;
         }
 
@@ -71,10 +72,17 @@ public class MockLifecycle implements LifeCycle
     public void stop()
     {
         logger.entering(className, "stop");
+
         if (!started)
         {
             logger.severe("Not started");
         }
+        else
+        {
+            started = false;
+            service = null;
+        }
+
         logger.exiting(className, "stop");
     }
 }
