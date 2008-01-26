@@ -33,6 +33,11 @@ public abstract class FutureReplyListener<V> implements ReplyListener
         owner.setValue(value);
     }
 
+    final protected void setThrowable(Throwable throwable)
+    {
+        owner.setThrowable(throwable);
+    }
+
     public void receiveANS(Message message)
     {
         throw new UnsupportedOperationException("Should not receive an ANS");

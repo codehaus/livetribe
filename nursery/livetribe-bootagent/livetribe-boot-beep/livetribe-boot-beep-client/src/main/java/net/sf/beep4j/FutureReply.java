@@ -145,4 +145,9 @@ public class FutureReply<V> implements Future<V>, ReplyListener
     {
         this.value = value;
     }
+
+    protected final void setThrowable(Throwable throwable)
+    {
+        this.throwable = throwable;
+    }
 }

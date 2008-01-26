@@ -28,11 +28,29 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.livetribe.boot</groupId>
-                                    <artifactId>livetribe-boot-mock</artifactId>
+                                    <artifactId>livetribe-boot-mock-a</artifactId>
                                     <version>${bootAgentVersion}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>target/test-classes/boot/resources/mock</outputDirectory>
+                                    <outputDirectory>target/test-classes/boot/resources/mock-a</outputDirectory>
+                                    <destFileName>1.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.livetribe.boot</groupId>
+                                    <artifactId>livetribe-boot-mock-b</artifactId>
+                                    <version>${bootAgentVersion}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/test-classes/boot/resources/mock-b</outputDirectory>
+                                    <destFileName>1.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.livetribe.boot</groupId>
+                                    <artifactId>livetribe-boot-mock-c</artifactId>
+                                    <version>${bootAgentVersion}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/test-classes/boot/resources/mock-c</outputDirectory>
                                     <destFileName>1.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
@@ -57,7 +75,19 @@
 
         <dependency>
             <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-mock</artifactId>
+            <artifactId>livetribe-boot-mock-a</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock-b</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock-c</artifactId>
             <scope>test</scope>
         </dependency>
 

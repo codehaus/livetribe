@@ -47,7 +47,7 @@ public class ServerSessionHandler extends SessionHandlerAdapter
     {
         if (startChannelRequest.hasProfile(CMD_PROFILE))
         {
-            startChannelRequest.selectProfile(startChannelRequest.getProfile(CMD_PROFILE), new ServeChannelHandler(bootServer));
+            startChannelRequest.selectProfile(startChannelRequest.getProfile(CMD_PROFILE), new ServerChannelHandler(bootServer));
         }
     }
 }

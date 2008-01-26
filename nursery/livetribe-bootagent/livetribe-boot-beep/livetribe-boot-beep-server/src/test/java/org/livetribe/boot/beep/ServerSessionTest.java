@@ -17,6 +17,7 @@
 package org.livetribe.boot.beep;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.SocketAddress;
 
 import junit.framework.TestCase;
@@ -24,8 +25,10 @@ import net.sf.beep4j.transport.mina.MinaListener;
 import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.transport.vmpipe.VmPipeAcceptor;
 import org.apache.mina.transport.vmpipe.VmPipeAddress;
-import org.apache.mina.transport.socket.nio.SocketAcceptor;
 
+import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.YouMust;
+import org.livetribe.boot.protocol.YouShould;
 import org.livetribe.boot.server.PropertiesBootServer;
 
 
@@ -41,6 +44,26 @@ public class ServerSessionTest extends TestCase
         assertTrue(bootDirectory.isDirectory());
 
         PropertiesBootServer bootServer = new PropertiesBootServer(bootDirectory);
+
+        YouShould directive = bootServer.hello("", 6);
+
+        assertNotNull(directive);
+        assertEquals(10, directive.getVersion());
+        assertEquals("com.acme.mock.c.MockLifecycle", directive.getBootClass());
+        assertFalse(directive instanceof YouMust);
+        assertEquals(3, directive.getEntries().size());
+
+        for (ProvisionEntry entry : directive.getEntries())
+        {
+            long count = 0;
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
+            assertNotNull(inputStream);
+            while ((len = inputStream.read(buffer)) != -1) count += len;
+            assertTrue(count > 0);
+        }
+
         ServerSessionHandlerFactory handlerFactory = new ServerSessionHandlerFactory(bootServer);
 
         SocketAddress address = new VmPipeAddress(12345);
