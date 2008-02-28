@@ -25,6 +25,7 @@ import java.util.Set;
 public class YouMust extends YouShould
 {
     private final boolean restart;
+    private transient String string;
 
     public YouMust(long version, String bootClass, Set<ProvisionEntry> entries, boolean restart)
     {
@@ -35,5 +36,34 @@ public class YouMust extends YouShould
     public boolean isRestart()
     {
         return restart;
+    }
+
+    @Override
+    public String toString()
+    {
+        if (string == null)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.append("MUST ");
+            builder.append(getVersion());
+            builder.append(" ");
+            builder.append(getBootClass());
+            builder.append(" ");
+            builder.append((restart ? " RESTART" : "NO-RESTART"));
+
+            builder.append(" [");
+            boolean first = true;
+            for (ProvisionEntry entry : getEntries())
+            {
+                if (first) first = false;
+                else builder.append(", ");
+
+                builder.append(entry);
+            }
+            builder.append("]");
+
+            string = builder.toString();
+        }
+        return string;
     }
 }

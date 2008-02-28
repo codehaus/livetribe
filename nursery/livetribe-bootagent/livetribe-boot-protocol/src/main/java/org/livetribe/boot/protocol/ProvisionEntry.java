@@ -23,9 +23,12 @@ public class ProvisionEntry
 {
     private final String name;
     private final long version;
+    private transient String string;
 
     public ProvisionEntry(String name, long version)
     {
+        if (name == null) throw new IllegalArgumentException("Name cannot be null");
+
         this.name = name;
         this.version = version;
     }
@@ -58,5 +61,15 @@ public class ProvisionEntry
         result = name.hashCode();
         result = 31 * result + (int) (version ^ (version >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        if (string == null)
+        {
+            string = name + ":" + version;
+        }
+        return string;
     }
 }

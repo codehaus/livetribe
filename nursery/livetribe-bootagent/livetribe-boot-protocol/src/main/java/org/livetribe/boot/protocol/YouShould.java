@@ -17,8 +17,8 @@
 package org.livetribe.boot.protocol;
 
 import java.util.Collections;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -29,9 +29,13 @@ public class YouShould
     private final long version;
     private final String bootClass;
     private final Set<ProvisionEntry> entries;
+    private transient String string;
 
     public YouShould(long version, String bootClass, Set<ProvisionEntry> entries)
     {
+        if (bootClass == null) throw new IllegalArgumentException("Boot class cannot be null");
+        if (entries == null) throw new IllegalArgumentException("Provision entries cannot be null");
+
         this.version = version;
         this.bootClass = bootClass;
         this.entries = Collections.unmodifiableSet(new HashSet<ProvisionEntry>(entries));
@@ -50,5 +54,52 @@ public class YouShould
     public Set<ProvisionEntry> getEntries()
     {
         return entries;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        YouShould youShould = (YouShould) o;
+
+        return version == youShould.version && bootClass.equals(youShould.bootClass);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result;
+        result = (int) (version ^ (version >>> 32));
+        result = 31 * result + bootClass.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        if (string == null)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.append("SHOULD ");
+            builder.append(version);
+            builder.append(" ");
+            builder.append(bootClass);
+
+            builder.append(" [");
+            boolean first = true;
+            for (ProvisionEntry entry : entries)
+            {
+                if (first) first = false;
+                else builder.append(", ");
+
+                builder.append(entry);
+            }
+            builder.append("]");
+
+            string = builder.toString();
+        }
+        return string;
     }
 }

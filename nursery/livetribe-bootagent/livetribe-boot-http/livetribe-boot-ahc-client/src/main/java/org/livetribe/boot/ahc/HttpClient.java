@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.http;
+package org.livetribe.boot.ahc;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -50,6 +50,7 @@ public class HttpClient implements BootServer
 {
     private final static String className = HttpClient.class.getName();
     private final static Logger logger = Logger.getLogger(className);
+    private final AsyncHttpClient ahc = new AsyncHttpClient();
     private final URL url;
     private int timeout;
 
@@ -78,7 +79,6 @@ public class HttpClient implements BootServer
         try
         {
             URL hello = new URL(url, "hello/" + uuid + "/" + version);
-            AsyncHttpClient ahc = new AsyncHttpClient();
 
             ResponseFuture rf = ahc.sendRequest(new HttpRequestMessage(hello, null));
 
@@ -163,7 +163,6 @@ public class HttpClient implements BootServer
         try
         {
             URL hello = new URL(url, "provide/" + name + "/" + version);
-            AsyncHttpClient ahc = new AsyncHttpClient();
 
             ResponseFuture rf = ahc.sendRequest(new HttpRequestMessage(hello, null));
 
