@@ -49,6 +49,7 @@ public class ScriptEngineManager
         this(Thread.currentThread().getContextClassLoader());
     }
 
+    @SuppressWarnings({ "EmptyCatchBlock" })
     public ScriptEngineManager(ClassLoader classLoader)
     {
         try
@@ -68,7 +69,7 @@ public class ScriptEngineManager
                         {
                             ScriptEngineFactory factory = (ScriptEngineFactory) object;
 
-                            byName.put(factory.getEngineName(), factory);
+                            for (String name : factory.getNames()) byName.put(name, factory);
 
                             for (String extension : factory.getExtensions()) byExtension.put(extension, factory);
 
@@ -181,6 +182,7 @@ public class ScriptEngineManager
         registeredByExtension.put(extension, factory);
     }
 
+    @SuppressWarnings({ "EmptyCatchBlock" })
     private Iterable<String> getClassNames(URL url)
     {
         Stack<String> stack = new Stack<String>();
