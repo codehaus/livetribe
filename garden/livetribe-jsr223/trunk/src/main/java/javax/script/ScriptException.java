@@ -32,7 +32,7 @@ public class ScriptException extends Exception
 
     public ScriptException(Exception e)
     {
-        super(null, e);
+        super(e.getMessage(), e);
 
         this.fileName = null;
         this.lineNumber = -1;
