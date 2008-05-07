@@ -179,7 +179,7 @@
         <repository>
             <id>central</id>
             <name>Maven Central Repository</name>
-            <url>http://www.ibiblio.org/maven2</url>
+            <url>http://repo.exist.com/maven2</url>
         </repository>
         <repository>
             <id>snapshots</id>
