@@ -13,10 +13,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>livetribe-boot-mock</module>
-        <module>livetribe-boot-mock-a</module>
-        <module>livetribe-boot-mock-b</module>
-        <module>livetribe-boot-mock-c</module>
+        <module>mock</module>
+        <module>mock-a</module>
+        <module>mock-b</module>
+        <module>mock-c</module>
     </modules>
 
 </project>

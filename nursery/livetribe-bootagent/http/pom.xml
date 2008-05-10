@@ -13,8 +13,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>livetribe-boot-ahc-client</module>
-        <module>livetribe-boot-http-server</module>
+        <module>ahc-client</module>
+        <module>server</module>
     </modules>
 
 </project>

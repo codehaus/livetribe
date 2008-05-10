@@ -13,8 +13,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>livetribe-boot-beep-client</module>
-        <module>livetribe-boot-beep-server</module>
+        <module>client</module>
+        <module>server</module>
     </modules>
 
 </project>
