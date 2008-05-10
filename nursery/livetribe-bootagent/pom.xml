@@ -100,9 +100,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.ahc</groupId>
-                <artifactId>ahc</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <groupId>org.apache.asyncweb</groupId>
+                <artifactId>asyncweb-client</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>

@@ -31,11 +31,10 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.ahc.AsyncHttpClient;
-import org.apache.ahc.codec.HttpRequestMessage;
-import org.apache.ahc.codec.HttpResponseMessage;
-import org.apache.ahc.codec.ResponseFuture;
-
+import org.apache.asyncweb.client.AsyncHttpClient;
+import org.apache.asyncweb.client.codec.HttpRequestMessage;
+import org.apache.asyncweb.client.codec.HttpResponseMessage;
+import org.apache.asyncweb.client.codec.ResponseFuture;
 import org.livetribe.boot.protocol.BootServer;
 import org.livetribe.boot.protocol.BootServerException;
 import org.livetribe.boot.protocol.ProvisionEntry;
@@ -74,7 +73,7 @@ public class HttpClient implements BootServer
 
     public YouShould hello(String uuid, long version) throws BootServerException
     {
-        if (logger.isLoggable(Level.FINER)) logger.entering(className, "hello", new Object[]{uuid, version});
+        if (logger.isLoggable(Level.FINER)) logger.entering(className, "hello", new Object[]{ uuid, version });
 
         try
         {
@@ -158,7 +157,7 @@ public class HttpClient implements BootServer
 
     public InputStream pleaseProvide(String name, long version) throws BootServerException
     {
-        if (logger.isLoggable(Level.FINER)) logger.entering(className, "pleaseProvide", new Object[]{name, version});
+        if (logger.isLoggable(Level.FINER)) logger.entering(className, "pleaseProvide", new Object[]{ name, version });
 
         try
         {

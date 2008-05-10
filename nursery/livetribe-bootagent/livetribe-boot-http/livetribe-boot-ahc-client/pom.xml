@@ -17,8 +17,8 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.ahc</groupId>
-            <artifactId>ahc</artifactId>
+            <groupId>org.apache.asyncweb</groupId>
+            <artifactId>asyncweb-client</artifactId>
         </dependency>
 
         <dependency>
