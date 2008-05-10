@@ -51,16 +51,13 @@
     </build>
 
     <modules>
-        <module>livetribe-boot-api</module>
-        <module>livetribe-boot-beep</module>
-        <module>livetribe-boot-client</module>
-        <module>livetribe-boot-http</module>
-        <module>livetribe-boot-mock</module>
-        <module>livetribe-boot-mock-a</module>
-        <module>livetribe-boot-mock-b</module>
-        <module>livetribe-boot-mock-c</module>
-        <module>livetribe-boot-protocol</module>
-        <module>livetribe-boot-server</module>
+        <module>api</module>
+        <module>beep</module>
+        <module>client</module>
+        <module>http</module>
+        <module>mock</module>
+        <module>protocol</module>
+        <module>server</module>
     </modules>
 
     <properties>
