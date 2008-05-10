@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.livetribe.boot</groupId>
+        <artifactId>livetribe-boot-root</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>livetribe-boot-mock-root</artifactId>
+    <name>LiveTribe :: Mock</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>livetribe-boot-mock</module>
+        <module>livetribe-boot-mock-a</module>
+        <module>livetribe-boot-mock-b</module>
+        <module>livetribe-boot-mock-c</module>
+    </modules>
+
+</project>
