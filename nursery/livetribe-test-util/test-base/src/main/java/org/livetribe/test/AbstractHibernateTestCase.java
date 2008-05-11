@@ -23,16 +23,19 @@ import org.hibernate.classic.Session;
 import org.hibernate.context.ManagedSessionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.Before;
+import org.junit.After;
 
 
 /**
  * @version $Revision$ $Date$
  */
-public abstract class AbstractHibernateTestCase extends TestCase
+public abstract class AbstractHibernateTestCase
 {
     private ClassPathXmlApplicationContext applicationContext;
     private SessionFactory sessionFactory;
 
+    @Before
     protected void setUp()
     {
         applicationContext = new ClassPathXmlApplicationContext(getApplicationContextResources());
@@ -85,6 +88,7 @@ public abstract class AbstractHibernateTestCase extends TestCase
         }
     }
 
+    @After
     protected void tearDown()
     {
         close();
