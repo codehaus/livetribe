@@ -38,6 +38,12 @@
             <artifactId>livetribe-boot-protocol</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.livetribe.test</groupId>
+            <artifactId>livetribe-test-base</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

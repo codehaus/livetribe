@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>livetribe-boot-mock-root</artifactId>
-    <name>LiveTribe :: Mock</name>
+    <name>LiveTribe :: Boot Agent :: Mock</name>
     <packaging>pom</packaging>
 
     <modules>

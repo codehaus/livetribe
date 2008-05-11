@@ -35,6 +35,7 @@ import org.apache.asyncweb.client.AsyncHttpClient;
 import org.apache.asyncweb.client.codec.HttpRequestMessage;
 import org.apache.asyncweb.client.codec.HttpResponseMessage;
 import org.apache.asyncweb.client.codec.ResponseFuture;
+
 import org.livetribe.boot.protocol.BootServer;
 import org.livetribe.boot.protocol.BootServerException;
 import org.livetribe.boot.protocol.ProvisionEntry;
@@ -51,7 +52,7 @@ public class HttpClient implements BootServer
     private final static Logger logger = Logger.getLogger(className);
     private final AsyncHttpClient ahc = new AsyncHttpClient();
     private final URL url;
-    private int timeout;
+    private int timeout = 60;
 
     public HttpClient(URL url)
     {
@@ -73,7 +74,7 @@ public class HttpClient implements BootServer
 
     public YouShould hello(String uuid, long version) throws BootServerException
     {
-        if (logger.isLoggable(Level.FINER)) logger.entering(className, "hello", new Object[]{ uuid, version });
+        if (logger.isLoggable(Level.FINER)) logger.entering(className, "hello", new Object[]{uuid, version});
 
         try
         {
@@ -89,29 +90,27 @@ public class HttpClient implements BootServer
             if (line.length() == 0) throw new BootServerException("Empty message");
 
             String[] tokens = line.split(" ");
-            long directedVersion = Long.parseLong(tokens[1]);
-            String bootClass = tokens[2];
+            long directedVersion = Long.parseLong(tokens[2]);
+            String bootClass = tokens[1];
+
             Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
+            int numEntries = Integer.parseInt(tokens[2]);
+            for (int i = 0; i < numEntries; i++)
+            {
+                line = reader.readLine();
+                String[] t = line.split(" ");
+
+                entries.add(new ProvisionEntry(t[0], Long.parseLong(t[1])));
+            }
 
             YouShould directive;
             if ("MUST".equals(tokens[0]))
             {
-                directive = new YouMust(directedVersion, bootClass, entries, Boolean.parseBoolean(tokens[4]));
+                directive = new YouMust(directedVersion, bootClass, entries, Boolean.parseBoolean(tokens[3]));
             }
             else
             {
                 directive = new YouShould(directedVersion, bootClass, entries);
-            }
-
-            int numEntries = Integer.parseInt(tokens[3]);
-            for (int i = 0; i < numEntries; i++)
-            {
-                line = reader.readLine();
-                tokens = line.split(" ");
-
-                ProvisionEntry entry = new ProvisionEntry(tokens[0], Long.parseLong(tokens[1]));
-
-                entries.add(entry);
             }
 
             logger.exiting(className, "hello", directive);
@@ -157,7 +156,7 @@ public class HttpClient implements BootServer
 
     public InputStream pleaseProvide(String name, long version) throws BootServerException
     {
-        if (logger.isLoggable(Level.FINER)) logger.entering(className, "pleaseProvide", new Object[]{ name, version });
+        if (logger.isLoggable(Level.FINER)) logger.entering(className, "pleaseProvide", new Object[]{name, version});
 
         try
         {
