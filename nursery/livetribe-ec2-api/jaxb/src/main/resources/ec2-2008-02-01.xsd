@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://ec2.amazonaws.com/doc/2008-02-01"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:ec2="http://ec2.amazonaws.com/doc/2008-02-01"
+        elementFormDefault="qualified">
+
+    <annotation>
+        <documentation xml:lang="en">
+
+        </documentation>
+    </annotation>
+
+    <!-- RegisterImage request definitions -->
+
+
+    <element name="RegisterImage" type="ec2:RegisterImageType"/>
+
+    <complexType name="RegisterImageType">
+        <sequence>
+            <element name="imageLocation" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- RegisterImage response definitions -->
+
+    <element name="RegisterImageResponse" type="ec2:RegisterImageResponseType"/>
+
+    <complexType name="RegisterImageResponseType">
+        <sequence>
+            <element name="imageId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- DeregisterImage request definitions -->
+
+    <element name="DeregisterImage" type="ec2:DeregisterImageType"/>
+
+    <complexType name="DeregisterImageType">
+        <sequence>
+            <element name="imageId" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- DeregisterImage response definitions -->
+
+    <element name="DeregisterImageResponse" type="ec2:DeregisterImageResponseType"/>
+
+    <complexType name="DeregisterImageResponseType">
+        <sequence>
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+
+    <!-- CreateKeyPair request definitions -->
+
+    <element name="CreateKeyPair" type="ec2:CreateKeyPairType"/>
+
+    <complexType name="CreateKeyPairType">
+        <sequence>
+            <element name="keyName" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- CreateKeyPair response definitions -->
+
+    <element name="CreateKeyPairResponse" type="ec2:CreateKeyPairResponseType"/>
+
+    <complexType name="CreateKeyPairResponseType">
+        <sequence>
+            <element name="keyName" type="string"/>
+            <element name="keyFingerprint" type="string"/>
+            <element name="keyMaterial" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- DeleteKeyPair request definitions -->
+
+    <element name="DeleteKeyPair" type="ec2:DeleteKeyPairType"/>
+
+
+    <complexType name="DeleteKeyPairType">
+        <sequence>
+            <element name="keyName" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- DeleteKeyPair response definitions -->
+
+    <element name="DeleteKeyPairResponse" type="ec2:DeleteKeyPairResponseType"/>
+
+    <complexType name="DeleteKeyPairResponseType">
+        <sequence>
+
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeKeyPairs Request definitions -->
+
+    <element name="DescribeKeyPairs" type="ec2:DescribeKeyPairsType"/>
+
+    <complexType name="DescribeKeyPairsType">
+        <sequence>
+            <element name="keySet" type="ec2:DescribeKeyPairsInfoType"/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name="DescribeKeyPairsInfoType">
+        <sequence>
+            <element name="item" type="ec2:DescribeKeyPairsItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeKeyPairsItemType">
+        <sequence>
+            <element name="keyName" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- DescribeKeyPairs Response definitions -->
+
+    <element name="DescribeKeyPairsResponse" type="ec2:DescribeKeyPairsResponseType"/>
+
+    <complexType name="DescribeKeyPairsResponseType">
+        <sequence>
+            <element name="keySet" type="ec2:DescribeKeyPairsResponseInfoType"/>
+        </sequence>
+    </complexType>
+
+
+    <complexType name="DescribeKeyPairsResponseInfoType">
+        <sequence>
+            <element name="item" type="ec2:DescribeKeyPairsResponseItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeKeyPairsResponseItemType">
+        <sequence>
+            <element name="keyName" type="string"/>
+            <element name="keyFingerprint" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- RunInstances request definitions -->
+
+    <element name="RunInstances" type="ec2:RunInstancesType"/>
+
+    <complexType name="RunInstancesType">
+        <sequence>
+            <element name="imageId" type="string"/>
+            <element name="minCount" type="int"/>
+            <element name="maxCount" type="int"/>
+
+            <element name="keyName" type="string" minOccurs="0"/>
+            <element name="groupSet" type="ec2:GroupSetType"/>
+            <element name="additionalInfo" type="string" minOccurs="0"/>
+            <element name="userData" type="ec2:UserDataType" minOccurs="0" maxOccurs="1"/>
+            <element name="addressingType" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="instanceType" type="string"/>
+            <element name="placement" type="ec2:PlacementRequestType" minOccurs="0" maxOccurs="1"/>
+            <element name="kernelId" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="ramdiskId" type="string" minOccurs="0" maxOccurs="1"/>
+
+            <element name="blockDeviceMapping" type="ec2:BlockDeviceMappingType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="GroupSetType">
+        <sequence>
+            <element name="item" type="ec2:GroupItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="GroupItemType">
+
+        <sequence>
+            <element name="groupId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="UserDataType" mixed="true">
+        <sequence>
+            <element name="data" type="string"/>
+        </sequence>
+        <attribute name="version" type="string" use="required" fixed="1.0"/>
+
+        <attribute name="encoding" type="string" use="required" fixed="base64"/>
+    </complexType>
+
+    <complexType name="BlockDeviceMappingType">
+        <sequence>
+            <element name="item" type="ec2:BlockDeviceMappingItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="BlockDeviceMappingItemType">
+        <sequence>
+            <element name="virtualName" type="string"/>
+            <element name="deviceName" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="PlacementRequestType">
+        <sequence>
+            <element name="availabilityZone" type="string" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <!-- RunInstances response definitions -->
+
+
+    <element name="RunInstancesResponse" type="ec2:ReservationInfoType"/>
+
+    <complexType name="ReservationInfoType">
+        <sequence>
+            <element name="reservationId" type="string"/>
+            <element name="ownerId" type="string"/>
+            <element name="groupSet" type="ec2:GroupSetType"/>
+            <element name="instancesSet" type="ec2:RunningInstancesSetType"/>
+        </sequence>
+    </complexType>
+
+
+    <complexType name="RunningInstancesSetType">
+        <sequence>
+            <element name="item" type="ec2:RunningInstancesItemType" minOccurs="1" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="RunningInstancesItemType">
+        <sequence>
+            <element name="instanceId" type="string"/>
+            <element name="imageId" type="string"/>
+
+            <element name="instanceState" type="ec2:InstanceStateType"/>
+            <element name="privateDnsName" type="string"/>
+            <element name="dnsName" type="string"/>
+            <element name="reason" type="string" minOccurs="0"/>
+            <element name="keyName" type="string" minOccurs="0"/>
+            <element name="amiLaunchIndex" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="productCodes" type="ec2:ProductCodesSetType" minOccurs="0" maxOccurs="1"/>
+            <element name="instanceType" type="string"/>
+            <element name="launchTime" type="dateTime"/>
+
+            <element name="placement" type="ec2:PlacementResponseType"/>
+            <element name="kernelId" type="string" minOccurs="0"/>
+            <element name="ramdiskId" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="PlacementResponseType">
+        <sequence>
+            <element name="availabilityZone" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- GetConsoleOutput request definitions -->
+
+
+    <element name="GetConsoleOutput" type="ec2:GetConsoleOutputType"/>
+
+    <complexType name="GetConsoleOutputType">
+        <sequence>
+            <element name="instanceId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- GetConsoleOutput response definitions -->
+
+    <element name="GetConsoleOutputResponse" type="ec2:GetConsoleOutputResponseType"/>
+
+    <complexType name="GetConsoleOutputResponseType">
+
+        <sequence>
+            <element name="instanceId" type="string"/>
+            <element name="timestamp" type="dateTime"/>
+            <element name="output" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- TerminateInstances request definitions -->
+
+    <element name="TerminateInstances" type="ec2:TerminateInstancesType"/>
+
+    <complexType name="TerminateInstancesType">
+
+        <sequence>
+            <element name="instancesSet" type="ec2:TerminateInstancesInfoType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TerminateInstancesInfoType">
+        <sequence>
+            <element name="item" type="ec2:TerminateInstancesItemType" minOccurs="1" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+
+    <complexType name="TerminateInstancesItemType">
+        <sequence>
+            <element name="instanceId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- TerminateInstances response definitions -->
+
+    <element name="TerminateInstancesResponse" type="ec2:TerminateInstancesResponseType"/>
+
+    <complexType name="TerminateInstancesResponseType">
+        <sequence>
+
+            <element name="instancesSet" type="ec2:TerminateInstancesResponseInfoType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TerminateInstancesResponseInfoType">
+        <sequence>
+            <element name="item" type="ec2:TerminateInstancesResponseItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TerminateInstancesResponseItemType">
+
+        <sequence>
+            <element name="instanceId" type="string"/>
+            <element name="shutdownState" type="ec2:InstanceStateType"/>
+            <element name="previousState" type="ec2:InstanceStateType"/>
+        </sequence>
+    </complexType>
+
+    <!-- RebootInstances request definitions -->
+    <element name="RebootInstances" type="ec2:RebootInstancesType"/>
+
+    <complexType name="RebootInstancesType">
+
+        <sequence>
+            <element name="instancesSet" type="ec2:RebootInstancesInfoType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="RebootInstancesInfoType">
+        <sequence>
+            <element name="item" type="ec2:RebootInstancesItemType" minOccurs="1" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+
+    <complexType name="RebootInstancesItemType">
+        <sequence>
+            <element name="instanceId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- RebootInstances response definitions -->
+
+    <element name="RebootInstancesResponse" type="ec2:RebootInstancesResponseType"/>
+
+    <complexType name="RebootInstancesResponseType">
+        <sequence>
+
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeInstances Request definitions -->
+
+    <element name="DescribeInstances" type="ec2:DescribeInstancesType"/>
+
+    <complexType name="DescribeInstancesType">
+        <sequence>
+            <element name="instancesSet" type="ec2:DescribeInstancesInfoType"/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name="DescribeInstancesInfoType">
+        <sequence>
+            <element name="item" type="ec2:DescribeInstancesItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeInstancesItemType">
+        <sequence>
+            <element name="instanceId" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- DescribeInstances Response definitions -->
+
+    <element name="DescribeInstancesResponse" type="ec2:DescribeInstancesResponseType"/>
+
+    <complexType name="DescribeInstancesResponseType">
+        <sequence>
+            <element name="reservationSet" type="ec2:ReservationSetType"/>
+        </sequence>
+    </complexType>
+
+
+    <complexType name="ReservationSetType">
+        <sequence>
+            <element name="item" type="ec2:ReservationInfoType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeImages Request definitions -->
+
+    <element name="DescribeImages" type="ec2:DescribeImagesType"/>
+
+    <complexType name="DescribeImagesType">
+        <sequence>
+
+            <element name="executableBySet" type="ec2:DescribeImagesExecutableBySetType" minOccurs="0"/>
+            <element name="imagesSet" type="ec2:DescribeImagesInfoType"/>
+            <element name="ownersSet" type="ec2:DescribeImagesOwnersType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesInfoType">
+        <sequence>
+            <element name="item" type="ec2:DescribeImagesItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name="DescribeImagesItemType">
+        <sequence>
+            <element name="imageId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesOwnersType">
+        <sequence>
+            <element name="item" type="ec2:DescribeImagesOwnerType" minOccurs="0" maxOccurs="unbounded"/>
+
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesOwnerType">
+        <sequence>
+            <element name="owner" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesExecutableBySetType">
+        <sequence>
+
+            <element name="item" type="ec2:DescribeImagesExecutableByType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesExecutableByType">
+        <sequence>
+            <element name="user" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeImages Response definitions -->
+
+
+    <element name="DescribeImagesResponse" type="ec2:DescribeImagesResponseType"/>
+
+    <complexType name="DescribeImagesResponseType">
+        <sequence>
+            <element name="imagesSet" type="ec2:DescribeImagesResponseInfoType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesResponseInfoType">
+        <sequence>
+            <element name="item" type="ec2:DescribeImagesResponseItemType" minOccurs="0" maxOccurs="unbounded"/>
+
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeImagesResponseItemType">
+        <sequence>
+            <element name="imageId" type="string"/>
+            <element name="imageLocation" type="string"/>
+            <element name="imageState" type="string"/>
+            <element name="imageOwnerId" type="string"/>
+            <element name="isPublic" type="boolean"/>
+
+            <element name="productCodes" type="ec2:ProductCodesSetType" minOccurs="0"/>
+            <element name="architecture" type="string" minOccurs="0"/>
+            <element name="imageType" type="string" minOccurs="0"/>
+            <element name="kernelId" type="string" minOccurs="0"/>
+            <element name="ramdiskId" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <!-- CreateSecurityGroup Request definitions -->
+
+    <element name="CreateSecurityGroup"
+             type="ec2:CreateSecurityGroupType"/>
+
+
+    <complexType name="CreateSecurityGroupType">
+        <sequence>
+            <element name="groupName" type="string"/>
+            <element name="groupDescription" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- CreateSecurityGroup Response definitions -->
+
+    <element name="CreateSecurityGroupResponse"
+             type="ec2:CreateSecurityGroupResponseType"/>
+
+    <complexType name="CreateSecurityGroupResponseType">
+
+        <sequence>
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- DeleteSecurityGroup Request definitions -->
+
+    <element name="DeleteSecurityGroup"
+             type="ec2:DeleteSecurityGroupType"/>
+
+    <complexType name="DeleteSecurityGroupType">
+        <sequence>
+            <element name="groupName" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- DeleteSecurityGroup Response definitions -->
+
+    <element name="DeleteSecurityGroupResponse"
+             type="ec2:DeleteSecurityGroupResponseType"/>
+
+    <complexType name="DeleteSecurityGroupResponseType">
+        <sequence>
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+
+    <!-- DescribeSecurityGroups Request definitions -->
+
+    <element name="DescribeSecurityGroups"
+             type="ec2:DescribeSecurityGroupsType"/>
+
+    <complexType name="DescribeSecurityGroupsType">
+        <sequence>
+            <element name="securityGroupSet" type="ec2:DescribeSecurityGroupsSetType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeSecurityGroupsSetType">
+        <sequence>
+
+            <element name="item" type="ec2:DescribeSecurityGroupsSetItemType"
+                     minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeSecurityGroupsSetItemType">
+        <sequence>
+            <element name="groupName" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeSecurityGroups Response definitions -->
+
+
+    <element name="DescribeSecurityGroupsResponse"
+             type="ec2:DescribeSecurityGroupsResponseType"/>
+
+    <complexType name="DescribeSecurityGroupsResponseType">
+        <sequence>
+            <element name="securityGroupInfo" type="ec2:SecurityGroupSetType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="IpPermissionSetType">
+        <sequence>
+            <element name="item" type="ec2:IpPermissionType"
+                     minOccurs="0" maxOccurs="unbounded"/>
+
+        </sequence>
+    </complexType>
+
+    <complexType name="IpPermissionType">
+        <sequence>
+            <element name="ipProtocol" type="string"/>
+            <element name="fromPort" type="int"/>
+            <element name="toPort" type="int"/>
+            <element name="groups" type="ec2:UserIdGroupPairSetType"/>
+            <element name="ipRanges" type="ec2:IpRangeSetType"/>
+
+        </sequence>
+    </complexType>
+
+    <complexType name="IpRangeSetType">
+        <sequence>
+            <element name="item" type="ec2:IpRangeItemType"
+                     minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="IpRangeItemType">
+        <sequence>
+
+            <element name="cidrIp" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="UserIdGroupPairSetType">
+        <sequence>
+            <element name="item" type="ec2:UserIdGroupPairType"
+                     minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="UserIdGroupPairType">
+
+        <sequence>
+            <element name="userId" type="string"/>
+            <element name="groupName" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="SecurityGroupSetType">
+        <sequence>
+            <element name="item" type="ec2:SecurityGroupItemType"
+                     minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name="SecurityGroupItemType">
+        <sequence>
+            <element name="ownerId" type="string"/>
+            <element name="groupName" type="string"/>
+            <element name="groupDescription" type="string"/>
+            <element name="ipPermissions" type="ec2:IpPermissionSetType"/>
+        </sequence>
+    </complexType>
+
+
+    <!-- AuthorizeSecurityGroupIngress Request definitions -->
+
+    <annotation>
+        <documentation xml:lang="en">
+            This API call should be treated as under development. The current API specification supports a richer
+            set of semantics than we intend to retain in future releases, and the details for this call are still under
+            review. Semantically, clients can depend on fine grained CIDR based access control (as currently exposed) but
+            for group based access control clients should only depend on the ability to control access for an entire
+            (user,group) tuple. Fine grained group based access control at the protocol and port or icmp code:type level
+            are not guaranteed to be supported in future releases of this API.
+        </documentation>
+    </annotation>
+
+    <element name="AuthorizeSecurityGroupIngress"
+             type="ec2:AuthorizeSecurityGroupIngressType"/>
+
+    <complexType name="AuthorizeSecurityGroupIngressType">
+        <sequence>
+
+            <element name="userId" type="string"/>
+            <element name="groupName" type="string"/>
+            <element name="ipPermissions" type="ec2:IpPermissionSetType"/>
+        </sequence>
+    </complexType>
+
+    <!-- AuthorizeSecurityGroupIngress Response definitions -->
+
+    <element name="AuthorizeSecurityGroupIngressResponse"
+             type="ec2:AuthorizeSecurityGroupIngressResponseType"/>
+
+    <complexType name="AuthorizeSecurityGroupIngressResponseType">
+        <sequence>
+
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- RevokeSecurityGroupIngress Request definitions -->
+
+    <annotation>
+        <documentation xml:lang="en">
+            This API call should be treated as under development. The current API specification supports a richer
+            set of semantics than we intend to retain in future releases, and the details for this call are still under
+            review. Semantically, clients can depend on fine grained CIDR based access control (as currently exposed) but
+            for group based access control clients should only depend on the ability to control access for an entire
+            (user,group) tuple. Fine grained group based access control at the protocol and port or icmp code:type level
+            are not guaranteed to be supported in future releases of this API.
+        </documentation>
+    </annotation>
+
+
+    <element name="RevokeSecurityGroupIngress"
+             type="ec2:RevokeSecurityGroupIngressType"/>
+
+    <complexType name="RevokeSecurityGroupIngressType">
+        <sequence>
+            <element name="userId" type="string"/>
+            <element name="groupName" type="string"/>
+            <element name="ipPermissions" type="ec2:IpPermissionSetType"/>
+        </sequence>
+    </complexType>
+
+    <!-- RevokeSecurityGroupIngress Response definitions -->
+
+
+    <element name="RevokeSecurityGroupIngressResponse"
+             type="ec2:RevokeSecurityGroupIngressResponseType"/>
+
+    <complexType name="RevokeSecurityGroupIngressResponseType">
+        <sequence>
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- Instance state type definition -->
+
+    <complexType name="InstanceStateType">
+        <sequence>
+
+            <element name="code" type="int"/>
+            <element name="name" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- ModifyImageAttribute Definitions -->
+
+    <element name="ModifyImageAttribute"
+             type="ec2:ModifyImageAttributeType"/>
+
+    <complexType name="ModifyImageAttributeType">
+        <sequence>
+            <element name="imageId" type="string"/>
+
+            <choice>
+                <element name="launchPermission" type="ec2:LaunchPermissionOperationType"/>
+                <element name="productCodes" type="ec2:ProductCodeListType"/>
+            </choice>
+        </sequence>
+    </complexType>
+
+    <complexType name="LaunchPermissionOperationType">
+        <choice>
+            <element name="add" type="ec2:LaunchPermissionListType"/>
+
+            <element name="remove" type="ec2:LaunchPermissionListType"/>
+        </choice>
+    </complexType>
+
+    <complexType name="LaunchPermissionListType">
+        <sequence>
+            <element name="item" type="ec2:LaunchPermissionItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="LaunchPermissionItemType">
+
+        <choice>
+            <element name="userId" type="string"/>
+            <element name="group" type="string"/>
+        </choice>
+    </complexType>
+
+    <complexType name="ProductCodeListType">
+        <sequence>
+            <element name="item" type="ec2:ProductCodeItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name="ProductCodeItemType">
+        <choice>
+            <element name="productCode" type="string"/>
+        </choice>
+    </complexType>
+
+    <!-- ModifyImageAttributeResponse Definitions -->
+
+    <element name="ModifyImageAttributeResponse"
+             type="ec2:ModifyImageAttributeResponseType"/>
+
+    <complexType name="ModifyImageAttributeResponseType">
+
+        <sequence>
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- ResetImageAttribute Definitions -->
+
+    <element name="ResetImageAttribute"
+             type="ec2:ResetImageAttributeType"/>
+
+    <complexType name="ResetImageAttributeType">
+        <sequence>
+            <element name="imageId" type="string"/>
+
+            <group ref="ec2:ResetImageAttributesGroup"/>
+        </sequence>
+    </complexType>
+
+    <group name="ResetImageAttributesGroup">
+        <choice>
+            <element name="launchPermission" type="ec2:EmptyElementType"/>
+        </choice>
+    </group>
+
+    <complexType name="EmptyElementType">
+
+    </complexType>
+
+    <!-- ResetImageAttributeResponse Definitions -->
+
+    <element name="ResetImageAttributeResponse"
+             type="ec2:ResetImageAttributeResponseType"/>
+
+    <complexType name="ResetImageAttributeResponseType">
+        <sequence>
+            <element name="return" type="boolean"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeImageAttribute Definitions -->
+
+
+    <element name="DescribeImageAttribute"
+             type="ec2:DescribeImageAttributeType"/>
+
+    <complexType name="DescribeImageAttributeType">
+        <sequence>
+            <element name="imageId" type="string"/>
+            <group ref="ec2:DescribeImageAttributesGroup"/>
+        </sequence>
+    </complexType>
+
+    <group name="DescribeImageAttributesGroup">
+        <choice>
+
+            <element name="launchPermission" type="ec2:EmptyElementType"/>
+            <element name="productCodes" type="ec2:EmptyElementType"/>
+            <element name="kernel" type="ec2:EmptyElementType"/>
+            <element name="ramdisk" type="ec2:EmptyElementType"/>
+            <element name="blockDeviceMapping" type="ec2:EmptyElementType"/>
+        </choice>
+    </group>
+
+    <!-- DescribeImageAttributeResponse Definitions -->
+
+    <element name="DescribeImageAttributeResponse"
+             type="ec2:DescribeImageAttributeResponseType"/>
+
+
+    <complexType name="DescribeImageAttributeResponseType">
+        <sequence>
+            <element name="imageId" type="string"/>
+            <choice>
+                <element name="launchPermission" type="ec2:LaunchPermissionListType"/>
+                <element name="productCodes" type="ec2:ProductCodeListType"/>
+                <element name="kernel" type="ec2:NullableAttributeValueType"/>
+                <element name="ramdisk" type="ec2:NullableAttributeValueType"/>
+                <element name="blockDeviceMapping" type="ec2:BlockDeviceMappingType"/>
+
+            </choice>
+        </sequence>
+    </complexType>
+
+    <complexType name="NullableAttributeValueType">
+        <sequence>
+            <element name="value" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="AttributeValueType">
+
+        <sequence>
+            <element name="value" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- ConfirmProductInstance Definitions -->
+
+    <element name="ConfirmProductInstance"
+             type="ec2:ConfirmProductInstanceType"/>
+
+    <complexType name="ConfirmProductInstanceType">
+        <sequence>
+            <element name="productCode" type="string"/>
+
+            <element name="instanceId" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="ProductCodesSetType">
+        <sequence>
+            <element name="item" type="ec2:ProductCodesSetItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="ProductCodesSetItemType">
+
+        <sequence>
+            <element name="productCode" type="string"/>
+        </sequence>
+    </complexType>
+
+    <!-- ConfirmProductInstanceResponse Definitions -->
+
+    <element name="ConfirmProductInstanceResponse"
+             type="ec2:ConfirmProductInstanceResponseType"/>
+
+    <complexType name="ConfirmProductInstanceResponseType">
+        <sequence>
+            <element name="return" type="boolean"/>
+
+            <element name="ownerId" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeAvailabilityZones Definitions -->
+
+    <element name="DescribeAvailabilityZones"
+             type="ec2:DescribeAvailabilityZonesType"/>
+
+    <complexType name="DescribeAvailabilityZonesType">
+        <sequence>
+            <element name="availabilityZoneSet" type="ec2:DescribeAvailabilityZonesSetType"/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name="DescribeAvailabilityZonesSetType">
+        <sequence>
+            <element name="item" type="ec2:DescribeAvailabilityZonesSetItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DescribeAvailabilityZonesSetItemType">
+        <sequence>
+            <element name="zoneName" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- DescribeAvailabilityZones Response definitions -->
+
+    <element name="DescribeAvailabilityZonesResponse"
+             type="ec2:DescribeAvailabilityZonesResponseType"/>
+
+    <complexType name="DescribeAvailabilityZonesResponseType">
+        <sequence>
+            <element name="availabilityZoneInfo" type="ec2:AvailabilityZoneSetType"/>
+        </sequence>
+    </complexType>
+
+
+    <complexType name="AvailabilityZoneSetType">
+        <sequence>
+            <element name="item" type="ec2:AvailabilityZoneItemType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="AvailabilityZoneItemType">
+        <sequence>
+            <element name="zoneName" type="string"/>
+            <element name="zoneState" type="string"/>
+
+        </sequence>
+    </complexType>
+
+    <!-- AllocateAddress definitions -->
+
+    <element name='AllocateAddress' type='ec2:AllocateAddressType'/>
+    <complexType name='AllocateAddressType'/>
+
+    <!-- AllocateAddressResponse definitions -->
+
+    <element name='AllocateAddressResponse' type='ec2:AllocateAddressResponseType'/>
+    <complexType name='AllocateAddressResponseType'>
+        <sequence>
+
+            <element name='publicIp' type='string'/>
+        </sequence>
+    </complexType>
+
+    <!-- ReleaseAddress definitions -->
+
+    <element name='ReleaseAddress' type='ec2:ReleaseAddressType'/>
+    <complexType name='ReleaseAddressType'>
+        <sequence>
+            <element name='publicIp' type='string'/>
+        </sequence>
+
+    </complexType>
+
+    <!-- ReleaseAddressResponse definitions -->
+
+    <element name='ReleaseAddressResponse' type='ec2:ReleaseAddressResponseType'/>
+    <complexType name='ReleaseAddressResponseType'>
+        <sequence>
+            <element name='return' type='boolean'/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeAddresses definitions -->
+
+
+    <element name='DescribeAddresses' type='ec2:DescribeAddressesType'/>
+    <complexType name='DescribeAddressesType'>
+        <sequence>
+            <element name='publicIpsSet' type='ec2:DescribeAddressesInfoType'/>
+        </sequence>
+    </complexType>
+
+    <complexType name='DescribeAddressesInfoType'>
+        <sequence>
+            <element name='item' maxOccurs='unbounded' minOccurs='0' type='ec2:DescribeAddressesItemType'/>
+
+        </sequence>
+
+    </complexType>
+
+    <complexType name='DescribeAddressesItemType'>
+        <sequence>
+            <element name='publicIp' type='string'/>
+        </sequence>
+    </complexType>
+
+    <!-- DescribeAddressesResponse definitions -->
+
+    <element name='DescribeAddressesResponse' type='ec2:DescribeAddressesResponseType'/>
+
+    <complexType name='DescribeAddressesResponseType'>
+        <sequence>
+            <element name='addressesSet' type='ec2:DescribeAddressesResponseInfoType'/>
+        </sequence>
+    </complexType>
+
+    <complexType name='DescribeAddressesResponseInfoType'>
+        <sequence>
+            <element name='item' maxOccurs='unbounded' minOccurs='0' type='ec2:DescribeAddressesResponseItemType'/>
+        </sequence>
+
+    </complexType>
+
+    <complexType name='DescribeAddressesResponseItemType'>
+        <sequence>
+            <element name='publicIp' type='string'/>
+            <element name='instanceId' minOccurs='0' type='string'/>
+        </sequence>
+    </complexType>
+
+    <!-- AssociateAddress definitions -->
+
+    <element name='AssociateAddress' type='ec2:AssociateAddressType'/>
+
+    <complexType name='AssociateAddressType'>
+        <sequence>
+            <element name='publicIp' type='string'/>
+            <element name='instanceId' type='string'/>
+        </sequence>
+    </complexType>
+
+    <!-- AssociateAddressResponse definitions -->
+
+    <element name='AssociateAddressResponse' type='ec2:AssociateAddressResponseType'/>
+    <complexType name='AssociateAddressResponseType'>
+
+        <sequence>
+            <element name='return' type='boolean'/>
+        </sequence>
+    </complexType>
+
+    <!-- DisassociateAddress definitions -->
+
+    <element name='DisassociateAddress' type='ec2:DisassociateAddressType'/>
+    <complexType name='DisassociateAddressType'>
+        <sequence>
+            <element name='publicIp' type='string'/>
+
+        </sequence>
+    </complexType>
+
+    <!-- DisassociateAddressResponse definitions -->
+
+    <element name='DisassociateAddressResponse' type='ec2:DisassociateAddressResponseType'/>
+    <complexType name='DisassociateAddressResponseType'>
+        <sequence>
+            <element name='return' type='boolean'/>
+        </sequence>
+    </complexType>
+
+
+</schema>
+

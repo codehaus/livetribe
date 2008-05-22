@@ -1,0 +1,12 @@
+<jxb:bindings version="1.0"
+              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <jxb:bindings schemaLocation="ec2-2008-02-01.xsd" node="/xsd:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="org.livetribe.ec2.jaxb"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
+</jxb:bindings>

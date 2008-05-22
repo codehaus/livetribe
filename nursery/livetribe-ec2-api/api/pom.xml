@@ -16,6 +16,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.livetribe.ec2</groupId>
+            <artifactId>livetribe-ec2-model</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
