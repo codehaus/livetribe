@@ -1,0 +1,262 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.livetribe</groupId>
+    <artifactId>livetribe</artifactId>
+    <name>LiveTribe</name>
+    <version>1.4.0</version>
+    <packaging>pom</packaging>
+    <description>LiveTribe Systems Management Project</description>
+    <url>http://livetribe.codehaus.org</url>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>http://jira.codehaus.org/browse/LIVETRIBE</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>continuum</system>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnError/>
+                <sendOnFailure/>
+                <configuration>
+                    <address>dev@livetribe.codehaus.org</address>
+                </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+
+    <inceptionYear>2006</inceptionYear>
+
+    <mailingLists>
+        <mailingList>
+            <name>LiveTribe Announcement List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+        <mailingList>
+            <name>LiveTribe User List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+        <mailingList>
+            <name>LiveTribe Developer List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+        <mailingList>
+            <name>LiveTribe SCM List</name>
+            <subscribe>http://xircles.codehaus.org/</subscribe>
+            <unsubscribe>http://xircles.codehaus.org/</unsubscribe>
+            <archive></archive>
+        </mailingList>
+    </mailingLists>
+
+    <developers>
+        <developer>
+            <id>maguro</id>
+            <name>Alan D. Cabrera</name>
+            <timezone>-8</timezone>
+        </developer>
+        <developer>
+            <id>jgenender</id>
+            <name>Jeff Genender</name>
+            <timezone>-7</timezone>
+        </developer>
+        <developer>
+            <id>hogstrom</id>
+            <name>Matt Hogstrom</name>
+            <timezone>-5</timezone>
+        </developer>
+        <developer>
+            <id>sbordet</id>
+            <name>Simone Bordet</name>
+            <timezone>1</timezone>
+        </developer>
+    </developers>
+
+    <contributors/>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:svn:http://svn.codehaus.org/livetribe/</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/livetribe/</developerConnection>
+        <url>http://svn.livetribe.codehaus.org/</url>
+    </scm>
+
+    <organization>
+        <name>LiveTribe</name>
+        <url>http://livetribe.codehaus.org/</url>
+    </organization>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-2</version>
+            </extension>
+        </extensions>
+        <defaultGoal>install</defaultGoal>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <jvm>${java.home}/bin/java</jvm>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <Maven-GroupId>${project.groupId}</Maven-GroupId>
+                                <Maven-ArtifactId>${project.artifactId}</Maven-ArtifactId>
+                                <Maven-Version>${project.version}</Maven-Version>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-one-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install-maven-one-repository</goal>
+                            <goal>deploy-maven-one-repository</goal>
+                        </goals>
+                        <configuration>
+                            <remoteRepositoryId>livetribe-m1</remoteRepositoryId>
+                            <remoteRepositoryUrl>
+                                dav:https://dav.codehaus.org/dist/livetribe/maven/m1
+                            </remoteRepositoryUrl>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles/>
+
+    <modules/>
+
+    <repositories>
+        <repository>
+            <id>livetribe</id>
+            <name>LiveTribe Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2</url>
+        </repository>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Maven 2 Repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>maven-repository.dev.java.net</id>
+            <name>Java.net Maven 1 Repository (legacy)</name>
+            <url>http://download.java.net/maven/1</url>
+            <layout>legacy</layout>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <name>Maven Snapshots Repository</name>
+            <url>http://snapshots.maven.codehaus.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots Repository</name>
+            <url>http://svn.apache.org/maven-snapshot-repository</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <name>CodeHaus Repository</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>codehaus.snapshots</id>
+            <name>CodeHaus Snapshots Repository</name>
+            <url>http://snapshots.repository.codehaus.org</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Maven 2 Repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>maven-repository.dev.java.net</id>
+            <name>Java.net Maven 1 Repository (legacy)</name>
+            <url>http://download.java.net/maven/1</url>
+            <layout>legacy</layout>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies/>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <dependencyManagement/>
+
+    <distributionManagement>
+        <repository>
+            <id>livetribe-repo</id>
+            <name>LiveTribe Central Repository</name>
+            <url>dav:https://dav.codehaus.org/repository/livetribe/</url>
+        </repository>
+        <snapshotRepository>
+            <id>livetribe-snapshots</id>
+            <name>LiveTribe Central Snapshots Repository</name>
+            <url>dav:https://dav.codehaus.org/snapshots.repository/livetribe/</url>
+        </snapshotRepository>
+        <site>
+            <id>livetribe-website</id>
+            <name>LiveTribe Web Site</name>
+            <url>dav:https://dav.codehaus.org/livetribe/</url>
+        </site>
+    </distributionManagement>
+
+</project>
