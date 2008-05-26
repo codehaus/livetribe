@@ -14,7 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
  * The user ID is neither in the form of an AWS account ID or one of the special values accepted by the <code>owner</code> or <code>executableBy</code> flags in the DescribeImages call.

@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
 
 import java.util.Set;
 
 import org.livetribe.ec2.model.AmazonImage;
+import org.livetribe.ec2.api.EC2Exception;
 
 
 /**

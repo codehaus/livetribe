@@ -14,30 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified permission is invalid.
+ * User not authorized.
+ * <p/>
+ * You might be trying to run an AMI for which you do not have permission.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidPermissionMalformedException extends ClientException
+public class AuthFailureException extends ClientException
 {
-    public InvalidPermissionMalformedException()
+    public AuthFailureException()
     {
     }
 
-    public InvalidPermissionMalformedException(String message)
+    public AuthFailureException(String message)
     {
         super(message);
     }
 
-    public InvalidPermissionMalformedException(String message, Throwable cause)
+    public AuthFailureException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidPermissionMalformedException(Throwable cause)
+    public AuthFailureException(Throwable cause)
     {
         super(cause);
     }

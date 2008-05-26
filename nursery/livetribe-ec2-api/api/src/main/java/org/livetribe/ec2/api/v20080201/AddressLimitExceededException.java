@@ -14,30 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified AMI has an unparsable Manifest.
+ * User has the maximum number of allowed IP addresses.
+ * <p/>
+ * Each user has an IP address limit. For new users, this limit is 5. If you need more than 5 Elastic IP addresses, please complete the  Amazon EC2 Elastic IP Address Request Form. We will ask you to think through your use case and help us understand your need for additional addresses.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidManifestException extends ClientException
+public class AddressLimitExceededException extends ClientException
 {
-    public InvalidManifestException()
+    public AddressLimitExceededException()
     {
     }
 
-    public InvalidManifestException(String message)
+    public AddressLimitExceededException(String message)
     {
         super(message);
     }
 
-    public InvalidManifestException(String message, Throwable cause)
+    public AddressLimitExceededException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidManifestException(Throwable cause)
+    public AddressLimitExceededException(Throwable cause)
     {
         super(cause);
     }

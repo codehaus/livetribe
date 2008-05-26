@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified group cannot be deleted because it is in use.
+ * Specified reservation ID does not exist.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidGroupInUseException extends ClientException
+public class InvalidReservationIDNotFoundException extends ClientException
 {
-    public InvalidGroupInUseException()
+    public InvalidReservationIDNotFoundException()
     {
     }
 
-    public InvalidGroupInUseException(String message)
+    public InvalidReservationIDNotFoundException(String message)
     {
         super(message);
     }
 
-    public InvalidGroupInUseException(String message, Throwable cause)
+    public InvalidReservationIDNotFoundException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidGroupInUseException(Throwable cause)
+    public InvalidReservationIDNotFoundException(Throwable cause)
     {
         super(cause);
     }

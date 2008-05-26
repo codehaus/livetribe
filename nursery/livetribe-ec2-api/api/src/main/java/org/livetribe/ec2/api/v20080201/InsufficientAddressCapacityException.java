@@ -14,32 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ServerException;
+
 
 /**
- * The value supplied for a parameter was invalid.
+ * Not enough available addresses to satisfy your minimum request.
  * <p/>
- * Requests that could cause this error include (for example) supplying an invalid image attribute to the <code>DescribeImageAttribute</code> request or an invalid <code>version</code> or <code>encoding</code> value for the <code>userData</code> in a <code>RunInstances</code> request.
+ * Reduce the number of addresses you are requesting or wait for additional capacity to become available.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidParameterValueException extends ClientException
+public class InsufficientAddressCapacityException extends ServerException
 {
-    public InvalidParameterValueException()
+    public InsufficientAddressCapacityException()
     {
     }
 
-    public InvalidParameterValueException(String message)
+    public InsufficientAddressCapacityException(String message)
     {
         super(message);
     }
 
-    public InvalidParameterValueException(String message, Throwable cause)
+    public InsufficientAddressCapacityException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidParameterValueException(Throwable cause)
+    public InsufficientAddressCapacityException(Throwable cause)
     {
         super(cause);
     }

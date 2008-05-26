@@ -14,32 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Not enough available instances to satisfy your minimum request.
- * <p/>
- * Reduce the number of instances in your request or wait for additional capacity to become available.
- *
  * @version $Revision$ $Date$
  */
-public class InsufficientInstanceCapacityException extends ServerException
+public class InvalidReservationIDMalformedException extends ClientException
 {
-    public InsufficientInstanceCapacityException()
+    public InvalidReservationIDMalformedException()
     {
     }
 
-    public InsufficientInstanceCapacityException(String message)
+    public InvalidReservationIDMalformedException(String message)
     {
         super(message);
     }
 
-    public InsufficientInstanceCapacityException(String message, Throwable cause)
+    public InvalidReservationIDMalformedException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InsufficientInstanceCapacityException(Throwable cause)
+    public InvalidReservationIDMalformedException(Throwable cause)
     {
         super(cause);
     }

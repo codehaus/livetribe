@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified AMI ID is not valid.
+ * Specified group cannot be deleted because it is in use.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidAMIIDMalformedException extends ClientException
+public class InvalidGroupInUseException extends ClientException
 {
-    public InvalidAMIIDMalformedException()
+    public InvalidGroupInUseException()
     {
     }
 
-    public InvalidAMIIDMalformedException(String message)
+    public InvalidGroupInUseException(String message)
     {
         super(message);
     }
 
-    public InvalidAMIIDMalformedException(String message, Throwable cause)
+    public InvalidGroupInUseException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidAMIIDMalformedException(Throwable cause)
+    public InvalidGroupInUseException(Throwable cause)
     {
         super(cause);
     }

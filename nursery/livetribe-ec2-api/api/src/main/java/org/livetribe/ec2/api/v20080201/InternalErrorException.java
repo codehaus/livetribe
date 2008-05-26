@@ -14,30 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ServerException;
+
 
 /**
- * Specified reservation ID does not exist.
+ * Internal Error.
+ * <p/>
+ * This error should not occur. If it does, please try to reproduce it and let us know by posting a message on the AWS forums.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidReservationIDNotFoundException extends ClientException
+public class InternalErrorException extends ServerException
 {
-    public InvalidReservationIDNotFoundException()
+    public InternalErrorException()
     {
     }
 
-    public InvalidReservationIDNotFoundException(String message)
+    public InternalErrorException(String message)
     {
         super(message);
     }
 
-    public InvalidReservationIDNotFoundException(String message, Throwable cause)
+    public InternalErrorException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidReservationIDNotFoundException(Throwable cause)
+    public InternalErrorException(Throwable cause)
     {
         super(cause);
     }

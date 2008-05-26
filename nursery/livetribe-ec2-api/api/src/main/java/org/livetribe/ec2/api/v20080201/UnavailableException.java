@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ServerException;
+
 
 /**
- * Specified AMI ID has been deregistered and is no longer available.
+ * The server is overloaded and cannot handle the request.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidAMIIDUnavailableException extends ClientException
+public class UnavailableException extends ServerException
 {
-    public InvalidAMIIDUnavailableException()
+    public UnavailableException()
     {
     }
 
-    public InvalidAMIIDUnavailableException(String message)
+    public UnavailableException(String message)
     {
         super(message);
     }
 
-    public InvalidAMIIDUnavailableException(String message, Throwable cause)
+    public UnavailableException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidAMIIDUnavailableException(Throwable cause)
+    public UnavailableException(Throwable cause)
     {
         super(cause);
     }

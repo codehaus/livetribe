@@ -14,32 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Internal Error.
+ * User has max allowed concurrent running instances.
  * <p/>
- * This error should not occur. If it does, please try to reproduce it and let us know by posting a message on the AWS forums.
+ * Each user has a concurrent running instance limit. For new users, this limit is 20. If you need more than 20 instances, please complete the  Amazon EC2 Instance Request Form and your request will be considered.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class InstanceLimitExceededException extends ClientException
 {
-    public InternalErrorException()
+    public InstanceLimitExceededException()
     {
     }
 
-    public InternalErrorException(String message)
+    public InstanceLimitExceededException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public InstanceLimitExceededException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public InstanceLimitExceededException(Throwable cause)
     {
         super(cause);
     }

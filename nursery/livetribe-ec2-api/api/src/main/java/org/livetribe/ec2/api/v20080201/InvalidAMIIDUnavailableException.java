@@ -14,32 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * User has the maximum number of allowed IP addresses.
- * <p/>
- * Each user has an IP address limit. For new users, this limit is 5. If you need more than 5 Elastic IP addresses, please complete the  Amazon EC2 Elastic IP Address Request Form. We will ask you to think through your use case and help us understand your need for additional addresses.
+ * Specified AMI ID has been deregistered and is no longer available.
  *
  * @version $Revision$ $Date$
  */
-public class AddressLimitExceededException extends ClientException
+public class InvalidAMIIDUnavailableException extends ClientException
 {
-    public AddressLimitExceededException()
+    public InvalidAMIIDUnavailableException()
     {
     }
 
-    public AddressLimitExceededException(String message)
+    public InvalidAMIIDUnavailableException(String message)
     {
         super(message);
     }
 
-    public AddressLimitExceededException(String message, Throwable cause)
+    public InvalidAMIIDUnavailableException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public AddressLimitExceededException(Throwable cause)
+    public InvalidAMIIDUnavailableException(Throwable cause)
     {
         super(cause);
     }

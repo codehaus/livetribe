@@ -14,32 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Not enough available addresses to satisfy your minimum request.
- * <p/>
- * Reduce the number of addresses you are requesting or wait for additional capacity to become available.
- *
  * @version $Revision$ $Date$
  */
-public class InsufficientAddressCapacityException extends ServerException
+public class InvalidInstanceIDNotFoundException extends ClientException
 {
-    public InsufficientAddressCapacityException()
+    public InvalidInstanceIDNotFoundException()
     {
     }
 
-    public InsufficientAddressCapacityException(String message)
+    public InvalidInstanceIDNotFoundException(String message)
     {
         super(message);
     }
 
-    public InsufficientAddressCapacityException(String message, Throwable cause)
+    public InvalidInstanceIDNotFoundException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InsufficientAddressCapacityException(Throwable cause)
+    public InvalidInstanceIDNotFoundException(Throwable cause)
     {
         super(cause);
     }

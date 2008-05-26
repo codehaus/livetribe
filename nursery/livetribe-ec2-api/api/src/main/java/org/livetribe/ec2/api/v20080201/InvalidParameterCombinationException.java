@@ -14,28 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
+ * RunInstances was called with <code>minCount</code> and <code>maxCount</code> set to 0 or minCount > maxCount.
+ *
  * @version $Revision$ $Date$
  */
-public class InvalidInstanceIDNotFoundException extends ClientException
+public class InvalidParameterCombinationException extends ClientException
 {
-    public InvalidInstanceIDNotFoundException()
+    public InvalidParameterCombinationException()
     {
     }
 
-    public InvalidInstanceIDNotFoundException(String message)
+    public InvalidParameterCombinationException(String message)
     {
         super(message);
     }
 
-    public InvalidInstanceIDNotFoundException(String message, Throwable cause)
+    public InvalidParameterCombinationException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidInstanceIDNotFoundException(Throwable cause)
+    public InvalidParameterCombinationException(Throwable cause)
     {
         super(cause);
     }

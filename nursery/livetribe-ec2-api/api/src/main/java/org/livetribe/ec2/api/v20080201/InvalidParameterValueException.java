@@ -14,30 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified group name is a reserved name.
+ * The value supplied for a parameter was invalid.
+ * <p/>
+ * Requests that could cause this error include (for example) supplying an invalid image attribute to the <code>DescribeImageAttribute</code> request or an invalid <code>version</code> or <code>encoding</code> value for the <code>userData</code> in a <code>RunInstances</code> request.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidGroupReservedException extends ClientException
+public class InvalidParameterValueException extends ClientException
 {
-    public InvalidGroupReservedException()
+    public InvalidParameterValueException()
     {
     }
 
-    public InvalidGroupReservedException(String message)
+    public InvalidParameterValueException(String message)
     {
         super(message);
     }
 
-    public InvalidGroupReservedException(String message, Throwable cause)
+    public InvalidParameterValueException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidGroupReservedException(Throwable cause)
+    public InvalidParameterValueException(Throwable cause)
     {
         super(cause);
     }

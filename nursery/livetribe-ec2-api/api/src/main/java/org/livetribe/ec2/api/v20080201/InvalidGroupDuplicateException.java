@@ -14,32 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * User not authorized.
- * <p/>
- * You might be trying to run an AMI for which you do not have permission.
+ * Attempt to create a duplicate group.
  *
  * @version $Revision$ $Date$
  */
-public class AuthFailureException extends ClientException
+public class InvalidGroupDuplicateException extends ClientException
 {
-    public AuthFailureException()
+    public InvalidGroupDuplicateException()
     {
     }
 
-    public AuthFailureException(String message)
+    public InvalidGroupDuplicateException(String message)
     {
         super(message);
     }
 
-    public AuthFailureException(String message, Throwable cause)
+    public InvalidGroupDuplicateException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public AuthFailureException(Throwable cause)
+    public InvalidGroupDuplicateException(Throwable cause)
     {
         super(cause);
     }

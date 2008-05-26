@@ -14,28 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
+ * Specified AMI ID is not valid.
+ *
  * @version $Revision$ $Date$
  */
-public class InvalidReservationIDMalformedException extends ClientException
+public class InvalidAMIIDMalformedException extends ClientException
 {
-    public InvalidReservationIDMalformedException()
+    public InvalidAMIIDMalformedException()
     {
     }
 
-    public InvalidReservationIDMalformedException(String message)
+    public InvalidAMIIDMalformedException(String message)
     {
         super(message);
     }
 
-    public InvalidReservationIDMalformedException(String message, Throwable cause)
+    public InvalidAMIIDMalformedException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidReservationIDMalformedException(Throwable cause)
+    public InvalidAMIIDMalformedException(Throwable cause)
     {
         super(cause);
     }

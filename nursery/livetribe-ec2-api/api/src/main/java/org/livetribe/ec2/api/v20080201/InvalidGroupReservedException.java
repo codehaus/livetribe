@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Attempt to create a duplicate key pair.
+ * Specified group name is a reserved name.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidKeyPairDuplicateException extends ClientException
+public class InvalidGroupReservedException extends ClientException
 {
-    public InvalidKeyPairDuplicateException()
+    public InvalidGroupReservedException()
     {
     }
 
-    public InvalidKeyPairDuplicateException(String message)
+    public InvalidGroupReservedException(String message)
     {
         super(message);
     }
 
-    public InvalidKeyPairDuplicateException(String message, Throwable cause)
+    public InvalidGroupReservedException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidKeyPairDuplicateException(Throwable cause)
+    public InvalidGroupReservedException(Throwable cause)
     {
         super(cause);
     }

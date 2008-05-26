@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * RunInstances was called with <code>minCount</code> and <code>maxCount</code> set to 0 or minCount > maxCount.
+ * Specified AMI ID does not exist.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidParameterCombinationException extends ClientException
+public class InvalidAMIIDNotFoundException extends ClientException
 {
-    public InvalidParameterCombinationException()
+    public InvalidAMIIDNotFoundException()
     {
     }
 
-    public InvalidParameterCombinationException(String message)
+    public InvalidAMIIDNotFoundException(String message)
     {
         super(message);
     }
 
-    public InvalidParameterCombinationException(String message, Throwable cause)
+    public InvalidAMIIDNotFoundException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidParameterCombinationException(Throwable cause)
+    public InvalidAMIIDNotFoundException(Throwable cause)
     {
         super(cause);
     }

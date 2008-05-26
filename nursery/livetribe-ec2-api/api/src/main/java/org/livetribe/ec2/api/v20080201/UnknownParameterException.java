@@ -14,32 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * User has max allowed concurrent running instances.
+ * If you are specifying a userId, check that it is in the form of an AWS account ID. UnknownParameter 	An unknown or unrecognized parameter was supplied.
  * <p/>
- * Each user has a concurrent running instance limit. For new users, this limit is 20. If you need more than 20 instances, please complete the  Amazon EC2 Instance Request Form and your request will be considered.
+ * Requests that could cause this error include supplying a misspelled parameter or a parameter that is not supported for the specified API version.
  *
  * @version $Revision$ $Date$
  */
-public class InstanceLimitExceededException extends ClientException
+public class UnknownParameterException extends ClientException
 {
-    public InstanceLimitExceededException()
+    public UnknownParameterException()
     {
     }
 
-    public InstanceLimitExceededException(String message)
+    public UnknownParameterException(String message)
     {
         super(message);
     }
 
-    public InstanceLimitExceededException(String message, Throwable cause)
+    public UnknownParameterException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InstanceLimitExceededException(Throwable cause)
+    public UnknownParameterException(Throwable cause)
     {
         super(cause);
     }

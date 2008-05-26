@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Attempt to create a duplicate group.
+ * Attempt to create a duplicate key pair.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidGroupDuplicateException extends ClientException
+public class InvalidKeyPairDuplicateException extends ClientException
 {
-    public InvalidGroupDuplicateException()
+    public InvalidKeyPairDuplicateException()
     {
     }
 
-    public InvalidGroupDuplicateException(String message)
+    public InvalidKeyPairDuplicateException(String message)
     {
         super(message);
     }
 
-    public InvalidGroupDuplicateException(String message, Throwable cause)
+    public InvalidKeyPairDuplicateException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidGroupDuplicateException(Throwable cause)
+    public InvalidKeyPairDuplicateException(Throwable cause)
     {
         super(cause);
     }

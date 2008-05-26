@@ -14,30 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Attempt to authorize a permission that has already been authorized.
+ * The value of an item added to, or removed from, an image attribute is invalid.
+ * <p/>
+ * If you are specifying a <code>userId</code>, check that it is in the form of an AWS account ID.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidPermissionDuplicateException extends ClientException
+public class InvalidAMIAttributeItemValueException extends ClientException
 {
-    public InvalidPermissionDuplicateException()
+    public InvalidAMIAttributeItemValueException()
     {
     }
 
-    public InvalidPermissionDuplicateException(String message)
+    public InvalidAMIAttributeItemValueException(String message)
     {
         super(message);
     }
 
-    public InvalidPermissionDuplicateException(String message, Throwable cause)
+    public InvalidAMIAttributeItemValueException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidPermissionDuplicateException(Throwable cause)
+    public InvalidAMIAttributeItemValueException(Throwable cause)
     {
         super(cause);
     }

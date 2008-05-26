@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * The server is overloaded and cannot handle the request.
+ * Attempt to authorize a permission that has already been authorized.
  *
  * @version $Revision$ $Date$
  */
-public class UnavailableException extends ServerException
+public class InvalidPermissionDuplicateException extends ClientException
 {
-    public UnavailableException()
+    public InvalidPermissionDuplicateException()
     {
     }
 
-    public UnavailableException(String message)
+    public InvalidPermissionDuplicateException(String message)
     {
         super(message);
     }
 
-    public UnavailableException(String message, Throwable cause)
+    public InvalidPermissionDuplicateException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public UnavailableException(Throwable cause)
+    public InvalidPermissionDuplicateException(Throwable cause)
     {
         super(cause);
     }

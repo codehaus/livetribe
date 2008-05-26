@@ -14,32 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * If you are specifying a userId, check that it is in the form of an AWS account ID. UnknownParameter 	An unknown or unrecognized parameter was supplied.
- * <p/>
- * Requests that could cause this error include supplying a misspelled parameter or a parameter that is not supported for the specified API version.
+ * Specified instance ID is not valid.
  *
  * @version $Revision$ $Date$
  */
-public class UnknownParameterException extends ClientException
+public class InvalidInstanceIDMalformedException extends ClientException
 {
-    public UnknownParameterException()
+    public InvalidInstanceIDMalformedException()
     {
     }
 
-    public UnknownParameterException(String message)
+    public InvalidInstanceIDMalformedException(String message)
     {
         super(message);
     }
 
-    public UnknownParameterException(String message, Throwable cause)
+    public InvalidInstanceIDMalformedException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public UnknownParameterException(Throwable cause)
+    public InvalidInstanceIDMalformedException(Throwable cause)
     {
         super(cause);
     }

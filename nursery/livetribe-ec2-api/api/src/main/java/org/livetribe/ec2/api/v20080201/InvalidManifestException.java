@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified AMI ID does not exist.
+ * Specified AMI has an unparsable Manifest.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidAMIIDNotFoundException extends ClientException
+public class InvalidManifestException extends ClientException
 {
-    public InvalidAMIIDNotFoundException()
+    public InvalidManifestException()
     {
     }
 
-    public InvalidAMIIDNotFoundException(String message)
+    public InvalidManifestException(String message)
     {
         super(message);
     }
 
-    public InvalidAMIIDNotFoundException(String message, Throwable cause)
+    public InvalidManifestException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidAMIIDNotFoundException(Throwable cause)
+    public InvalidManifestException(Throwable cause)
     {
         super(cause);
     }

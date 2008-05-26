@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified group name does not exist.
+ * Specified permission is invalid.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidGroupNotFoundException extends ClientException
+public class InvalidPermissionMalformedException extends ClientException
 {
-    public InvalidGroupNotFoundException()
+    public InvalidPermissionMalformedException()
     {
     }
 
-    public InvalidGroupNotFoundException(String message)
+    public InvalidPermissionMalformedException(String message)
     {
         super(message);
     }
 
-    public InvalidGroupNotFoundException(String message, Throwable cause)
+    public InvalidPermissionMalformedException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidGroupNotFoundException(Throwable cause)
+    public InvalidPermissionMalformedException(Throwable cause)
     {
         super(cause);
     }

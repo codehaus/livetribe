@@ -14,30 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.api;
+package org.livetribe.ec2.api.v20080201;
+
+import org.livetribe.ec2.api.ClientException;
+
 
 /**
- * Specified instance ID is not valid.
+ * Specified group name does not exist.
  *
  * @version $Revision$ $Date$
  */
-public class InvalidInstanceIDMalformedException extends ClientException
+public class InvalidGroupNotFoundException extends ClientException
 {
-    public InvalidInstanceIDMalformedException()
+    public InvalidGroupNotFoundException()
     {
     }
 
-    public InvalidInstanceIDMalformedException(String message)
+    public InvalidGroupNotFoundException(String message)
     {
         super(message);
     }
 
-    public InvalidInstanceIDMalformedException(String message, Throwable cause)
+    public InvalidGroupNotFoundException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InvalidInstanceIDMalformedException(Throwable cause)
+    public InvalidGroupNotFoundException(Throwable cause)
     {
         super(cause);
     }
