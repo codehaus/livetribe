@@ -57,6 +57,7 @@
         <module>model</module>
         <module>ra</module>
         <module>rest</module>
+        <module>util</module>
     </modules>
 
     <properties>

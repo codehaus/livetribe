@@ -5,7 +5,7 @@
 
     <jxb:bindings schemaLocation="ec2-2008-02-01.xsd" node="/xsd:schema">
         <jxb:schemaBindings>
-            <jxb:package name="org.livetribe.ec2.jaxb"/>
+            <jxb:package name="org.livetribe.ec2.jaxb.v20080201"/>
         </jxb:schemaBindings>
     </jxb:bindings>
 
