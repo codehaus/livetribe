@@ -14,13 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.model;
+package org.livetribe.ec2.util;
+
+import java.util.Date;
+
+import org.junit.Test;
+import org.junit.Assert;
+
 
 /**
  * @version $Revision$ $Date$
  */
-public enum AmazonMachineImageState
+public class UtilTest
 {
-    available,
-    deregistered
+    @Test
+    public void test() throws Exception
+    {
+       String ts = Util.iso8601Conversion(new Date());
+    }
 }

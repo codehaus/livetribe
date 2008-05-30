@@ -21,7 +21,10 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.SignatureException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -37,6 +40,7 @@ public final class Util
 {
     private final static Logger LOGGER = LoggerFactory.getLogger(Util.class);
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+    private static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
     /**
      * Computes RFC 2104-compliant HMAC signature for Amazon EC2 API calls.
@@ -48,7 +52,7 @@ public final class Util
      */
     public static String sign(Map<String, String> data, String key) throws SignatureException
     {
-       if (LOGGER.isDebugEnabled()) LOGGER.debug("Data {} key {}", data, key);
+        if (LOGGER.isDebugEnabled()) LOGGER.debug("Data {} key {}", data, key);
 
         StringBuilder sortedData = new StringBuilder();
         Set<String> sorted = new TreeSet<String>(new Comparator<String>()
@@ -98,6 +102,16 @@ public final class Util
             throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
         }
         return result;
+    }
+
+    public static String iso8601Conversion(Calendar calendar)
+    {
+        return iso8601Conversion(calendar.getTime());
+    }
+
+    public static String iso8601Conversion(Date date)
+    {
+        return ISO8601FORMAT.format(date);
     }
 
     private Util() { }

@@ -19,8 +19,40 @@ package org.livetribe.ec2.model;
 /**
  * @version $Revision$ $Date$
  */
-public enum AmazonMachineImageState
+public class InstanceState
 {
-    available,
-    deregistered
+    public enum State
+    {
+        pending, running, shutting_down, terminated;
+
+        @Override
+        public String toString()
+        {
+            return name().replaceAll("_", "-").toLowerCase();
+        }
+
+        public static State getValue(String value)
+        {
+            return valueOf(value.replaceAll("-", "_"));
+        }
+    }
+
+    private final short code;
+    private final State state;
+
+    public InstanceState(short code, State state)
+    {
+        this.code = code;
+        this.state = state;
+    }
+
+    public short getCode()
+    {
+        return code;
+    }
+
+    public State getState()
+    {
+        return state;
+    }
 }

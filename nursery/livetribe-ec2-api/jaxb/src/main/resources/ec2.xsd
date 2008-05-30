@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <annotation>
+        <documentation xml:lang="en">
+
+        </documentation>
+    </annotation>
+
+    <element name='Response'>
+        <complexType>
+            <sequence>
+                <element name="Errors">
+                    <complexType>
+                        <sequence>
+                            <element name="Error" maxOccurs="unbounded">
+                                <complexType>
+                                    <sequence>
+                                        <element name="Code" type="string"/>
+                                        <element name="Message" type="string"/>
+                                    </sequence>
+                                </complexType>
+                            </element>
+                        </sequence>
+                    </complexType>
+                </element>
+                <element name="RequestID" type="string"/>
+            </sequence>
+        </complexType>
+    </element>
+
+</schema>
+

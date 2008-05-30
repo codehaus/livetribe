@@ -16,11 +16,28 @@
  */
 package org.livetribe.ec2.model;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
  * @version $Revision$ $Date$
  */
-public enum AmazonMachineImageState
+public enum InstanceType
 {
-    available,
-    deregistered
+    m1_small,
+    m1_large,
+    m1_xlarge;
+
+    @Override
+    public String toString()
+    {
+        return name().replaceAll("_", ".").toLowerCase();
+    }
+
+    public static InstanceType getValue(String value)
+    {
+        return valueOf(value.replaceAll("-", "_"));
+    }
 }

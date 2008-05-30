@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://ec2.amazonaws.com/doc/2008-02-01"
+<schema targetNamespace="http://ec2.amazonaws.com/doc/2008-02-01/"
         xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:ec2="http://ec2.amazonaws.com/doc/2008-02-01"
+        xmlns:ec2="http://ec2.amazonaws.com/doc/2008-02-01/"
         elementFormDefault="qualified">
 
     <annotation>
@@ -1094,6 +1094,27 @@
     <complexType name='DisassociateAddressResponseType'>
         <sequence>
             <element name='return' type='boolean'/>
+        </sequence>
+    </complexType>
+
+    <element name='Response' type='ec2:ResponseType'/>
+    <complexType name="ResponseType">
+        <sequence>
+            <element name="Errors">
+                <complexType>
+                    <sequence>
+                        <element name="Error" maxOccurs="unbounded">
+                            <complexType>
+                                <sequence>
+                                    <element name="Code" type="string"/>
+                                    <element name="Message" type="string"/>
+                                </sequence>
+                            </complexType>
+                        </element>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="RequestID" type="string"/>
         </sequence>
     </complexType>
 

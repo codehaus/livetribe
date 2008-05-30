@@ -43,4 +43,26 @@ public class AmazonMachineImage extends AmazonImage
     {
         this.ramdiskId = ramdiskId;
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("(AmazonMachineImage ");
+        builder.append(super.toString());
+        if (kernelId != null)
+        {
+            builder.append(" kernelId: ");
+            builder.append(kernelId);
+        }
+        if (ramdiskId != null)
+        {
+            builder.append(" ramdiskId: ");
+            builder.append(ramdiskId);
+        }
+        builder.append(")");
+
+        return builder.toString();
+    }
 }

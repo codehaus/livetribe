@@ -19,8 +19,17 @@ package org.livetribe.ec2.model;
 /**
  * @version $Revision$ $Date$
  */
-public enum AmazonMachineImageState
+public class Placement
 {
-    available,
-    deregistered
+    private final String availabilityZone;
+
+    public Placement(String availabilityZone)
+    {
+        this.availabilityZone = availabilityZone;
+    }
+
+    public String getAvailabilityZone()
+    {
+        return availabilityZone;
+    }
 }

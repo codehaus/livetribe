@@ -21,4 +21,9 @@ package org.livetribe.ec2.model;
  */
 public class AmazonKernelImage extends AmazonImage
 {
+    @Override
+    public String toString()
+    {
+        return "(AmazonKernelImage " + super.toString() + ")";
+    }
 }

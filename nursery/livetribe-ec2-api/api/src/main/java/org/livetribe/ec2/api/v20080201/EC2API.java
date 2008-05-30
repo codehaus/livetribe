@@ -19,6 +19,8 @@ package org.livetribe.ec2.api.v20080201;
 import java.util.Set;
 
 import org.livetribe.ec2.model.AmazonImage;
+import org.livetribe.ec2.model.ReservationInfo;
+import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.api.EC2Exception;
 
 
@@ -32,4 +34,17 @@ public interface EC2API
     Set<AmazonImage> describeImages(String[] imageId, String[] owner, String[] executedBy) throws EC2Exception;
 
     boolean deregisterImage(String imageId) throws EC2Exception;
+
+    ReservationInfo runInstances(String imageId, int minCount, int maxCount,
+                                 String keyName,
+                                 String[] securityGroup,
+                                 String userData,
+                                 InstanceType instanceType,
+                                 String availabilityZone,
+                                 String kernelId,
+                                 String ramdiskId,
+                                 String[] BDMVirtualNames,
+                                 String[] BDMDeviceNames) throws EC2Exception;
+
+    ReservationInfo describeInstances(String[] instanceIds) throws EC2Exception;
 }

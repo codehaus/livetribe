@@ -77,7 +77,7 @@ public class AmazonImage
 
     public void setProductCodes(String[] productCodes)
     {
-        productCodes = new String[productCodes.length];
+        this.productCodes = new String[productCodes.length];
         System.arraycopy(productCodes, 0, this.productCodes, 0, this.productCodes.length);
     }
 
@@ -89,5 +89,32 @@ public class AmazonImage
     public void setArchitecture(Architecture architecture)
     {
         this.architecture = architecture;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(" id: ");
+        builder.append(id);
+        builder.append(" state: ");
+        builder.append(state);
+        builder.append(" ownerId: ");
+        builder.append(ownerId);
+        builder.append(" public: ");
+        builder.append(pblic);
+        builder.append(" [");
+        if (productCodes != null)
+        {
+            for (int i = 0; i < productCodes.length; i++)
+            {
+                if (i > 0) builder.append(", ");
+                builder.append(productCodes[i]);
+            }
+        }
+        builder.append("]");
+
+        return builder.toString();
     }
 }

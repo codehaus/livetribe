@@ -9,4 +9,10 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
+    <jxb:bindings schemaLocation="ec2.xsd" node="/xsd:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="org.livetribe.ec2.jaxb"/>
+        </jxb:schemaBindings>
+    </jxb:bindings>
+
 </jxb:bindings>

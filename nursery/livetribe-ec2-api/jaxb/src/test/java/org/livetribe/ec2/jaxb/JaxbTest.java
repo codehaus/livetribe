@@ -14,13 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.ec2.model;
+package org.livetribe.ec2.jaxb;
+
+import org.junit.Test;
+
 
 /**
  * @version $Revision$ $Date$
  */
-public enum AmazonMachineImageState
+public class JaxbTest
 {
-    available,
-    deregistered
+    @Test
+    public void empty() throws Exception
+    {}
 }

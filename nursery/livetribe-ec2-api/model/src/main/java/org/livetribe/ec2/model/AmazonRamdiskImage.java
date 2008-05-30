@@ -21,4 +21,9 @@ package org.livetribe.ec2.model;
  */
 public class AmazonRamdiskImage extends AmazonImage
 {
+    @Override
+    public String toString()
+    {
+        return "(AmazonRamdiskImage " + super.toString() + ")";
+    }
 }
