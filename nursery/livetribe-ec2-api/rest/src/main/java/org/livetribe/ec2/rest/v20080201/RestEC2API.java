@@ -63,14 +63,20 @@ import org.livetribe.ec2.api.v20080201.InvalidPermissionMalformedException;
 import org.livetribe.ec2.api.v20080201.InvalidReservationIDMalformedException;
 import org.livetribe.ec2.api.v20080201.InvalidReservationIDNotFoundException;
 import org.livetribe.ec2.api.v20080201.InvalidUserIDMalformedException;
+import org.livetribe.ec2.api.v20080201.KeyPair;
+import org.livetribe.ec2.api.v20080201.ProductInstanceConfirmation;
 import org.livetribe.ec2.api.v20080201.TerminatedInstance;
 import org.livetribe.ec2.api.v20080201.UnavailableException;
 import org.livetribe.ec2.api.v20080201.UnknownParameterException;
-import org.livetribe.ec2.api.v20080201.ProductInstanceConfirmation;
 import org.livetribe.ec2.jaxb.Response;
+import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
+import org.livetribe.ec2.jaxb.v20080201.CreateKeyPairResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DeleteKeyPairResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeregisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseItemType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseType;
 import org.livetribe.ec2.jaxb.v20080201.GroupItemType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodesSetItemType;
 import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
@@ -78,7 +84,6 @@ import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
 import org.livetribe.ec2.jaxb.v20080201.RunningInstancesItemType;
 import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseType;
-import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
 import org.livetribe.ec2.model.AmazonImage;
 import org.livetribe.ec2.model.AmazonKernelImage;
 import org.livetribe.ec2.model.AmazonMachineImage;
@@ -317,7 +322,69 @@ public class RestEC2API implements EC2API
         if (response.getOwnerId() != null) return new ProductInstanceConfirmation(response.isReturn(), response.getOwnerId());
         else return new ProductInstanceConfirmation(response.isReturn());
     }
-    
+
+    public KeyPair createKeyPair(String keyName) throws EC2Exception
+    {
+        if (keyName == null) throw new IllegalArgumentException("keyName cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "CreateKeyPair");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("KeyName", keyName);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        CreateKeyPairResponseType response = (CreateKeyPairResponseType) call(map);
+
+        if (response.getKeyMaterial() != null) return new KeyPair(response.getKeyName(), response.getKeyFingerprint(), response.getKeyMaterial());
+        else return new KeyPair(response.getKeyName(), response.getKeyFingerprint());
+    }
+
+    public List<KeyPair> describeKeyPairs(String[] keyNames) throws EC2Exception
+    {
+        if (keyNames == null) throw new IllegalArgumentException("keyNames cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DescribeKeyPairs");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        for (int i = 0; i < keyNames.length; i++) map.put("KeyName." + i, keyNames[i]);
+
+        DescribeKeyPairsResponseType response = (DescribeKeyPairsResponseType) call(map);
+        List<KeyPair> keyPairs = new ArrayList<KeyPair>();
+
+        for (DescribeKeyPairsResponseItemType keyPair : response.getKeySet().getItem())
+        {
+            keyPairs.add(new KeyPair(keyPair.getKeyName(), keyPair.getKeyFingerprint()));
+        }
+
+        return keyPairs;
+    }
+
+    public boolean deleteKeyPair(String keyName) throws EC2Exception
+    {
+        if (keyName == null) throw new IllegalArgumentException("keyName cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DeleteKeyPair");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("KeyName", keyName);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        DeleteKeyPairResponseType response = (DeleteKeyPairResponseType) call(map);
+
+        return response.isReturn();
+    }
+
     protected ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
     {
         List<GroupItemType> elements = reservationInfoType.getGroupSet().getItem();

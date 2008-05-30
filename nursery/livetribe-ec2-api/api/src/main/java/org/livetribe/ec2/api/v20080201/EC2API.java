@@ -16,12 +16,13 @@
  */
 package org.livetribe.ec2.api.v20080201;
 
+import java.util.List;
 import java.util.Set;
 
-import org.livetribe.ec2.model.AmazonImage;
-import org.livetribe.ec2.model.ReservationInfo;
-import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.api.EC2Exception;
+import org.livetribe.ec2.model.AmazonImage;
+import org.livetribe.ec2.model.InstanceType;
+import org.livetribe.ec2.model.ReservationInfo;
 
 
 /**
@@ -47,4 +48,14 @@ public interface EC2API
                                  String[] BDMDeviceNames) throws EC2Exception;
 
     ReservationInfo describeInstances(String[] instanceIds) throws EC2Exception;
+
+    public List<TerminatedInstance> terminateInstances(String[] instanceIds) throws EC2Exception;
+
+    public ProductInstanceConfirmation confirmProductInstance(String productCode, String instanceId) throws EC2Exception;
+
+    public KeyPair createKeyPair(String keyName) throws EC2Exception;
+
+    public List<KeyPair> describeKeyPairs(String[] keyNames) throws EC2Exception;
+
+    public boolean deleteKeyPair(String keyName) throws EC2Exception;
 }

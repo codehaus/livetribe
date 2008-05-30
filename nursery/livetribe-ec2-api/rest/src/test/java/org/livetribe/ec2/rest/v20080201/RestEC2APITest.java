@@ -17,10 +17,13 @@
 package org.livetribe.ec2.rest.v20080201;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
+import org.livetribe.ec2.api.v20080201.EC2API;
+import org.livetribe.ec2.api.v20080201.KeyPair;
 import org.livetribe.ec2.model.AmazonImage;
 
 
@@ -35,12 +38,17 @@ public class RestEC2APITest
 
     public static void main(String[] args) throws Exception
     {
-        RestEC2API client = new RestEC2API(new URL("https://ec2.amazonaws.com"), args[0], args[1]);
-        client.setTimeout(Integer.MAX_VALUE);
+        EC2API client = new RestEC2API(new URL("https://ec2.amazonaws.com"), args[0], args[1]);
+        ((RestEC2API) client).setTimeout(Integer.MAX_VALUE);
 
         Set<AmazonImage> images = client.describeImages(new String[]{"ami-3948ad50"}, null, null);
         images = client.describeImages(null, null, null);
         images = client.describeImages(null, new String[]{"063491364108"}, null);
         images = client.describeImages(null, null, new String[]{"self"});
+
+        KeyPair pair = client.createKeyPair("cabrera");
+        List<KeyPair> pairs = client.describeKeyPairs(new String[]{"cabrera"});
+        client.deleteKeyPair("foo");
+        client.deleteKeyPair("cabrera");
     }
 }
