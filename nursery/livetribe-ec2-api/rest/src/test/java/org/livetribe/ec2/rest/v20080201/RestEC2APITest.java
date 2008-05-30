@@ -33,10 +33,9 @@ public class RestEC2APITest
     public void empty() throws Exception
     {}
 
-    //    @Test
-    public void test() throws Exception
+    public static void main(String[] args) throws Exception
     {
-        RestEC2API client = new RestEC2API(new URL("https://ec2.amazonaws.com"), "a", "b");
+        RestEC2API client = new RestEC2API(new URL("https://ec2.amazonaws.com"), args[0], args[1]);
         client.setTimeout(Integer.MAX_VALUE);
 
         Set<AmazonImage> images = client.describeImages(new String[]{"ami-3948ad50"}, null, null);

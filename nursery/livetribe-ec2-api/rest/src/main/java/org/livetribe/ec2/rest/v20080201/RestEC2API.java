@@ -22,6 +22,7 @@ import javax.xml.bind.JAXBException;
 import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.security.SignatureException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,8 +63,10 @@ import org.livetribe.ec2.api.v20080201.InvalidPermissionMalformedException;
 import org.livetribe.ec2.api.v20080201.InvalidReservationIDMalformedException;
 import org.livetribe.ec2.api.v20080201.InvalidReservationIDNotFoundException;
 import org.livetribe.ec2.api.v20080201.InvalidUserIDMalformedException;
+import org.livetribe.ec2.api.v20080201.TerminatedInstance;
 import org.livetribe.ec2.api.v20080201.UnavailableException;
 import org.livetribe.ec2.api.v20080201.UnknownParameterException;
+import org.livetribe.ec2.api.v20080201.ProductInstanceConfirmation;
 import org.livetribe.ec2.jaxb.Response;
 import org.livetribe.ec2.jaxb.v20080201.DeregisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseItemType;
@@ -73,6 +76,9 @@ import org.livetribe.ec2.jaxb.v20080201.ProductCodesSetItemType;
 import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
 import org.livetribe.ec2.jaxb.v20080201.RunningInstancesItemType;
+import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseItemType;
+import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseType;
+import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
 import org.livetribe.ec2.model.AmazonImage;
 import org.livetribe.ec2.model.AmazonKernelImage;
 import org.livetribe.ec2.model.AmazonMachineImage;
@@ -244,22 +250,7 @@ public class RestEC2API implements EC2API
         if (BDMVirtualNames != null) for (int i = 0; i < BDMVirtualNames.length; i++) map.put("BlockDeviceMapping." + i + ".VirtualName", BDMVirtualNames[i]);
         if (BDMDeviceNames != null) for (int i = 0; i < BDMDeviceNames.length; i++) map.put("BlockDeviceMapping." + i + ".DeviceName", BDMDeviceNames[i]);
 
-        ReservationInfoType response = (ReservationInfoType) call(map);
-
-        List<GroupItemType> elements = response.getGroupSet().getItem();
-        String[] groups = new String[elements.size()];
-        for (int i = 0; i < groups.length; i++) groups[i] = elements.get(i).getGroupId();
-
-        Instance[] instances = new Instance[response.getInstancesSet().getItem().size()];
-        for (int i = 0; i < instances.length; i++)
-        {
-            RunningInstancesItemType riit = response.getInstancesSet().getItem().get(i);
-            InstanceState state = new InstanceState((short) riit.getInstanceState().getCode(), InstanceState.State.getValue(riit.getInstanceState().getName()));
-
-            instances[i] = new Instance(riit.getDnsName(), riit.getImageId(), riit.getInstanceId(), state, InstanceType.getValue(riit.getInstanceType()), riit.getLaunchTime().toGregorianCalendar().getTime(), new Placement(riit.getPlacement().getAvailabilityZone()), riit.getPrivateDnsName());
-        }
-
-        return new ReservationInfo(response.getReservationId(), response.getOwnerId(), groups, instances);
+        return obtainReservationInfo((ReservationInfoType) call(map));
     }
 
     public ReservationInfo describeInstances(String[] instanceIds) throws EC2Exception
@@ -275,22 +266,74 @@ public class RestEC2API implements EC2API
 
         if (instanceIds != null) for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
 
-        ReservationInfoType response = (ReservationInfoType) call(map);
+        return obtainReservationInfo((ReservationInfoType) call(map));
+    }
 
-        List<GroupItemType> elements = response.getGroupSet().getItem();
+    public List<TerminatedInstance> terminateInstances(String[] instanceIds) throws EC2Exception
+    {
+        if (instanceIds == null) throw new IllegalArgumentException("instanceIds cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "TerminateInstances");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
+
+        TerminateInstancesResponseType response = (TerminateInstancesResponseType) call(map);
+        List<TerminatedInstance> instances = new ArrayList<TerminatedInstance>();
+
+        for (TerminateInstancesResponseItemType item : response.getInstancesSet().getItem())
+        {
+            InstanceState shutdownState = new InstanceState((short) item.getShutdownState().getCode(), InstanceState.State.getValue(item.getShutdownState().getName()));
+            InstanceState prevState = new InstanceState((short) item.getPreviousState().getCode(), InstanceState.State.getValue(item.getPreviousState().getName()));
+
+            instances.add(new TerminatedInstance(item.getInstanceId(), shutdownState, prevState));
+        }
+
+        return instances;
+    }
+
+    public ProductInstanceConfirmation confirmProductInstance(String productCode, String instanceId) throws EC2Exception
+    {
+        if (productCode == null) throw new IllegalArgumentException("productCode cannot be null");
+        if (instanceId == null) throw new IllegalArgumentException("instanceId cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "ConfirmProductInstance");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("ProductCode", productCode);
+        map.put("InstanceId", instanceId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        ConfirmProductInstanceResponseType response = (ConfirmProductInstanceResponseType) call(map);
+
+        if (response.getOwnerId() != null) return new ProductInstanceConfirmation(response.isReturn(), response.getOwnerId());
+        else return new ProductInstanceConfirmation(response.isReturn());
+    }
+    
+    protected ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
+    {
+        List<GroupItemType> elements = reservationInfoType.getGroupSet().getItem();
         String[] groups = new String[elements.size()];
         for (int i = 0; i < groups.length; i++) groups[i] = elements.get(i).getGroupId();
 
-        Instance[] instances = new Instance[response.getInstancesSet().getItem().size()];
+        Instance[] instances = new Instance[reservationInfoType.getInstancesSet().getItem().size()];
         for (int i = 0; i < instances.length; i++)
         {
-            RunningInstancesItemType riit = response.getInstancesSet().getItem().get(i);
+            RunningInstancesItemType riit = reservationInfoType.getInstancesSet().getItem().get(i);
             InstanceState state = new InstanceState((short) riit.getInstanceState().getCode(), InstanceState.State.getValue(riit.getInstanceState().getName()));
 
             instances[i] = new Instance(riit.getDnsName(), riit.getImageId(), riit.getInstanceId(), state, InstanceType.getValue(riit.getInstanceType()), riit.getLaunchTime().toGregorianCalendar().getTime(), new Placement(riit.getPlacement().getAvailabilityZone()), riit.getPrivateDnsName());
         }
 
-        return new ReservationInfo(response.getReservationId(), response.getOwnerId(), groups, instances);
+        return new ReservationInfo(reservationInfoType.getReservationId(), reservationInfoType.getOwnerId(), groups, instances);
     }
 
     protected Object call(Map<String, String> map) throws EC2Exception
