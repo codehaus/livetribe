@@ -60,4 +60,10 @@ public class KeyPair
     {
         return material;
     }
+
+    @Override
+    public String toString()
+    {
+        return "(KeyPair name: " + name + " fingerprint: " + fingerprint + " material: " + material + ")";
+    }
 }
