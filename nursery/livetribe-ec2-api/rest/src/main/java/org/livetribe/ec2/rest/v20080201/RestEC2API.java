@@ -78,6 +78,7 @@ import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseType;
 import org.livetribe.ec2.jaxb.v20080201.GroupItemType;
+import org.livetribe.ec2.jaxb.v20080201.ModifyImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodesSetItemType;
 import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
@@ -90,11 +91,13 @@ import org.livetribe.ec2.model.AmazonMachineImage;
 import org.livetribe.ec2.model.AmazonMachineImageState;
 import org.livetribe.ec2.model.AmazonRamdiskImage;
 import org.livetribe.ec2.model.Architecture;
+import org.livetribe.ec2.model.ImageAttributeType;
 import org.livetribe.ec2.model.Instance;
 import org.livetribe.ec2.model.InstanceState;
 import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.model.Placement;
 import org.livetribe.ec2.model.ReservationInfo;
+import org.livetribe.ec2.model.ImageAttributeOperationType;
 import org.livetribe.ec2.rest.EC2Callback;
 import org.livetribe.ec2.util.Util;
 
@@ -381,6 +384,44 @@ public class RestEC2API implements EC2API
         map.put("Timestamp", Util.iso8601Conversion(new Date()));
 
         DeleteKeyPairResponseType response = (DeleteKeyPairResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public boolean modifyImageAttribute(String imageId, ImageAttributeType attributeType, ImageAttributeOperationType operationType, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception
+    {
+        if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
+        if (attributeType == null) throw new IllegalArgumentException("attributeType cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "ModifyImageAttribute");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("ImageId", imageId);
+        map.put("Attribute", attributeType.toString());
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        if (attributeType == ImageAttributeType.launchPermission)
+        {
+            if (operationType == null) throw new IllegalArgumentException("operationType cannot be null");
+            if (userId == null) throw new IllegalArgumentException("userId cannot be null");
+            if (userGroup == null) throw new IllegalArgumentException("userGroup cannot be null");
+
+            map.put("OperationType", operationType.toString());
+            
+            for (int i = 0; i < userId.length; i++) map.put("UserId." + i, userId[i]);
+            for (int i = 0; i < userGroup.length; i++) map.put("UserGroup." + i, userGroup[i]);
+        }
+        else
+        {
+            if (productCode == null) throw new IllegalArgumentException("productCode cannot be null");
+
+            for (int i = 0; i < productCode.length; i++) map.put("ProductCode." + i, productCode[i]);
+        }
+
+        ModifyImageAttributeResponseType response = (ModifyImageAttributeResponseType) call(map);
 
         return response.isReturn();
     }

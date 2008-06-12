@@ -23,6 +23,8 @@ import org.livetribe.ec2.api.EC2Exception;
 import org.livetribe.ec2.model.AmazonImage;
 import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.model.ReservationInfo;
+import org.livetribe.ec2.model.ImageAttributeType;
+import org.livetribe.ec2.model.ImageAttributeOperationType;
 
 
 /**
@@ -58,4 +60,6 @@ public interface EC2API
     public List<KeyPair> describeKeyPairs(String[] keyNames) throws EC2Exception;
 
     public boolean deleteKeyPair(String keyName) throws EC2Exception;
+
+    public boolean modifyImageAttribute(String imageId, ImageAttributeType attributeType, ImageAttributeOperationType operationType, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception;
 }
