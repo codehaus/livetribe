@@ -69,19 +69,24 @@ import org.livetribe.ec2.api.v20080201.TerminatedInstance;
 import org.livetribe.ec2.api.v20080201.UnavailableException;
 import org.livetribe.ec2.api.v20080201.UnknownParameterException;
 import org.livetribe.ec2.jaxb.Response;
+import org.livetribe.ec2.jaxb.v20080201.BlockDeviceMappingItemType;
 import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
 import org.livetribe.ec2.jaxb.v20080201.CreateKeyPairResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeleteKeyPairResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeregisterImageResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseType;
 import org.livetribe.ec2.jaxb.v20080201.GroupItemType;
+import org.livetribe.ec2.jaxb.v20080201.LaunchPermissionItemType;
 import org.livetribe.ec2.jaxb.v20080201.ModifyImageAttributeResponseType;
+import org.livetribe.ec2.jaxb.v20080201.ProductCodeItemType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodesSetItemType;
 import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
+import org.livetribe.ec2.jaxb.v20080201.ResetImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.RunningInstancesItemType;
 import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseType;
@@ -91,13 +96,15 @@ import org.livetribe.ec2.model.AmazonMachineImage;
 import org.livetribe.ec2.model.AmazonMachineImageState;
 import org.livetribe.ec2.model.AmazonRamdiskImage;
 import org.livetribe.ec2.model.Architecture;
-import org.livetribe.ec2.model.ImageAttributeType;
+import org.livetribe.ec2.model.BlockDeviceMappingItem;
+import org.livetribe.ec2.model.ImageAttribute;
+import org.livetribe.ec2.model.ImageAttributeOperation;
 import org.livetribe.ec2.model.Instance;
 import org.livetribe.ec2.model.InstanceState;
 import org.livetribe.ec2.model.InstanceType;
+import org.livetribe.ec2.model.LaunchPermission;
 import org.livetribe.ec2.model.Placement;
 import org.livetribe.ec2.model.ReservationInfo;
-import org.livetribe.ec2.model.ImageAttributeOperationType;
 import org.livetribe.ec2.rest.EC2Callback;
 import org.livetribe.ec2.util.Util;
 
@@ -388,40 +395,132 @@ public class RestEC2API implements EC2API
         return response.isReturn();
     }
 
-    public boolean modifyImageAttribute(String imageId, ImageAttributeType attributeType, ImageAttributeOperationType operationType, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception
+    public boolean modifyImageAttribute(String imageId, ImageAttribute attribute, ImageAttributeOperation operation, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception
     {
         if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
-        if (attributeType == null) throw new IllegalArgumentException("attributeType cannot be null");
+        if (attribute == null) throw new IllegalArgumentException("attributeType cannot be null");
 
         Map<String, String> map = new HashMap<String, String>();
 
         map.put("Action", "ModifyImageAttribute");
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("ImageId", imageId);
-        map.put("Attribute", attributeType.toString());
+        map.put("Attribute", attribute.toString());
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
         map.put("Timestamp", Util.iso8601Conversion(new Date()));
 
-        if (attributeType == ImageAttributeType.launchPermission)
+        if (attribute == ImageAttribute.launchPermission)
         {
-            if (operationType == null) throw new IllegalArgumentException("operationType cannot be null");
+            if (operation == null) throw new IllegalArgumentException("operationType cannot be null");
             if (userId == null) throw new IllegalArgumentException("userId cannot be null");
             if (userGroup == null) throw new IllegalArgumentException("userGroup cannot be null");
 
-            map.put("OperationType", operationType.toString());
-            
+            map.put("OperationType", operation.toString());
+
             for (int i = 0; i < userId.length; i++) map.put("UserId." + i, userId[i]);
             for (int i = 0; i < userGroup.length; i++) map.put("UserGroup." + i, userGroup[i]);
         }
-        else
+        else if (attribute == ImageAttribute.productCodes)
         {
             if (productCode == null) throw new IllegalArgumentException("productCode cannot be null");
 
             for (int i = 0; i < productCode.length; i++) map.put("ProductCode." + i, productCode[i]);
         }
+        else
+        {
+            throw new IllegalArgumentException("Unsupported image attribute type: " + attribute);
+        }
 
         ModifyImageAttributeResponseType response = (ModifyImageAttributeResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public Object describeImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception
+    {
+        if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
+        if (attribute == null) throw new IllegalArgumentException("attributeType cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DescribeImageAttribute");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("ImageId", imageId);
+        map.put("Attribute", attribute.toString());
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        DescribeImageAttributeResponseType response = (DescribeImageAttributeResponseType) call(map);
+
+        if (attribute == ImageAttribute.launchPermission)
+        {
+            List<LaunchPermissionItemType> results = response.getLaunchPermission().getItem();
+            List<LaunchPermission> permissions = new ArrayList<LaunchPermission>(results.size());
+
+            for (LaunchPermissionItemType result : results)
+            {
+                permissions.add(new LaunchPermission(result.getGroup(), result.getUserId()));
+            }
+
+            return permissions;
+        }
+        else if (attribute == ImageAttribute.productCodes)
+        {
+            List<ProductCodeItemType> results = response.getProductCodes().getItem();
+            List<String> codes = new ArrayList<String>(results.size());
+
+            for (ProductCodeItemType result : results)
+            {
+                codes.add(result.getProductCode());
+            }
+
+            return codes;
+        }
+        else if (attribute == ImageAttribute.kernel)
+        {
+            return response.getKernel();
+        }
+        else if (attribute == ImageAttribute.ramdisk)
+        {
+            return response.getRamdisk().getValue();
+        }
+        else if (attribute == ImageAttribute.blockDeviceMapping)
+        {
+            List<BlockDeviceMappingItemType> results = response.getBlockDeviceMapping().getItem();
+            List<BlockDeviceMappingItem> mappings = new ArrayList<BlockDeviceMappingItem>(results.size());
+
+            for (BlockDeviceMappingItemType result : results)
+            {
+                mappings.add(new BlockDeviceMappingItem(result.getVirtualName(), result.getDeviceName()));
+            }
+
+            return mappings;
+        }
+        else
+        {
+            throw new AssertionError("Should not have reached this condition");
+        }
+    }
+
+    public boolean resetImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception
+    {
+        if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
+        if (attribute == null) throw new IllegalArgumentException("attributeType cannot be null");
+        if (attribute != ImageAttribute.launchPermission) throw new IllegalArgumentException("Can only reset launchPermission attribute");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "ResetImageAttribute");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("ImageId", imageId);
+        map.put("Attribute", attribute.toString());
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        ResetImageAttributeResponseType response = (ResetImageAttributeResponseType) call(map);
 
         return response.isReturn();
     }

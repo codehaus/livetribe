@@ -19,8 +19,11 @@ package org.livetribe.ec2.model;
 /**
  * @version $Revision$ $Date$
  */
-public enum ImageAttributeType
+public enum ImageAttribute
 {
     launchPermission,
-    productCodes
+    productCodes,
+    kernel,
+    ramdisk,
+    blockDeviceMapping
 }

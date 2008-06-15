@@ -21,10 +21,10 @@ import java.util.Set;
 
 import org.livetribe.ec2.api.EC2Exception;
 import org.livetribe.ec2.model.AmazonImage;
+import org.livetribe.ec2.model.ImageAttribute;
+import org.livetribe.ec2.model.ImageAttributeOperation;
 import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.model.ReservationInfo;
-import org.livetribe.ec2.model.ImageAttributeType;
-import org.livetribe.ec2.model.ImageAttributeOperationType;
 
 
 /**
@@ -61,5 +61,9 @@ public interface EC2API
 
     public boolean deleteKeyPair(String keyName) throws EC2Exception;
 
-    public boolean modifyImageAttribute(String imageId, ImageAttributeType attributeType, ImageAttributeOperationType operationType, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception;
+    public boolean modifyImageAttribute(String imageId, ImageAttribute attribute, ImageAttributeOperation operation, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception;
+
+    public Object describeImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
+
+    public boolean resetImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
 }

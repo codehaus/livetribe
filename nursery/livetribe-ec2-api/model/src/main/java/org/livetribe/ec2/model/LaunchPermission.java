@@ -19,8 +19,33 @@ package org.livetribe.ec2.model;
 /**
  * @version $Revision$ $Date$
  */
-public enum ImageAttributeOperationType
+public class LaunchPermission
 {
-    add,
-    remove
+    private final String group;
+    private final String userId;
+
+    public LaunchPermission(String group, String userId)
+    {
+        if (group == null) throw new IllegalArgumentException("group cannot be null");
+        if (userId == null) throw new IllegalArgumentException("userId cannot be null");
+
+        this.group = group;
+        this.userId = userId;
+    }
+
+    public String getGroup()
+    {
+        return group;
+    }
+
+    public String getUserId()
+    {
+        return userId;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "(LaunchPermissionItemType group: " + group + " userId: " + userId + ")";
+    }
 }
