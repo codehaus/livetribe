@@ -28,6 +28,7 @@ import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.model.IpProtocol;
 import org.livetribe.ec2.model.ReservationInfo;
 import org.livetribe.ec2.model.SecurityGroup;
+import org.livetribe.ec2.model.AvailabilityZone;
 
 
 /**
@@ -94,4 +95,5 @@ public interface EC2API
 
     public boolean disassociateAddress(String publicIp) throws EC2Exception;
 
+    public List<AvailabilityZone> describeAvailabilityZones(String[] zoneNames) throws EC2Exception;
 }

@@ -21,17 +21,21 @@ package org.livetribe.ec2.model;
  */
 public class AvailabilityZone
 {
-    private String name;
-    private String state;
+    private final String name;
+    private final String state;
+
+    public AvailabilityZone(String name, String state)
+    {
+        if (name != null) throw new IllegalArgumentException("name cannot be null");
+        if (state != null) throw new IllegalArgumentException("state cannot be null");
+
+        this.name = name;
+        this.state = state;
+    }
 
     public String getName()
     {
         return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     public String getState()
@@ -39,8 +43,9 @@ public class AvailabilityZone
         return state;
     }
 
-    public void setState(String state)
+    @Override
+    public String toString()
     {
-        this.state = state;
+        return "(AvailabilityZone name: " + name + " state: " + state + ")";
     }
 }

@@ -71,6 +71,7 @@ import org.livetribe.ec2.api.v20080201.UnknownParameterException;
 import org.livetribe.ec2.jaxb.Response;
 import org.livetribe.ec2.jaxb.v20080201.AllocateAddressResponseType;
 import org.livetribe.ec2.jaxb.v20080201.AuthorizeSecurityGroupIngressResponseType;
+import org.livetribe.ec2.jaxb.v20080201.AvailabilityZoneItemType;
 import org.livetribe.ec2.jaxb.v20080201.BlockDeviceMappingItemType;
 import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
 import org.livetribe.ec2.jaxb.v20080201.CreateKeyPairResponseType;
@@ -80,6 +81,7 @@ import org.livetribe.ec2.jaxb.v20080201.DeleteSecurityGroupResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeregisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeAddressesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeAddressesResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeAvailabilityZonesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
@@ -108,6 +110,7 @@ import org.livetribe.ec2.model.AmazonMachineImage;
 import org.livetribe.ec2.model.AmazonMachineImageState;
 import org.livetribe.ec2.model.AmazonRamdiskImage;
 import org.livetribe.ec2.model.Architecture;
+import org.livetribe.ec2.model.AvailabilityZone;
 import org.livetribe.ec2.model.BlockDeviceMappingItem;
 import org.livetribe.ec2.model.ImageAttribute;
 import org.livetribe.ec2.model.ImageAttributeOperation;
@@ -793,6 +796,30 @@ public final class RestEC2API implements EC2API
         ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
 
         return response.isReturn();
+    }
+
+    public List<AvailabilityZone> describeAvailabilityZones(String[] zoneNames) throws EC2Exception
+    {
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DescribeAvailabilityZones");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        if (zoneNames != null) for (int i = 0; i < zoneNames.length; i++) map.put("ZoneName." + i, zoneNames[i]);
+
+        DescribeAvailabilityZonesResponseType response = (DescribeAvailabilityZonesResponseType) call(map);
+
+        List<AvailabilityZone> zones = new ArrayList<AvailabilityZone>(response.getAvailabilityZoneInfo().getItem().size());
+
+        for (AvailabilityZoneItemType zone : response.getAvailabilityZoneInfo().getItem())
+        {
+            zones.add(new AvailabilityZone(zone.getZoneName(), zone.getZoneState()));
+        }
+
+        return zones;
     }
 
     private ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
