@@ -17,6 +17,7 @@
 package org.livetribe.ec2.api.v20080201;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.livetribe.ec2.api.EC2Exception;
@@ -24,9 +25,9 @@ import org.livetribe.ec2.model.AmazonImage;
 import org.livetribe.ec2.model.ImageAttribute;
 import org.livetribe.ec2.model.ImageAttributeOperation;
 import org.livetribe.ec2.model.InstanceType;
+import org.livetribe.ec2.model.IpProtocol;
 import org.livetribe.ec2.model.ReservationInfo;
 import org.livetribe.ec2.model.SecurityGroup;
-import org.livetribe.ec2.model.IpProtocol;
 
 
 /**
@@ -80,6 +81,17 @@ public interface EC2API
                                                  IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
 
     public boolean revokeSecurityGroupIngress(String name,
-                                                 String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
-                                                 IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
+                                              String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                              IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
+
+    public String allocateAddress() throws EC2Exception;
+
+    public Map<String, List<String>> DescribeAddresses(String[] publicIps) throws EC2Exception;
+
+    public boolean releaseAddress(String publicIp) throws EC2Exception;
+
+    public boolean associateAddress(String instanceId, String publicIp) throws EC2Exception;
+
+    public boolean disassociateAddress(String publicIp) throws EC2Exception;
+
 }

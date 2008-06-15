@@ -69,6 +69,7 @@ import org.livetribe.ec2.api.v20080201.TerminatedInstance;
 import org.livetribe.ec2.api.v20080201.UnavailableException;
 import org.livetribe.ec2.api.v20080201.UnknownParameterException;
 import org.livetribe.ec2.jaxb.Response;
+import org.livetribe.ec2.jaxb.v20080201.AllocateAddressResponseType;
 import org.livetribe.ec2.jaxb.v20080201.AuthorizeSecurityGroupIngressResponseType;
 import org.livetribe.ec2.jaxb.v20080201.BlockDeviceMappingItemType;
 import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
@@ -77,6 +78,8 @@ import org.livetribe.ec2.jaxb.v20080201.CreateSecurityGroupResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeleteKeyPairResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeleteSecurityGroupResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeregisterImageResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeAddressesResponseItemType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeAddressesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
@@ -91,6 +94,7 @@ import org.livetribe.ec2.jaxb.v20080201.ModifyImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodeItemType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodesSetItemType;
 import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
+import org.livetribe.ec2.jaxb.v20080201.ReleaseAddressResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
 import org.livetribe.ec2.jaxb.v20080201.ResetImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.RunningInstancesItemType;
@@ -693,6 +697,104 @@ public final class RestEC2API implements EC2API
         return response.isReturn();
     }
 
+    public String allocateAddress() throws EC2Exception
+    {
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "AllocateAddress");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        AllocateAddressResponseType response = (AllocateAddressResponseType) call(map);
+
+        return response.getPublicIp();
+    }
+
+    public Map<String, List<String>> DescribeAddresses(String[] publicIps) throws EC2Exception
+    {
+        if (publicIps == null) throw new IllegalArgumentException("publicIps cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DescribeAddresses");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        for (int i = 0; i < publicIps.length; i++) map.put("PublicIp." + i, publicIps[i]);
+
+        DescribeAddressesResponseType response = (DescribeAddressesResponseType) call(map);
+        Map<String, List<String>> addresses = new HashMap<String, List<String>>();
+
+        for (DescribeAddressesResponseItemType address : response.getAddressesSet().getItem())
+        {
+            List<String> ips = addresses.get(address.getInstanceId());
+            if (ips == null) addresses.put(address.getInstanceId(), ips = new ArrayList<String>());
+            ips.add(address.getPublicIp());
+        }
+
+        return addresses;
+    }
+
+    public boolean releaseAddress(String publicIp) throws EC2Exception
+    {
+        if (publicIp == null) throw new IllegalArgumentException("publicIp cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "ReleaseAddress");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("PublicIp", publicIp);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public boolean associateAddress(String instanceId, String publicIp) throws EC2Exception
+    {
+        if (instanceId == null) throw new IllegalArgumentException("instanceId cannot be null");
+        if (publicIp == null) throw new IllegalArgumentException("publicIp cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "AssociateAddress");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("InstanceId", instanceId);
+        map.put("PublicIp", publicIp);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public boolean disassociateAddress(String publicIp) throws EC2Exception
+    {
+        if (publicIp == null) throw new IllegalArgumentException("publicIp cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DisassociateAddress");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("PublicIp", publicIp);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
+
+        return response.isReturn();
+    }
+
     private ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
     {
         List<GroupItemType> elements = reservationInfoType.getGroupSet().getItem();
@@ -713,6 +815,8 @@ public final class RestEC2API implements EC2API
 
     private Object call(Map<String, String> map) throws EC2Exception
     {
+        assert !map.containsKey("Signature");
+
         try
         {
             map.put("Signature", Util.sign(map, secretAccessKey));
