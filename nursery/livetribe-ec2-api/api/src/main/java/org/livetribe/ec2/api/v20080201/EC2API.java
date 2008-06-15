@@ -25,6 +25,8 @@ import org.livetribe.ec2.model.ImageAttribute;
 import org.livetribe.ec2.model.ImageAttributeOperation;
 import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.model.ReservationInfo;
+import org.livetribe.ec2.model.SecurityGroup;
+import org.livetribe.ec2.model.IpProtocol;
 
 
 /**
@@ -66,4 +68,18 @@ public interface EC2API
     public Object describeImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
 
     public boolean resetImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
+
+    public boolean createSecurityGroup(String name, String description) throws EC2Exception;
+
+    public List<SecurityGroup> describeSecurityGroups(String[] names) throws EC2Exception;
+
+    public boolean deleteSecurityGroup(String name) throws EC2Exception;
+
+    public boolean authorizeSecurityGroupIngress(String name,
+                                                 String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                                 IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
+
+    public boolean revokeSecurityGroupIngress(String name,
+                                                 String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                                 IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
 }

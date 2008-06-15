@@ -69,17 +69,23 @@ import org.livetribe.ec2.api.v20080201.TerminatedInstance;
 import org.livetribe.ec2.api.v20080201.UnavailableException;
 import org.livetribe.ec2.api.v20080201.UnknownParameterException;
 import org.livetribe.ec2.jaxb.Response;
+import org.livetribe.ec2.jaxb.v20080201.AuthorizeSecurityGroupIngressResponseType;
 import org.livetribe.ec2.jaxb.v20080201.BlockDeviceMappingItemType;
 import org.livetribe.ec2.jaxb.v20080201.ConfirmProductInstanceResponseType;
 import org.livetribe.ec2.jaxb.v20080201.CreateKeyPairResponseType;
+import org.livetribe.ec2.jaxb.v20080201.CreateSecurityGroupResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeleteKeyPairResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DeleteSecurityGroupResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DeregisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseType;
+import org.livetribe.ec2.jaxb.v20080201.DescribeSecurityGroupsResponseType;
 import org.livetribe.ec2.jaxb.v20080201.GroupItemType;
+import org.livetribe.ec2.jaxb.v20080201.IpPermissionType;
+import org.livetribe.ec2.jaxb.v20080201.IpRangeItemType;
 import org.livetribe.ec2.jaxb.v20080201.LaunchPermissionItemType;
 import org.livetribe.ec2.jaxb.v20080201.ModifyImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodeItemType;
@@ -88,8 +94,10 @@ import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
 import org.livetribe.ec2.jaxb.v20080201.ResetImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.RunningInstancesItemType;
+import org.livetribe.ec2.jaxb.v20080201.SecurityGroupItemType;
 import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.TerminateInstancesResponseType;
+import org.livetribe.ec2.jaxb.v20080201.UserIdGroupPairType;
 import org.livetribe.ec2.model.AmazonImage;
 import org.livetribe.ec2.model.AmazonKernelImage;
 import org.livetribe.ec2.model.AmazonMachineImage;
@@ -102,9 +110,13 @@ import org.livetribe.ec2.model.ImageAttributeOperation;
 import org.livetribe.ec2.model.Instance;
 import org.livetribe.ec2.model.InstanceState;
 import org.livetribe.ec2.model.InstanceType;
+import org.livetribe.ec2.model.IpPermission;
+import org.livetribe.ec2.model.IpProtocol;
 import org.livetribe.ec2.model.LaunchPermission;
 import org.livetribe.ec2.model.Placement;
 import org.livetribe.ec2.model.ReservationInfo;
+import org.livetribe.ec2.model.SecurityGroup;
+import org.livetribe.ec2.model.UserIdGroupPair;
 import org.livetribe.ec2.rest.EC2Callback;
 import org.livetribe.ec2.util.Util;
 
@@ -112,7 +124,7 @@ import org.livetribe.ec2.util.Util;
 /**
  * @version $Revision$ $Date$
  */
-public class RestEC2API implements EC2API
+public final class RestEC2API implements EC2API
 {
     private final static String VERSION = "2008-02-01";
     private final JAXBContext context20080201;
@@ -525,7 +537,163 @@ public class RestEC2API implements EC2API
         return response.isReturn();
     }
 
-    protected ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
+    public boolean createSecurityGroup(String name, String description) throws EC2Exception
+    {
+        if (name == null) throw new IllegalArgumentException("Group name cannot be null");
+        if (description == null) throw new IllegalArgumentException("Group description cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "CreateSecurityGroup");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("GroupName", name);
+        map.put("GroupDescription", description);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        CreateSecurityGroupResponseType response = (CreateSecurityGroupResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public List<SecurityGroup> describeSecurityGroups(String[] names) throws EC2Exception
+    {
+        if (names == null) throw new IllegalArgumentException("names cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DescribeSecurityGroups");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        for (int i = 0; i < names.length; i++) map.put("GroupName." + i, names[i]);
+
+        DescribeSecurityGroupsResponseType response = (DescribeSecurityGroupsResponseType) call(map);
+        List<SecurityGroup> securityGroups = new ArrayList<SecurityGroup>();
+
+        for (SecurityGroupItemType group : response.getSecurityGroupInfo().getItem())
+        {
+            List<IpPermission> permissions = new ArrayList<IpPermission>(group.getIpPermissions().getItem().size());
+
+            for (IpPermissionType permission : group.getIpPermissions().getItem())
+            {
+                List<UserIdGroupPair> groups = new ArrayList<UserIdGroupPair>(permission.getGroups().getItem().size());
+
+                for (UserIdGroupPairType pair : permission.getGroups().getItem()) groups.add(new UserIdGroupPair(pair.getUserId(), pair.getGroupName()));
+
+                List<String> ranges = new ArrayList<String>(permission.getIpRanges().getItem().size());
+
+                for (IpRangeItemType range : permission.getIpRanges().getItem()) ranges.add(range.getCidrIp());
+
+                permissions.add(new IpPermission(IpProtocol.valueOf(permission.getIpProtocol()), permission.getFromPort(), permission.getToPort(), groups, ranges));
+            }
+
+            securityGroups.add(new SecurityGroup(group.getOwnerId(), group.getGroupName(), group.getGroupDescription(), permissions));
+        }
+
+        return securityGroups;
+    }
+
+    public boolean deleteSecurityGroup(String name) throws EC2Exception
+    {
+        if (name == null) throw new IllegalArgumentException("Group name cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "DeleteSecurityGroup");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("GroupName", name);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        DeleteSecurityGroupResponseType response = (DeleteSecurityGroupResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public boolean authorizeSecurityGroupIngress(String name,
+                                                 String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                                 IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception
+    {
+        if (name == null) throw new IllegalArgumentException("Group name cannot be null");
+
+        boolean userGroupPairPermission = sourceSecurityGroupName != null && sourceSecurityGroupOwnerId != null;
+        boolean cidrIpPermission = ipProtocol != null && cidrIp != null;
+
+        if (userGroupPairPermission && cidrIpPermission) throw new IllegalArgumentException("Cannot set both user/group pair and CIDR IP permissions at the same time");
+        if (!(userGroupPairPermission || cidrIpPermission)) throw new IllegalArgumentException("Not enough parameters specified for either user/group pair and CIDR IP permissions");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "AuthorizeSecurityGroupIngress");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("GroupName", name);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        if (userGroupPairPermission)
+        {
+            map.put("SourceSecurityGroupName", sourceSecurityGroupName);
+            map.put("SourceSecurityGroupOwnerId", sourceSecurityGroupOwnerId);
+        }
+        else
+        {
+            map.put("IpProtocol", ipProtocol.toString());
+            map.put("FromPort", Integer.toString(fromPort));
+            map.put("ToPort", Integer.toString(toPort));
+            map.put("CidrIp", cidrIp);
+        }
+
+        AuthorizeSecurityGroupIngressResponseType response = (AuthorizeSecurityGroupIngressResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    public boolean revokeSecurityGroupIngress(String name,
+                                              String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                              IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception
+    {
+        if (name == null) throw new IllegalArgumentException("Group name cannot be null");
+
+        boolean userGroupPairPermission = sourceSecurityGroupName != null && sourceSecurityGroupOwnerId != null;
+        boolean cidrIpPermission = ipProtocol != null && cidrIp != null;
+
+        if (userGroupPairPermission && cidrIpPermission) throw new IllegalArgumentException("Cannot set both user/group pair and CIDR IP permissions at the same time");
+        if (!(userGroupPairPermission || cidrIpPermission)) throw new IllegalArgumentException("Not enough parameters specified for either user/group pair and CIDR IP permissions");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "RevokeSecurityGroupIngress");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("GroupName", name);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        if (userGroupPairPermission)
+        {
+            map.put("SourceSecurityGroupName", sourceSecurityGroupName);
+            map.put("SourceSecurityGroupOwnerId", sourceSecurityGroupOwnerId);
+        }
+        else
+        {
+            map.put("IpProtocol", ipProtocol.toString());
+            map.put("FromPort", Integer.toString(fromPort));
+            map.put("ToPort", Integer.toString(toPort));
+            map.put("CidrIp", cidrIp);
+        }
+
+        AuthorizeSecurityGroupIngressResponseType response = (AuthorizeSecurityGroupIngressResponseType) call(map);
+
+        return response.isReturn();
+    }
+
+    private ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
     {
         List<GroupItemType> elements = reservationInfoType.getGroupSet().getItem();
         String[] groups = new String[elements.size()];
@@ -543,7 +711,7 @@ public class RestEC2API implements EC2API
         return new ReservationInfo(reservationInfoType.getReservationId(), reservationInfoType.getOwnerId(), groups, instances);
     }
 
-    protected Object call(Map<String, String> map) throws EC2Exception
+    private Object call(Map<String, String> map) throws EC2Exception
     {
         try
         {
