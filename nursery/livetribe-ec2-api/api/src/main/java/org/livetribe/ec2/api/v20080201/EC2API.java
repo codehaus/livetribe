@@ -22,13 +22,13 @@ import java.util.Set;
 
 import org.livetribe.ec2.api.EC2Exception;
 import org.livetribe.ec2.model.AmazonImage;
+import org.livetribe.ec2.model.AvailabilityZone;
 import org.livetribe.ec2.model.ImageAttribute;
 import org.livetribe.ec2.model.ImageAttributeOperation;
 import org.livetribe.ec2.model.InstanceType;
 import org.livetribe.ec2.model.IpProtocol;
 import org.livetribe.ec2.model.ReservationInfo;
 import org.livetribe.ec2.model.SecurityGroup;
-import org.livetribe.ec2.model.AvailabilityZone;
 
 
 /**
@@ -55,45 +55,47 @@ public interface EC2API
 
     ReservationInfo describeInstances(String[] instanceIds) throws EC2Exception;
 
-    public List<TerminatedInstance> terminateInstances(String[] instanceIds) throws EC2Exception;
+    boolean rebootInstances(String[] instanceIds) throws EC2Exception;
 
-    public ProductInstanceConfirmation confirmProductInstance(String productCode, String instanceId) throws EC2Exception;
+    List<TerminatedInstance> terminateInstances(String[] instanceIds) throws EC2Exception;
 
-    public KeyPair createKeyPair(String keyName) throws EC2Exception;
+    ProductInstanceConfirmation confirmProductInstance(String productCode, String instanceId) throws EC2Exception;
 
-    public List<KeyPair> describeKeyPairs(String[] keyNames) throws EC2Exception;
+    KeyPair createKeyPair(String keyName) throws EC2Exception;
 
-    public boolean deleteKeyPair(String keyName) throws EC2Exception;
+    List<KeyPair> describeKeyPairs(String[] keyNames) throws EC2Exception;
 
-    public boolean modifyImageAttribute(String imageId, ImageAttribute attribute, ImageAttributeOperation operation, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception;
+    boolean deleteKeyPair(String keyName) throws EC2Exception;
 
-    public Object describeImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
+    boolean modifyImageAttribute(String imageId, ImageAttribute attribute, ImageAttributeOperation operation, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception;
 
-    public boolean resetImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
+    Object describeImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
 
-    public boolean createSecurityGroup(String name, String description) throws EC2Exception;
+    boolean resetImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception;
 
-    public List<SecurityGroup> describeSecurityGroups(String[] names) throws EC2Exception;
+    boolean createSecurityGroup(String name, String description) throws EC2Exception;
 
-    public boolean deleteSecurityGroup(String name) throws EC2Exception;
+    List<SecurityGroup> describeSecurityGroups(String[] names) throws EC2Exception;
 
-    public boolean authorizeSecurityGroupIngress(String name,
-                                                 String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
-                                                 IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
+    boolean deleteSecurityGroup(String name) throws EC2Exception;
 
-    public boolean revokeSecurityGroupIngress(String name,
-                                              String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
-                                              IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
+    boolean authorizeSecurityGroupIngress(String name,
+                                          String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                          IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
 
-    public String allocateAddress() throws EC2Exception;
+    boolean revokeSecurityGroupIngress(String name,
+                                       String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
+                                       IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception;
 
-    public Map<String, List<String>> DescribeAddresses(String[] publicIps) throws EC2Exception;
+    String allocateAddress() throws EC2Exception;
 
-    public boolean releaseAddress(String publicIp) throws EC2Exception;
+    Map<String, List<String>> DescribeAddresses(String[] publicIps) throws EC2Exception;
 
-    public boolean associateAddress(String instanceId, String publicIp) throws EC2Exception;
+    boolean releaseAddress(String publicIp) throws EC2Exception;
 
-    public boolean disassociateAddress(String publicIp) throws EC2Exception;
+    boolean associateAddress(String instanceId, String publicIp) throws EC2Exception;
 
-    public List<AvailabilityZone> describeAvailabilityZones(String[] zoneNames) throws EC2Exception;
+    boolean disassociateAddress(String publicIp) throws EC2Exception;
+
+    List<AvailabilityZone> describeAvailabilityZones(String[] zoneNames) throws EC2Exception;
 }

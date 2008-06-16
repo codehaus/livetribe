@@ -95,6 +95,7 @@ import org.livetribe.ec2.jaxb.v20080201.LaunchPermissionItemType;
 import org.livetribe.ec2.jaxb.v20080201.ModifyImageAttributeResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodeItemType;
 import org.livetribe.ec2.jaxb.v20080201.ProductCodesSetItemType;
+import org.livetribe.ec2.jaxb.v20080201.RebootInstancesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.RegisterImageResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReleaseAddressResponseType;
 import org.livetribe.ec2.jaxb.v20080201.ReservationInfoType;
@@ -301,6 +302,23 @@ public final class RestEC2API implements EC2API
         if (instanceIds != null) for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
 
         return obtainReservationInfo((ReservationInfoType) call(map));
+    }
+
+    public boolean rebootInstances(String[] instanceIds) throws EC2Exception
+    {
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "RebootInstances");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+
+        if (instanceIds != null) for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
+
+        RebootInstancesResponseType response = (RebootInstancesResponseType) call(map);
+
+        return response.isReturn();
     }
 
     public List<TerminatedInstance> terminateInstances(String[] instanceIds) throws EC2Exception
@@ -916,5 +934,4 @@ public final class RestEC2API implements EC2API
             throw new EC2Exception("Unable to sign request", se);
         }
     }
-
 }
