@@ -137,18 +137,8 @@ public class Base64Encoder
 
     private static boolean isBase64(byte octect)
     {
-        if (octect == PAD)
-        {
-            return true;
-        }
-        else if (base64Alphabet[octect] == -1)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        if (octect == PAD) return true;
+        else return base64Alphabet[octect] != -1;
     }
 
     /**

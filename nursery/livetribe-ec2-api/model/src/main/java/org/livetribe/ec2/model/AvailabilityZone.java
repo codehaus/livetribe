@@ -17,6 +17,8 @@
 package org.livetribe.ec2.model;
 
 /**
+ * A response POJO from a <code>describeAvailabilityZones()</code> request.
+ *
  * @version $Revision$ $Date$
  */
 public class AvailabilityZone
@@ -24,6 +26,12 @@ public class AvailabilityZone
     private final String name;
     private final String state;
 
+    /**
+     * Constructor.
+     *
+     * @param name  the name of the Availability Zone
+     * @param state the state of the Availability Zone
+     */
     public AvailabilityZone(String name, String state)
     {
         if (name != null) throw new IllegalArgumentException("name cannot be null");
@@ -33,11 +41,21 @@ public class AvailabilityZone
         this.state = state;
     }
 
+    /**
+     * Name of the Availability Zone.
+     *
+     * @return the name of the Availability Zone
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * State of the Availability Zone.
+     *
+     * @return the state of the Availability Zone
+     */
     public String getState()
     {
         return state;

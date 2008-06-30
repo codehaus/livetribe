@@ -39,8 +39,8 @@ import org.slf4j.LoggerFactory;
 public final class Util
 {
     private final static Logger LOGGER = LoggerFactory.getLogger(Util.class);
-    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-    private static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+    private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+    private final static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
     /**
      * Computes RFC 2104-compliant HMAC signature for Amazon EC2 API calls.
@@ -52,7 +52,7 @@ public final class Util
      */
     public static String sign(Map<String, String> data, String key) throws SignatureException
     {
-        if (LOGGER.isDebugEnabled()) LOGGER.debug("Data {} key {}", data, key);
+        LOGGER.debug("Data {} key {}", data, key);
 
         StringBuilder sortedData = new StringBuilder();
         Set<String> sorted = new TreeSet<String>(new Comparator<String>()
@@ -104,12 +104,24 @@ public final class Util
         return result;
     }
 
-    public static String iso8601Conversion(Calendar calendar)
+    /**
+     * Format the calendar instance using ISO 8601 standard
+     *
+     * @param calendar the instance to be formatted
+     * @return the formatted calendar instance using ISO 8601 standard
+     */
+    public static String iso8601Format(Calendar calendar)
     {
-        return iso8601Conversion(calendar.getTime());
+        return iso8601Format(calendar.getTime());
     }
 
-    public static String iso8601Conversion(Date date)
+    /**
+     * Format the date instance using ISO 8601 standard
+     *
+     * @param date the instance to be formatted
+     * @return the formatted date instance using ISO 8601 standard
+     */
+    public static String iso8601Format(Date date)
     {
         return ISO8601FORMAT.format(date);
     }

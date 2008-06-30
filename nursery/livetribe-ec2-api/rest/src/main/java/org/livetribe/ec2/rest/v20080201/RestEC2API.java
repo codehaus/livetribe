@@ -38,6 +38,7 @@ import org.apache.asyncweb.client.codec.HttpResponseMessage;
 import org.livetribe.ec2.api.EC2Exception;
 import org.livetribe.ec2.api.v20080201.AddressLimitExceededException;
 import org.livetribe.ec2.api.v20080201.AuthFailureException;
+import org.livetribe.ec2.api.v20080201.ConsoleOutput;
 import org.livetribe.ec2.api.v20080201.EC2API;
 import org.livetribe.ec2.api.v20080201.InstanceLimitExceededException;
 import org.livetribe.ec2.api.v20080201.InsufficientAddressCapacityException;
@@ -88,6 +89,7 @@ import org.livetribe.ec2.jaxb.v20080201.DescribeImagesResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseItemType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeKeyPairsResponseType;
 import org.livetribe.ec2.jaxb.v20080201.DescribeSecurityGroupsResponseType;
+import org.livetribe.ec2.jaxb.v20080201.GetConsoleOutputResponseType;
 import org.livetribe.ec2.jaxb.v20080201.GroupItemType;
 import org.livetribe.ec2.jaxb.v20080201.IpPermissionType;
 import org.livetribe.ec2.jaxb.v20080201.IpRangeItemType;
@@ -126,10 +128,13 @@ import org.livetribe.ec2.model.ReservationInfo;
 import org.livetribe.ec2.model.SecurityGroup;
 import org.livetribe.ec2.model.UserIdGroupPair;
 import org.livetribe.ec2.rest.EC2Callback;
+import org.livetribe.ec2.util.Base64Encoder;
 import org.livetribe.ec2.util.Util;
 
 
 /**
+ * A restful implementation of the <code>EC2API</code> interface.
+ *
  * @version $Revision$ $Date$
  */
 public final class RestEC2API implements EC2API
@@ -142,6 +147,14 @@ public final class RestEC2API implements EC2API
     private final String secretAccessKey;
     private int timeout = 60;
 
+    /**
+     * A restful implementation of the <code>EC2API</code> interface
+     *
+     * @param url             the URL of the Amazon EC2 restful API
+     * @param AWSAccessKeyId  the Access Key ID for the request sender. This identifies the account which will be charged for usage of the service. The account with which the Access Key ID is associated must be signed up for Amazon EC2, or requests will not be accepted.
+     * @param secretAccessKey the Secret Access Key is used to calculate a signature the requests
+     * @throws JAXBException if unable to create JAXB Contexts for org.livetribe.ec2.jaxb or org.livetribe.ec2.jaxb.v20080201
+     */
     public RestEC2API(URL url, String AWSAccessKeyId, String secretAccessKey) throws JAXBException
     {
         if (url == null) throw new IllegalArgumentException("url cannot be null");
@@ -155,16 +168,29 @@ public final class RestEC2API implements EC2API
         this.context20080201 = JAXBContext.newInstance("org.livetribe.ec2.jaxb.v20080201");
     }
 
+    /**
+     * Get how long to wait for a reply in seconds
+     *
+     * @return how long to wait for a reply in seconds
+     */
     public int getTimeout()
     {
         return timeout;
     }
 
+    /**
+     * Set how long to wait for a reply in seconds
+     *
+     * @param timeout how long to wait for a reply in seconds
+     */
     public void setTimeout(int timeout)
     {
         this.timeout = timeout;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String registerImage(String imageLocation) throws EC2Exception
     {
         if (imageLocation == null) throw new IllegalArgumentException("imageLocation cannot be null");
@@ -176,13 +202,16 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         RegisterImageResponseType response = (RegisterImageResponseType) call(map);
 
         return response.getImageId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<AmazonImage> describeImages(String[] imageId, String[] owner, String[] executableBy) throws EC2Exception
     {
         Map<String, String> map = new HashMap<String, String>();
@@ -195,7 +224,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         DescribeImagesResponseType images = (DescribeImagesResponseType) call(map);
 
@@ -242,6 +271,9 @@ public final class RestEC2API implements EC2API
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean deregisterImage(String imageId) throws EC2Exception
     {
         if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
@@ -253,13 +285,16 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         DeregisterImageResponseType response = (DeregisterImageResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ReservationInfo runInstances(String imageId, int minCount, int maxCount, String keyName, String[] securityGroup, String userData, InstanceType instanceType, String availabilityZone, String kernelId, String ramdiskId, String[] BDMVirtualNames, String[] BDMDeviceNames) throws EC2Exception
     {
         if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
@@ -273,7 +308,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (keyName != null) map.put("KeyName", keyName);
         if (securityGroup != null) for (int i = 0; i < securityGroup.length; i++) map.put("SecurityGroup." + i, securityGroup[i]);
@@ -288,6 +323,9 @@ public final class RestEC2API implements EC2API
         return obtainReservationInfo((ReservationInfoType) call(map));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ReservationInfo describeInstances(String[] instanceIds) throws EC2Exception
     {
 
@@ -297,13 +335,16 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (instanceIds != null) for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
 
         return obtainReservationInfo((ReservationInfoType) call(map));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean rebootInstances(String[] instanceIds) throws EC2Exception
     {
         Map<String, String> map = new HashMap<String, String>();
@@ -312,7 +353,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (instanceIds != null) for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
 
@@ -321,6 +362,9 @@ public final class RestEC2API implements EC2API
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<TerminatedInstance> terminateInstances(String[] instanceIds) throws EC2Exception
     {
         if (instanceIds == null) throw new IllegalArgumentException("instanceIds cannot be null");
@@ -331,7 +375,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         for (int i = 0; i < instanceIds.length; i++) map.put("InstanceId." + i, instanceIds[i]);
 
@@ -349,6 +393,9 @@ public final class RestEC2API implements EC2API
         return instances;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProductInstanceConfirmation confirmProductInstance(String productCode, String instanceId) throws EC2Exception
     {
         if (productCode == null) throw new IllegalArgumentException("productCode cannot be null");
@@ -362,14 +409,17 @@ public final class RestEC2API implements EC2API
         map.put("InstanceId", instanceId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         ConfirmProductInstanceResponseType response = (ConfirmProductInstanceResponseType) call(map);
 
-        if (response.getOwnerId() != null) return new ProductInstanceConfirmation(response.isReturn(), response.getOwnerId());
-        else return new ProductInstanceConfirmation(response.isReturn());
+        if (response.isReturn()) return new ProductInstanceConfirmation(response.getOwnerId());
+        else return new ProductInstanceConfirmation();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public KeyPair createKeyPair(String keyName) throws EC2Exception
     {
         if (keyName == null) throw new IllegalArgumentException("keyName cannot be null");
@@ -381,7 +431,7 @@ public final class RestEC2API implements EC2API
         map.put("KeyName", keyName);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         CreateKeyPairResponseType response = (CreateKeyPairResponseType) call(map);
 
@@ -389,6 +439,9 @@ public final class RestEC2API implements EC2API
         else return new KeyPair(response.getKeyName(), response.getKeyFingerprint());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<KeyPair> describeKeyPairs(String[] keyNames) throws EC2Exception
     {
         if (keyNames == null) throw new IllegalArgumentException("keyNames cannot be null");
@@ -399,7 +452,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         for (int i = 0; i < keyNames.length; i++) map.put("KeyName." + i, keyNames[i]);
 
@@ -414,6 +467,9 @@ public final class RestEC2API implements EC2API
         return keyPairs;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean deleteKeyPair(String keyName) throws EC2Exception
     {
         if (keyName == null) throw new IllegalArgumentException("keyName cannot be null");
@@ -425,13 +481,16 @@ public final class RestEC2API implements EC2API
         map.put("KeyName", keyName);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         DeleteKeyPairResponseType response = (DeleteKeyPairResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean modifyImageAttribute(String imageId, ImageAttribute attribute, ImageAttributeOperation operation, String[] userId, String[] userGroup, String[] productCode) throws EC2Exception
     {
         if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
@@ -445,7 +504,7 @@ public final class RestEC2API implements EC2API
         map.put("Attribute", attribute.toString());
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (attribute == ImageAttribute.launchPermission)
         {
@@ -474,6 +533,9 @@ public final class RestEC2API implements EC2API
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object describeImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception
     {
         if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
@@ -487,7 +549,7 @@ public final class RestEC2API implements EC2API
         map.put("Attribute", attribute.toString());
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         DescribeImageAttributeResponseType response = (DescribeImageAttributeResponseType) call(map);
 
@@ -541,6 +603,9 @@ public final class RestEC2API implements EC2API
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean resetImageAttribute(String imageId, ImageAttribute attribute) throws EC2Exception
     {
         if (imageId == null) throw new IllegalArgumentException("imageId cannot be null");
@@ -555,13 +620,16 @@ public final class RestEC2API implements EC2API
         map.put("Attribute", attribute.toString());
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         ResetImageAttributeResponseType response = (ResetImageAttributeResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean createSecurityGroup(String name, String description) throws EC2Exception
     {
         if (name == null) throw new IllegalArgumentException("Group name cannot be null");
@@ -575,13 +643,16 @@ public final class RestEC2API implements EC2API
         map.put("GroupDescription", description);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         CreateSecurityGroupResponseType response = (CreateSecurityGroupResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<SecurityGroup> describeSecurityGroups(String[] names) throws EC2Exception
     {
         if (names == null) throw new IllegalArgumentException("names cannot be null");
@@ -592,7 +663,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         for (int i = 0; i < names.length; i++) map.put("GroupName." + i, names[i]);
 
@@ -622,6 +693,9 @@ public final class RestEC2API implements EC2API
         return securityGroups;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean deleteSecurityGroup(String name) throws EC2Exception
     {
         if (name == null) throw new IllegalArgumentException("Group name cannot be null");
@@ -633,13 +707,16 @@ public final class RestEC2API implements EC2API
         map.put("GroupName", name);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         DeleteSecurityGroupResponseType response = (DeleteSecurityGroupResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean authorizeSecurityGroupIngress(String name,
                                                  String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
                                                  IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception
@@ -659,7 +736,7 @@ public final class RestEC2API implements EC2API
         map.put("GroupName", name);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (userGroupPairPermission)
         {
@@ -679,6 +756,9 @@ public final class RestEC2API implements EC2API
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean revokeSecurityGroupIngress(String name,
                                               String sourceSecurityGroupName, String sourceSecurityGroupOwnerId,
                                               IpProtocol ipProtocol, int fromPort, int toPort, String cidrIp) throws EC2Exception
@@ -698,7 +778,7 @@ public final class RestEC2API implements EC2API
         map.put("GroupName", name);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (userGroupPairPermission)
         {
@@ -718,6 +798,9 @@ public final class RestEC2API implements EC2API
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String allocateAddress() throws EC2Exception
     {
         Map<String, String> map = new HashMap<String, String>();
@@ -726,14 +809,17 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         AllocateAddressResponseType response = (AllocateAddressResponseType) call(map);
 
         return response.getPublicIp();
     }
 
-    public Map<String, List<String>> DescribeAddresses(String[] publicIps) throws EC2Exception
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, List<String>> describeAddresses(String[] publicIps) throws EC2Exception
     {
         if (publicIps == null) throw new IllegalArgumentException("publicIps cannot be null");
 
@@ -743,7 +829,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         for (int i = 0; i < publicIps.length; i++) map.put("PublicIp." + i, publicIps[i]);
 
@@ -760,6 +846,9 @@ public final class RestEC2API implements EC2API
         return addresses;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean releaseAddress(String publicIp) throws EC2Exception
     {
         if (publicIp == null) throw new IllegalArgumentException("publicIp cannot be null");
@@ -771,13 +860,16 @@ public final class RestEC2API implements EC2API
         map.put("PublicIp", publicIp);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean associateAddress(String instanceId, String publicIp) throws EC2Exception
     {
         if (instanceId == null) throw new IllegalArgumentException("instanceId cannot be null");
@@ -791,13 +883,16 @@ public final class RestEC2API implements EC2API
         map.put("PublicIp", publicIp);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean disassociateAddress(String publicIp) throws EC2Exception
     {
         if (publicIp == null) throw new IllegalArgumentException("publicIp cannot be null");
@@ -809,13 +904,16 @@ public final class RestEC2API implements EC2API
         map.put("PublicIp", publicIp);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         ReleaseAddressResponseType response = (ReleaseAddressResponseType) call(map);
 
         return response.isReturn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<AvailabilityZone> describeAvailabilityZones(String[] zoneNames) throws EC2Exception
     {
         Map<String, String> map = new HashMap<String, String>();
@@ -824,7 +922,7 @@ public final class RestEC2API implements EC2API
         map.put("AWSAccessKeyId", AWSAccessKeyId);
         map.put("SignatureVersion", "1");
         map.put("Version", VERSION);
-        map.put("Timestamp", Util.iso8601Conversion(new Date()));
+        map.put("Timestamp", Util.iso8601Format(new Date()));
 
         if (zoneNames != null) for (int i = 0; i < zoneNames.length; i++) map.put("ZoneName." + i, zoneNames[i]);
 
@@ -840,6 +938,35 @@ public final class RestEC2API implements EC2API
         return zones;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public ConsoleOutput getConsoleOutput(String instanceId) throws EC2Exception
+    {
+        if (instanceId == null) throw new IllegalArgumentException("instanceId cannot be null");
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("Action", "GetConsoleOutput");
+        map.put("AWSAccessKeyId", AWSAccessKeyId);
+        map.put("InstanceId", instanceId);
+        map.put("SignatureVersion", "1");
+        map.put("Version", VERSION);
+        map.put("Timestamp", Util.iso8601Format(new Date()));
+
+        GetConsoleOutputResponseType response = (GetConsoleOutputResponseType) call(map);
+
+        String output = Base64Encoder.convert(response.getOutput().getBytes());
+
+        return new ConsoleOutput(response.getInstanceId(), response.getTimestamp().toGregorianCalendar().getTime(), output);
+    }
+
+    /**
+     * A private utility method shared amongst a few methods
+     *
+     * @param reservationInfoType JAXB POJO for reservation information
+     * @return a filled <code>ReservationInfo</code> object
+     */
     private ReservationInfo obtainReservationInfo(ReservationInfoType reservationInfoType)
     {
         List<GroupItemType> elements = reservationInfoType.getGroupSet().getItem();
@@ -858,6 +985,14 @@ public final class RestEC2API implements EC2API
         return new ReservationInfo(reservationInfoType.getReservationId(), reservationInfoType.getOwnerId(), groups, instances);
     }
 
+    /**
+     * Sign the parameters and send the HTTP request to Amazon EC2.  Read the
+     * results using our JAXB context and return the resulting JAXB Element.
+     *
+     * @param map the parameters to be signed and appened to the URL parameters
+     * @return the resulting JAXB Element of the HTTP request to Amazon EC2
+     * @throws EC2Exception if something goes wrong with the request or Amazon EC2 returns an error
+     */
     private Object call(Map<String, String> map) throws EC2Exception
     {
         assert !map.containsKey("Signature");

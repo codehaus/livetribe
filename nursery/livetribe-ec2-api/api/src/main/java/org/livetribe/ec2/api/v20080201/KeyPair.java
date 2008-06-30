@@ -17,7 +17,10 @@
 package org.livetribe.ec2.api.v20080201;
 
 /**
+ * A response POJO from a <code>createKeyPair()</code> request.
+ *
  * @version $Revision$ $Date$
+ * @see org.livetribe.ec2.api.v20080201.EC2API#createKeyPair(String)
  */
 public class KeyPair
 {
@@ -25,6 +28,12 @@ public class KeyPair
     private final String fingerprint;
     private final String material;
 
+    /**
+     * Constructor to be used if the RSA private key is not provided
+     *
+     * @param name        the key pair name provided in the original request
+     * @param fingerprint the SHA-1 digest of the DER encoded private key
+     */
     public KeyPair(String name, String fingerprint)
     {
         if (name == null) throw new IllegalArgumentException("name cannot be null");
@@ -35,6 +44,13 @@ public class KeyPair
         this.material = null;
     }
 
+    /**
+     * Constructor to be used if the RSA private key is  provided
+     *
+     * @param name        the key pair name provided in the original request
+     * @param fingerprint the SHA-1 digest of the DER encoded private key
+     * @param material    the unencrypted PEM encoded RSA private key
+     */
     public KeyPair(String name, String fingerprint, String material)
     {
         if (name == null) throw new IllegalArgumentException("name cannot be null");
@@ -46,16 +62,31 @@ public class KeyPair
         this.material = material;
     }
 
+    /**
+     * The key pair name provided in the original request.
+     *
+     * @return the key pair name provided in the original request
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * A SHA-1 digest of the DER encoded private key
+     *
+     * @return the SHA-1 digest of the DER encoded private key
+     */
     public String getFingerprint()
     {
         return fingerprint;
     }
 
+    /**
+     * An unencrypted PEM encoded RSA private key.
+     *
+     * @return the unencrypted PEM encoded RSA private key
+     */
     public String getMaterial()
     {
         return material;

@@ -26,6 +26,8 @@ import org.livetribe.ec2.api.EC2Exception;
 
 
 /**
+ * EC2 API specific implementation of <code>AsyncHttpClientCallback</code>
+ *
  * @version $Revision$ $Date$
  */
 public class EC2Callback implements AsyncHttpClientCallback

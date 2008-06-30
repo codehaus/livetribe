@@ -17,33 +17,61 @@
 package org.livetribe.ec2.api.v20080201;
 
 /**
+ * A response POJO from a <code>confirmProductInstance()</code> request.
+ *
  * @version $Revision$ $Date$
+ * @see org.livetribe.ec2.api.v20080201.EC2API#confirmProductInstance(String, String)
  */
 public class ProductInstanceConfirmation
 {
     private final boolean attached;
     private final String ownerId;
 
-    public ProductInstanceConfirmation(boolean attached)
+    /**
+     * Constructor used if the product code is not attached to the instance.
+     */
+    public ProductInstanceConfirmation()
     {
-        this.attached = attached;
+        this.attached = false;
         this.ownerId = null;
     }
 
-    public ProductInstanceConfirmation(boolean attached, String ownerId)
+    /**
+     * Constructor used if the product code is not attached to the instance.
+     *
+     * @param ownerId the instance owner's account ID
+     */
+    public ProductInstanceConfirmation(String ownerId)
     {
         if (ownerId == null) throw new IllegalArgumentException("ownerId cannot be null");
-        this.attached = attached;
+
+        this.attached = true;
         this.ownerId = ownerId;
     }
 
+    /**
+     * Check if the product code is attached to the instance,
+     *
+     * @return true if the product code is attached to the instance, false if it is not
+     */
     public boolean isAttached()
     {
         return attached;
     }
 
+    /**
+     * The instance owner's account ID. Only present if the product code is attached to the instance.
+     *
+     * @return the instance owner's account ID
+     */
     public String getOwnerId()
     {
         return ownerId;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "(ProductInstanceConfirmation attached: " + attached + " ownerId: " + ownerId + ")";
     }
 }

@@ -19,7 +19,6 @@ package org.livetribe.ec2.util;
 import java.util.Date;
 
 import org.junit.Test;
-import org.junit.Assert;
 
 
 /**
@@ -30,6 +29,6 @@ public class UtilTest
     @Test
     public void test() throws Exception
     {
-       String ts = Util.iso8601Conversion(new Date());
+       String ts = Util.iso8601Format(new Date());
     }
 }
