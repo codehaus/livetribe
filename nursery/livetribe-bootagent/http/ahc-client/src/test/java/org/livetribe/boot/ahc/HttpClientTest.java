@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
 import org.livetribe.test.AbstractHttpTest;
 
@@ -39,7 +40,16 @@ import org.livetribe.test.AbstractHttpTest;
  */
 public class HttpClientTest extends AbstractHttpTest
 {
-    private static final String UUID = "1234-5678-9abc";
+    private static final String UUID_1 = "1234-5678-9abc";
+    private static final String UUID_2 = "e9d8-309a-3fe86";
+    private static final String UUID_EMPTY_RESULTS = "UUID_EMPTY_RESULTS";
+    private static final String UUID_MISSING_VERSION = "UUID_MISSING_VERSION";
+    private static final String UUID_MISSING_ENTRIES_COUNT = "UUID_MISSING_ENTRIES_COUNT";
+    private static final String UUID_MALFORMED_VERSION = "UUID_MALFORMED_VERSION";
+    private static final String UUID_MALFORMED_ENTRIES_COUNT = "UUID_MALFORMED_ENTRIES_COUNT";
+    private static final String UUID_SHORT_ENTRIES = "UUID_SHORT_ENTRIES";
+    private static final String UUID_MISSING_RESTART = "UUID_MISSING_RESTART";
+    private static final String UUID_MALFORMED_RESTART = "UUID_MALFORMED_RESTART";
 
     public HttpClientTest()
     {
@@ -54,23 +64,39 @@ public class HttpClientTest extends AbstractHttpTest
 
                     if ("hello".equals(tokens[1]))
                     {
-                        if (!UUID.equals(tokens[2]))
+                        if (UUID_1.equals(tokens[2]))
                         {
-                            response.setStatus(400);
-                        }
-                        else if (!"1".equals(tokens[3]))
-                        {
-                            response.setStatus(400);
-                        }
-                        else
-                        {
-                            PrintWriter writer = response.getWriter();
+                            if (!"1".equals(tokens[3]))
+                            {
+                                response.setStatus(400);
+                            }
+                            else
+                            {
+                                PrintWriter writer = response.getWriter();
 
-                            writer.println("SHOULD com.acme.Boot 2");
-                            writer.println("com.acme.service.Foo 15");
-                            writer.println("com.acme.service.Bar 1");
+                                writer.println("SHOULD com.acme.Boot 37 2");
+                                writer.println("com.acme.service.Foo 15");
+                                writer.println("com.acme.service.Bar 1");
 
-                            response.setStatus(200);
+                                response.setStatus(200);
+                            }
+                        }
+                        else if (UUID_2.equals(tokens[2]))
+                        {
+                            if (!"5".equals(tokens[3]))
+                            {
+                                response.setStatus(400);
+                            }
+                            else
+                            {
+                                PrintWriter writer = response.getWriter();
+
+                                writer.println("MUST com.acme.Boot 37 2 true");
+                                writer.println("com.acme.service.Foo 15");
+                                writer.println("com.acme.service.Bar 1");
+
+                                response.setStatus(200);
+                            }
                         }
                     }
                     else if ("provide".equals(tokens[1]))
@@ -106,16 +132,45 @@ public class HttpClientTest extends AbstractHttpTest
     }
 
     @Test
-    public void test() throws Exception
+    public void testShould() throws Exception
     {
         HttpClient client = new HttpClient(new URL("http://localhost:8085/test/"));
 
-        YouShould directive = client.hello(UUID, 1);
+        YouShould directive = client.hello(UUID_1, 1);
 
         Assert.assertNotNull(directive);
         Assert.assertEquals("com.acme.Boot", directive.getBootClass());
-        Assert.assertEquals(2, directive.getVersion());
+        Assert.assertEquals(37, directive.getVersion());
         Assert.assertEquals(2, directive.getEntries().size());
+
+        for (ProvisionEntry entry : directive.getEntries())
+        {
+            if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals(15, entry.getVersion());
+            else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals(1, entry.getVersion());
+            else Assert.fail();
+
+            InputStream in = client.pleaseProvide(entry.getName(), entry.getVersion());
+
+            Assert.assertNotNull(in);
+
+            DataInputStream bin = new DataInputStream(in);
+            if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals("HOW NOW BROWN COW", bin.readLine());
+            else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals("THE RAIN IN SPAIN", bin.readLine());
+        }
+    }
+
+    @Test
+    public void testMust() throws Exception
+    {
+        HttpClient client = new HttpClient(new URL("http://localhost:8085/test/"));
+
+        YouMust directive = (YouMust) client.hello(UUID_2, 5);
+
+        Assert.assertNotNull(directive);
+        Assert.assertEquals("com.acme.Boot", directive.getBootClass());
+        Assert.assertEquals(37, directive.getVersion());
+        Assert.assertEquals(2, directive.getEntries().size());
+        Assert.assertTrue(directive.isRestart());
 
         for (ProvisionEntry entry : directive.getEntries())
         {

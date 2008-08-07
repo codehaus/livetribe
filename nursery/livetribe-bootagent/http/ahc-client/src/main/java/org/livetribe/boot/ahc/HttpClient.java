@@ -94,7 +94,7 @@ public class HttpClient implements BootServer
             String bootClass = tokens[1];
 
             Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
-            int numEntries = Integer.parseInt(tokens[2]);
+            int numEntries = Integer.parseInt(tokens[3]);
             for (int i = 0; i < numEntries; i++)
             {
                 line = reader.readLine();
@@ -106,7 +106,7 @@ public class HttpClient implements BootServer
             YouShould directive;
             if ("MUST".equals(tokens[0]))
             {
-                directive = new YouMust(directedVersion, bootClass, entries, Boolean.parseBoolean(tokens[3]));
+                directive = new YouMust(directedVersion, bootClass, entries, Boolean.parseBoolean(tokens[4]));
             }
             else
             {
