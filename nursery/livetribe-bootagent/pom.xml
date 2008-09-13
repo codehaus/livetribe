@@ -52,7 +52,6 @@
 
     <modules>
         <module>api</module>
-        <module>beep</module>
         <module>client</module>
         <module>http</module>
         <module>mock</module>
@@ -88,12 +87,6 @@
                 <groupId>net.jcip</groupId>
                 <artifactId>jcip-annotations</artifactId>
                 <version>1.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>net.sf.beep4j</groupId>
-                <artifactId>beep4j</artifactId>
-                <version>0.1.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
