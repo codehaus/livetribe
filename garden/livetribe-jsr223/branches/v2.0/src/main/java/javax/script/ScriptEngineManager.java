@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2006 - 2007 (C) The original author or authors
+ * Copyright 2006 - 2008 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package javax.script;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.annotation.AnnotationFormatError;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -49,7 +50,7 @@ public class ScriptEngineManager
         this(Thread.currentThread().getContextClassLoader());
     }
 
-    @SuppressWarnings({ "EmptyCatchBlock" })
+    @SuppressWarnings({"EmptyCatchBlock"})
     public ScriptEngineManager(ClassLoader classLoader)
     {
         try
@@ -87,8 +88,13 @@ public class ScriptEngineManager
                     catch (InstantiationException doNothing)
                     {
                     }
+                    catch (LinkageError doNothing)
+                    {
+                    }
+                    catch (AnnotationFormatError doNothing)
+                    {
+                    }
                 }
-
             }
         }
         catch (IOException doNothing)
@@ -113,10 +119,7 @@ public class ScriptEngineManager
 
     public Object get(String key)
     {
-        if (globalScope != null)
-        {
-            return globalScope.get(key);
-        }
+        if (globalScope != null) return globalScope.get(key);
         else return null;
     }
 
@@ -182,7 +185,7 @@ public class ScriptEngineManager
         registeredByExtension.put(extension, factory);
     }
 
-    @SuppressWarnings({ "EmptyCatchBlock" })
+    @SuppressWarnings({"EmptyCatchBlock"})
     private Iterable<String> getClassNames(URL url)
     {
         Stack<String> stack = new Stack<String>();
