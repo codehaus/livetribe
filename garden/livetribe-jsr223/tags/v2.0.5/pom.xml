@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.livetribe</groupId>
+        <artifactId>livetribe</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.livetribe</groupId>
+    <artifactId>livetribe-jsr223</artifactId>
+    <version>2.0.5</version>
+    <name>LiveTribe :: JSR 223</name>
+    <packaging>jar</packaging>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>codehaus</id>
+            <name>CodeHaus Repository</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>codehaus.snapshots</id>
+            <name>CodeHaus Snapshots Repository</name>
+            <url>http://snapshots.repository.codehaus.org</url>
+        </repository>
+    </repositories>
+
+</project>
