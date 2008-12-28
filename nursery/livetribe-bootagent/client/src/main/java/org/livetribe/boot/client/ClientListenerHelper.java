@@ -16,13 +16,12 @@
  */
 package org.livetribe.boot.client;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
-import org.livetribe.boot.protocol.YouShould;
+import org.livetribe.boot.protocol.ProvisionDirective;
 
 
 /**
@@ -31,22 +30,19 @@ import org.livetribe.boot.protocol.YouShould;
 @ThreadSafe
 public class ClientListenerHelper implements ClientListener
 {
-    private final List<ClientListener> listeners = new ArrayList<ClientListener>();
+    private final List<ClientListener> listeners = new CopyOnWriteArrayList<ClientListener>();
 
-    @GuardedBy("this")
-    public synchronized void addListener(ClientListener listener)
+    public void addListener(ClientListener listener)
     {
         listeners.add(listener);
     }
 
-    @GuardedBy("this")
-    public synchronized void removeListener(ClientListener listener)
+    public void removeListener(ClientListener listener)
     {
         listeners.remove(listener);
     }
 
-    @GuardedBy("this")
-    public synchronized void stateChange(State oldState, State newState)
+    public void stateChange(State oldState, State newState)
     {
         for (ClientListener listener : listeners)
         {
@@ -60,8 +56,7 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
-    @GuardedBy("this")
-    public synchronized void provisionCheck(String uuid, long version)
+    public void provisionCheck(String uuid, long version)
     {
         for (ClientListener listener : listeners)
         {
@@ -75,8 +70,7 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
-    @GuardedBy("this")
-    public synchronized void provisionDirective(YouShould directive)
+    public void provisionDirective(ProvisionDirective directive)
     {
         for (ClientListener listener : listeners)
         {
@@ -90,8 +84,7 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
-    @GuardedBy("this")
-    public synchronized void warning(String message)
+    public void warning(String message)
     {
         for (ClientListener listener : listeners)
         {
@@ -105,8 +98,7 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
-    @GuardedBy("this")
-    public synchronized void error(String message)
+    public void error(String message)
     {
         for (ClientListener listener : listeners)
         {
@@ -120,8 +112,7 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
-    @GuardedBy("this")
-    public synchronized void error(String message, Throwable throwable)
+    public void error(String message, Throwable throwable)
     {
         for (ClientListener listener : listeners)
         {
