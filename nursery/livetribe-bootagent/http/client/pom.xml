@@ -8,8 +8,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>livetribe-boot-ahc-client</artifactId>
-    <name>LiveTribe :: Boot Agent :: HTTP :: AHC Client</name>
+    <artifactId>livetribe-boot-http-client</artifactId>
+    <name>LiveTribe :: Boot Agent :: HTTP :: Client</name>
     <packaging>jar</packaging>
 
     <build/>
