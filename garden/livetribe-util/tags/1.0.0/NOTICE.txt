@@ -1,0 +1,21 @@
+=========================================================================
+==  NOTICE file corresponding to section 4(d) of the Apache License,   ==
+==  Version 2.0, in this case for the LiveTribe distribution.          ==
+=========================================================================
+
+LiveTribe
+Copyright 2005-2008 the original author or authors
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
+=========================================================================
+==  THE SPRING FRAMEWORK Notice                                        ==
+=========================================================================
+
+This product includes software developed by the Spring Source community. 
+(http://www.springsource.org/)
+
+Copyright (c) 2002-2008 the original author or authors
+SpringSource (http://www.springsource.org)
+
