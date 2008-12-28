@@ -136,7 +136,7 @@ public class HttpClientTest extends AbstractHttpTest
     {
         HttpClient client = new HttpClient(new URL("http://localhost:8085/test/"));
 
-        YouShould directive = client.hello(UUID_1, 1);
+        YouShould directive = (YouShould) client.hello(UUID_1, 1);
 
         Assert.assertNotNull(directive);
         Assert.assertEquals("com.acme.Boot", directive.getBootClass());

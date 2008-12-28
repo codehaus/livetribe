@@ -17,31 +17,26 @@
 package org.livetribe.boot.ahc;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.asyncweb.client.AsyncHttpClient;
-import org.apache.asyncweb.client.codec.HttpRequestMessage;
-import org.apache.asyncweb.client.codec.HttpResponseMessage;
-import org.apache.asyncweb.client.codec.ResponseFuture;
-
-import org.livetribe.boot.protocol.ProvisionProvider;
 import org.livetribe.boot.protocol.BootException;
+import org.livetribe.boot.protocol.ContentProvider;
+import org.livetribe.boot.protocol.DoNothing;
+import org.livetribe.boot.protocol.ProvisionDirective;
 import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.ProvisionProvider;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
-import org.livetribe.boot.protocol.ContentProvider;
 
 
 /**
@@ -49,18 +44,18 @@ import org.livetribe.boot.protocol.ContentProvider;
  */
 public class HttpClient implements ProvisionProvider, ContentProvider
 {
-    private final static String className = HttpClient.class.getName();
-    private final static Logger logger = Logger.getLogger(className);
-    private final AsyncHttpClient ahc = new AsyncHttpClient();
+    public final static int DEFAULT_TIMEOUT = 60 * 1000;
+    private final static String CLASS_NAME = HttpClient.class.getName();
+    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private final URL url;
-    private int timeout = 60;
+    private volatile int timeout = DEFAULT_TIMEOUT;
 
     public HttpClient(URL url)
     {
         if (url == null) throw new IllegalArgumentException("URL cannot be null");
         this.url = url;
 
-        if (logger.isLoggable(Level.CONFIG)) logger.config("url: " + url);
+        if (LOGGER.isLoggable(Level.CONFIG)) LOGGER.config("url: " + url);
     }
 
     public int getTimeout()
@@ -73,19 +68,21 @@ public class HttpClient implements ProvisionProvider, ContentProvider
         this.timeout = timeout;
     }
 
-    public YouShould hello(String uuid, long version) throws BootException
+    public ProvisionDirective hello(String uuid, long version) throws BootException
     {
-        if (logger.isLoggable(Level.FINER)) logger.entering(className, "hello", new Object[]{uuid, version});
+        if (LOGGER.isLoggable(Level.FINER)) LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
 
         try
         {
             URL hello = new URL(url, "hello/" + uuid + "/" + version);
 
-            ResponseFuture rf = ahc.sendRequest(new HttpRequestMessage(hello, null));
+            HttpURLConnection connection = (HttpURLConnection) hello.openConnection();
 
-            HttpResponseMessage message = rf.get(timeout, TimeUnit.SECONDS);
+            connection.setInstanceFollowRedirects(true);
+            connection.setReadTimeout(timeout);
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(message.getContent())));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
             String line = reader.readLine();
 
             if (line.length() == 0) throw new BootException("Empty message");
@@ -104,94 +101,84 @@ public class HttpClient implements ProvisionProvider, ContentProvider
                 entries.add(new ProvisionEntry(t[0], Long.parseLong(t[1])));
             }
 
-            YouShould directive;
+            ProvisionDirective directive;
             if ("MUST".equals(tokens[0]))
             {
                 directive = new YouMust(directedVersion, bootClass, entries, Boolean.parseBoolean(tokens[4]));
             }
-            else
+            else if ("SHOULD".equals(tokens[0]))
             {
                 directive = new YouShould(directedVersion, bootClass, entries);
             }
+            else
+            {
+                directive = new DoNothing();
+            }
 
-            logger.exiting(className, "hello", directive);
+            LOGGER.exiting(CLASS_NAME, "hello", directive);
 
             return directive;
         }
         catch (MalformedURLException mue)
         {
-            logger.log(Level.SEVERE, "Unable to form URL for hello", mue);
+            LOGGER.log(Level.SEVERE, "Unable to form URL for hello", mue);
             throw new BootException("Unable to form URL for hello", mue);
         }
-        catch (ExecutionException ee)
+        catch (SocketTimeoutException ste)
         {
-            logger.log(Level.SEVERE, "Unable to send hello", ee.getCause());
-            throw new BootException("Unable to send hello", ee.getCause());
-        }
-        catch (InterruptedException ie)
-        {
-            logger.log(Level.SEVERE, "Hello interrupted", ie);
-            throw new BootException("Hello interrupted", ie);
-        }
-        catch (TimeoutException te)
-        {
-            logger.log(Level.SEVERE, "Hello timed out", te);
-            throw new BootException("Hello timed out", te);
+            LOGGER.log(Level.SEVERE, "Hello timed out", ste);
+            throw new BootException("Hello timed out", ste);
         }
         catch (NumberFormatException nfe)
         {
-            logger.log(Level.SEVERE, "Number could not be parsed", nfe);
+            LOGGER.log(Level.SEVERE, "Number could not be parsed", nfe);
             throw new BootException("Number could not be parsed", nfe);
         }
         catch (IOException ioe)
         {
-            logger.log(Level.SEVERE, "Hello experience an IO exception", ioe);
+            LOGGER.log(Level.SEVERE, "Hello experience an IO exception", ioe);
             throw new BootException("Hello experience an IO exception", ioe);
         }
         catch (ArrayIndexOutOfBoundsException aioobe)
         {
-            logger.log(Level.SEVERE, "Hello response was malformed", aioobe);
+            LOGGER.log(Level.SEVERE, "Hello response was malformed", aioobe);
             throw new BootException("Hello response was malformed", aioobe);
         }
     }
 
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
-        if (logger.isLoggable(Level.FINER)) logger.entering(className, "pleaseProvide", new Object[]{name, version});
+        if (LOGGER.isLoggable(Level.FINER)) LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
 
         try
         {
             URL hello = new URL(url, "provide/" + name + "/" + version);
 
-            ResponseFuture rf = ahc.sendRequest(new HttpRequestMessage(hello, null));
+            HttpURLConnection connection = (HttpURLConnection) hello.openConnection();
 
-            HttpResponseMessage message = rf.get(timeout, TimeUnit.SECONDS);
+            connection.setInstanceFollowRedirects(true);
+            connection.setReadTimeout(timeout);
 
-            InputStream response = new ByteArrayInputStream(message.getContent());
+            InputStream response = connection.getInputStream();
 
-            logger.exiting(className, "pleaseProvide", response);
+            LOGGER.exiting(CLASS_NAME, "pleaseProvide", response);
 
             return response;
         }
         catch (MalformedURLException mue)
         {
-            logger.log(Level.SEVERE, "Unable to form URL for hello", mue);
+            LOGGER.log(Level.SEVERE, "Unable to form URL for hello", mue);
             throw new BootException("Unable to form URL for hello", mue);
         }
-        catch (ExecutionException ee)
+        catch (SocketTimeoutException ste)
         {
-            logger.log(Level.SEVERE, "Unable to send hello", ee.getCause());
-            throw new BootException("Unable to send hello", ee.getCause());
+            LOGGER.log(Level.SEVERE, "Hello timed out", ste);
+            throw new BootException("Hello timed out", ste);
         }
-        catch (InterruptedException ie)
+        catch (IOException ioe)
         {
-            logger.log(Level.SEVERE, "Hello interrupted", ie);
-            throw new BootException("Hello interrupted", ie);
-        }
-        catch (TimeoutException te)
-        {
-            logger.log(Level.SEVERE, "Hello timed out", te);
-            throw new BootException("Hello timed out", te);
+            LOGGER.log(Level.SEVERE, "Hello experience an IO exception", ioe);
+            throw new BootException("Hello experience an IO exception", ioe);
         }
     }
 }

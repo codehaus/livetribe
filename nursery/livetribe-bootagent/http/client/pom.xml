@@ -17,11 +17,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.asyncweb</groupId>
-            <artifactId>asyncweb-client</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.livetribe.boot</groupId>
             <artifactId>livetribe-boot-client</artifactId>
             <scope>test</scope>
