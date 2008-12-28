@@ -28,16 +28,16 @@ import java.util.Iterator;
  */
 public class EnumerationIterator
 {
-    public static Iterator iterator(final Enumeration enumeration)
+    public static <T> Iterator<T> iterator(final Enumeration<T> enumeration)
     {
-        return new Iterator()
+        return new Iterator<T>()
         {
             public boolean hasNext()
             {
                 return enumeration.hasMoreElements();
             }
 
-            public Object next()
+            public T next()
             {
                 return enumeration.nextElement();
             }
@@ -48,4 +48,33 @@ public class EnumerationIterator
             }
         };
     }
+
+    public static <T> Iterable<T> iterable(final Enumeration<T> enumeration)
+    {
+        return new Iterable<T>()
+        {
+            public Iterator<T> iterator()
+            {
+                return new Iterator<T>()
+                {
+                    public boolean hasNext()
+                    {
+                        return enumeration.hasMoreElements();
+                    }
+
+                    public T next()
+                    {
+                        return enumeration.nextElement();
+                    }
+
+                    public void remove()
+                    {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
+    }
+
+    private EnumerationIterator() { }
 }
