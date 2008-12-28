@@ -15,12 +15,12 @@
  */
 package org.livetribe.util.store;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * $Rev$
@@ -66,7 +66,7 @@ public class FileSystemStore implements Store
     {
         synchronized (items)
         {
-            return (StoreItem)items.get(name);
+            return (StoreItem) items.get(name);
         }
     }
 }
