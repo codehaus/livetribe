@@ -19,22 +19,24 @@ package org.livetribe.boot.protocol;
 /**
  * @version $Revision$ $Date$
  */
-public class Error
+public class BootException extends Exception
 {
-    private String description;
-
-    public Error(String description)
+    public BootException()
     {
-        this.description = description;
     }
 
-    public String getDescription()
+    public BootException(String message)
     {
-        return description;
+        super(message);
     }
 
-    public void setDescription(String description)
+    public BootException(String message, Throwable cause)
     {
-        this.description = description;
+        super(message, cause);
+    }
+
+    public BootException(Throwable cause)
+    {
+        super(cause);
     }
 }

@@ -14,7 +14,7 @@
 
     <servlet-mapping>
         <servlet-name>boot.servlet</servlet-name>
-        <url-pattern>/boot</url-pattern>
+        <url-pattern>/boot/*</url-pattern>
     </servlet-mapping>
 
 

@@ -22,9 +22,12 @@ import java.util.Set;
 
 
 /**
+ * This provision directive directs what version the client should be at.  The
+ * client may update at its own descresion.
+ *
  * @version $Revision$ $Date$
  */
-public class YouShould
+public class YouShould extends ProvisionDirective
 {
     private final long version;
     private final String bootClass;

@@ -9,9 +9,15 @@
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:boot.properties"/>
+        <property name="location" value="classpath:/directives.properties"/>
     </bean>
 
-    <bean id="bootServer" class=""
+    <bean id="provisionProvider" class="org.livetribe.boot.server.PropertiesProvisionProvider">
+        <constructor-arg value="src/test/resources/directives.properties"/>
+    </bean>
+
+    <bean id="contentProvider" class="org.livetribe.boot.server.FileContentProvider">
+        <constructor-arg value="src/test/resources/content"/>
+    </bean>
 
 </beans>

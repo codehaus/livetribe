@@ -36,17 +36,18 @@ import org.apache.asyncweb.client.codec.HttpRequestMessage;
 import org.apache.asyncweb.client.codec.HttpResponseMessage;
 import org.apache.asyncweb.client.codec.ResponseFuture;
 
-import org.livetribe.boot.protocol.BootServer;
-import org.livetribe.boot.protocol.BootServerException;
+import org.livetribe.boot.protocol.ProvisionProvider;
+import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ProvisionEntry;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
+import org.livetribe.boot.protocol.ContentProvider;
 
 
 /**
  * @version $Revision: $ $Date: $
  */
-public class HttpClient implements BootServer
+public class HttpClient implements ProvisionProvider, ContentProvider
 {
     private final static String className = HttpClient.class.getName();
     private final static Logger logger = Logger.getLogger(className);
@@ -72,7 +73,7 @@ public class HttpClient implements BootServer
         this.timeout = timeout;
     }
 
-    public YouShould hello(String uuid, long version) throws BootServerException
+    public YouShould hello(String uuid, long version) throws BootException
     {
         if (logger.isLoggable(Level.FINER)) logger.entering(className, "hello", new Object[]{uuid, version});
 
@@ -87,7 +88,7 @@ public class HttpClient implements BootServer
             BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(message.getContent())));
             String line = reader.readLine();
 
-            if (line.length() == 0) throw new BootServerException("Empty message");
+            if (line.length() == 0) throw new BootException("Empty message");
 
             String[] tokens = line.split(" ");
             long directedVersion = Long.parseLong(tokens[2]);
@@ -120,41 +121,41 @@ public class HttpClient implements BootServer
         catch (MalformedURLException mue)
         {
             logger.log(Level.SEVERE, "Unable to form URL for hello", mue);
-            throw new BootServerException("Unable to form URL for hello", mue);
+            throw new BootException("Unable to form URL for hello", mue);
         }
         catch (ExecutionException ee)
         {
             logger.log(Level.SEVERE, "Unable to send hello", ee.getCause());
-            throw new BootServerException("Unable to send hello", ee.getCause());
+            throw new BootException("Unable to send hello", ee.getCause());
         }
         catch (InterruptedException ie)
         {
             logger.log(Level.SEVERE, "Hello interrupted", ie);
-            throw new BootServerException("Hello interrupted", ie);
+            throw new BootException("Hello interrupted", ie);
         }
         catch (TimeoutException te)
         {
             logger.log(Level.SEVERE, "Hello timed out", te);
-            throw new BootServerException("Hello timed out", te);
+            throw new BootException("Hello timed out", te);
         }
         catch (NumberFormatException nfe)
         {
             logger.log(Level.SEVERE, "Number could not be parsed", nfe);
-            throw new BootServerException("Number could not be parsed", nfe);
+            throw new BootException("Number could not be parsed", nfe);
         }
         catch (IOException ioe)
         {
             logger.log(Level.SEVERE, "Hello experience an IO exception", ioe);
-            throw new BootServerException("Hello experience an IO exception", ioe);
+            throw new BootException("Hello experience an IO exception", ioe);
         }
         catch (ArrayIndexOutOfBoundsException aioobe)
         {
             logger.log(Level.SEVERE, "Hello response was malformed", aioobe);
-            throw new BootServerException("Hello response was malformed", aioobe);
+            throw new BootException("Hello response was malformed", aioobe);
         }
     }
 
-    public InputStream pleaseProvide(String name, long version) throws BootServerException
+    public InputStream pleaseProvide(String name, long version) throws BootException
     {
         if (logger.isLoggable(Level.FINER)) logger.entering(className, "pleaseProvide", new Object[]{name, version});
 
@@ -175,22 +176,22 @@ public class HttpClient implements BootServer
         catch (MalformedURLException mue)
         {
             logger.log(Level.SEVERE, "Unable to form URL for hello", mue);
-            throw new BootServerException("Unable to form URL for hello", mue);
+            throw new BootException("Unable to form URL for hello", mue);
         }
         catch (ExecutionException ee)
         {
             logger.log(Level.SEVERE, "Unable to send hello", ee.getCause());
-            throw new BootServerException("Unable to send hello", ee.getCause());
+            throw new BootException("Unable to send hello", ee.getCause());
         }
         catch (InterruptedException ie)
         {
             logger.log(Level.SEVERE, "Hello interrupted", ie);
-            throw new BootServerException("Hello interrupted", ie);
+            throw new BootException("Hello interrupted", ie);
         }
         catch (TimeoutException te)
         {
             logger.log(Level.SEVERE, "Hello timed out", te);
-            throw new BootServerException("Hello timed out", te);
+            throw new BootException("Hello timed out", te);
         }
     }
 }

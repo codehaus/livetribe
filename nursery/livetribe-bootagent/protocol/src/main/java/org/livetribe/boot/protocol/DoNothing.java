@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2008 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.client;
-
-import org.livetribe.boot.protocol.ProvisionDirective;
-
+package org.livetribe.boot.protocol;
 
 /**
+ * This directive is returned if the client is at an adequate version.
+ *
  * @version $Revision$ $Date$
  */
-public interface ClientListener extends Listener
+public final class DoNothing extends ProvisionDirective
 {
-    public void stateChange(State oldState, State newState);
-
-    public void provisionCheck(String uuid, long version);
-
-    public void provisionDirective(ProvisionDirective directive);
 }

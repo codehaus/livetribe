@@ -19,7 +19,7 @@
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>${jettyVersion}</version>
                 <configuration>
-                    <contextPath>/upload</contextPath>
+                    <contextPath>/mock</contextPath>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
                             <port>9080</port>
@@ -61,6 +61,12 @@
         <dependency>
             <groupId>org.livetribe.boot</groupId>
             <artifactId>livetribe-boot-protocol</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-server</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

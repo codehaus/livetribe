@@ -27,9 +27,12 @@ import java.util.concurrent.TimeUnit;
 import net.jcip.annotations.ThreadSafe;
 
 import org.livetribe.boot.LifeCycle;
-import org.livetribe.boot.protocol.BootServer;
-import org.livetribe.boot.protocol.BootServerException;
+import org.livetribe.boot.protocol.BootException;
+import org.livetribe.boot.protocol.ContentProvider;
+import org.livetribe.boot.protocol.DoNothing;
+import org.livetribe.boot.protocol.ProvisionDirective;
 import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.ProvisionProvider;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
 
@@ -40,25 +43,29 @@ import org.livetribe.boot.protocol.YouShould;
 @ThreadSafe
 public class Client
 {
+    public final static long DEFAULT_PERIOD = 900;
     private final Object LOCK = new Object();
     private final Semaphore semaphore = new Semaphore(1);
     private final ClientListenerHelper listeners = new ClientListenerHelper();
-    private final BootServer bootServer;
+    private final ProvisionProvider provisionProvider;
+    private final ContentProvider contentProvider;
     private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
     private final ProvisionStore provisionStore;
     private volatile State state = State.STOPPED;
-    private volatile long period = 900;
+    private volatile long period = DEFAULT_PERIOD;
     private volatile Runnable handle;
     private volatile LifeCycle lifeCycleInstance;
 
 
-    public Client(BootServer bootServer, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore)
+    public Client(ProvisionProvider provisionProvider, ContentProvider contentProvider, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore)
     {
-        if (bootServer == null) throw new IllegalArgumentException("bootServer is null");
+        if (provisionProvider == null) throw new IllegalArgumentException("provisionProvider is null");
+        if (contentProvider == null) throw new IllegalArgumentException("contentProvider is null");
         if (scheduledThreadPoolExecutor == null) throw new IllegalArgumentException("scheduledThreadPoolExecutor is null");
         if (provisionStore == null) throw new IllegalArgumentException("provisionStore is null");
 
-        this.bootServer = bootServer;
+        this.provisionProvider = provisionProvider;
+        this.contentProvider = contentProvider;
         this.scheduledThreadPoolExecutor = scheduledThreadPoolExecutor;
         this.provisionStore = provisionStore;
     }
@@ -150,10 +157,12 @@ public class Client
         {
             List<URL> urls = provisionStore.getClasspath();
             URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), saved);
-            Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
-            lifeCycleInstance = bootClass.newInstance();
 
             Thread.currentThread().setContextClassLoader(classLoader);
+
+            Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
+
+            lifeCycleInstance = bootClass.newInstance();
 
             lifeCycleInstance.start();
         }
@@ -210,22 +219,26 @@ public class Client
 
                 listeners.provisionCheck(uuid, currentVersion);
 
-                YouShould response = bootServer.hello(provisionStore.getUuid(), currentVersion);
-
-                if (response.getVersion() == currentVersion) return;
+                ProvisionDirective response = provisionProvider.hello(provisionStore.getUuid(), currentVersion);
 
                 listeners.provisionDirective(response);
 
+                if (response instanceof DoNothing) return;
+
+                YouShould should = (YouShould) response;
+
+                if (should.getVersion() == currentVersion) return;
+
                 Set<ProvisionEntry> currentEntries = provisionStore.getCurrentProvisionDirective().getEntries();
-                for (ProvisionEntry entry : response.getEntries())
+                for (ProvisionEntry entry : should.getEntries())
                 {
                     if (!currentEntries.contains(entry))
                     {
-                        provisionStore.store(entry, bootServer.pleaseProvide(entry.getName(), entry.getVersion()));
+                        provisionStore.store(entry, contentProvider.pleaseProvide(entry.getName(), entry.getVersion()));
                     }
                 }
 
-                provisionStore.setNextProvisionDirective(new ProvisionDirective(response.getVersion(), response.getBootClass(), response.getEntries()));
+                provisionStore.setNextProvisionDirective(new ProvisionConfiguration(should.getVersion(), should.getBootClass(), should.getEntries()));
 
                 provisionStore.prepareNext();
 
@@ -244,7 +257,7 @@ public class Client
                     startup();
                 }
             }
-            catch (BootServerException bse)
+            catch (BootException bse)
             {
                 listeners.error("Provision check error", bse);
             }

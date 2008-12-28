@@ -51,8 +51,8 @@ public class DefaultProvisionStore implements ProvisionStore
     private final File root;
     private final File resources;
     private String uuid = "org.livetribe.boot.uuid.unset";
-    private ProvisionDirective currentProvisionDirective;
-    private ProvisionDirective nextProvisionDirective;
+    private ProvisionConfiguration currentProvisionConfiguration;
+    private ProvisionConfiguration nextProvisionConfiguration;
 
     public DefaultProvisionStore(File root)
     {
@@ -61,8 +61,8 @@ public class DefaultProvisionStore implements ProvisionStore
         this.root = root;
         this.resources = new File(root, "resources");
         this.uuid = loadUuid();
-        this.currentProvisionDirective = loadCurrentProvisionDirective();
-        this.nextProvisionDirective = loadNextProvisionDirective();
+        this.currentProvisionConfiguration = loadCurrentProvisionDirective();
+        this.nextProvisionConfiguration = loadNextProvisionDirective();
 
         if (!resources.exists()) resources.mkdirs();
         else if (!resources.isDirectory()) throw new IllegalArgumentException("Resources in root is not a directory");
@@ -79,20 +79,20 @@ public class DefaultProvisionStore implements ProvisionStore
         saveUuid(uuid);
     }
 
-    public ProvisionDirective getCurrentProvisionDirective()
+    public ProvisionConfiguration getCurrentProvisionDirective()
     {
-        return currentProvisionDirective;
+        return currentProvisionConfiguration;
     }
 
-    public ProvisionDirective getNextProvisionDirective()
+    public ProvisionConfiguration getNextProvisionDirective()
     {
-        return nextProvisionDirective;
+        return nextProvisionConfiguration;
     }
 
-    public void setNextProvisionDirective(ProvisionDirective provisionDirective) throws ProvisionStoreException
+    public void setNextProvisionDirective(ProvisionConfiguration provisionConfiguration) throws ProvisionStoreException
     {
-        nextProvisionDirective = provisionDirective;
-        saveNextProvisionDirective(nextProvisionDirective);
+        nextProvisionConfiguration = provisionConfiguration;
+        saveNextProvisionDirective(nextProvisionConfiguration);
     }
 
     public void store(ProvisionEntry provisionEntry, InputStream inputStream) throws ProvisionStoreException
@@ -119,14 +119,14 @@ public class DefaultProvisionStore implements ProvisionStore
 
     public void prepareNext() throws ProvisionStoreException
     {
-        long currentVersion = currentProvisionDirective.getVersion();
-        long nextVersion = nextProvisionDirective.getVersion();
+        long currentVersion = currentProvisionConfiguration.getVersion();
+        long nextVersion = nextProvisionConfiguration.getVersion();
 
         if (nextVersion < 1) throw new ProvisionStoreException("Next provision directive has bad version " + nextVersion);
         if (nextVersion <= currentVersion) throw new ProvisionStoreException("Next provision directive has bad version " + nextVersion + " which is less than or equal to current " + nextVersion);
-        if (nextProvisionDirective.getBootClass().trim().length() == 0) throw new ProvisionStoreException("Next provision directive has empty boot class");
+        if (nextProvisionConfiguration.getBootClass().trim().length() == 0) throw new ProvisionStoreException("Next provision directive has empty boot class");
 
-        for (ProvisionEntry entry : nextProvisionDirective.getEntries())
+        for (ProvisionEntry entry : nextProvisionConfiguration.getEntries())
         {
             File directory = new File(resources, entry.getName());
             if (!directory.exists()) throw new MissingProvisionException(entry, "Resource directory" + directory + " does not exist");
@@ -137,11 +137,11 @@ public class DefaultProvisionStore implements ProvisionStore
             else if (!resource.isFile()) throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " is not a file");
         }
 
-        Set<ProvisionEntry> removeSet = new HashSet<ProvisionEntry>(currentProvisionDirective.getEntries());
-        removeSet.removeAll(nextProvisionDirective.getEntries());
+        Set<ProvisionEntry> removeSet = new HashSet<ProvisionEntry>(currentProvisionConfiguration.getEntries());
+        removeSet.removeAll(nextProvisionConfiguration.getEntries());
 
-        currentProvisionDirective = nextProvisionDirective;
-        saveCurrentProvisionDirective(currentProvisionDirective);
+        currentProvisionConfiguration = nextProvisionConfiguration;
+        saveCurrentProvisionDirective(currentProvisionConfiguration);
 
         for (ProvisionEntry entry : removeSet)
         {
@@ -154,9 +154,9 @@ public class DefaultProvisionStore implements ProvisionStore
 
     public List<URL> getClasspath() throws ProvisionStoreException
     {
-        List<URL> classpath = new ArrayList<URL>(currentProvisionDirective.getEntries().size());
+        List<URL> classpath = new ArrayList<URL>(currentProvisionConfiguration.getEntries().size());
 
-        for (ProvisionEntry entry : currentProvisionDirective.getEntries())
+        for (ProvisionEntry entry : currentProvisionConfiguration.getEntries())
         {
             File directory = new File(resources, entry.getName());
             File resource = new File(directory, Long.toString(entry.getVersion()));
@@ -212,24 +212,24 @@ public class DefaultProvisionStore implements ProvisionStore
         }
     }
 
-    private ProvisionDirective loadCurrentProvisionDirective()
+    private ProvisionConfiguration loadCurrentProvisionDirective()
     {
         return loadProvisionDirective(CURRENT_FILE);
     }
 
-    private ProvisionDirective loadNextProvisionDirective()
+    private ProvisionConfiguration loadNextProvisionDirective()
     {
         return loadProvisionDirective(NEXT_FILE);
     }
 
-    private void saveCurrentProvisionDirective(ProvisionDirective nextProvisionDirective) throws ProvisionStoreException
+    private void saveCurrentProvisionDirective(ProvisionConfiguration nextProvisionConfiguration) throws ProvisionStoreException
     {
-        saveProvisionDirective(nextProvisionDirective, CURRENT_FILE);
+        saveProvisionDirective(nextProvisionConfiguration, CURRENT_FILE);
     }
 
-    private void saveNextProvisionDirective(ProvisionDirective nextProvisionDirective) throws ProvisionStoreException
+    private void saveNextProvisionDirective(ProvisionConfiguration nextProvisionConfiguration) throws ProvisionStoreException
     {
-        saveProvisionDirective(nextProvisionDirective, NEXT_FILE);
+        saveProvisionDirective(nextProvisionConfiguration, NEXT_FILE);
     }
 
     /**
@@ -241,7 +241,7 @@ public class DefaultProvisionStore implements ProvisionStore
      * @return the ProvisionDirective loaded from the properties file
      */
     @SuppressWarnings({"EmptyCatchBlock"})
-    private ProvisionDirective loadProvisionDirective(String name)
+    private ProvisionConfiguration loadProvisionDirective(String name)
     {
         File file = new File(root, name);
 
@@ -255,7 +255,7 @@ public class DefaultProvisionStore implements ProvisionStore
 
                 long version = Long.valueOf((String) properties.get(VERSION_KEY));
 
-                if (!properties.contains(BOOT_CLASS_KEY)) return new ProvisionDirective();
+                if (!properties.contains(BOOT_CLASS_KEY)) return new ProvisionConfiguration();
                 String bootClass = (String) properties.get(BOOT_CLASS_KEY);
 
                 Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
@@ -268,12 +268,12 @@ public class DefaultProvisionStore implements ProvisionStore
 
                     String[] tokens = ((String) properties.get(key)).split(":");
 
-                    if (tokens.length != 2) return new ProvisionDirective();
+                    if (tokens.length != 2) return new ProvisionConfiguration();
 
                     entries.add(new ProvisionEntry(tokens[0], Long.valueOf(tokens[1])));
                 }
 
-                return new ProvisionDirective(version, bootClass, entries);
+                return new ProvisionConfiguration(version, bootClass, entries);
             }
             catch (NumberFormatException fallThrough)
             {
@@ -283,20 +283,20 @@ public class DefaultProvisionStore implements ProvisionStore
             }
 
         }
-        return new ProvisionDirective();
+        return new ProvisionConfiguration();
     }
 
     @SuppressWarnings({"EmptyCatchBlock"})
-    private void saveProvisionDirective(ProvisionDirective directive, String name) throws ProvisionStoreException
+    private void saveProvisionDirective(ProvisionConfiguration configuration, String name) throws ProvisionStoreException
     {
         File file = new File(root, name);
         Properties properties = new Properties();
 
-        properties.put(VERSION_KEY, Long.toString(directive.getVersion()));
-        properties.put(BOOT_CLASS_KEY, directive.getBootClass());
+        properties.put(VERSION_KEY, Long.toString(configuration.getVersion()));
+        properties.put(BOOT_CLASS_KEY, configuration.getBootClass());
 
         int count = 0;
-        for (ProvisionEntry entry : directive.getEntries())
+        for (ProvisionEntry entry : configuration.getEntries())
         {
             properties.put(DIRECTIVE_BASE_KEY + count++, entry.getName() + ":" + entry.getVersion());
         }
@@ -310,7 +310,7 @@ public class DefaultProvisionStore implements ProvisionStore
         }
         catch (IOException ioe)
         {
-            throw new ProvisionStoreException("Unable to save ProvisionDirective to " + name, ioe);
+            throw new ProvisionStoreException("Unable to save ProvisionConfiguration to " + name, ioe);
         }
         finally
         {

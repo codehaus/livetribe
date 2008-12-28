@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2008 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,26 +17,10 @@
 package org.livetribe.boot.protocol;
 
 /**
+ * The base class for all provisioning directives from the boot server.
+ *
  * @version $Revision$ $Date$
  */
-public class BootServerException extends Exception
+public abstract class ProvisionDirective
 {
-    public BootServerException()
-    {
-    }
-
-    public BootServerException(String message)
-    {
-        super(message);
-    }
-
-    public BootServerException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    public BootServerException(Throwable cause)
-    {
-        super(cause);
-    }
 }

@@ -29,18 +29,18 @@ import org.livetribe.boot.protocol.ProvisionEntry;
  * @version $Revision$ $Date$
  */
 @Immutable
-public class ProvisionDirective
+public class ProvisionConfiguration
 {
     private final long version;
     private final String bootClass;
     private final Set<ProvisionEntry> entries;
 
-    public ProvisionDirective()
+    public ProvisionConfiguration()
     {
         this(0, "", Collections.<ProvisionEntry>emptySet());
     }
 
-    public ProvisionDirective(long version, String bootClass, Set<ProvisionEntry> entries)
+    public ProvisionConfiguration(long version, String bootClass, Set<ProvisionEntry> entries)
     {
         if (bootClass == null) throw new IllegalArgumentException("Boot class cannot be null");
 

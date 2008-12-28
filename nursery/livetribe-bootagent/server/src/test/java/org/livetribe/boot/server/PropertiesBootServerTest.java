@@ -21,8 +21,9 @@ import java.io.InputStream;
 
 import junit.framework.TestCase;
 
-import org.livetribe.boot.protocol.BootServer;
+import org.livetribe.boot.protocol.ContentProvider;
 import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.ProvisionProvider;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
 
@@ -38,9 +39,10 @@ public class PropertiesBootServerTest extends TestCase
 
         assertTrue(bootDirectory.isDirectory());
 
-        BootServer bootServer = new PropertiesBootServer(bootDirectory);
+        ProvisionProvider provisionProvider = new PropertiesProvisionProvider(new File(bootDirectory, "directives.properties"));
+        ContentProvider contentProvider = new FileContentProvider(new File(bootDirectory, "resources"));
 
-        YouShould directive = bootServer.hello("", 6);
+        YouShould directive = (YouShould) provisionProvider.hello("", 6);
 
         assertNotNull(directive);
         assertEquals(10, directive.getVersion());
@@ -53,13 +55,13 @@ public class PropertiesBootServerTest extends TestCase
             long count = 0;
             int len = 0;
             byte[] buffer = new byte[1024];
-            InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
+            InputStream inputStream = contentProvider.pleaseProvide(entry.getName(), entry.getVersion());
             assertNotNull(inputStream);
             while ((len = inputStream.read(buffer)) != -1) count += len;
             assertTrue(count > 0);
         }
 
-        directive = bootServer.hello("special", 2);
+        directive = (YouShould) provisionProvider.hello("special", 2);
 
         assertNotNull(directive);
         assertEquals(5, directive.getVersion());
@@ -72,7 +74,7 @@ public class PropertiesBootServerTest extends TestCase
             long count = 0;
             int len = 0;
             byte[] buffer = new byte[1024];
-            InputStream inputStream = bootServer.pleaseProvide(entry.getName(), entry.getVersion());
+            InputStream inputStream = contentProvider.pleaseProvide(entry.getName(), entry.getVersion());
             assertNotNull(inputStream);
             while ((len = inputStream.read(buffer)) != -1) count += len;
             assertTrue(count > 0);

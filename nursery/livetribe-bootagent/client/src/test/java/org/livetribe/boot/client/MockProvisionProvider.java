@@ -16,31 +16,23 @@
  */
 package org.livetribe.boot.client;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.ProvisionProvider;
+import org.livetribe.boot.protocol.YouShould;
 
 
 /**
  * @version $Revision$ $Date$
  */
-public interface ProvisionStore
+public class MockProvisionProvider implements ProvisionProvider
 {
-    String getUuid() throws ProvisionStoreException;
-
-    void setUuid(String uuid) throws ProvisionStoreException;
-
-    ProvisionConfiguration getCurrentProvisionDirective() throws ProvisionStoreException;
-
-    ProvisionConfiguration getNextProvisionDirective() throws ProvisionStoreException;
-
-    void setNextProvisionDirective(ProvisionConfiguration provisionConfiguration) throws ProvisionStoreException;
-
-    void store(ProvisionEntry provisionEntry, InputStream inputStream) throws ProvisionStoreException;
-
-    void prepareNext() throws ProvisionStoreException;
-
-    List<URL> getClasspath() throws ProvisionStoreException;
+    public YouShould hello(String uuid, long version) throws BootException
+    {
+        Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
+        return new YouShould(1, "org.livetribe.boot.Server", entries);
+    }
 }

@@ -20,6 +20,9 @@ import java.util.Set;
 
 
 /**
+ * This provision directive directs what version the client must be at.  The
+ * client must update as soon as possible, possibly restarting in the process.
+ *
  * @version $Revision$ $Date$
  */
 public class YouMust extends YouShould

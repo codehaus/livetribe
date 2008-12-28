@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2008 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,17 @@ package org.livetribe.boot.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.livetribe.boot.protocol.BootServer;
-import org.livetribe.boot.protocol.BootServerException;
-import org.livetribe.boot.protocol.ProvisionEntry;
-import org.livetribe.boot.protocol.YouShould;
+import org.livetribe.boot.protocol.BootException;
+import org.livetribe.boot.protocol.ContentProvider;
 
 
 /**
  * @version $Revision$ $Date$
  */
-public class MockBootServer implements BootServer
+public class MockContentProvider implements ContentProvider
 {
-    public YouShould hello(String uuid, long version) throws BootServerException
-    {
-        Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
-        return new YouShould(1, "org.livetribe.boot.Server", entries);
-    }
-
-    public InputStream pleaseProvide(String name, long version) throws BootServerException
+    public InputStream pleaseProvide(String name, long version) throws BootException
     {
         return new ByteArrayInputStream(new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe});
     }

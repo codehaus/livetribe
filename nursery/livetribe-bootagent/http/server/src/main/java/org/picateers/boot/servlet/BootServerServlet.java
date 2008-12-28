@@ -22,15 +22,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import org.livetribe.boot.protocol.BootServer;
-import org.livetribe.boot.protocol.BootServerException;
+import org.livetribe.boot.protocol.BootException;
+import org.livetribe.boot.protocol.ContentProvider;
+import org.livetribe.boot.protocol.DoNothing;
+import org.livetribe.boot.protocol.ProvisionDirective;
 import org.livetribe.boot.protocol.ProvisionEntry;
+import org.livetribe.boot.protocol.ProvisionProvider;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
 
@@ -42,7 +48,9 @@ public class BootServerServlet extends HttpServlet
 {
     private final static String CLASS_NAME = BootServerServlet.class.getName();
     private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
-    private BootServer bootServer;
+
+    private ProvisionProvider provisionProvider;
+    private ContentProvider contentProvider;
 
     public void init(ServletConfig servletConfig) throws ServletException
     {
@@ -55,38 +63,69 @@ public class BootServerServlet extends HttpServlet
             throw new ServletException("Missing Spring application context");
         }
 
-        bootServer = (BootServer) applicationContext.getBean("bootServer");
-        if (bootServer == null)
+        provisionProvider = (ProvisionProvider) applicationContext.getBean("provisionProvider");
+        if (provisionProvider == null)
         {
-            LOGGER.severe("Missing boot server");
-            throw new ServletException("Missing boot server");
+            LOGGER.severe("Missing provision provider");
+            throw new ServletException("Missing provision provider");
+        }
+
+        contentProvider = (ContentProvider) applicationContext.getBean("contentProvider");
+        if (contentProvider == null)
+        {
+            LOGGER.severe("Missing content provider");
+            throw new ServletException("Missing content provider");
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        if (request.getPathInfo() != null)
+        LOGGER.entering(CLASS_NAME, "doGet", new Object[]{request, response});
+
+        if (request.getPathInfo() == null)
         {
-            String[] tokens = request.getPathInfo().split("/");
+            LOGGER.warning("Path was null");
+            response.setStatus(400);
+            return;
+        }
 
-            if ("hello".equals(tokens[1]))
+        String[] tokens = request.getPathInfo().split("/");
+
+        if (tokens.length != 4)
+        {
+            LOGGER.warning("Path '" + request.getPathInfo() + "' did not properly split into three parts");
+            response.setStatus(400);
+            return;
+        }
+
+        try
+        {
+            if ("hello".equalsIgnoreCase(tokens[1].trim()))
             {
-                try
+                String uuid = tokens[2].trim();
+                long version = Long.valueOf(tokens[3].trim());
+
+                ProvisionDirective directive = provisionProvider.hello(uuid, version);
+
+                response.setHeader("content-type", "text/plain");
+
+                PrintWriter writer = response.getWriter();
+
+                if (directive instanceof DoNothing)
                 {
-                    String uuid = tokens[2];
-                    long version = Long.valueOf(tokens[3]);
-
-                    YouShould directive = bootServer.hello(uuid, version);
-
-                    PrintWriter writer = response.getWriter();
-
+                    writer.println("NOTHING");
+                }
+                else
+                {
                     if (directive instanceof YouMust) writer.print("MUST ");
                     else writer.print("SHOULD ");
 
-                    writer.print(directive.getBootClass());
+                    YouShould should = (YouShould) directive;
+
+                    writer.print(should.getBootClass());
                     writer.print(" ");
 
-                    writer.print(directive.getVersion());
+                    writer.print(should.getVersion());
 
                     if (directive instanceof YouMust)
                     {
@@ -96,67 +135,48 @@ public class BootServerServlet extends HttpServlet
 
                     writer.println();
 
-                    for (ProvisionEntry entry : directive.getEntries())
+                    for (ProvisionEntry entry : should.getEntries())
                     {
                         writer.print(entry.getName());
                         writer.print(" ");
                         writer.println(entry.getVersion());
                     }
-
-                    response.setStatus(200);
-                }
-                catch (BootServerException e)
-                {
-
-                    e.printStackTrace();  //todo: consider this autogenerated code
                 }
 
-                if (!"f".equals(tokens[2]))
-                {
-                    response.setStatus(400);
-                }
-                else if (!"1".equals(tokens[3]))
-                {
-                    response.setStatus(400);
-                }
-                else
-                {
-                    PrintWriter writer = response.getWriter();
-
-                    writer.println("SHOULD com.acme.Boot 2");
-                    writer.println("com.acme.service.Foo 15");
-                    writer.println("com.acme.service.Bar 1");
-
-                    response.setStatus(200);
-                }
+                response.setStatus(200);
             }
-            else if ("provide".equals(tokens[1]))
+            else if ("provide".equalsIgnoreCase(tokens[1]))
             {
-                if ("com.acme.service.Foo".equals(tokens[2]) && "15".equals(tokens[3]))
-                {
-                    PrintWriter writer = response.getWriter();
+                int len;
+                byte[] buffer = new byte[4096];
 
-                    writer.println("HOW NOW BROWN COW");
+                InputStream in = contentProvider.pleaseProvide(tokens[2], Long.valueOf(tokens[3].trim()));
 
-                    response.setStatus(200);
-                }
-                else if ("com.acme.service.Bar".equals(tokens[2]) && "1".equals(tokens[3]))
-                {
-                    PrintWriter writer = response.getWriter();
+                response.setHeader("content-type", "application/x-java-archive");
 
-                    writer.println("THE RAIN IN SPAIN");
+                OutputStream out = response.getOutputStream();
 
-                    response.setStatus(200);
-                }
-                else
-                {
-                    response.setStatus(400);
-                }
+                while ((len = in.read(buffer)) != -1) out.write(buffer, 0, len);
+
+                out.flush();
+
+                response.setStatus(200);
             }
             else
             {
+                LOGGER.warning("Did not recogize the command " + tokens[1]);
                 response.setStatus(400);
             }
+        }
+        catch (NumberFormatException nfe)
+        {
+            LOGGER.log(Level.WARNING, "Unable to parse a long from '" + tokens[3] + "'", nfe);
+            response.setStatus(400);
+        }
+        catch (BootException bse)
+        {
+            LOGGER.log(Level.WARNING, "Boot exception", bse);
+            response.setStatus(400);
         }
     }
 }

@@ -26,18 +26,17 @@ import junit.framework.TestCase;
  */
 public class ClientTest extends TestCase
 {
-    public final static int PORT = 12345;
     ScheduledThreadPoolExecutor executor;
 
     public void test() throws Exception
     {
         try
         {
-            Client client = new Client(new MockBootServer(), executor, new MockProvisionStore());
+            Client client = new Client(new MockProvisionProvider(), new MockContentProvider(), executor, new MockProvisionStore());
 
-//            client.start();
-//
-//            client.stop();
+            client.start();
+
+            client.stop();
         }
         finally
         {
