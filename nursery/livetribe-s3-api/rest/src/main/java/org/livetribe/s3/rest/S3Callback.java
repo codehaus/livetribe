@@ -26,11 +26,11 @@ import org.livetribe.s3.api.S3Exception;
 
 
 /**
- * EC2 API specific implementation of <code>AsyncHttpClientCallback</code>
+ * S3 API specific implementation of <code>AsyncHttpClientCallback</code>
  *
  * @version $Revision$ $Date: 2008-06-29 20:37:33 -0700 (Sun, 29 Jun 2008) $
  */
-public class EC2Callback implements AsyncHttpClientCallback
+public class S3Callback implements AsyncHttpClientCallback
 {
     private final CountDownLatch complete = new CountDownLatch(1);
     private volatile boolean closed;

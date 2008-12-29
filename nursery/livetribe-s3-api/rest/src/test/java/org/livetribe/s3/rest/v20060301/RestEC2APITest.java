@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.rest.v20080201;
+package org.livetribe.s3.rest.v20060301;
 
 import java.net.URL;
 import java.util.List;
@@ -38,17 +38,7 @@ public class RestEC2APITest
 
     public static void main(String[] args) throws Exception
     {
-        EC2API client = new RestEC2API(new URL("https://s3.amazonaws.com"), args[0], args[1]);
+        RestEC2API client = new RestEC2API(new URL("https://s3.amazonaws.com"), args[0], args[1]);
         ((RestEC2API) client).setTimeout(Integer.MAX_VALUE);
-
-        Set<AmazonImage> images = client.describeImages(new String[]{"ami-3948ad50"}, null, null);
-        images = client.describeImages(null, null, null);
-        images = client.describeImages(null, new String[]{"063491364108"}, null);
-        images = client.describeImages(null, null, new String[]{"self"});
-
-        KeyPair pair = client.createKeyPair("cabrera");
-        List<KeyPair> pairs = client.describeKeyPairs(new String[]{"cabrera"});
-        client.deleteKeyPair("foo");
-        client.deleteKeyPair("cabrera");
     }
 }
