@@ -3,15 +3,15 @@
               xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
               xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <jxb:bindings schemaLocation="ec2-2008-02-01.xsd" node="/xsd:schema">
+    <jxb:bindings schemaLocation="s3-2006-03-01.xsd" node="/xsd:schema">
         <jxb:schemaBindings>
-            <jxb:package name="org.livetribe.ec2.jaxb.v20080201"/>
+            <jxb:package name="org.livetribe.s3.jaxb.v20060301"/>
         </jxb:schemaBindings>
     </jxb:bindings>
 
-    <jxb:bindings schemaLocation="ec2.xsd" node="/xsd:schema">
+    <jxb:bindings schemaLocation="s3.xsd" node="/xsd:schema">
         <jxb:schemaBindings>
-            <jxb:package name="org.livetribe.ec2.jaxb"/>
+            <jxb:package name="org.livetribe.s3.jaxb"/>
         </jxb:schemaBindings>
     </jxb:bindings>
 
