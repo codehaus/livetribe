@@ -1,0 +1,167 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.livetribe</groupId>
+        <artifactId>livetribe</artifactId>
+        <version>1.4.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.livetribe.s3</groupId>
+    <artifactId>livetribe-s3-root</artifactId>
+    <name>LiveTribe :: Amazon S3 API</name>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>LiveTribe S3 API</description>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <tagBase>https://svn.codehaus.org/livetribe/tags</tagBase>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+        <module>api</module>
+        <module>connector</module>
+        <module>jaxb</module>
+        <module>model</module>
+        <module>ra</module>
+        <module>rest</module>
+        <module>util</module>
+    </modules>
+
+    <properties>
+        <s3ApiVersion>1.0-SNAPSHOT</s3ApiVersion>
+        <jaxbApiVersion>2.1.4</jaxbApiVersion>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.0.1</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.12</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${jaxbApiVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-xjc</artifactId>
+                <version>${jaxbApiVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.jcip</groupId>
+                <artifactId>jcip-annotations</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.asyncweb</groupId>
+                <artifactId>asyncweb-client</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.s3</groupId>
+                <artifactId>livetribe-s3-api</artifactId>
+                <version>${s3ApiVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.s3</groupId>
+                <artifactId>livetribe-s3-jaxb</artifactId>
+                <version>${s3ApiVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.s3</groupId>
+                <artifactId>livetribe-s3-model</artifactId>
+                <version>${s3ApiVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.s3</groupId>
+                <artifactId>livetribe-s3-util</artifactId>
+                <version>${s3ApiVersion}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>livetribe</id>
+            <name>LiveTribe Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2</url>
+        </repository>
+        <repository>
+            <id>livetribe-snapshots</id>
+            <name>LiveTribe Snapshot Repository</name>
+            <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
+        </repository>
+    </repositories>
+
+</project>
