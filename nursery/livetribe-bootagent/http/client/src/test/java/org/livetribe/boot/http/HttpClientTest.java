@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.boot.ahc;
+package org.livetribe.boot.http;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
