@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * Inline data exceeds the maximum allowed size.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class InlineDataTooLargeException extends ClientException
 {
-    public InternalErrorException()
+    public InlineDataTooLargeException()
     {
     }
 
-    public InternalErrorException(String message)
+    public InlineDataTooLargeException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public InlineDataTooLargeException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public InlineDataTooLargeException(Throwable cause)
     {
         super(cause);
     }

@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * This request does not support credentials.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class CredentialsNotSupportedException extends ClientException
 {
-    public InternalErrorException()
+    public CredentialsNotSupportedException()
     {
     }
 
-    public InternalErrorException(String message)
+    public CredentialsNotSupportedException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public CredentialsNotSupportedException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public CredentialsNotSupportedException(Throwable cause)
     {
         super(cause);
     }

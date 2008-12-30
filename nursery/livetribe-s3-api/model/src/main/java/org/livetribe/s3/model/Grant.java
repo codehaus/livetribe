@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.api.v20080201;
-
-import org.livetribe.s3.api.ServerException;
+package org.livetribe.s3.model;
 
 /**
- * We encountered an internal error. Please try again.
- *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class Grant
 {
-    public InternalErrorException()
+    private Grantee grantee;
+    private Permission permission;
+
+    public Grantee getGrantee()
     {
+        return grantee;
     }
 
-    public InternalErrorException(String message)
+    public void setGrantee(Grantee grantee)
     {
-        super(message);
+        this.grantee = grantee;
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public Permission getPermission()
     {
-        super(message, cause);
+        return permission;
     }
 
-    public InternalErrorException(Throwable cause)
+    public void setPermission(Permission permission)
     {
-        super(cause);
+        this.permission = permission;
     }
 }

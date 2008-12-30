@@ -16,30 +16,31 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * You did not provide the number of bytes specified by the Content-Length HTTP
+ * header.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class IncompleteBodyException extends ClientException
 {
-    public InternalErrorException()
+    public IncompleteBodyException()
     {
     }
 
-    public InternalErrorException(String message)
+    public IncompleteBodyException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public IncompleteBodyException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public IncompleteBodyException(Throwable cause)
     {
         super(cause);
     }

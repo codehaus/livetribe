@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * Your proposed upload is smaller than the minimum allowed object size.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class EntityTooSmallException extends ClientException
 {
-    public InternalErrorException()
+    public EntityTooSmallException()
     {
     }
 
-    public InternalErrorException(String message)
+    public EntityTooSmallException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public EntityTooSmallException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public EntityTooSmallException(Throwable cause)
     {
         super(cause);
     }

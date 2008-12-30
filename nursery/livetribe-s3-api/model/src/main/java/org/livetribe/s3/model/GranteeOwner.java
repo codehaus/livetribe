@@ -14,33 +14,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.api.v20080201;
-
-import org.livetribe.s3.api.ServerException;
+package org.livetribe.s3.model;
 
 /**
- * We encountered an internal error. Please try again.
- *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class GranteeOwner implements Grantee
 {
-    public InternalErrorException()
+    private String id;
+    private String displayName;
+
+    public GranteeOwner()
     {
     }
 
-    public InternalErrorException(String message)
+    public GranteeOwner(String id, String displayName)
     {
-        super(message);
+        this.id = id;
+        this.displayName = displayName;
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public GranteeOwner(Owner owner)
     {
-        super(message, cause);
+        this.id = owner.getId();
+        this.displayName = owner.getDisplayName();
     }
 
-    public InternalErrorException(Throwable cause)
+    public String getId()
     {
-        super(cause);
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getDisplayName()
+    {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName)
+    {
+        this.displayName = displayName;
     }
 }

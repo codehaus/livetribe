@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.api.v20080201;
-
-import org.livetribe.s3.api.ServerException;
+package org.livetribe.s3.model;
 
 /**
- * We encountered an internal error. Please try again.
- *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class Owner
 {
-    public InternalErrorException()
+    private String id;
+    private String displayName;
+
+    public String getId()
     {
+        return id;
     }
 
-    public InternalErrorException(String message)
+    public void setId(String id)
     {
-        super(message);
+        this.id = id;
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public String getDisplayName()
     {
-        super(message, cause);
+        return displayName;
     }
 
-    public InternalErrorException(Throwable cause)
+    public void setDisplayName(String displayName)
     {
-        super(cause);
+        this.displayName = displayName;
     }
 }

@@ -14,33 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.api.v20080201;
+package org.livetribe.s3.model;
 
-import org.livetribe.s3.api.ServerException;
+import java.util.List;
 
 /**
- * We encountered an internal error. Please try again.
- *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class AccessControlPolicy
 {
-    public InternalErrorException()
+    private Owner owner;
+    private List<Grant> accessControlList;
+
+    public Owner getOwner()
     {
+        return owner;
     }
 
-    public InternalErrorException(String message)
+    public void setOwner(Owner owner)
     {
-        super(message);
+        this.owner = owner;
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public List<Grant> getAccessControlList()
     {
-        super(message, cause);
+        return accessControlList;
     }
 
-    public InternalErrorException(Throwable cause)
+    public void setAccessControlList(List<Grant> accessControlList)
     {
-        super(cause);
+        this.accessControlList = accessControlList;
     }
 }

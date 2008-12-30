@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * The bucket you tried to delete is not empty.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class BucketNotEmptyException extends ClientException
 {
-    public InternalErrorException()
+    public BucketNotEmptyException()
     {
     }
 
-    public InternalErrorException(String message)
+    public BucketNotEmptyException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public BucketNotEmptyException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public BucketNotEmptyException(Throwable cause)
     {
         super(cause);
     }

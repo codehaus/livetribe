@@ -14,33 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.api.v20080201;
-
-import org.livetribe.s3.api.ServerException;
+package org.livetribe.s3.model;
 
 /**
- * We encountered an internal error. Please try again.
- *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class GranteeEmail implements Grantee
 {
-    public InternalErrorException()
+    private String email;
+
+    public String getEmail()
     {
+        return email;
     }
 
-    public InternalErrorException(String message)
+    public void setEmail(String email)
     {
-        super(message);
-    }
-
-    public InternalErrorException(String message, Throwable cause)
-    {
-        super(message, cause);
-    }
-
-    public InternalErrorException(Throwable cause)
-    {
-        super(cause);
+        this.email = email;
     }
 }

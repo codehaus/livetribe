@@ -16,30 +16,32 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * There is a problem with your AWS account that prevents the operation from
+ * completing successfully. Please contact customer service at
+ * webservices@amazon.com.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class AccountProblemException extends ClientException
 {
-    public InternalErrorException()
+    public AccountProblemException()
     {
     }
 
-    public InternalErrorException(String message)
+    public AccountProblemException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public AccountProblemException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public AccountProblemException(Throwable cause)
     {
         super(cause);
     }

@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * The Content-MD5 you specified did not match what we received.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class BadDigestException extends ClientException
 {
-    public InternalErrorException()
+    public BadDigestException()
     {
     }
 
-    public InternalErrorException(String message)
+    public BadDigestException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public BadDigestException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public BadDigestException(Throwable cause)
     {
         super(cause);
     }

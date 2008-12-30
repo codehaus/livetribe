@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * The e-mail address you provided is associated with more than one account.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class AmbiguousGrantByEmailAddressException extends ClientException
 {
-    public InternalErrorException()
+    public AmbiguousGrantByEmailAddressException()
     {
     }
 
-    public InternalErrorException(String message)
+    public AmbiguousGrantByEmailAddressException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public AmbiguousGrantByEmailAddressException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public AmbiguousGrantByEmailAddressException(Throwable cause)
     {
         super(cause);
     }

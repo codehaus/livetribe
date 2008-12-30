@@ -16,30 +16,31 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * The requested bucket name is not available. The bucket namespace is shared
+ * by all users of the system. Please select a different name and try again.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class BucketAlreadyExistsException extends ClientException
 {
-    public InternalErrorException()
+    public BucketAlreadyExistsException()
     {
     }
 
-    public InternalErrorException(String message)
+    public BucketAlreadyExistsException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public BucketAlreadyExistsException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public BucketAlreadyExistsException(Throwable cause)
     {
         super(cause);
     }

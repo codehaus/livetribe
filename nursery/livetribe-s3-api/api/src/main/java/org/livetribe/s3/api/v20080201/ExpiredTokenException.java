@@ -16,30 +16,30 @@
  */
 package org.livetribe.s3.api.v20080201;
 
-import org.livetribe.s3.api.ServerException;
+import org.livetribe.s3.api.ClientException;
 
 /**
- * We encountered an internal error. Please try again.
+ * The provided token has expired.
  *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class ExpiredTokenException extends ClientException
 {
-    public InternalErrorException()
+    public ExpiredTokenException()
     {
     }
 
-    public InternalErrorException(String message)
+    public ExpiredTokenException(String message)
     {
         super(message);
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public ExpiredTokenException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
-    public InternalErrorException(Throwable cause)
+    public ExpiredTokenException(Throwable cause)
     {
         super(cause);
     }

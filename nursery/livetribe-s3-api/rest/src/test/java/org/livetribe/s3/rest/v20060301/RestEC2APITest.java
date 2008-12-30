@@ -17,14 +17,8 @@
 package org.livetribe.s3.rest.v20060301;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
-
-import org.livetribe.s3.api.v20080201.EC2API;
-import org.livetribe.s3.api.v20080201.KeyPair;
-import org.livetribe.s3.model.AmazonImage;
 
 
 /**
@@ -38,7 +32,7 @@ public class RestEC2APITest
 
     public static void main(String[] args) throws Exception
     {
-        RestEC2API client = new RestEC2API(new URL("https://s3.amazonaws.com"), args[0], args[1]);
-        ((RestEC2API) client).setTimeout(Integer.MAX_VALUE);
+        RestS3API client = new RestS3API(new URL("https://s3.amazonaws.com"), args[0], args[1]);
+        ((RestS3API) client).setTimeout(Integer.MAX_VALUE);
     }
 }

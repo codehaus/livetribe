@@ -14,33 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.api.v20080201;
+package org.livetribe.s3.model;
 
-import org.livetribe.s3.api.ServerException;
+import java.util.List;
 
 /**
- * We encountered an internal error. Please try again.
- *
  * @version $Revision$ $Date$
  */
-public class InternalErrorException extends ServerException
+public class LoggingConfiguration
 {
-    public InternalErrorException()
+    private Bucket target;
+    private String prefix;
+    private List<Grant> accessControlList;
+
+    public Bucket getTarget()
     {
+        return target;
     }
 
-    public InternalErrorException(String message)
+    public void setTarget(Bucket target)
     {
-        super(message);
+        this.target = target;
     }
 
-    public InternalErrorException(String message, Throwable cause)
+    public String getPrefix()
     {
-        super(message, cause);
+        return prefix;
     }
 
-    public InternalErrorException(Throwable cause)
+    public void setPrefix(String prefix)
     {
-        super(cause);
+        this.prefix = prefix;
+    }
+
+    public List<Grant> getAccessControlList()
+    {
+        return accessControlList;
+    }
+
+    public void setAccessControlList(List<Grant> accessControlList)
+    {
+        this.accessControlList = accessControlList;
     }
 }
