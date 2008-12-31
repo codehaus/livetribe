@@ -22,7 +22,7 @@ import java.util.Date;
 /**
  * @version $Revision$ $Date$
  */
-public class Bucket
+public class S3Bucket
 {
     private Owner owner;
     private String name;

@@ -21,39 +21,28 @@ import java.util.List;
 /**
  * @version $Revision$ $Date$
  */
-public class LoggingConfiguration
+public class BucketListing
 {
-    private S3Bucket target;
-    private String prefix;
-    private List<Grant> accessControlList;
+    List<ObjectInfo> objects;
+    List<String> commonPrefixes;
 
-    public S3Bucket getTarget()
+    public List<ObjectInfo> getObjects()
     {
-        return target;
+        return objects;
     }
 
-    public void setTarget(S3Bucket target)
+    public void setObjects(List<ObjectInfo> objects)
     {
-        this.target = target;
+        this.objects = objects;
     }
 
-    public String getPrefix()
+    public List<String> getCommonPrefixes()
     {
-        return prefix;
+        return commonPrefixes;
     }
 
-    public void setPrefix(String prefix)
+    public void setCommonPrefixes(List<String> commonPrefixes)
     {
-        this.prefix = prefix;
-    }
-
-    public List<Grant> getAccessControlList()
-    {
-        return accessControlList;
-    }
-
-    public void setAccessControlList(List<Grant> accessControlList)
-    {
-        this.accessControlList = accessControlList;
+        this.commonPrefixes = commonPrefixes;
     }
 }

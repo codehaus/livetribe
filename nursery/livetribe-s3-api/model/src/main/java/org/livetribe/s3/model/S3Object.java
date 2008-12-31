@@ -16,44 +16,18 @@
  */
 package org.livetribe.s3.model;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @version $Revision$ $Date$
  */
-public class LoggingConfiguration
+public class S3Object
 {
-    private S3Bucket target;
-    private String prefix;
+    private String key;
+    private Map<String, String> metadata;
+    private long contentLength;
     private List<Grant> accessControlList;
-
-    public S3Bucket getTarget()
-    {
-        return target;
-    }
-
-    public void setTarget(S3Bucket target)
-    {
-        this.target = target;
-    }
-
-    public String getPrefix()
-    {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix)
-    {
-        this.prefix = prefix;
-    }
-
-    public List<Grant> getAccessControlList()
-    {
-        return accessControlList;
-    }
-
-    public void setAccessControlList(List<Grant> accessControlList)
-    {
-        this.accessControlList = accessControlList;
-    }
+    private Date lastModified;
 }

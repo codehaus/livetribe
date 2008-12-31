@@ -16,44 +16,11 @@
  */
 package org.livetribe.s3.model;
 
-import java.util.List;
-
 /**
  * @version $Revision$ $Date$
  */
-public class LoggingConfiguration
+public enum MetadataDirective
 {
-    private S3Bucket target;
-    private String prefix;
-    private List<Grant> accessControlList;
-
-    public S3Bucket getTarget()
-    {
-        return target;
-    }
-
-    public void setTarget(S3Bucket target)
-    {
-        this.target = target;
-    }
-
-    public String getPrefix()
-    {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix)
-    {
-        this.prefix = prefix;
-    }
-
-    public List<Grant> getAccessControlList()
-    {
-        return accessControlList;
-    }
-
-    public void setAccessControlList(List<Grant> accessControlList)
-    {
-        this.accessControlList = accessControlList;
-    }
+    COPY,
+    REPLACE
 }
