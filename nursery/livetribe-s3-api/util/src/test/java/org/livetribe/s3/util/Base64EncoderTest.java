@@ -17,11 +17,9 @@
 package org.livetribe.s3.util;
 
 import java.net.URLDecoder;
-import java.util.Map;
-import java.util.HashMap;
 
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 
 /**
@@ -34,15 +32,5 @@ public class Base64EncoderTest
     {
         Assert.assertEquals("2006-12-08T07:48:03Z", URLDecoder.decode("2006-12-08T07%3A48%3A03Z", "UTF-8"));
         Assert.assertEquals("2006-12-08T07:48:03Z", URLDecoder.decode("2006-12-08T07:48:03Z", "UTF-8"));
-
-        Map<String, String> data = new HashMap<String, String>();
-
-        data.put("Action", "DescribeImages");
-        data.put("Timestamp", "2006-12-08T07%3A48%3A03Z");
-        data.put("AWSAccessKeyId", "10QMXFEV71ZS32XQFTR2");
-        data.put("Version", "2007-01-03");
-        data.put("SignatureVersion", "1");
-
-//        Assert.assertEquals("GjH3941IBe6qsgQu+k7FpCJjpnc=", Util.sign(data, "DMADSSfPfdaDjbK+RRUhS/aDrjsiZadgAUm8gRU2"));
     }
 }
