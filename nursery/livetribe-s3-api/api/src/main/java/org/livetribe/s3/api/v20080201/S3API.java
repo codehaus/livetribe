@@ -57,10 +57,9 @@ public interface S3API
      * are never allowed to create buckets.
      *
      * @param bucketName The name of the bucket you are trying to create
-     * @return the newly create bucket
      * @throws S3Exception if any error occurs
      */
-    S3Bucket createBucket(String bucketName) throws S3Exception;
+    void createBucket(String bucketName) throws S3Exception;
 
     /**
      * Deletes a bucket. All objects in the bucket must be deleted before the

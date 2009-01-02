@@ -16,19 +16,14 @@
  */
 package org.livetribe.s3.util;
 
-import java.util.Date;
-
-import org.junit.Test;
-
-
 /**
- * @version $Revision$ $Date: 2008-06-29 20:37:33 -0700 (Sun, 29 Jun 2008) $
+ * @version $Revision$ $Date$
  */
-public class UtilTest
+public enum HttpVerb
 {
-    @Test
-    public void testIso8601Format() throws Exception
-    {
-        String ts = Util.iso8601Format(new Date());
-    }
+    GET,
+    PUT,
+    POST,
+    DELETE,
+    HEAD
 }

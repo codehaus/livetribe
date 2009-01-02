@@ -9,10 +9,4 @@
         </jxb:schemaBindings>
     </jxb:bindings>
 
-    <jxb:bindings schemaLocation="s3.xsd" node="/xsd:schema">
-        <jxb:schemaBindings>
-            <jxb:package name="org.livetribe.s3.jaxb"/>
-        </jxb:schemaBindings>
-    </jxb:bindings>
-
 </jxb:bindings>

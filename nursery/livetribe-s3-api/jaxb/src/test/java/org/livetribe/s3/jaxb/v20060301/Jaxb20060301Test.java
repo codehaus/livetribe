@@ -75,4 +75,19 @@ public class Jaxb20060301Test
                                                                         " </Contents>\n" +
                                                                         "</ListBucketResponse>"));
     }
+
+    @Test
+    public void testAnotherListBucketResult() throws Exception
+    {
+        JAXBContext context20060301 = JAXBContext.newInstance("org.livetribe.s3.jaxb.v20060301");
+
+        context20060301.createUnmarshaller().unmarshal(new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                                                                        "<ListAllMyBucketsResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">" +
+                                                                        "<Owner>" +
+                                                                        "<ID>552975a30196c72b56d22b412eb483b198ad51c651fd0a18727750816f85399d</ID>" +
+                                                                        "<DisplayName>sysadmin-beta</DisplayName>" +
+                                                                        "</Owner>" +
+                                                                        "<Buckets/>" +
+                                                                        "</ListAllMyBucketsResult>"));
+    }
 }

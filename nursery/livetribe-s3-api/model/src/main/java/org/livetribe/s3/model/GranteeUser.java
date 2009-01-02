@@ -19,22 +19,22 @@ package org.livetribe.s3.model;
 /**
  * @version $Revision$ $Date$
  */
-public class GranteeOwner implements Grantee
+public class GranteeUser implements Grantee
 {
     private String id;
     private String displayName;
 
-    public GranteeOwner()
+    public GranteeUser()
     {
     }
 
-    public GranteeOwner(String id, String displayName)
+    public GranteeUser(String id, String displayName)
     {
         this.id = id;
         this.displayName = displayName;
     }
 
-    public GranteeOwner(Owner owner)
+    public GranteeUser(Owner owner)
     {
         this.id = owner.getId();
         this.displayName = owner.getDisplayName();

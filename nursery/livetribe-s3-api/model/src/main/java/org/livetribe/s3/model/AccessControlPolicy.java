@@ -16,7 +16,9 @@
  */
 package org.livetribe.s3.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * @version $Revision$ $Date$
@@ -24,7 +26,7 @@ import java.util.List;
 public class AccessControlPolicy
 {
     private Owner owner;
-    private List<Grant> accessControlList;
+    private List<Grant> accessControlList = new ArrayList<Grant>();
 
     public Owner getOwner()
     {

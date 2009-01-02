@@ -23,6 +23,15 @@ public class GranteeEmail implements Grantee
 {
     private String email;
 
+    public GranteeEmail()
+    {
+    }
+
+    public GranteeEmail(String email)
+    {
+        this.email = email;
+    }
+
     public String getEmail()
     {
         return email;

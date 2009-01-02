@@ -24,6 +24,16 @@ public class Grant
     private Grantee grantee;
     private Permission permission;
 
+    public Grant()
+    {
+    }
+
+    public Grant(Grantee grantee, Permission permission)
+    {
+        this.grantee = grantee;
+        this.permission = permission;
+    }
+
     public Grantee getGrantee()
     {
         return grantee;

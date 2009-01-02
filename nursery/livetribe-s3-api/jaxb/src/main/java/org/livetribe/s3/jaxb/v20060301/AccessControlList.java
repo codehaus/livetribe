@@ -14,21 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.s3.util;
+package org.livetribe.s3.jaxb.v20060301;
 
-import java.util.Date;
-
-import org.junit.Test;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
- * @version $Revision$ $Date: 2008-06-29 20:37:33 -0700 (Sun, 29 Jun 2008) $
+ * @version $Revision$ $Date$
  */
-public class UtilTest
+@XmlRootElement(name = "AccessControlList")
+public class AccessControlList extends AccessControlListType
 {
-    @Test
-    public void testIso8601Format() throws Exception
-    {
-        String ts = Util.iso8601Format(new Date());
-    }
 }
