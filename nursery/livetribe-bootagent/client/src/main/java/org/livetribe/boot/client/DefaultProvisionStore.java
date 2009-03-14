@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,15 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import net.jcip.annotations.NotThreadSafe;
+
 import org.livetribe.boot.protocol.ProvisionEntry;
 
 
 /**
  * @version $Revision$ $Date$
  */
+@NotThreadSafe
 public class DefaultProvisionStore implements ProvisionStore
 {
     private final static String DEFAULT_UUID = "org.livetribe.boot.uuid.unset";
@@ -64,7 +67,7 @@ public class DefaultProvisionStore implements ProvisionStore
         this.currentProvisionConfiguration = loadCurrentProvisionDirective();
         this.nextProvisionConfiguration = loadNextProvisionDirective();
 
-        if (!resources.exists()) resources.mkdirs();
+        if (!resources.exists() && !resources.mkdirs()) throw new IllegalArgumentException("Unable to creare provision store root directory");
         else if (!resources.isDirectory()) throw new IllegalArgumentException("Resources in root is not a directory");
     }
 
@@ -99,7 +102,7 @@ public class DefaultProvisionStore implements ProvisionStore
     {
         File directory = new File(resources, provisionEntry.getName());
 
-        if (!directory.exists()) directory.mkdirs();
+        if (!directory.exists() && !directory.mkdirs()) throw new ProvisionStoreException("Unable to create resource directory " + directory);
         else if (!directory.isDirectory()) throw new ProvisionStoreException("Resource directory " + directory + " is not a directory");
 
         try
@@ -148,7 +151,7 @@ public class DefaultProvisionStore implements ProvisionStore
             File directory = new File(resources, entry.getName());
             File resource = new File(directory, Long.toString(entry.getVersion()));
 
-            resource.delete();
+            if (!resource.delete()) throw new ProvisionStoreException("Unable to delete version " + entry.getVersion() + " for " + directory);
         }
     }
 
@@ -192,7 +195,6 @@ public class DefaultProvisionStore implements ProvisionStore
         return DEFAULT_UUID;
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
     private void saveUuid(String uuid) throws ProvisionStoreException
     {
         File file = new File(root, UUID_FILE);
@@ -208,7 +210,7 @@ public class DefaultProvisionStore implements ProvisionStore
         }
         finally
         {
-            if (writer != null) try { writer.close(); } catch (IOException ignored) {}
+            if (writer != null) try { writer.close(); } catch (IOException ignored) { }
         }
     }
 
@@ -240,7 +242,6 @@ public class DefaultProvisionStore implements ProvisionStore
      * @param name the name of the properties file
      * @return the ProvisionDirective loaded from the properties file
      */
-    @SuppressWarnings({"EmptyCatchBlock"})
     private ProvisionConfiguration loadProvisionDirective(String name)
     {
         File file = new File(root, name);
@@ -286,7 +287,6 @@ public class DefaultProvisionStore implements ProvisionStore
         return new ProvisionConfiguration();
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
     private void saveProvisionDirective(ProvisionConfiguration configuration, String name) throws ProvisionStoreException
     {
         File file = new File(root, name);
@@ -314,7 +314,7 @@ public class DefaultProvisionStore implements ProvisionStore
         }
         finally
         {
-            if (writer != null) try { writer.close(); } catch (IOException ignored) {}
+            if (writer != null) try { writer.close(); } catch (IOException ignored) { }
         }
     }
 }

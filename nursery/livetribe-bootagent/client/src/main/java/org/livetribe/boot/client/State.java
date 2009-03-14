@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,14 @@
 package org.livetribe.boot.client;
 
 /**
+ * The various states of the Boot Agent Client.
+ *
  * @version $Revision$ $Date$
+ * @see Client
  */
 public enum State
 {
-    STARTED,
+    STARTING,
     RUNNING,
     STOPPING,
     STOPPED

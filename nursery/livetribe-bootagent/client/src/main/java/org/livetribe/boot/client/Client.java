@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,28 @@ import org.livetribe.boot.protocol.YouShould;
 
 
 /**
+ * A Boot Agent Provisioning Client, (BAPC).
+ * <p/>
+ * The BPAC is meant to load and start the lowest layer of a server.  It is
+ * expected that this bottom service layer will then, after being started by
+ * the BAPC, go on to provision higher, more complex, levels of a server.
+ * Long running servers must be prepared to have any of its layers updated.
+ * To facilitate operator-less updates a simple boot agent, this BAPC, queries
+ * for updates, loads, then initiates them.  Since the BPAC is the start of
+ * this chain of updates it must be incredibly simple to mitigate any need to
+ * update the BAPC itself.  Therefore it is severely restricted in
+ * functionality.
+ * <p/>
+ * The BAPC is supplied with a provision provider, from which it it makes
+ * provisioning queries, a content provider, from which it obtains provision
+ * enties, a scheduled thread pool, to schedule and execute its provisioning
+ * queries, and the provisioning store, to store its current provisioning
+ * directive.
+ *
  * @version $Revision$ $Date$
+ * @see ProvisionProvider
+ * @see ContentProvider
+ * @see ProvisionStore
  */
 @ThreadSafe
 public class Client
@@ -57,6 +78,18 @@ public class Client
     private volatile LifeCycle lifeCycleInstance;
 
 
+    /**
+     * Create an instance of a Boot Agent Provisioning Client, (BAPC).
+     * <p/>
+     * All parameters are required.  The client is not started until the
+     * <code>start()</code> method is called.
+     *
+     * @param provisionProvider           provisioning queries are made against this provider
+     * @param contentProvider             content listed by the provisioning provider are obtained from this provider
+     * @param scheduledThreadPoolExecutor periodic queries are scheduled in this pool
+     * @param provisionStore              the current provisioning cirective is stored in this store
+     * @see #start()
+     */
     public Client(ProvisionProvider provisionProvider, ContentProvider contentProvider, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore)
     {
         if (provisionProvider == null) throw new IllegalArgumentException("provisionProvider is null");
@@ -70,44 +103,98 @@ public class Client
         this.provisionStore = provisionStore;
     }
 
+    /**
+     * Obtain the current state of this client.
+     *
+     * @return the current state of this client
+     */
     public State getState()
     {
         return state;
     }
 
+    /**
+     * Set the current state of this client and notify listeners of the state
+     * change.
+     *
+     * @param state the next state for this client
+     */
     protected void setState(State state)
     {
         listeners.stateChange(this.state, state);
         this.state = state;
     }
 
+    /**
+     * Obtain period, in seconds, used to query the provisioning provider.
+     *
+     * @return the period, in seconds, used to query the provisioning provider
+     */
     public long getPeriod()
     {
         return period;
     }
 
+    /**
+     * Set the period, in seconds, used to query the provisioning provider.
+     * <p/>
+     * Changing the period to a new value will result in the removal of the old
+     * provisioning checker and the scheduling of a new provisioning checker
+     * with the new period.
+     *
+     * @param period the period, in seconds, to use to query the provisioning provider
+     */
     public void setPeriod(long period)
     {
-        this.period = period;
+        if (this.period != period)
+        {
+            if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
+
+            handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
+
+            this.period = period;
+        }
     }
 
+    protected ScheduledThreadPoolExecutor getScheduledThreadPoolExecutor()
+    {
+        return scheduledThreadPoolExecutor;
+    }
+
+    /**
+     * Add a client listener which monitors changes in this client.
+     *
+     * @param listener the client listener to added
+     */
     public void addListener(ClientListener listener)
     {
         listeners.addListener(listener);
     }
 
+    /**
+     * Remove a client listener.
+     *
+     * @param listener the client listener to be removed
+     */
     public void removeListener(ClientListener listener)
     {
         listeners.removeListener(listener);
     }
 
+    /**
+     * Start the Boot Agent Provisioning Client.
+     * <p/>
+     * A provisioning check is immediately run which results in the provisioned
+     * entries being started.  This method can potentially take a very long
+     * time to complete.
+     */
     public void start()
     {
         synchronized (LOCK)
         {
-            if (state == State.STARTED || state == State.RUNNING) return;
+            if (state == State.STARTING || state == State.RUNNING) return;
 
-            setState(State.STARTED);
+            setState(State.STARTING);
 
             ProvisionCheck provisionCheck = new ProvisionCheck();
 
@@ -119,6 +206,12 @@ public class Client
         }
     }
 
+    /**
+     * Stop the Boot Agent Provisioning Client.
+     * <p/>
+     * The currently provisioned artifacts are stopped.  This method can
+     * potentially take a very long time to complete.
+     */
     public void stop()
     {
         synchronized (LOCK)
@@ -127,7 +220,7 @@ public class Client
 
             setState(State.STOPPING);
 
-            scheduledThreadPoolExecutor.remove(handle);
+            if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
             handle = null;
 
             try
@@ -149,10 +242,14 @@ public class Client
         }
     }
 
-    @SuppressWarnings({"unchecked"})
+    /**
+     * Internal startup method which loads a lifecycle instance and calls its
+     * start method.
+     */
     private void startup()
     {
-        ClassLoader saved = Thread.currentThread().getContextClassLoader();
+        final ClassLoader saved = Thread.currentThread().getContextClassLoader();
+
         try
         {
             List<URL> urls = provisionStore.getClasspath();
@@ -160,7 +257,7 @@ public class Client
 
             Thread.currentThread().setContextClassLoader(classLoader);
 
-            Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
+            @SuppressWarnings({"unchecked"}) Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
 
             lifeCycleInstance = bootClass.newInstance();
 
@@ -188,6 +285,10 @@ public class Client
         }
     }
 
+    /**
+     * Internal startup method which calls the stop method of the loaded
+     * lifecycle instance.
+     */
     private void shutdown()
     {
         if (lifeCycleInstance != null)
@@ -201,9 +302,9 @@ public class Client
             finally
             {
                 Thread.currentThread().setContextClassLoader(saved);
+                lifeCycleInstance = null;
             }
         }
-        lifeCycleInstance = null;
     }
 
     private class ProvisionCheck implements Runnable
@@ -252,7 +353,7 @@ public class Client
                         startup();
                     }
                 }
-                else if (state == State.STARTED)
+                else if (state == State.STARTING)
                 {
                     startup();
                 }
