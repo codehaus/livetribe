@@ -55,6 +55,13 @@ import org.livetribe.boot.protocol.YouShould;
  * enties, a scheduled thread pool, to schedule and execute its provisioning
  * queries, and the provisioning store, to store its current provisioning
  * directive.
+ * <p/>
+ * When the BAPC receives a provisioning directive and it is directed to
+ * restart, or if it is starting up for the first time, it will load the boot
+ * class of the provisioning directive and call the boot class' lifecycle start
+ * method.  The loading of the class is done using the provisioning classloader
+ * which is constructed using the provisioning entries of the provision
+ * directive and the parent classloader that was passed in the constructor.
  *
  * @version $Revision$ $Date$
  * @see ProvisionProvider
@@ -72,6 +79,7 @@ public class Client
     private final ContentProvider contentProvider;
     private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
     private final ProvisionStore provisionStore;
+    private final ClassLoader parentClassLoader;
     private volatile State state = State.STOPPED;
     private volatile long period = DEFAULT_PERIOD;
     private volatile Runnable handle;
@@ -79,10 +87,12 @@ public class Client
 
 
     /**
-     * Create an instance of a Boot Agent Provisioning Client, (BAPC).
+     * Create an instance of a Boot Agent Provisioning Client.
      * <p/>
      * All parameters are required.  The client is not started until the
-     * <code>start()</code> method is called.
+     * <code>start()</code> method is called.  The classloader used as parent
+     * classloader when constructing the provisioning classloader is the
+     * thread's context classloader
      *
      * @param provisionProvider           provisioning queries are made against this provider
      * @param contentProvider             content listed by the provisioning provider are obtained from this provider
@@ -92,15 +102,35 @@ public class Client
      */
     public Client(ProvisionProvider provisionProvider, ContentProvider contentProvider, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore)
     {
+        this(provisionProvider, contentProvider, scheduledThreadPoolExecutor, provisionStore, Thread.currentThread().getContextClassLoader());
+    }
+
+    /**
+     * Create an instance of a Boot Agent Provisioning Client.
+     * <p/>
+     * All parameters are required.  The client is not started until the
+     * <code>start()</code> method is called.
+     *
+     * @param provisionProvider           provisioning queries are made against this provider
+     * @param contentProvider             content listed by the provisioning provider are obtained from this provider
+     * @param scheduledThreadPoolExecutor periodic queries are scheduled in this pool
+     * @param provisionStore              the current provisioning cirective is stored in this store
+     * @param parentClassLoader           the classloader to use as the parent classloader when constructing the provisioning classloader
+     * @see #start()
+     */
+    public Client(ProvisionProvider provisionProvider, ContentProvider contentProvider, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore, ClassLoader parentClassLoader)
+    {
         if (provisionProvider == null) throw new IllegalArgumentException("provisionProvider is null");
         if (contentProvider == null) throw new IllegalArgumentException("contentProvider is null");
         if (scheduledThreadPoolExecutor == null) throw new IllegalArgumentException("scheduledThreadPoolExecutor is null");
         if (provisionStore == null) throw new IllegalArgumentException("provisionStore is null");
+        if (parentClassLoader == null) throw new IllegalArgumentException("classLoader is null");
 
         this.provisionProvider = provisionProvider;
         this.contentProvider = contentProvider;
         this.scheduledThreadPoolExecutor = scheduledThreadPoolExecutor;
         this.provisionStore = provisionStore;
+        this.parentClassLoader = parentClassLoader;
     }
 
     /**
@@ -253,7 +283,7 @@ public class Client
         try
         {
             List<URL> urls = provisionStore.getClasspath();
-            URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), saved);
+            URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), parentClassLoader);
 
             Thread.currentThread().setContextClassLoader(classLoader);
 
