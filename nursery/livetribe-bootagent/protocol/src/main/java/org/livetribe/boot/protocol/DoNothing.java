@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2008 (C) The original author or authors
+ * Copyright 2008-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,20 @@
  */
 package org.livetribe.boot.protocol;
 
+import net.jcip.annotations.Immutable;
+
+
 /**
  * This directive is returned if the client is at an adequate version.
  *
  * @version $Revision$ $Date$
  */
+@Immutable
 public final class DoNothing extends ProvisionDirective
 {
+    @Override
+    public String toString()
+    {
+        return "DO_NOTHING";
+    }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,22 @@
  */
 package org.livetribe.boot.protocol;
 
+import net.jcip.annotations.Immutable;
+
+
 /**
  * @version $Revision$ $Date$
  */
+@Immutable
 public class Hello
 {
-    private String uuid;
-    private long version;
+    private final String uuid;
+    private final long version;
 
     public Hello(String uuid, long version)
     {
+        if (uuid == null) throw new IllegalArgumentException("UUID cannot be null");
+
         this.uuid = uuid;
         this.version = version;
     }
@@ -35,18 +41,33 @@ public class Hello
         return uuid;
     }
 
-    public void setUuid(String uuid)
-    {
-        this.uuid = uuid;
-    }
-
     public long getVersion()
     {
         return version;
     }
 
-    public void setVersion(long version)
+    @Override
+    public boolean equals(Object o)
     {
-        this.version = version;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Hello hello = (Hello) o;
+
+        return version == hello.version && uuid.equals(hello.uuid);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = uuid.hashCode();
+        result = 31 * result + (int) (version ^ (version >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "HELLO " + uuid + ":" + version;
     }
 }

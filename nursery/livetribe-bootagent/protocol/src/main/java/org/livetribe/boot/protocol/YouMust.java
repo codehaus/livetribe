@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package org.livetribe.boot.protocol;
 
 import java.util.Set;
 
+import net.jcip.annotations.Immutable;
+
 
 /**
  * This provision directive directs what version the client must be at.  The
@@ -25,10 +27,10 @@ import java.util.Set;
  *
  * @version $Revision$ $Date$
  */
+@Immutable
 public class YouMust extends YouShould
 {
     private final boolean restart;
-    private transient String string;
 
     public YouMust(long version, String bootClass, Set<ProvisionEntry> entries, boolean restart)
     {
@@ -44,29 +46,25 @@ public class YouMust extends YouShould
     @Override
     public String toString()
     {
-        if (string == null)
+        StringBuilder builder = new StringBuilder();
+        builder.append("MUST ");
+        builder.append(getVersion());
+        builder.append(" ");
+        builder.append(getBootClass());
+        builder.append(" ");
+        builder.append((restart ? " RESTART" : "NO-RESTART"));
+
+        builder.append(" [");
+        boolean first = true;
+        for (ProvisionEntry entry : getEntries())
         {
-            StringBuilder builder = new StringBuilder();
-            builder.append("MUST ");
-            builder.append(getVersion());
-            builder.append(" ");
-            builder.append(getBootClass());
-            builder.append(" ");
-            builder.append((restart ? " RESTART" : "NO-RESTART"));
+            if (first) first = false;
+            else builder.append(", ");
 
-            builder.append(" [");
-            boolean first = true;
-            for (ProvisionEntry entry : getEntries())
-            {
-                if (first) first = false;
-                else builder.append(", ");
-
-                builder.append(entry);
-            }
-            builder.append("]");
-
-            string = builder.toString();
+            builder.append(entry);
         }
-        return string;
+        builder.append("]");
+
+        return builder.toString();
     }
 }

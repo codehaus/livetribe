@@ -63,17 +63,27 @@ import org.livetribe.boot.protocol.YouShould;
  * which is constructed using the provisioning entries of the provision
  * directive and the parent classloader that was passed in the constructor.
  *
+ * The BAPC itself does not perform any logging.  Instead it uses
+ * <code>ClientListener</code> for state change notifications as well as
+ * warning and error messages.
+ *
  * @version $Revision$ $Date$
  * @see ProvisionProvider
  * @see ContentProvider
  * @see ProvisionStore
+ * @see ClientListener
  */
 @ThreadSafe
 public class Client
 {
     public final static long DEFAULT_PERIOD = 900;
-    private final Object LOCK = new Object();
+
+    // Used to prevent start and stop from concurrently executing
+    private final Object lock = new Object();
+
+    // Used to prevent provisioning requests from concurrently executing
     private final Semaphore semaphore = new Semaphore(1);
+
     private final ClientListenerHelper listeners = new ClientListenerHelper();
     private final ProvisionProvider provisionProvider;
     private final ContentProvider contentProvider;
@@ -151,6 +161,8 @@ public class Client
      */
     protected void setState(State state)
     {
+        assert Thread.holdsLock(lock);
+
         listeners.stateChange(this.state, state);
         this.state = state;
     }
@@ -176,19 +188,37 @@ public class Client
      */
     public void setPeriod(long period)
     {
-        if (this.period != period)
+        synchronized (lock)
         {
-            if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
+            if (this.period != period)
+            {
+                if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
 
-            handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
+                handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
 
-            this.period = period;
+                this.period = period;
+            }
         }
     }
 
+    /**
+     * Protected access to the thread pool for client extensions
+     *
+     * @return the scheduled thread pool
+     */
     protected ScheduledThreadPoolExecutor getScheduledThreadPoolExecutor()
     {
         return scheduledThreadPoolExecutor;
+    }
+
+    /**
+     * Protected access to the client's internal lock for client extensions
+     *
+     * @return the lock
+     */
+    protected Object getLock()
+    {
+        return lock;
     }
 
     /**
@@ -220,31 +250,39 @@ public class Client
      */
     public void start()
     {
-        synchronized (LOCK)
+        synchronized (lock)
         {
             if (state == State.STARTING || state == State.RUNNING) return;
 
             setState(State.STARTING);
 
-            ProvisionCheck provisionCheck = new ProvisionCheck();
+            try
+            {
+                ProvisionCheck provisionCheck = new ProvisionCheck();
 
-            provisionCheck.run();
+                provisionCheck.run();
 
-            handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
+                handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
 
-            setState(State.RUNNING);
+                setState(State.RUNNING);
+            }
+            catch (Throwable throwable)
+            {
+                listeners.error("Unable to start client", throwable);
+                setState(State.STOPPED);
+            }
         }
     }
 
     /**
      * Stop the Boot Agent Provisioning Client.
      * <p/>
-     * The currently provisioned artifacts are stopped.  This method can
+     * The currently provisioned entries are stopped.  This method can
      * potentially take a very long time to complete.
      */
     public void stop()
     {
-        synchronized (LOCK)
+        synchronized (lock)
         {
             if (state == State.STOPPING || state == State.STOPPED) return;
 
@@ -253,6 +291,9 @@ public class Client
             if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
             handle = null;
 
+            /**
+             * wait for any starting entry to complete
+             */
             try
             {
                 semaphore.acquire();
@@ -266,9 +307,14 @@ public class Client
                 semaphore.release();
             }
 
-            shutdown();
-
-            setState(State.STOPPED);
+            try
+            {
+                shutdown();
+            }
+            finally
+            {
+                setState(State.STOPPED);
+            }
         }
     }
 
@@ -295,19 +341,23 @@ public class Client
         }
         catch (ProvisionStoreException pse)
         {
-            listeners.error("Provision check error", pse);
+            listeners.error("Startup error", pse);
         }
         catch (ClassNotFoundException cnde)
         {
-            listeners.error("Provision check error", cnde);
+            listeners.error("Startup error", cnde);
         }
         catch (IllegalAccessException iae)
         {
-            listeners.error("Provision check error", iae);
+            listeners.error("Startup error", iae);
         }
         catch (InstantiationException ie)
         {
-            listeners.error("Provision check error", ie);
+            listeners.error("Startup error", ie);
+        }
+        catch (Throwable t)
+        {
+            listeners.error("Startup error", t);
         }
         finally
         {
@@ -329,6 +379,10 @@ public class Client
                 Thread.currentThread().setContextClassLoader(lifeCycleInstance.getClass().getClassLoader());
                 lifeCycleInstance.stop();
             }
+            catch (Throwable t)
+            {
+                listeners.error("Shutdown error", t);
+            }
             finally
             {
                 Thread.currentThread().setContextClassLoader(saved);
@@ -339,6 +393,14 @@ public class Client
 
     private class ProvisionCheck implements Runnable
     {
+        /**
+         * Perform a provision check.
+         * <p/>
+         * If an update needs to take place then the entities are downloaded
+         * and stored first.  If there are no problems then the store is
+         * instructed to mark the next provision directive.  If there are no
+         * errors after that, the provision set is started if required.
+         */
         public void run()
         {
             try
@@ -346,11 +408,11 @@ public class Client
                 semaphore.acquire();
 
                 long currentVersion = provisionStore.getCurrentProvisionDirective().getVersion();
-                String uuid = provisionStore.getUuid();
+                final String uuid = provisionStore.getUuid();
 
                 listeners.provisionCheck(uuid, currentVersion);
 
-                ProvisionDirective response = provisionProvider.hello(provisionStore.getUuid(), currentVersion);
+                ProvisionDirective response = provisionProvider.hello(uuid, currentVersion);
 
                 listeners.provisionDirective(response);
 
@@ -373,24 +435,40 @@ public class Client
 
                 provisionStore.prepareNext();
 
-                if (response instanceof YouMust)
+                try
                 {
-                    YouMust must = (YouMust) response;
-
-                    if (must.isRestart())
+                    if (response instanceof YouMust)
                     {
-                        if (state == State.RUNNING) shutdown();
+                        YouMust must = (YouMust) response;
+
+                        if (must.isRestart())
+                        {
+                            if (state == State.RUNNING) shutdown();
+                            startup();
+                        }
+                    }
+                    else if (state == State.STARTING)
+                    {
                         startup();
                     }
+
+                    try
+                    {
+                        provisionStore.commitNext();
+                    }
+                    catch (ProvisionStoreException pse)
+                    {
+                        listeners.error("Provision check error", pse);
+                    }
                 }
-                else if (state == State.STARTING)
+                catch (Throwable t)
                 {
-                    startup();
+                    provisionStore.rollbackNext();
                 }
             }
             catch (BootException bse)
             {
-                listeners.error("Provision check error", bse);
+                listeners.warning("Provision check error", bse);
             }
             catch (ProvisionStoreException pse)
             {
@@ -398,7 +476,7 @@ public class Client
             }
             catch (InterruptedException ie)
             {
-                listeners.error("Provision check error", ie);
+                listeners.warning("Provision check interrupted");
             }
             finally
             {

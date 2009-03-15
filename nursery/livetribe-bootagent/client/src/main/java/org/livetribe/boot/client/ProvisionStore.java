@@ -42,5 +42,9 @@ public interface ProvisionStore
 
     void prepareNext() throws ProvisionStoreException;
 
+    void commitNext() throws ProvisionStoreException;
+
+    void rollbackNext() throws ProvisionStoreException;
+
     List<URL> getClasspath() throws ProvisionStoreException;
 }

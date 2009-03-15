@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
  */
 package org.livetribe.boot.protocol;
 
+import net.jcip.annotations.Immutable;
+
+
 /**
  * @version $Revision$ $Date$
  */
+@Immutable
 public class ProvisionEntry
 {
     private final String name;
     private final long version;
-    private transient String string;
 
     public ProvisionEntry(String name, long version)
     {
@@ -66,10 +69,6 @@ public class ProvisionEntry
     @Override
     public String toString()
     {
-        if (string == null)
-        {
-            string = name + ":" + version;
-        }
-        return string;
+        return name + ":" + version;
     }
 }

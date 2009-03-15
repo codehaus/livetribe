@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@
  */
 package org.livetribe.boot.protocol;
 
+import net.jcip.annotations.Immutable;
+
+
 /**
  * @version $Revision$ $Date$
  */
+@Immutable
 public class PleaseProvide
 {
     private String name;
@@ -26,6 +30,8 @@ public class PleaseProvide
 
     public PleaseProvide(String name, long version)
     {
+        if (name == null) throw new IllegalArgumentException("Name cannot be null");
+
         this.name = name;
         this.version = version;
     }
@@ -48,5 +54,30 @@ public class PleaseProvide
     public void setVersion(long version)
     {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PleaseProvide that = (PleaseProvide) o;
+
+        return version == that.version && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = name.hashCode();
+        result = 31 * result + (int) (version ^ (version >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "PROVIDE " + name + ":" + version;
     }
 }

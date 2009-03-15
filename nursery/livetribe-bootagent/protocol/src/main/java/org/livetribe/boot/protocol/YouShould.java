@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.jcip.annotations.Immutable;
+
 
 /**
  * This provision directive directs what version the client should be at.  The
@@ -27,12 +29,12 @@ import java.util.Set;
  *
  * @version $Revision$ $Date$
  */
+@Immutable
 public class YouShould extends ProvisionDirective
 {
     private final long version;
     private final String bootClass;
     private final Set<ProvisionEntry> entries;
-    private transient String string;
 
     public YouShould(long version, String bootClass, Set<ProvisionEntry> entries)
     {
@@ -82,27 +84,23 @@ public class YouShould extends ProvisionDirective
     @Override
     public String toString()
     {
-        if (string == null)
+        StringBuilder builder = new StringBuilder();
+        builder.append("SHOULD ");
+        builder.append(version);
+        builder.append(" ");
+        builder.append(bootClass);
+
+        builder.append(" [");
+        boolean first = true;
+        for (ProvisionEntry entry : entries)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.append("SHOULD ");
-            builder.append(version);
-            builder.append(" ");
-            builder.append(bootClass);
+            if (first) first = false;
+            else builder.append(", ");
 
-            builder.append(" [");
-            boolean first = true;
-            for (ProvisionEntry entry : entries)
-            {
-                if (first) first = false;
-                else builder.append(", ");
-
-                builder.append(entry);
-            }
-            builder.append("]");
-
-            string = builder.toString();
+            builder.append(entry);
         }
-        return string;
+        builder.append("]");
+
+        return builder.toString();
     }
 }

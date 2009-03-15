@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,11 @@ package org.livetribe.boot.protocol;
 /**
  * Provision provider interface.
  * <p/>
- * This interface is purposfully kept simple to enforce a narrow scope of
+ * An inteface is used to decouple the higher level protocol from the lower
+ * level wire protocol.  For example wire protocol implementations could
+ * include HTTP, BEEP, ASN1, etc.
+ * <p/>
+ * This interface is purposefully kept simple to enforce a narrow scope of
  * application.  This being the initial provisioning of a boot environment.
  * It is not meant to be used as a fully functional provisioning system.  Such
  * a system would be implemented "on top" of this provision provider.

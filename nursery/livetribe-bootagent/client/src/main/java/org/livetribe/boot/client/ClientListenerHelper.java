@@ -98,6 +98,20 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    public void warning(String message, Throwable throwable)
+    {
+        for (ClientListener listener : listeners)
+        {
+            try
+            {
+                listener.warning(message, throwable);
+            }
+            catch (Throwable ignore)
+            {
+            }
+        }
+    }
+
     public void error(String message)
     {
         for (ClientListener listener : listeners)

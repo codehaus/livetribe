@@ -53,9 +53,10 @@ public class DefaultProvisionStore implements ProvisionStore
     private final static String DIRECTIVE_BASE_KEY = "directive.";
     private final File root;
     private final File resources;
-    private String uuid = "org.livetribe.boot.uuid.unset";
-    private ProvisionConfiguration currentProvisionConfiguration;
-    private ProvisionConfiguration nextProvisionConfiguration;
+    private volatile String uuid = DEFAULT_UUID;
+    private volatile ProvisionConfiguration currentProvisionConfiguration;
+    private volatile ProvisionConfiguration nextProvisionConfiguration;
+    private volatile ProvisionConfiguration previousProvisionConfiguration;
 
     public DefaultProvisionStore(File root)
     {
@@ -140,10 +141,15 @@ public class DefaultProvisionStore implements ProvisionStore
             else if (!resource.isFile()) throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " is not a file");
         }
 
+        previousProvisionConfiguration = currentProvisionConfiguration;
+        currentProvisionConfiguration = nextProvisionConfiguration;
+    }
+
+    public void commitNext() throws ProvisionStoreException
+    {
         Set<ProvisionEntry> removeSet = new HashSet<ProvisionEntry>(currentProvisionConfiguration.getEntries());
         removeSet.removeAll(nextProvisionConfiguration.getEntries());
 
-        currentProvisionConfiguration = nextProvisionConfiguration;
         saveCurrentProvisionDirective(currentProvisionConfiguration);
 
         for (ProvisionEntry entry : removeSet)
@@ -153,6 +159,12 @@ public class DefaultProvisionStore implements ProvisionStore
 
             if (!resource.delete()) throw new ProvisionStoreException("Unable to delete version " + entry.getVersion() + " for " + directory);
         }
+    }
+
+    public void rollbackNext() throws ProvisionStoreException
+    {
+        nextProvisionConfiguration = currentProvisionConfiguration;
+        currentProvisionConfiguration = previousProvisionConfiguration;
     }
 
     public List<URL> getClasspath() throws ProvisionStoreException
@@ -229,9 +241,9 @@ public class DefaultProvisionStore implements ProvisionStore
         saveProvisionDirective(nextProvisionConfiguration, CURRENT_FILE);
     }
 
-    private void saveNextProvisionDirective(ProvisionConfiguration nextProvisionConfiguration) throws ProvisionStoreException
+    private void saveNextProvisionDirective(ProvisionConfiguration provisionConfiguration) throws ProvisionStoreException
     {
-        saveProvisionDirective(nextProvisionConfiguration, NEXT_FILE);
+        saveProvisionDirective(provisionConfiguration, NEXT_FILE);
     }
 
     /**

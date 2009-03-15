@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007 (C) The original author or authors
+ * Copyright 2007-2009 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class HttpClient implements ProvisionProvider, ContentProvider
 
     public ProvisionDirective hello(String uuid, long version) throws BootException
     {
-        if (LOGGER.isLoggable(Level.FINER)) LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
+        LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
 
         try
         {
@@ -148,7 +148,7 @@ public class HttpClient implements ProvisionProvider, ContentProvider
 
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
-        if (LOGGER.isLoggable(Level.FINER)) LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
+        LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
 
         try
         {

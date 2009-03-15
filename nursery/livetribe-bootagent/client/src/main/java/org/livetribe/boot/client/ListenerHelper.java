@@ -66,6 +66,22 @@ public class ListenerHelper implements Listener
 
     @SuppressWarnings({"EmptyCatchBlock"})
     @GuardedBy("this")
+    public synchronized void warning(String message, Throwable throwable)
+    {
+        for (Listener listener : listeners)
+        {
+            try
+            {
+                listener.warning(message, throwable);
+            }
+            catch (Throwable ignore)
+            {
+            }
+        }
+    }
+
+    @SuppressWarnings({"EmptyCatchBlock"})
+    @GuardedBy("this")
     public synchronized void error(String message)
     {
         for (Listener listener : listeners)

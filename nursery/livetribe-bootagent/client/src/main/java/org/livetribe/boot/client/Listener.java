@@ -23,6 +23,8 @@ public interface Listener
 {
     public void warning(String message);
 
+    public void warning(String message, Throwable throwable);
+
     public void error(String message);
 
     public void error(String message, Throwable throwable);
