@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.livetribe</groupId>
         <artifactId>livetribe</artifactId>
-        <version>1.0</version>
+        <version>1.2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -12,7 +12,7 @@
     <artifactId>livetribe-jsr223</artifactId>
     <version>2.0-SNAPSHOT</version>
     <name>LiveTribe :: JSR 223</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
 
     <build>
         <defaultGoal>install</defaultGoal>
@@ -25,6 +25,34 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>1.4.3</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Name>${artifactId}</Bundle-Name>
+                        <Bundle-SymbolicName>${groupId}.${artifactId}_1.0_spec</Bundle-SymbolicName>
+                        <Bundle-Description>LiveTribe :: JSR 223</Bundle-Description>
+                        <Export-Package>!META-INF*,javax.script.*;version=1.0</Export-Package>
+                        <Import-Package></Import-Package>
+                        <Private-Package></Private-Package>
+                        <Implementation-Title>LiveTribe :: JSR 223</Implementation-Title>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                    </instructions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         </plugins>
     </build>
 
