@@ -17,7 +17,7 @@
 package javax.script;
 
 /**
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  */
 public interface Invocable
 {

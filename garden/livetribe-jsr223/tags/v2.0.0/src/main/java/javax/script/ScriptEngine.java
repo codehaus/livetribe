@@ -20,7 +20,7 @@ import java.io.Reader;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  */
 public interface ScriptEngine
 {

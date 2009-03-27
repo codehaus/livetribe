@@ -20,7 +20,7 @@ import java.util.Map;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  */
 public interface Bindings extends Map<String, Object>
 {

@@ -22,7 +22,7 @@ import java.util.List;
 
 
 /**
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  */
 public interface ScriptContext
 {
