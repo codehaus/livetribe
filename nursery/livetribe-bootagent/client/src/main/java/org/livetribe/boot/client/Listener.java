@@ -17,15 +17,40 @@
 package org.livetribe.boot.client;
 
 /**
+ * A listener interface used by users of the <code>Client</code> object to
+ * listen for warning and errors.
+ * <p/>
+ * Errors are in indication that the client is irrevocably broken.  When this
+ * occurs the client is broken in some way and there is no way to recover other
+ * than restarting the server.
+ *
  * @version $Revision$ $Date$
  */
 public interface Listener
 {
+    /**
+     * A problem of some sort occured.
+     * @param message an explanation as to what happened
+     */
     public void warning(String message);
 
+    /**
+     * A problem of some sort occured.
+     * @param message an explanation as to what happened
+     * @param throwable the exception that caused the problem
+     */
     public void warning(String message, Throwable throwable);
 
+    /**
+     * An unrecoverable problem occured.
+     * @param message an explanation as to what happened
+     */
     public void error(String message);
 
+    /**
+     * An unrecoverable problem occured.
+     * @param message an explanation as to what happened
+     * @param throwable the exception that caused the problem
+     */
     public void error(String message, Throwable throwable);
 }

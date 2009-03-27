@@ -99,12 +99,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.livetribe</groupId>
-                <artifactId>livetribe-util</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.livetribe.boot</groupId>
                 <artifactId>livetribe-boot-api</artifactId>
                 <version>${bootAgentVersion}</version>

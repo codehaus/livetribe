@@ -29,6 +29,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.jcip.annotations.ThreadSafe;
+
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ContentProvider;
 import org.livetribe.boot.protocol.DoNothing;
@@ -40,8 +42,14 @@ import org.livetribe.boot.protocol.YouShould;
 
 
 /**
+ * An HTTP based provisioning and content provider.
+ * <p/>
+ * Any provisioning commands returned from the server that are not understood
+ * will cause a boot exception to be thrown.
+ *
  * @version $Revision: $ $Date: $
  */
+@ThreadSafe
 public class HttpClient implements ProvisionProvider, ContentProvider
 {
     public final static int DEFAULT_TIMEOUT = 60 * 1000;
@@ -58,19 +66,34 @@ public class HttpClient implements ProvisionProvider, ContentProvider
         if (LOGGER.isLoggable(Level.CONFIG)) LOGGER.config("url: " + url);
     }
 
+    /**
+     * Obtain the HTTP read timeout in seconds
+     *
+     * @return the HTTP read timeout in seconds
+     */
     public int getTimeout()
     {
         return timeout;
     }
 
+    /**
+     * Set the HTTP read timeout in seconds
+     *
+     * @param timeout the HTTP read timeout in seconds
+     */
     public void setTimeout(int timeout)
     {
         this.timeout = timeout;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionDirective hello(String uuid, long version) throws BootException
     {
         LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
+
+        if (uuid == null) throw new IllegalArgumentException("uuid cannot be null");
 
         try
         {
@@ -110,9 +133,14 @@ public class HttpClient implements ProvisionProvider, ContentProvider
             {
                 directive = new YouShould(directedVersion, bootClass, entries);
             }
-            else
+            else if ("DO_NOTHING".equals(tokens[0]))
             {
                 directive = new DoNothing();
+            }
+            else
+            {
+                LOGGER.warning("Unable to recognize directive " + tokens[0]);
+                throw new BootException("Unable to recognize directive " + tokens[0]);
             }
 
             LOGGER.exiting(CLASS_NAME, "hello", directive);
@@ -121,34 +149,39 @@ public class HttpClient implements ProvisionProvider, ContentProvider
         }
         catch (MalformedURLException mue)
         {
-            LOGGER.log(Level.SEVERE, "Unable to form URL for hello", mue);
+            LOGGER.log(Level.WARNING, "Unable to form URL for hello", mue);
             throw new BootException("Unable to form URL for hello", mue);
         }
         catch (SocketTimeoutException ste)
         {
-            LOGGER.log(Level.SEVERE, "Hello timed out", ste);
+            LOGGER.log(Level.WARNING, "Hello timed out", ste);
             throw new BootException("Hello timed out", ste);
         }
         catch (NumberFormatException nfe)
         {
-            LOGGER.log(Level.SEVERE, "Number could not be parsed", nfe);
+            LOGGER.log(Level.WARNING, "Number could not be parsed", nfe);
             throw new BootException("Number could not be parsed", nfe);
         }
         catch (IOException ioe)
         {
-            LOGGER.log(Level.SEVERE, "Hello experience an IO exception", ioe);
+            LOGGER.log(Level.WARNING, "Hello experience an IO exception", ioe);
             throw new BootException("Hello experience an IO exception", ioe);
         }
         catch (ArrayIndexOutOfBoundsException aioobe)
         {
-            LOGGER.log(Level.SEVERE, "Hello response was malformed", aioobe);
+            LOGGER.log(Level.WARNING, "Hello response was malformed", aioobe);
             throw new BootException("Hello response was malformed", aioobe);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
         LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
+
+        if (name == null) throw new IllegalArgumentException("name cannot be null");
 
         try
         {
@@ -167,17 +200,17 @@ public class HttpClient implements ProvisionProvider, ContentProvider
         }
         catch (MalformedURLException mue)
         {
-            LOGGER.log(Level.SEVERE, "Unable to form URL for hello", mue);
+            LOGGER.log(Level.WARNING, "Unable to form URL for hello", mue);
             throw new BootException("Unable to form URL for hello", mue);
         }
         catch (SocketTimeoutException ste)
         {
-            LOGGER.log(Level.SEVERE, "Hello timed out", ste);
+            LOGGER.log(Level.WARNING, "Hello timed out", ste);
             throw new BootException("Hello timed out", ste);
         }
         catch (IOException ioe)
         {
-            LOGGER.log(Level.SEVERE, "Hello experience an IO exception", ioe);
+            LOGGER.log(Level.WARNING, "Hello experience an IO exception", ioe);
             throw new BootException("Hello experience an IO exception", ioe);
         }
     }

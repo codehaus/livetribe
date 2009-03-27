@@ -20,13 +20,38 @@ import org.livetribe.boot.protocol.ProvisionDirective;
 
 
 /**
+ * A listener interface used by users of the <code>Client</code> object to
+ * monitor its state and to listen for warning and errors.
+ * <p/>
+ * Errors are in indication that the client is irrevocably broken.  When this
+ * occurs the client is broken in some way and there is no way to recover other
+ * than restarting the server.
+ *
  * @version $Revision$ $Date$
+ * @see Listener
  */
 public interface ClientListener extends Listener
 {
+    /**
+     * The state of the client has changed.
+     *
+     * @param oldState the old state of the client
+     * @param newState the new state of the client
+     */
     public void stateChange(State oldState, State newState);
 
+    /**
+     * A provision check is about to be performed
+     *
+     * @param uuid    the UUID of the client that is going to be sent for the check
+     * @param version the provisioning verison that is going to be sent for the check
+     */
     public void provisionCheck(String uuid, long version);
 
+    /**
+     * A provisioning directive was returned as a result of a check
+     *
+     * @param directive the directive that was returned
+     */
     public void provisionDirective(ProvisionDirective directive);
 }

@@ -42,6 +42,11 @@ import org.livetribe.boot.protocol.YouShould;
 
 
 /**
+ * An HTTP server implementation that an HTTP client can communicate with to
+ * obtain its provisioning directives and content.  While this servlet can
+ * support requests from the HTTP client, serious installations may want to
+ * implement their own more robust implementations.
+ *
  * @version $Revision$ $Date$
  */
 public class BootServerServlet extends HttpServlet

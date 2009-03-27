@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -99,11 +98,11 @@ public class DefaultProvisionStoreTest extends TestCase
         store.prepareNext();
         store.commitNext();
 
-        List<URL> classpath = store.getClasspath();
+        URL[] classpath = store.getClasspath();
 
-        assertEquals(1, classpath.size());
+        assertEquals(1, classpath.length);
 
-        InputStream inputStream = classpath.get(0).openConnection().getInputStream();
+        InputStream inputStream = classpath[0].openConnection().getInputStream();
         byte[] buffer = new byte[1024];
 
         assertEquals(4, inputStream.read(buffer));
@@ -123,9 +122,9 @@ public class DefaultProvisionStoreTest extends TestCase
 
         classpath = store.getClasspath();
 
-        assertEquals(1, classpath.size());
+        assertEquals(1, classpath.length);
 
-        inputStream = classpath.get(0).openConnection().getInputStream();
+        inputStream = classpath[0].openConnection().getInputStream();
 
         assertEquals(4, inputStream.read(buffer));
         assertEquals((byte) 0xba, buffer[0]);
@@ -152,6 +151,7 @@ public class DefaultProvisionStoreTest extends TestCase
         }
         else
         {
+            //noinspection ResultOfMethodCallIgnored
             file.delete();
         }
     }

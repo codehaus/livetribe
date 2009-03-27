@@ -46,16 +46,32 @@ public class YouShould extends ProvisionDirective
         this.entries = Collections.unmodifiableSet(new HashSet<ProvisionEntry>(entries));
     }
 
+    /**
+     * The version of this provisioning directive.
+     *
+     * @return the version of this provisioning directive
+     */
     public long getVersion()
     {
         return version;
     }
 
+    /**
+     * The class to instantiate and execute.  Instances of this class must
+     * implement <code>org.livetribe.boot.LifeCycle</code>.
+     *
+     * @return the name of the class to instantiate
+     */
     public String getBootClass()
     {
         return bootClass;
     }
 
+    /**
+     * The set provisioning entries associated with this directive.
+     *
+     * @return the set provisioning entries associated with this directive
+     */
     public Set<ProvisionEntry> getEntries()
     {
         return entries;
@@ -85,6 +101,7 @@ public class YouShould extends ProvisionDirective
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
+
         builder.append("SHOULD ");
         builder.append(version);
         builder.append(" ");

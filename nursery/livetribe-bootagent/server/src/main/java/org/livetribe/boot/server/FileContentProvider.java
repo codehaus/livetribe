@@ -19,28 +19,70 @@ package org.livetribe.boot.server;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import net.jcip.annotations.ThreadSafe;
 
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ContentProvider;
 
 
 /**
+ * The <code>FileContentProvider</code> is an implementation of
+ * <code>ContentProvider</code> backed by a file system.
+ * <p/>
+ * The first level of directories correspond to the names of the content and so
+ * the directory names match the content names that they represent.  Within
+ * those directies are the collection of versions of that content.  They are of
+ * the format <code><i>version</i>.jar</code>.  For example, content with the
+ * name bar has three versions and the content named foo has two:
+ * <p/>
+ * <blockquote><pre>
+ *     bar/
+ *       1.jar
+ *       2.jar
+ *       3.jar
+ *     foo/
+ *       1.jar
+ *       2.jar
+ * </pre></blockquote>
+ *
  * @version $Revision$ $Date$
  */
+@ThreadSafe
 public class FileContentProvider implements ContentProvider
 {
+    private final static String CLASS_NAME = FileContentProvider.class.getName();
+    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private final File resources;
 
-    public FileContentProvider(File directory) throws IOException
+    /**
+     * @param resources the root directory of the content that this provider
+     *                  delivers.  This directory must already exist and its
+     *                  contents must be in the format described in this class'
+     *                  description.
+     */
+    public FileContentProvider(File resources)
     {
-        if (directory == null) throw new IllegalArgumentException("Directory cannot be null");
-        if (!directory.exists() || !directory.isDirectory()) throw new IllegalArgumentException("Directory does not exist or is a file");
+        if (resources == null) throw new IllegalArgumentException("Directory cannot be null");
+        if (!resources.exists() || !resources.isDirectory()) throw new IllegalArgumentException("Directory does not exist or is a file");
 
-        this.resources = directory;
+        if (LOGGER.isLoggable(Level.CONFIG)) LOGGER.config("resources: " + resources);
+
+        this.resources = resources;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
+        LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
+
+        if (name == null) throw new BootException("Content name cannot be null");
+        if (version < 0) throw new BootException("Content version cannot be negative");
+
         File directory = new File(resources, name);
 
         if (!directory.exists() || !directory.isDirectory()) throw new BootException("Directory for resource does not exist");
@@ -51,6 +93,8 @@ public class FileContentProvider implements ContentProvider
 
         try
         {
+            LOGGER.exiting(CLASS_NAME, "pleaseProvide", resource.toURL());
+
             return resource.toURL().openStream();
         }
         catch (IOException ioe)

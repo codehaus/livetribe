@@ -19,7 +19,7 @@ package org.livetribe.boot.protocol;
 /**
  * @version $Revision$ $Date$
  */
-public class BootException extends Exception
+public final class BootException extends Exception
 {
     public BootException()
     {

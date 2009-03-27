@@ -20,10 +20,15 @@ import net.jcip.annotations.Immutable;
 
 
 /**
+ * A provision entry describes the name of the content and its version.  It
+ * will be subsequently used to obtain content from a
+ * <code>ContentProvider</code>.
+ *
  * @version $Revision$ $Date$
+ * @see ContentProvider
  */
 @Immutable
-public class ProvisionEntry
+public final class ProvisionEntry
 {
     private final String name;
     private final long version;
@@ -36,11 +41,21 @@ public class ProvisionEntry
         this.version = version;
     }
 
+    /**
+     * The name of the content to be obtained from a <code>ContentProvider</code>.
+     *
+     * @return the name of the content to be obtained
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * The version of the content to be obtained from a <code>ContentProvider</code>.
+     *
+     * @return the version of the content to be obtained
+     */
     public long getVersion()
     {
         return version;

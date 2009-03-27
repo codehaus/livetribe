@@ -18,7 +18,6 @@ package org.livetribe.boot.client;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.Semaphore;
@@ -62,7 +61,7 @@ import org.livetribe.boot.protocol.YouShould;
  * method.  The loading of the class is done using the provisioning classloader
  * which is constructed using the provisioning entries of the provision
  * directive and the parent classloader that was passed in the constructor.
- *
+ * <p/>
  * The BAPC itself does not perform any logging.  Instead it uses
  * <code>ClientListener</code> for state change notifications as well as
  * warning and error messages.
@@ -301,6 +300,7 @@ public class Client
             catch (InterruptedException ie)
             {
                 listeners.warning("Stop interrupted");
+                Thread.currentThread().interrupt();
             }
             finally
             {
@@ -328,8 +328,8 @@ public class Client
 
         try
         {
-            List<URL> urls = provisionStore.getClasspath();
-            URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]), parentClassLoader);
+            URL[] urls = provisionStore.getClasspath();
+            URLClassLoader classLoader = new URLClassLoader(urls, parentClassLoader);
 
             Thread.currentThread().setContextClassLoader(classLoader);
 
@@ -407,7 +407,7 @@ public class Client
             {
                 semaphore.acquire();
 
-                long currentVersion = provisionStore.getCurrentProvisionDirective().getVersion();
+                final long currentVersion = provisionStore.getCurrentProvisionDirective().getVersion();
                 final String uuid = provisionStore.getUuid();
 
                 listeners.provisionCheck(uuid, currentVersion);
@@ -437,6 +437,21 @@ public class Client
 
                 try
                 {
+                    /**
+                     * First make sure that we can instantiate an instance of
+                     * the boot class so we don't end up needlessly restarting
+                     * the server.
+                     */
+                    URL[] urls = provisionStore.getClasspath();
+                    URLClassLoader classLoader = new URLClassLoader(urls, parentClassLoader);
+
+                    @SuppressWarnings({"unchecked"}) Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
+
+                    bootClass.newInstance();
+
+                    /**
+                     * Start the server if we must
+                     */
                     if (response instanceof YouMust)
                     {
                         YouMust must = (YouMust) response;
@@ -461,8 +476,29 @@ public class Client
                         listeners.error("Provision check error", pse);
                     }
                 }
+                catch (ClassNotFoundException cnde)
+                {
+                    listeners.warning("Startup error", cnde);
+                    provisionStore.rollbackNext();
+                }
+                catch (ClassCastException cce)
+                {
+                    listeners.warning("Startup error: boot class does not implement org.livetribe.boot.LifeCycle", cce);
+                    provisionStore.rollbackNext();
+                }
+                catch (IllegalAccessException iae)
+                {
+                    listeners.warning("Startup error", iae);
+                    provisionStore.rollbackNext();
+                }
+                catch (InstantiationException ie)
+                {
+                    listeners.warning("Startup error", ie);
+                    provisionStore.rollbackNext();
+                }
                 catch (Throwable t)
                 {
+                    listeners.error("Startup error", t);
                     provisionStore.rollbackNext();
                 }
             }
@@ -477,6 +513,7 @@ public class Client
             catch (InterruptedException ie)
             {
                 listeners.warning("Provision check interrupted");
+                Thread.currentThread().interrupt();
             }
             finally
             {

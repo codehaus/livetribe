@@ -68,7 +68,10 @@ public class DefaultProvisionStore implements ProvisionStore
         this.currentProvisionConfiguration = loadCurrentProvisionDirective();
         this.nextProvisionConfiguration = loadNextProvisionDirective();
 
-        if (!resources.exists() && !resources.mkdirs()) throw new IllegalArgumentException("Unable to creare provision store root directory");
+        if (!resources.exists() && !resources.mkdirs())
+        {
+            throw new IllegalArgumentException("Unable to creare provision store root directory");
+        }
         else if (!resources.isDirectory()) throw new IllegalArgumentException("Resources in root is not a directory");
     }
 
@@ -103,7 +106,10 @@ public class DefaultProvisionStore implements ProvisionStore
     {
         File directory = new File(resources, provisionEntry.getName());
 
-        if (!directory.exists() && !directory.mkdirs()) throw new ProvisionStoreException("Unable to create resource directory " + directory);
+        if (!directory.exists() && !directory.mkdirs())
+        {
+            throw new ProvisionStoreException("Unable to create resource directory " + directory);
+        }
         else if (!directory.isDirectory()) throw new ProvisionStoreException("Resource directory " + directory + " is not a directory");
 
         try
@@ -133,11 +139,17 @@ public class DefaultProvisionStore implements ProvisionStore
         for (ProvisionEntry entry : nextProvisionConfiguration.getEntries())
         {
             File directory = new File(resources, entry.getName());
-            if (!directory.exists()) throw new MissingProvisionException(entry, "Resource directory" + directory + " does not exist");
+            if (!directory.exists())
+            {
+                throw new MissingProvisionException(entry, "Resource directory" + directory + " does not exist");
+            }
             else if (!directory.isDirectory()) throw new MissingProvisionException(entry, "Resource directory " + directory + " is not a directory");
 
             File resource = new File(directory, Long.toString(entry.getVersion()));
-            if (!resource.exists()) throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " does not exist");
+            if (!resource.exists())
+            {
+                throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " does not exist");
+            }
             else if (!resource.isFile()) throw new MissingProvisionException(entry, "Resource verison " + entry.getVersion() + " is not a file");
         }
 
@@ -167,7 +179,7 @@ public class DefaultProvisionStore implements ProvisionStore
         currentProvisionConfiguration = previousProvisionConfiguration;
     }
 
-    public List<URL> getClasspath() throws ProvisionStoreException
+    public URL[] getClasspath() throws ProvisionStoreException
     {
         List<URL> classpath = new ArrayList<URL>(currentProvisionConfiguration.getEntries().size());
 
@@ -186,7 +198,7 @@ public class DefaultProvisionStore implements ProvisionStore
             }
         }
 
-        return classpath;
+        return classpath.toArray(new URL[classpath.size()]);
     }
 
     private String loadUuid()

@@ -70,11 +70,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.livetribe</groupId>
-            <artifactId>livetribe-util</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.livetribe.boot</groupId>
             <artifactId>livetribe-boot-mock-b</artifactId>
             <scope>test</scope>

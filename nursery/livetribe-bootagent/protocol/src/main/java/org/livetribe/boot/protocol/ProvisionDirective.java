@@ -23,4 +23,10 @@ package org.livetribe.boot.protocol;
  */
 public abstract class ProvisionDirective
 {
+    /**
+     * Make it difficult to extend this class
+     */
+    ProvisionDirective()
+    {
+    }
 }

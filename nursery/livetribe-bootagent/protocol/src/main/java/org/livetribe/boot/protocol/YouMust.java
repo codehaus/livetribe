@@ -28,7 +28,7 @@ import net.jcip.annotations.Immutable;
  * @version $Revision$ $Date$
  */
 @Immutable
-public class YouMust extends YouShould
+public final class YouMust extends YouShould
 {
     private final boolean restart;
 
@@ -38,6 +38,12 @@ public class YouMust extends YouShould
         this.restart = restart;
     }
 
+    /**
+     * The designation as to whether the provisioned server should be restarted
+     * or not.
+     *
+     * @return whether the provisioned server should be restarted or not
+     */
     public boolean isRestart()
     {
         return restart;
@@ -47,6 +53,7 @@ public class YouMust extends YouShould
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
+
         builder.append("MUST ");
         builder.append(getVersion());
         builder.append(" ");

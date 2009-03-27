@@ -28,6 +28,18 @@ import net.jcip.annotations.Immutable;
 public final class DoNothing extends ProvisionDirective
 {
     @Override
+    public int hashCode()
+    {
+        return DoNothing.class.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof DoNothing;
+    }
+
+    @Override
     public String toString()
     {
         return "DO_NOTHING";

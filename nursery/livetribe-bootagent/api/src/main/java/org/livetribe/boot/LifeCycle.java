@@ -17,11 +17,22 @@
 package org.livetribe.boot;
 
 /**
+ * A simple lifecycle interface that must be implemented by boot classes.
+ * <p/>
+ * This interface contains no dependencies and belongs in its own jar so that
+ * boot classes have no additional dependencies.
+ *
  * @version $Revision$ $Date$
  */
 public interface LifeCycle
 {
+    /**
+     * Start the boot class instance.
+     */
     void start();
 
+    /**
+     * Stop the boot class instance.
+     */
     void stop();
 }

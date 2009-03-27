@@ -18,7 +18,6 @@ package org.livetribe.boot.client;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 
 import org.livetribe.boot.protocol.ProvisionEntry;
 
@@ -46,5 +45,5 @@ public interface ProvisionStore
 
     void rollbackNext() throws ProvisionStoreException;
 
-    List<URL> getClasspath() throws ProvisionStoreException;
+    URL[] getClasspath() throws ProvisionStoreException;
 }

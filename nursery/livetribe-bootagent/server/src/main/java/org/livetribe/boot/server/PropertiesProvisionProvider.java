@@ -33,10 +33,66 @@ import org.livetribe.boot.protocol.ProvisionEntry;
 import org.livetribe.boot.protocol.ProvisionProvider;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
-import org.livetribe.util.EnumerationIterator;
 
 
 /**
+ * A properties file based provisioning provider.
+ * <p/>
+ * <p/>
+ * <dl>
+ * <dt>version</dt>
+ * <dd>the version of this provisioning directive</dd>
+ * <dt>boot.class</dt>
+ * <dd>the boot class to instantiate and make lifecycle calls to</dd>
+ * <dt>directive.x</dt>
+ * <dd>a provisioning entry in the format of &lt;name&gt;:&lt;version&gt;.  The order of
+ * these entries, specified by the conscutive numbers ".x" indicate the order
+ * to be used when constructing the classpath when the boot class is
+ * instantiated and started.</dd>
+ * <dt>required</dt>
+ * <dd>indicate whether or not a forced restart should occur.  The default is
+ * <code>false</code></dd>
+ * </dl>
+ * <p/>
+ * Entries that are directed to specific UUIDs are prefixed with that UUID +
+ * ".", e.g. <code>1d02-d3c9.version</code> would be used to specify the
+ * version of the provisioning directive for UUID <code>1d02-d3c9</code>.
+ * <p/>
+ * In the following example the version of the default provisioning directive
+ * is 10, ts boot class is <code>com.acme.boot.BootAgent</code>, and its
+ * provisioning entries are:
+ * <ol>
+ * <li>acme-a, version 1</li>
+ * <li>acme-b, version 1</li>
+ * <li>acme-b, version 1</li>
+ * </ol>
+ * <p/>
+ * For the UUID <code>1d02-d3c9</code> the version of the default provisioning directive
+ * is 5, ts boot class is <code>com.foo.boot.BootAgent</code>, its
+ * provisioning entries are:
+ * <ol>
+ * <li>foo-a, version 4</li>
+ * <li>acme-a, version 1</li>
+ * <li>acme-b, version 2</li>
+ * <li>acme-b, version 1</li>
+ * </ol>
+ * and it is directed to restart once the entries have been loaded.
+ * <p/>
+ * <blockquote><pre>
+ * version=10
+ * boot.class=com.acme.boot.BootAgent
+ * directive.0=acme-a:1
+ * directive.1=acme-b:1
+ * directive.2=acme-c:1
+ * 1d02-d3c9.version=5
+ * 1d02-d3c9.boot.class=com.foo.boot.BootAgent
+ * 1d02-d3c9.directive.0=foo-a:4
+ * 1d02-d3c9.directive.1=acme-a:1
+ * 1d02-d3c9.directive.2=acme-b:2
+ * 1d02-d3c9.directive.3=acme-c:1
+ * 1d02-d3c9.required=true
+ * </pre></blockquote>
+ *
  * @version $Revision$ $Date$
  */
 public class PropertiesProvisionProvider implements ProvisionProvider
@@ -64,17 +120,24 @@ public class PropertiesProvisionProvider implements ProvisionProvider
         reload();
     }
 
-    public void reload() throws IOException
+    /**
+     * Reloads the configuration of this provisioning provider.
+     *
+     * @throws IOException if there is an error loading the properties file
+     */
+    public synchronized void reload() throws IOException
     {
         LOGGER.entering(CLASS_NAME, "reload");
 
+        properties.clear();
         properties.load(new FileInputStream(file));
 
         if (LOGGER.isLoggable(Level.FINEST))
         {
-            //noinspection unchecked
-            for (String key : EnumerationIterator.iterable((Enumeration<String>) properties.propertyNames()))
+            @SuppressWarnings({"unchecked"}) Enumeration<String> keys = (Enumeration<String>) properties.propertyNames();
+            while (keys.hasMoreElements())
             {
+                String key = keys.nextElement();
                 LOGGER.finest(key + " = " + properties.getProperty(key));
             }
         }
@@ -82,7 +145,10 @@ public class PropertiesProvisionProvider implements ProvisionProvider
         LOGGER.exiting(CLASS_NAME, "reload");
     }
 
-    public ProvisionDirective hello(String uuid, long version) throws BootException
+    /**
+     * {@inheritDoc}
+     */
+    public synchronized ProvisionDirective hello(String uuid, long version) throws BootException
     {
         LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
 
@@ -101,7 +167,9 @@ public class PropertiesProvisionProvider implements ProvisionProvider
     {
         LOGGER.entering(CLASS_NAME, "load", new Object[]{prefix, version});
 
-        long v = Long.valueOf((String) properties.get(prefix + VERSION_KEY));
+        assert Thread.holdsLock(this);
+
+        final long v = Long.valueOf((String) properties.get(prefix + VERSION_KEY));
 
         if (v == version) return new DoNothing();
 
