@@ -20,9 +20,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 
@@ -153,7 +154,7 @@ public class HttpClientTest extends AbstractHttpTest
 
             Assert.assertNotNull(in);
 
-            DataInputStream bin = new DataInputStream(in);
+            BufferedReader bin = new BufferedReader(new InputStreamReader(in));
             if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals("HOW NOW BROWN COW", bin.readLine());
             else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals("THE RAIN IN SPAIN", bin.readLine());
         }
@@ -182,7 +183,7 @@ public class HttpClientTest extends AbstractHttpTest
 
             Assert.assertNotNull(in);
 
-            DataInputStream bin = new DataInputStream(in);
+            BufferedReader bin = new BufferedReader(new InputStreamReader(in));
             if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals("HOW NOW BROWN COW", bin.readLine());
             else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals("THE RAIN IN SPAIN", bin.readLine());
         }
