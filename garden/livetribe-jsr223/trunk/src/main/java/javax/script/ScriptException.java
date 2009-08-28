@@ -55,10 +55,10 @@ public class ScriptException extends Exception
 
     public String getMessage()
     {
-        StringBuffer message = new StringBuffer(super.getMessage());
-
         if (fileName != null)
         {
+            StringBuffer message = new StringBuffer(super.getMessage() == null ? "" : super.getMessage());
+
             if (lineNumber != -1)
             {
                 message.append(" at [").append(lineNumber);
@@ -66,9 +66,13 @@ public class ScriptException extends Exception
                 message.append("]");
             }
             message.append(" in file ").append(fileName);
-        }
 
-        return message.toString();
+            return message.toString();
+        }
+        else
+        {
+            return super.getMessage();
+        }
     }
 
     public String getFileName()
