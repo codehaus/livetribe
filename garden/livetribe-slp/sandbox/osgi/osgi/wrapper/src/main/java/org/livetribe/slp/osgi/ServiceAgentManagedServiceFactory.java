@@ -28,6 +28,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 
 import org.livetribe.slp.SLP;
+import org.livetribe.slp.osgi.util.DictionarySettings;
 import org.livetribe.slp.sa.IServiceAgent;
 import org.livetribe.slp.sa.ServiceAgent;
 

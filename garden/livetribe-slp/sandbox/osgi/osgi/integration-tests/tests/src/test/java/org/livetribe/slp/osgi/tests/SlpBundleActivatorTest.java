@@ -16,6 +16,8 @@
  */
 package org.livetribe.slp.osgi.tests;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,11 +30,9 @@ import org.junit.runner.RunWith;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
-import static org.ops4j.pax.exam.CoreOptions.waitForFrameworkStartup;
 import org.ops4j.pax.exam.Inject;
 import static org.ops4j.pax.exam.MavenUtils.asInProject;
 import org.ops4j.pax.exam.Option;
-import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.vmOption;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.osgi.framework.Bundle;
@@ -46,6 +46,7 @@ import org.livetribe.slp.Scopes;
 import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceURL;
 import org.livetribe.slp.osgi.ByServiceInfoServiceTracker;
+import org.livetribe.slp.osgi.ByServicePropertiesServiceTracker;
 import org.livetribe.slp.sa.ServiceAgent;
 import org.livetribe.slp.sa.ServiceNotificationEvent;
 import org.livetribe.slp.sa.ServiceNotificationListener;
@@ -99,7 +100,7 @@ public class SlpBundleActivatorTest
     }
 
     @Test
-    public void testTracker() throws Exception
+    public void testByServicePropertiesServiceTracker() throws Exception
     {
         ClassLoader saved = Thread.currentThread().getContextClassLoader();
 
@@ -117,7 +118,72 @@ public class SlpBundleActivatorTest
             {
                 public void serviceRegistered(ServiceNotificationEvent event)
                 {
-                    counter.incrementAndGet();
+                    if ("service:printer:lpr://myprinter:1234/myqueue".equals(event.getService().getServiceURL().getURL())) counter.incrementAndGet();
+                }
+
+                public void serviceDeregistered(ServiceNotificationEvent event)
+                {
+                    if ("service:printer:lpr://myprinter:1234/myqueue".equals(event.getService().getServiceURL().getURL())) counter.decrementAndGet();
+                }
+            });
+
+            serviceAgent.start();
+            userAgent.start();
+
+            ByServicePropertiesServiceTracker tracker = new ByServicePropertiesServiceTracker(bundleContext, serviceAgent);
+            tracker.open();
+
+            Dictionary<String, String> dictionary = new Hashtable<String, String>();
+            dictionary.put("slp.url", "service:printer:lpr://myprinter:${port}/myqueue");
+            dictionary.put("port", "1234");
+
+            ServiceRegistration serviceRegistration = bundleContext.registerService(getClass().getName(),
+                                                                                    this,
+                                                                                    dictionary);
+
+            Thread.sleep(500);
+
+            Assert.assertEquals(1, tracker.size());
+            Assert.assertEquals(1, counter.get());
+
+            serviceRegistration.unregister();
+
+            Thread.sleep(500);
+
+            Assert.assertEquals(0, tracker.size());
+            Assert.assertEquals(0, counter.get());
+
+            tracker.close();
+
+            userAgent.stop();
+            serviceAgent.stop();
+        }
+        finally
+        {
+            Thread.currentThread().setContextClassLoader(saved);
+        }
+    }
+
+    @Test
+    public void testByServiceInfoServiceTracker() throws Exception
+    {
+        ClassLoader saved = Thread.currentThread().getContextClassLoader();
+
+        try
+        {
+            Thread.currentThread().setContextClassLoader(SLP.class.getClassLoader());
+
+            assertThat(bundleContext, is(notNullValue()));
+
+            ServiceAgent serviceAgent = SLP.newServiceAgent(newSettings());
+            UserAgent userAgent = SLP.newUserAgent(newSettings());
+            final AtomicInteger counter = new AtomicInteger();
+
+            userAgent.addServiceNotificationListener(new ServiceNotificationListener()
+            {
+                public void serviceRegistered(ServiceNotificationEvent event)
+                {
+                     counter.incrementAndGet();
                 }
 
                 public void serviceDeregistered(ServiceNotificationEvent event)

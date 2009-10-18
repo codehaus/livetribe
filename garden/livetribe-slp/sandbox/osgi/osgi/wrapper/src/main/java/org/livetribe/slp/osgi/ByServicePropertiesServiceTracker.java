@@ -16,9 +16,9 @@
  */
 package org.livetribe.slp.osgi;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +34,7 @@ import org.livetribe.slp.Scopes;
 import org.livetribe.slp.ServiceInfo;
 import org.livetribe.slp.ServiceType;
 import org.livetribe.slp.ServiceURL;
+import org.livetribe.slp.osgi.util.Utils;
 import org.livetribe.slp.sa.ServiceAgent;
 
 
@@ -120,7 +121,10 @@ public class ByServicePropertiesServiceTracker extends ServiceTracker
 
     private ServiceInfo generateServiceInfo(ServiceReference reference)
     {
-        Collection<String> keys = Arrays.asList(reference.getPropertyKeys());
+        Map<String, String> map = Utils.toMap(reference);
+        Set<String> keys = map.keySet();
+
+        String slpUrl = Utils.subst((String) reference.getProperty(SLP_URL), map);
 
         ServiceURL serviceURL;
         if (keys.contains(SLP_URL_LIFETIME))
@@ -128,16 +132,16 @@ public class ByServicePropertiesServiceTracker extends ServiceTracker
             try
             {
                 int lifetime = Integer.parseInt((String) reference.getProperty(SLP_URL_LIFETIME));
-                serviceURL = new ServiceURL((String) reference.getProperty(SLP_URL), lifetime);
+                serviceURL = new ServiceURL(slpUrl, lifetime);
             }
             catch (NumberFormatException e)
             {
-                serviceURL = new ServiceURL((String) reference.getProperty(SLP_URL));
+                serviceURL = new ServiceURL(slpUrl);
             }
         }
         else
         {
-            serviceURL = new ServiceURL((String) reference.getProperty(SLP_URL));
+            serviceURL = new ServiceURL(slpUrl);
         }
 
         String language;
@@ -159,21 +163,13 @@ public class ByServicePropertiesServiceTracker extends ServiceTracker
             serviceType = new ServiceType((String) reference.getProperty(SLP_SERVICE_TYPE));
         }
 
-        keys.remove(SLP_URL);
-        keys.remove(SLP_URL_LIFETIME);
-        keys.remove(SLP_LANGUAGE);
-        keys.remove(SLP_SCOPES);
-        keys.remove(SLP_SERVICE_TYPE);
+        map.remove(SLP_URL);
+        map.remove(SLP_URL_LIFETIME);
+        map.remove(SLP_LANGUAGE);
+        map.remove(SLP_SCOPES);
+        map.remove(SLP_SERVICE_TYPE);
 
-        StringBuilder builder = new StringBuilder();
-
-        for (String key : keys)
-        {
-            String value = (String) reference.getProperty(key);
-            if (builder.length() > 0) builder.append(",");
-            builder.append(Attributes.escapeTag(key)).append("=").append(Attributes.escapeValue(value));
-        }
-        Attributes attributes = Attributes.from(builder.toString());
+        Attributes attributes = Attributes.from(map);
 
         ServiceInfo serviceInfo;
         if (serviceType != null)

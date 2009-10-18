@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.livetribe.slp.osgi;
+package org.livetribe.slp.osgi.util;
 
 import java.util.Dictionary;
 
@@ -64,6 +64,7 @@ public class DictionarySettings implements Settings
         return dictionary.get(key.getKey()) != null;
     }
 
+    @SuppressWarnings({"unchecked"})
     public <V> void put(Key<? super V> key, V value)
     {
         dictionary.put(key.getKey(), value);
