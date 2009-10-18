@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2008 the original author or authors
+ * Copyright 2008-2009 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package org.livetribe.slp.spi.da;
 
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.livetribe.slp.ServiceInfo;
@@ -61,13 +60,16 @@ public class UDPSrvRplyPerformer extends SrvRplyPerformer
         SrvRply srvRply = newSrvRply(message, services);
         byte[] bytes = srvRply.serialize();
 
-        if (bytes.length <= maxTransmissionUnit)
+        if (bytes.length > maxTransmissionUnit)
         {
-            udpConnector.send(localAddress.getAddress().getHostAddress(), remoteAddress, bytes);
+            logger.finer("Message bigger than maxTransmissionUnit, truncating and setting overflow bit");
+
+            byte[] truncated = new byte[maxTransmissionUnit];
+            System.arraycopy(bytes, 0, truncated, 0, truncated.length);
+            truncated[5] |= 0x80;
+            bytes = truncated;
         }
-        else
-        {
-            logger.finer("Reply not sent, message bigger than maxTransmissionUnit");
-        }
+
+        udpConnector.send(localAddress.getAddress().getHostAddress(), remoteAddress, bytes);
     }
 }

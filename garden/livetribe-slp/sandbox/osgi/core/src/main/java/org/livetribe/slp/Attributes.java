@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+
 /**
  * Attributes are a comma separated list of key-value pairs that describe a service.
  * <br />
@@ -85,6 +86,28 @@ public class Attributes
         return parseAttributeList(escapedAttributesString);
     }
 
+    /**
+     * Creates an <code>Attributes</code> object converting the given string map.
+     * The keys and values are not escaped
+     *
+     * @param stringMap The string map containing the attributes convert
+     * @return a new Attributes instance obtained converting the given string map
+     * @throws ServiceLocationException If the conversion fails
+     */
+    public static Attributes from(Map<String, String> stringMap)
+    {
+        if (stringMap == null || stringMap.size() == 0) return NONE;
+
+        Attributes result = new Attributes();
+
+        for (Map.Entry<String, String> entry : stringMap.entrySet())
+        {
+            result.attributes.put(Tag.from(entry.getKey(), false), Value.from(entry.getValue()));
+        }
+
+        return result;
+    }
+    
     /**
      * Creates an <code>Attributes</code> object parsing the given escaped tags string.
      * An escaped tags string is a tag list as defined in RFC 2608, 9.4, where
@@ -180,7 +203,7 @@ public class Attributes
                 throw new ServiceLocationException("Invalid escape sequence at index " + index + " of " + opaqueString, SLPError.PARSE_ERROR);
             ++index;
             String hexString = opaqueString.substring(index, index + 2);
-            result[position] = (byte)(Integer.parseInt(hexString, 16) & 0xFF);
+            result[position] = (byte) (Integer.parseInt(hexString, 16) & 0xFF);
             ++position;
             index += 2;
         }
@@ -422,7 +445,7 @@ public class Attributes
     {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        final Attributes that = (Attributes)obj;
+        final Attributes that = (Attributes) obj;
         // Could not compare the attributes Map, since it contains String[] that will make the comparison fail,
         // since native arrays do not override equals: they are different even if they contain the same objects
         return asString().equals(that.asString());
@@ -462,7 +485,7 @@ public class Attributes
                     {
                         if (i > 0) result.append(",");
                         if (value.isOpaqueType())
-                            result.append(bytesToOpaque((byte[])values[i]));
+                            result.append(bytesToOpaque((byte[]) values[i]));
                         else
                             result.append(escapeValue(String.valueOf(values[i])));
                     }
@@ -470,7 +493,7 @@ public class Attributes
                 else
                 {
                     if (value.isOpaqueType())
-                        result.append(bytesToOpaque((byte[])value.getValue()));
+                        result.append(bytesToOpaque((byte[]) value.getValue()));
                     else
                         result.append(escapeValue(String.valueOf(value.getValue())));
                 }
@@ -657,7 +680,7 @@ public class Attributes
         {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
-            Tag that = (Tag)obj;
+            Tag that = (Tag) obj;
             return tag.equals(that.tag);
         }
 
@@ -847,7 +870,7 @@ public class Attributes
         public Object getValue()
         {
             if (isPresenceType()) return null;
-            if (multiValued) return ((Object[])value)[0];
+            if (multiValued) return ((Object[]) value)[0];
             return value;
         }
 
@@ -858,7 +881,7 @@ public class Attributes
         public Object[] getValues()
         {
             if (isPresenceType()) return null;
-            if (multiValued) return (Object[])value;
+            if (multiValued) return (Object[]) value;
             return new Object[]{value};
         }
 
@@ -925,12 +948,12 @@ public class Attributes
         {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
-            final Value that = (Value)obj;
+            final Value that = (Value) obj;
             if (type != that.type) return false;
             if (multiValued != that.multiValued) return false;
             if (multiValued)
             {
-                return Arrays.equals((Object[])value, (Object[])that.value);
+                return Arrays.equals((Object[]) value, (Object[]) that.value);
             }
             else
             {
@@ -944,7 +967,7 @@ public class Attributes
             result = 29 * result + (multiValued ? 1 : 0);
             if (multiValued)
             {
-                result = 29 * result + Arrays.hashCode((Object[])value);
+                result = 29 * result + Arrays.hashCode((Object[]) value);
             }
             else
             {
