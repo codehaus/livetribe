@@ -103,71 +103,64 @@
     </organization>
 
     <build>
-        <!-- extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-        </extensions -->
         <defaultGoal>install</defaultGoal>
         <pluginManagement>
-<plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <compilerArgument>-Xlint:all,-serial,-unchecked</compilerArgument>
-                </configuration>
-            </plugin>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                        <compilerArgument>-Xlint:all,-serial,-unchecked</compilerArgument>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <LiveTribe-UserDir>${user.dir}</LiveTribe-UserDir>
-                            <LiveTribe-GroupId>${project.groupId}</LiveTribe-GroupId>
-                            <LiveTribe-ArtifactId>${project.artifactId}</LiveTribe-ArtifactId>
-                            <LiveTribe-Version>${project.version}</LiveTribe-Version>
-                            <LiveTribe-Packaging>${project.packaging}</LiveTribe-Packaging>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <LiveTribe-UserDir>${user.dir}</LiveTribe-UserDir>
+                                <LiveTribe-GroupId>${project.groupId}</LiveTribe-GroupId>
+                                <LiveTribe-ArtifactId>${project.artifactId}</LiveTribe-ArtifactId>
+                                <LiveTribe-Version>${project.version}</LiveTribe-Version>
+                                <LiveTribe-Packaging>${project.packaging}</LiveTribe-Packaging>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.0.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-archiver</artifactId>
-                        <!--
-                            FIXME: 2.1 is broken... won't allow custom manifestEntires, need to use
-                            this snap until new maven war plugin is released.
-                        -->
-                        <version>2.2</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <LiveTribe-UserDir>${user.dir}</LiveTribe-UserDir>
-                            <LiveTribe-GroupId>${project.groupId}</LiveTribe-GroupId>
-                            <LiveTribe-ArtifactId>${project.artifactId}</LiveTribe-ArtifactId>
-                            <LiveTribe-Version>${project.version}</LiveTribe-Version>
-                            <LiveTribe-Packaging>${project.packaging}</LiveTribe-Packaging>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.0.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven</groupId>
+                            <artifactId>maven-archiver</artifactId>
+                            <!--
+                                FIXME: 2.1 is broken... won't allow custom manifestEntires, need to use
+                                this snap until new maven war plugin is released.
+                            -->
+                            <version>2.2</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <archive>
+                            <manifestEntries>
+                                <LiveTribe-UserDir>${user.dir}</LiveTribe-UserDir>
+                                <LiveTribe-GroupId>${project.groupId}</LiveTribe-GroupId>
+                                <LiveTribe-ArtifactId>${project.artifactId}</LiveTribe-ArtifactId>
+                                <LiveTribe-Version>${project.version}</LiveTribe-Version>
+                                <LiveTribe-Packaging>${project.packaging}</LiveTribe-Packaging>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
