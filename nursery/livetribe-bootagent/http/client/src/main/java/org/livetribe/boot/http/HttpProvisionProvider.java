@@ -18,7 +18,6 @@ package org.livetribe.boot.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -32,7 +31,6 @@ import java.util.logging.Logger;
 import net.jcip.annotations.ThreadSafe;
 
 import org.livetribe.boot.protocol.BootException;
-import org.livetribe.boot.protocol.ContentProvider;
 import org.livetribe.boot.protocol.DoNothing;
 import org.livetribe.boot.protocol.ProvisionDirective;
 import org.livetribe.boot.protocol.ProvisionEntry;
@@ -42,7 +40,7 @@ import org.livetribe.boot.protocol.YouShould;
 
 
 /**
- * An HTTP based provisioning and content provider.
+ * An HTTP based provisioning provider.
  * <p/>
  * Any provisioning commands returned from the server that are not understood
  * will cause a boot exception to be thrown.
@@ -50,15 +48,15 @@ import org.livetribe.boot.protocol.YouShould;
  * @version $Revision: $ $Date: $
  */
 @ThreadSafe
-public class HttpClient implements ProvisionProvider, ContentProvider
+public class HttpProvisionProvider implements ProvisionProvider
 {
     public final static int DEFAULT_TIMEOUT = 60 * 1000;
-    private final static String CLASS_NAME = HttpClient.class.getName();
+    private final static String CLASS_NAME = HttpProvisionProvider.class.getName();
     private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private final URL url;
     private volatile int timeout = DEFAULT_TIMEOUT;
 
-    public HttpClient(URL url)
+    public HttpProvisionProvider(URL url)
     {
         if (url == null) throw new IllegalArgumentException("URL cannot be null");
         this.url = url;
@@ -99,7 +97,7 @@ public class HttpClient implements ProvisionProvider, ContentProvider
         {
             URL hello = new URL(url, "hello/" + uuid + "/" + version);
 
-            HttpURLConnection connection = (HttpURLConnection) hello.openConnection();
+            HttpURLConnection connection = (HttpURLConnection)hello.openConnection();
 
             connection.setInstanceFollowRedirects(true);
             connection.setReadTimeout(timeout);
@@ -171,47 +169,6 @@ public class HttpClient implements ProvisionProvider, ContentProvider
         {
             LOGGER.log(Level.WARNING, "Hello response was malformed", aioobe);
             throw new BootException("Hello response was malformed", aioobe);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public InputStream pleaseProvide(String name, long version) throws BootException
-    {
-        LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
-
-        if (name == null) throw new IllegalArgumentException("name cannot be null");
-
-        try
-        {
-            URL hello = new URL(url, "provide/" + name + "/" + version);
-
-            HttpURLConnection connection = (HttpURLConnection) hello.openConnection();
-
-            connection.setInstanceFollowRedirects(true);
-            connection.setReadTimeout(timeout);
-
-            InputStream response = connection.getInputStream();
-
-            LOGGER.exiting(CLASS_NAME, "pleaseProvide", response);
-
-            return response;
-        }
-        catch (MalformedURLException mue)
-        {
-            LOGGER.log(Level.WARNING, "Unable to form URL for hello", mue);
-            throw new BootException("Unable to form URL for hello", mue);
-        }
-        catch (SocketTimeoutException ste)
-        {
-            LOGGER.log(Level.WARNING, "Hello timed out", ste);
-            throw new BootException("Hello timed out", ste);
-        }
-        catch (IOException ioe)
-        {
-            LOGGER.log(Level.WARNING, "Hello experience an IO exception", ioe);
-            throw new BootException("Hello experience an IO exception", ioe);
         }
     }
 }

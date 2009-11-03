@@ -68,14 +68,14 @@ public class BootServerServlet extends HttpServlet
             throw new ServletException("Missing Spring application context");
         }
 
-        provisionProvider = (ProvisionProvider) applicationContext.getBean("provisionProvider");
+        provisionProvider = (ProvisionProvider)applicationContext.getBean("provisionProvider");
         if (provisionProvider == null)
         {
             LOGGER.severe("Missing provision provider");
             throw new ServletException("Missing provision provider");
         }
 
-        contentProvider = (ContentProvider) applicationContext.getBean("contentProvider");
+        contentProvider = (ContentProvider)applicationContext.getBean("contentProvider");
         if (contentProvider == null)
         {
             LOGGER.severe("Missing content provider");
@@ -90,25 +90,26 @@ public class BootServerServlet extends HttpServlet
         if (request.getPathInfo() == null)
         {
             LOGGER.warning("Path was null");
-            response.setStatus(400);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         String[] tokens = request.getPathInfo().split("/");
 
-        if (tokens.length != 4)
+        if (tokens.length != 3)
         {
             LOGGER.warning("Path '" + request.getPathInfo() + "' did not properly split into three parts");
-            response.setStatus(400);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
+        String command = tokens[0].trim();
         try
         {
-            if ("hello".equalsIgnoreCase(tokens[1].trim()))
+            if ("hello".equalsIgnoreCase(command))
             {
-                String uuid = tokens[2].trim();
-                long version = Long.valueOf(tokens[3].trim());
+                String uuid = tokens[1].trim();
+                long version = Long.valueOf(tokens[2].trim());
 
                 ProvisionDirective directive = provisionProvider.hello(uuid, version);
 
@@ -125,7 +126,7 @@ public class BootServerServlet extends HttpServlet
                     if (directive instanceof YouMust) writer.print("MUST ");
                     else writer.print("SHOULD ");
 
-                    YouShould should = (YouShould) directive;
+                    YouShould should = (YouShould)directive;
 
                     writer.print(should.getBootClass());
                     writer.print(" ");
@@ -135,7 +136,7 @@ public class BootServerServlet extends HttpServlet
                     if (directive instanceof YouMust)
                     {
                         writer.print(" ");
-                        writer.print(((YouMust) directive).isRestart() ? "true" : "false");
+                        writer.print(((YouMust)directive).isRestart() ? "true" : "false");
                     }
 
                     writer.println();
@@ -148,40 +149,68 @@ public class BootServerServlet extends HttpServlet
                     }
                 }
 
-                response.setStatus(200);
+                response.setStatus(HttpServletResponse.SC_OK);
             }
-            else if ("provide".equalsIgnoreCase(tokens[1]))
+            else if ("provide".equalsIgnoreCase(command))
             {
                 int len;
                 byte[] buffer = new byte[4096];
 
-                InputStream in = contentProvider.pleaseProvide(tokens[2], Long.valueOf(tokens[3].trim()));
+                InputStream in = contentProvider.pleaseProvide(tokens[1], Long.valueOf(tokens[2].trim()));
 
-                response.setHeader("content-type", "application/x-java-archive");
+                try
+                {
+                    response.setHeader("content-type", "application/x-java-archive");
 
-                OutputStream out = response.getOutputStream();
+                    OutputStream out = response.getOutputStream();
 
-                while ((len = in.read(buffer)) != -1) out.write(buffer, 0, len);
+                    try
+                    {
+                        while ((len = in.read(buffer)) != -1) out.write(buffer, 0, len);
 
-                out.flush();
+                        out.flush();
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            out.close();
+                        }
+                        catch (IOException ioe)
+                        {
+                            LOGGER.log(Level.WARNING, "Problems closing output stream", ioe);
+                        }
+                    }
+                }
+                finally
+                {
+                    try
+                    {
+                        in.close();
+                    }
+                    catch (IOException ioe)
+                    {
+                        LOGGER.log(Level.WARNING, "Problems closing input stream", ioe);
+                    }
+                }
 
-                response.setStatus(200);
+                response.setStatus(HttpServletResponse.SC_OK);
             }
             else
             {
-                LOGGER.warning("Did not recogize the command " + tokens[1]);
-                response.setStatus(400);
+                LOGGER.warning("Did not recogize the command " + command);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
         }
         catch (NumberFormatException nfe)
         {
-            LOGGER.log(Level.WARNING, "Unable to parse a long from '" + tokens[3] + "'", nfe);
-            response.setStatus(400);
+            LOGGER.log(Level.WARNING, "Unable to parse a long from '" + tokens[2] + "'", nfe);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
         catch (BootException bse)
         {
             LOGGER.log(Level.WARNING, "Boot exception", bse);
-            response.setStatus(400);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

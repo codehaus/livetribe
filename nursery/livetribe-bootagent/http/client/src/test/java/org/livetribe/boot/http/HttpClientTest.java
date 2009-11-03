@@ -27,7 +27,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import org.livetribe.boot.protocol.ProvisionEntry;
@@ -135,57 +138,83 @@ public class HttpClientTest extends AbstractHttpTest
     @Test
     public void testShould() throws Exception
     {
-        HttpClient client = new HttpClient(new URL("http://localhost:8085/test/"));
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
+        HttpContentProvider contentProvider = new HttpContentProvider(new URL("http://localhost:8085/test/"));
 
-        YouShould directive = (YouShould) client.hello(UUID_1, 1);
+        YouShould directive = (YouShould)provisionProvider.hello(UUID_1, 1);
 
-        Assert.assertNotNull(directive);
-        Assert.assertEquals("com.acme.Boot", directive.getBootClass());
-        Assert.assertEquals(37, directive.getVersion());
-        Assert.assertEquals(2, directive.getEntries().size());
+        assertNotNull(directive);
+        assertEquals("com.acme.Boot", directive.getBootClass());
+        assertEquals(37, directive.getVersion());
+        assertEquals(2, directive.getEntries().size());
 
         for (ProvisionEntry entry : directive.getEntries())
         {
-            if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals(15, entry.getVersion());
-            else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals(1, entry.getVersion());
-            else Assert.fail();
+            if ("com.acme.service.Foo".equals(entry.getName()))
+            {
+                assertEquals(15, entry.getVersion());
+            }
+            else if ("com.acme.service.Bar".equals(entry.getName()))
+            {
+                assertEquals(1, entry.getVersion());
+            }
+            else
+            {
+                fail();
+            }
 
-            InputStream in = client.pleaseProvide(entry.getName(), entry.getVersion());
+            InputStream in = contentProvider.pleaseProvide(entry.getName(), entry.getVersion());
 
-            Assert.assertNotNull(in);
+            assertNotNull(in);
 
             BufferedReader bin = new BufferedReader(new InputStreamReader(in));
-            if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals("HOW NOW BROWN COW", bin.readLine());
-            else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals("THE RAIN IN SPAIN", bin.readLine());
+            if ("com.acme.service.Foo".equals(entry.getName()))
+            {
+                assertEquals("HOW NOW BROWN COW", bin.readLine());
+            }
+            else if ("com.acme.service.Bar".equals(entry.getName())) assertEquals("THE RAIN IN SPAIN", bin.readLine());
         }
     }
 
     @Test
     public void testMust() throws Exception
     {
-        HttpClient client = new HttpClient(new URL("http://localhost:8085/test/"));
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
+        HttpContentProvider contentProvider = new HttpContentProvider(new URL("http://localhost:8085/test/"));
 
-        YouMust directive = (YouMust) client.hello(UUID_2, 5);
+        YouMust directive = (YouMust)provisionProvider.hello(UUID_2, 5);
 
-        Assert.assertNotNull(directive);
-        Assert.assertEquals("com.acme.Boot", directive.getBootClass());
-        Assert.assertEquals(37, directive.getVersion());
-        Assert.assertEquals(2, directive.getEntries().size());
-        Assert.assertTrue(directive.isRestart());
+        assertNotNull(directive);
+        assertEquals("com.acme.Boot", directive.getBootClass());
+        assertEquals(37, directive.getVersion());
+        assertEquals(2, directive.getEntries().size());
+        assertTrue(directive.isRestart());
 
         for (ProvisionEntry entry : directive.getEntries())
         {
-            if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals(15, entry.getVersion());
-            else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals(1, entry.getVersion());
-            else Assert.fail();
+            if ("com.acme.service.Foo".equals(entry.getName()))
+            {
+                assertEquals(15, entry.getVersion());
+            }
+            else if ("com.acme.service.Bar".equals(entry.getName()))
+            {
+                assertEquals(1, entry.getVersion());
+            }
+            else
+            {
+                fail();
+            }
 
-            InputStream in = client.pleaseProvide(entry.getName(), entry.getVersion());
+            InputStream in = contentProvider.pleaseProvide(entry.getName(), entry.getVersion());
 
-            Assert.assertNotNull(in);
+            assertNotNull(in);
 
             BufferedReader bin = new BufferedReader(new InputStreamReader(in));
-            if ("com.acme.service.Foo".equals(entry.getName())) Assert.assertEquals("HOW NOW BROWN COW", bin.readLine());
-            else if ("com.acme.service.Bar".equals(entry.getName())) Assert.assertEquals("THE RAIN IN SPAIN", bin.readLine());
+            if ("com.acme.service.Foo".equals(entry.getName()))
+            {
+                assertEquals("HOW NOW BROWN COW", bin.readLine());
+            }
+            else if ("com.acme.service.Bar".equals(entry.getName())) assertEquals("THE RAIN IN SPAIN", bin.readLine());
         }
     }
 
