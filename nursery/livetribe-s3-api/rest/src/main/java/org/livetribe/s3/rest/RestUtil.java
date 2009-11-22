@@ -26,12 +26,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.livetribe.s3.api.S3Exception;
 import org.livetribe.s3.util.Base64Encoder;
-import org.livetribe.s3.util.HttpVerb;
+
+import org.apache.ahc.api.HttpVerb;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -105,7 +105,6 @@ public class RestUtil
         }
 
         if (!hasXAmzDate && date == null) throw new IllegalArgumentException("date is null and x-amz-date has not been set");
-
 
         StringBuilder stringToSign = new StringBuilder();
 

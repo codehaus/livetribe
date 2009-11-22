@@ -17,7 +17,9 @@
 package org.livetribe.s3.rest.v20060301;
 
 import java.net.URL;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import org.apache.ahc.client.AsyncHttpClient;
 import org.junit.Test;
 
 import org.livetribe.s3.api.v20080201.S3API;
@@ -39,24 +41,27 @@ public class RestEC2APITest
 
     public static void main(String[] args) throws Exception
     {
-        S3API client = new RestS3API(new URL("http://s3.amazonaws.com"), args[0], args[1]);
+        ScheduledThreadPoolExecutor threadPool = new ScheduledThreadPoolExecutor(10);
+        AsyncHttpClient httpClient = new AsyncHttpClient(threadPool, threadPool);
+        S3API client = new RestS3API(httpClient, new URL("http://s3.amazonaws.com"), args[0], args[1]);
 
-        for (S3Bucket bucket : client.listAllMyBuckets())
+        for (S3Bucket bucket : client.listAllMyBuckets().get())
         {
             client.deleteBucket(bucket.getName());
         }
 
         client.createBucket("livetribe-foo");
 
-        AccessControlPolicy policy = client.getBucketAccessControlPolicy("livetribe-foo");
+
+        AccessControlPolicy policy = client.getBucketAccessControlPolicy("livetribe-foo").get();
 
         policy.getAccessControlList().add(new Grant(new GranteeLogDeliveryGroup(), Permission.READ));
 
         client.setBucketAccessControlPolicy("livetribe-foo", policy);
 
-        policy = client.getBucketAccessControlPolicy("livetribe-foo");
+        policy = client.getBucketAccessControlPolicy("livetribe-foo").get();
 
-        for (S3Bucket bucket : client.listAllMyBuckets())
+        for (S3Bucket bucket : client.listAllMyBuckets().get())
         {
             client.deleteBucket(bucket.getName());
         }

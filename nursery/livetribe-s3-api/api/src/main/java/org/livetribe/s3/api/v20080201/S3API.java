@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.livetribe.s3.api.FutureResult;
 import org.livetribe.s3.api.S3Exception;
 import org.livetribe.s3.model.AccessControlPolicy;
 import org.livetribe.s3.model.BucketListing;
@@ -46,7 +47,7 @@ public interface S3API
      * @return a Set of all of the buckets owned by the authenticated sender of the request
      * @throws S3Exception if any error occurs
      */
-    Set<S3Bucket> listAllMyBuckets() throws S3Exception;
+    FutureResult<Set<S3Bucket>> listAllMyBuckets() throws S3Exception;
 
     /**
      * Creates a bucket. Not every string is an acceptable bucket name. For
@@ -57,9 +58,10 @@ public interface S3API
      * are never allowed to create buckets.
      *
      * @param bucketName The name of the bucket you are trying to create
+     * @return a {@link FutureResult} that facilitates waiting synchronously or asynchronously for completion
      * @throws S3Exception if any error occurs
      */
-    void createBucket(String bucketName) throws S3Exception;
+    FutureResult<Void> createBucket(String bucketName) throws S3Exception;
 
     /**
      * Deletes a bucket. All objects in the bucket must be deleted before the
@@ -69,9 +71,10 @@ public interface S3API
      * access control policy on the bucket.
      *
      * @param bucketName The name of the bucket you are trying to delete
+     * @return a {@link FutureResult} that facilitates waiting synchronously or asynchronously for completion
      * @throws S3Exception if any error occurs
      */
-    void deleteBucket(String bucketName) throws S3Exception;
+    FutureResult<Void> deleteBucket(String bucketName) throws S3Exception;
 
     /**
      * Returns information about some of the items in the bucket
@@ -119,7 +122,7 @@ public interface S3API
      * @return a information about objects that matched the criteria passed.
      * @throws S3Exception if any error occurs
      */
-    BucketListing listBuckets(String prefix, String marker, String delimiter, long maxKeys) throws S3Exception;
+    FutureResult<BucketListing> listBuckets(String prefix, String marker, String delimiter, long maxKeys) throws S3Exception;
 
     /**
      * Fetches the access control policy for a bucket.
@@ -132,7 +135,7 @@ public interface S3API
      * @return the access control policy of the bucket
      * @throws S3Exception if any error occurs
      */
-    AccessControlPolicy getBucketAccessControlPolicy(String bucketName) throws S3Exception;
+    FutureResult<AccessControlPolicy> getBucketAccessControlPolicy(String bucketName) throws S3Exception;
 
     /**
      * Sets the Access Control Policy for an existing bucket. If successful,
@@ -145,9 +148,10 @@ public interface S3API
      * @param bucketName          The name of the bucket whose access control
      *                            policy you are trying to set
      * @param accessControlPolicy the access control policy
+     * @return a {@link FutureResult} that facilitates waiting synchronously or asynchronously for completion
      * @throws S3Exception if any error occurs
      */
-    void setBucketAccessControlPolicy(String bucketName, AccessControlPolicy accessControlPolicy) throws S3Exception;
+    FutureResult<Void> setBucketAccessControlPolicy(String bucketName, AccessControlPolicy accessControlPolicy) throws S3Exception;
 
     /**
      * Retrieves the logging status for an existing bucket.
@@ -160,7 +164,7 @@ public interface S3API
      *         there is none
      * @throws S3Exception if any error occurs
      */
-    LoggingConfiguration getBucketLoggingConfiguration(String bucketName) throws S3Exception;
+    FutureResult<LoggingConfiguration> getBucketLoggingConfiguration(String bucketName) throws S3Exception;
 
     /**
      * Updates the logging status for an existing bucket.
@@ -170,9 +174,10 @@ public interface S3API
      * @param bucketName           The name of the bucket whose logging status
      *                             you are trying to set
      * @param loggingConfiguration the logging configuration
+     * @return a {@link FutureResult} that facilitates waiting synchronously or asynchronously for completion
      * @throws S3Exception if any error occurs
      */
-    void setBucketLoggingConfiguration(String bucketName, LoggingConfiguration loggingConfiguration) throws S3Exception;
+    FutureResult<Void> setBucketLoggingConfiguration(String bucketName, LoggingConfiguration loggingConfiguration) throws S3Exception;
 
     /**
      * Adds an object to a bucket.
@@ -207,11 +212,11 @@ public interface S3API
      * @return a populated S3Object that represents the created object
      * @throws S3Exception if any error occurs
      */
-    S3Object putObject(String bucketName, String key,
-                       Map<String, String> metaData,
-                       int contentLength,
-                       List<Grant> accessControlList,
-                       InputStream data) throws S3Exception;
+    FutureResult<S3Object> putObject(String bucketName, String key,
+                                     Map<String, String> metaData,
+                                     int contentLength,
+                                     List<Grant> accessControlList,
+                                     InputStream data) throws S3Exception;
 
     /**
      * Creates a copy of an object when you specify the key and bucket of a
@@ -261,12 +266,12 @@ public interface S3API
      * @return a populated S3Object that represents the copied object
      * @throws S3Exception if any error occurs
      */
-    S3Object copyObject(String sourceBucketName, String sourceKey,
-                        String destBucketName, String destKey,
-                        MetadataDirective metadataDirective, Map<String, String> metaData,
-                        List<Grant> accessControlList,
-                        String copyIfMatch, String copyIfNoMatch,
-                        Date copyIfUnmodifiedSince, Date copyIfModifiedSince) throws S3Exception;
+    FutureResult<S3Object> copyObject(String sourceBucketName, String sourceKey,
+                                      String destBucketName, String destKey,
+                                      MetadataDirective metadataDirective, Map<String, String> metaData,
+                                      List<Grant> accessControlList,
+                                      String copyIfMatch, String copyIfNoMatch,
+                                      Date copyIfUnmodifiedSince, Date copyIfModifiedSince) throws S3Exception;
 
     /**
      * Retrieve an object stored in Amazon S3.
@@ -288,9 +293,9 @@ public interface S3API
      * @return a populated S3Object that represents the object
      * @throws S3Exception if any error occurs
      */
-    S3Object getObject(String bucketName, String key,
-                       String ifMatch, String ifNoMatch,
-                       Date ifUnmodifiedSince, Date ifModifiedSince) throws S3Exception;
+    FutureResult<S3Object> getObject(String bucketName, String key,
+                                     String ifMatch, String ifNoMatch,
+                                     Date ifUnmodifiedSince, Date ifModifiedSince) throws S3Exception;
 
     /**
      * Retrieve the data contents object stored in Amazon S3.
@@ -326,11 +331,11 @@ public interface S3API
      * @return an input stream of the data contents of the object
      * @throws S3Exception if any error occurs
      */
-    InputStream getObjectData(String bucketName, String key,
-                              long start, long end,
-                              String ifMatch, String ifNoMatch,
-                              Date ifUnmodifiedSince, Date ifModifiedSince,
-                              boolean returnCompleteObjectOnConditionFailure) throws S3Exception;
+    FutureResult<InputStream> getObjectData(String bucketName, String key,
+                                            long start, long end,
+                                            String ifMatch, String ifNoMatch,
+                                            Date ifUnmodifiedSince, Date ifModifiedSince,
+                                            boolean returnCompleteObjectOnConditionFailure) throws S3Exception;
 
     /**
      * Remove the specified object from Amazon S3. Once deleted, there is no
@@ -342,9 +347,10 @@ public interface S3API
      *
      * @param bucketName The bucket that holds the object.
      * @param key        The key that identifies the object.
+     * @return a {@link FutureResult} that facilitates waiting synchronously or asynchronously for completion
      * @throws S3Exception if any error occurs
      */
-    void deleteObject(String bucketName, String key) throws S3Exception;
+    FutureResult<Void> deleteObject(String bucketName, String key) throws S3Exception;
 
     /**
      * Fetches the access control policy for a object.
@@ -358,7 +364,7 @@ public interface S3API
      * @return the access control policy of the bucket
      * @throws S3Exception if any error occurs
      */
-    AccessControlPolicy getObjectAccessControlPolicy(String bucketName, String key) throws S3Exception;
+    FutureResult<AccessControlPolicy> getObjectAccessControlPolicy(String bucketName, String key) throws S3Exception;
 
     /**
      * Sets the Access Control Policy for an existing object. If successful,
@@ -372,8 +378,9 @@ public interface S3API
      *                            policy you are trying to set
      * @param key                 The key that identifies the object.
      * @param accessControlPolicy the access control policy
+     * @return a {@link FutureResult} that facilitates waiting synchronously or asynchronously for completion
      * @throws S3Exception if any error occurs
      */
-    void setObjectAccessControlPolicy(String bucketName, String key, AccessControlPolicy accessControlPolicy) throws S3Exception;
+    FutureResult<Void> setObjectAccessControlPolicy(String bucketName, String key, AccessControlPolicy accessControlPolicy) throws S3Exception;
 
 }

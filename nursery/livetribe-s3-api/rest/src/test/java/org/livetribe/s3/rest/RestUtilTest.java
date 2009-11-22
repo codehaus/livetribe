@@ -16,11 +16,10 @@
  */
 package org.livetribe.s3.rest;
 
+import org.apache.ahc.HttpHeaders;
+import org.apache.ahc.api.HttpVerb;
 import org.junit.Assert;
 import org.junit.Test;
-
-import org.livetribe.s3.util.HttpHeaders;
-import org.livetribe.s3.util.HttpVerb;
 
 
 /**
