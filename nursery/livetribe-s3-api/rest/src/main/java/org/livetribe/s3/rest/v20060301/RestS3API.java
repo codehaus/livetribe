@@ -111,11 +111,6 @@ public final class RestS3API implements S3API
         this.context20060301 = JAXBContext.newInstance("org.livetribe.s3.jaxb.v20060301");
 
         this.ahc = ahc;
-
-        AsyncHttpConfig config = new AsyncHttpConfig();
-        config.setTcpNoDelay(true);
-
-        this.ahc.addConfig(config);
     }
 
     /**
