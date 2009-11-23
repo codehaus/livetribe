@@ -16,6 +16,9 @@
  */
 package org.livetribe.s3.api;
 
+import java.util.logging.Logger;
+
+
 /**
  * @version $Revision$ $Date$
  */

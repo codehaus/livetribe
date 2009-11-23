@@ -29,6 +29,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.ahc.api.FutureListener;
+import org.apache.ahc.api.HttpClientFuture;
+import org.apache.ahc.api.HttpResponse;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import org.livetribe.s3.api.FutureResult;
 import org.livetribe.s3.api.S3Exception;
 import org.livetribe.s3.api.v20080201.AccessDeniedException;
 import org.livetribe.s3.api.v20080201.AccountProblemException;
@@ -94,13 +102,6 @@ import org.livetribe.s3.api.v20080201.UnexpectedContentException;
 import org.livetribe.s3.api.v20080201.UnresolvableGrantByEmailAddressException;
 import org.livetribe.s3.api.v20080201.UserKeyMustBeSpecifiedException;
 
-import org.apache.ahc.api.FutureListener;
-import org.apache.ahc.api.HttpClientFuture;
-import org.apache.ahc.api.HttpResponse;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
 
 /**
  * @version $Revision$ $Date$
@@ -127,47 +128,50 @@ public class FutureResultAdapter<V> implements org.livetribe.s3.api.FutureResult
                 {
                     result.set(t);
                     latch.countDown();
-
-                    for (org.livetribe.s3.api.FutureListener<V> listener : listeners)
-                    {
-                        listener.exception(t);
-                    }
-
-                    listeners.clear();
                 }
+
+                for (org.livetribe.s3.api.FutureListener<V> listener : listeners)
+                {
+                    listener.exception(t);
+                }
+
+                listeners.clear();
             }
 
             public void completed(HttpResponse response)
             {
                 assert !isDone();
 
-                synchronized (latch)
+                try
                 {
-                    try
-                    {
-                        V v = preconvert(response);
+                    V v = preconvert(response);
 
+                    synchronized (latch)
+                    {
                         result.set(v);
                         latch.countDown();
-
-                        for (org.livetribe.s3.api.FutureListener<V> listener : listeners)
-                        {
-                            try { listener.completed(v); } catch (Throwable ignore) { }
-                        }
                     }
-                    catch (Throwable throwable)
+
+                    for (org.livetribe.s3.api.FutureListener<V> listener : listeners)
+                    {
+                        try { listener.completed(v); } catch (Throwable ignore) { }
+                    }
+                }
+                catch (Throwable throwable)
+                {
+                    synchronized (latch)
                     {
                         result.set(throwable);
                         latch.countDown();
-
-                        for (org.livetribe.s3.api.FutureListener<V> listener : listeners)
-                        {
-                            try { listener.exception(throwable); } catch (Throwable ignore) { }
-                        }
                     }
 
-                    listeners.clear();
+                    for (org.livetribe.s3.api.FutureListener<V> listener : listeners)
+                    {
+                        try { listener.exception(throwable); } catch (Throwable ignore) { }
+                    }
                 }
+
+                listeners.clear();
             }
         });
     }
@@ -242,24 +246,28 @@ public class FutureResultAdapter<V> implements org.livetribe.s3.api.FutureResult
     }
 
     @SuppressWarnings({"unchecked"})
-    public org.livetribe.s3.api.FutureResult<V> register(org.livetribe.s3.api.FutureListener<V> listener)
+    public FutureResult<V> register(org.livetribe.s3.api.FutureListener<V> listener)
     {
         synchronized (latch)
         {
-            if (isDone())
+            if (!isDone())
             {
-                Object object = result.get();
-                if (object instanceof Throwable)
-                {
-                    listener.exception((Throwable)object);
-                }
-                else
-                {
-                    listener.completed((V)object);
-                }
+                listeners.add(listener);
+                listener = null;
             }
+        }
 
-            listeners.add(listener);
+        if (listener != null)
+        {
+            Object object = result.get();
+            if (object instanceof Throwable)
+            {
+                listener.exception((Throwable)object);
+            }
+            else
+            {
+                listener.completed((V)object);
+            }
         }
 
         return this;

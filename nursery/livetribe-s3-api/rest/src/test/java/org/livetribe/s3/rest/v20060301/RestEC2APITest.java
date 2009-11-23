@@ -52,7 +52,6 @@ public class RestEC2APITest
 
         client.createBucket("livetribe-foo");
 
-
         AccessControlPolicy policy = client.getBucketAccessControlPolicy("livetribe-foo").get();
 
         policy.getAccessControlList().add(new Grant(new GranteeLogDeliveryGroup(), Permission.READ));
