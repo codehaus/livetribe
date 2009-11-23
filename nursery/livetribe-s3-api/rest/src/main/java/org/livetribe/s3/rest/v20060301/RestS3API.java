@@ -32,8 +32,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ahc.HttpHeaders;
-import org.apache.ahc.api.FutureResult;
 import org.apache.ahc.api.HttpClient;
+import org.apache.ahc.api.HttpClientFuture;
 import org.apache.ahc.api.HttpRequest;
 import org.apache.ahc.api.HttpResponse;
 import org.apache.ahc.api.HttpVerb;
@@ -41,6 +41,7 @@ import org.apache.ahc.api.MimeContent;
 import org.apache.ahc.client.AsyncHttpConfig;
 import org.apache.ahc.client.ByteArrayBasedMimeContent;
 
+import org.livetribe.s3.api.FutureResult;
 import org.livetribe.s3.api.S3Exception;
 import org.livetribe.s3.api.v20080201.S3API;
 import org.livetribe.s3.jaxb.v20060301.ObjectFactory;
@@ -140,14 +141,14 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<Set<S3Bucket>> listAllMyBuckets() throws S3Exception
+    public FutureResult<Set<S3Bucket>> listAllMyBuckets() throws S3Exception
     {
         HttpHeaders headers = new HttpHeaders();
 
         headers.put("Date", Util.rfc822Format(new Date()));
         headers.put("Authorization", "AWS " + AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.GET, "/"));
 
-        FutureResult<HttpResponse> response = call(headers, HttpVerb.GET, "/");
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.GET, "/");
 
         return new FutureResultAdapter<Set<S3Bucket>>(response)
         {
@@ -179,14 +180,14 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<Void> createBucket(String bucketName) throws S3Exception
+    public FutureResult<Void> createBucket(String bucketName) throws S3Exception
     {
         HttpHeaders headers = new HttpHeaders();
 
         headers.put("Date", Util.rfc822Format(new Date()));
         headers.put("Authorization", "AWS " + AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.PUT, "/" + bucketName + "/"));
 
-        FutureResult<HttpResponse> response = call(headers, HttpVerb.PUT, "/" + bucketName + "/");
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.PUT, "/" + bucketName + "/");
 
         return new FutureResultAdapter<Void>(response);
     }
@@ -194,14 +195,14 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<Void> deleteBucket(String bucketName) throws S3Exception
+    public FutureResult<Void> deleteBucket(String bucketName) throws S3Exception
     {
         HttpHeaders headers = new HttpHeaders();
 
         headers.put("Date", Util.rfc822Format(new Date()));
         headers.put("Authorization", "AWS " + AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.DELETE, "/" + bucketName + "/"));
 
-        FutureResult<HttpResponse> response = call(headers, HttpVerb.DELETE, "/" + bucketName + "/");
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.DELETE, "/" + bucketName + "/");
 
         return new FutureResultAdapter<Void>(response);
     }
@@ -209,7 +210,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<BucketListing> listBuckets(String prefix, String marker, String delimiter, long maxKeys) throws S3Exception
+    public FutureResult<BucketListing> listBuckets(String prefix, String marker, String delimiter, long maxKeys) throws S3Exception
     {
         StringBuilder builder = new StringBuilder("?");
 
@@ -225,7 +226,7 @@ public final class RestS3API implements S3API
         headers.put("Date", Util.rfc822Format(new Date()));
         headers.put("Authorization", "AWS " + AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.GET, path));
 
-        FutureResult<HttpResponse> response = call(headers, HttpVerb.GET, path);
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.GET, path);
 
         return new FutureResultAdapter<BucketListing>(response)
         {
@@ -270,14 +271,14 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<AccessControlPolicy> getBucketAccessControlPolicy(String bucketName) throws S3Exception
+    public FutureResult<AccessControlPolicy> getBucketAccessControlPolicy(String bucketName) throws S3Exception
     {
         HttpHeaders headers = new HttpHeaders();
 
         headers.put("Date", Util.rfc822Format(new Date()));
         headers.put("Authorization", "AWS " + this.AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.GET, "/" + bucketName + "/?acl"));
 
-        FutureResult<HttpResponse> response = call(headers, HttpVerb.GET, "/" + bucketName + "/?acl");
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.GET, "/" + bucketName + "/?acl");
 
         return new FutureResultAdapter<AccessControlPolicy>(response)
         {
@@ -297,7 +298,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<Void> setBucketAccessControlPolicy(String bucketName, AccessControlPolicy accessControlPolicy) throws S3Exception
+    public FutureResult<Void> setBucketAccessControlPolicy(String bucketName, AccessControlPolicy accessControlPolicy) throws S3Exception
     {
         HttpHeaders headers = new HttpHeaders();
 
@@ -314,13 +315,13 @@ public final class RestS3API implements S3API
             throw new S3Exception(je);
         }
 
-        FutureResult<HttpResponse> response = call(headers,
-                                                   HttpVerb.PUT,
-                                                   "/" + bucketName + "/?acl",
-                                                   new ByteArrayBasedMimeContent("AccessControlPolicy",
-                                                                                 null,
-                                                                                 "text/xml",
-                                                                                 out.toByteArray()));
+        HttpClientFuture<HttpResponse> response = call(headers,
+                                                       HttpVerb.PUT,
+                                                       "/" + bucketName + "/?acl",
+                                                       new ByteArrayBasedMimeContent("AccessControlPolicy",
+                                                                                     null,
+                                                                                     "text/xml",
+                                                                                     out.toByteArray()));
 
         return new FutureResultAdapter<Void>(response);
     }
@@ -328,7 +329,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<LoggingConfiguration> getBucketLoggingConfiguration(String bucketName) throws S3Exception
+    public FutureResult<LoggingConfiguration> getBucketLoggingConfiguration(String bucketName) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -336,7 +337,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<Void> setBucketLoggingConfiguration(String bucketName, LoggingConfiguration loggingConfiguration) throws S3Exception
+    public FutureResult<Void> setBucketLoggingConfiguration(String bucketName, LoggingConfiguration loggingConfiguration) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -344,7 +345,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<S3Object> putObject(String bucketName, String key, Map<String, String> metaData, int contentLength, List<Grant> accessControlList, InputStream data) throws S3Exception
+    public FutureResult<S3Object> putObject(String bucketName, String key, Map<String, String> metaData, int contentLength, List<Grant> accessControlList, InputStream data) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -352,7 +353,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<S3Object> copyObject(String sourceBucketName, String sourceKey, String destBucketName, String destKey, MetadataDirective metadataDirective, Map<String, String> metaData, List<Grant> accessControlList, String copyIfMatch, String copyIfNoMatch, Date copyIfUnmodifiedSince, Date copyIfModifiedSince) throws S3Exception
+    public FutureResult<S3Object> copyObject(String sourceBucketName, String sourceKey, String destBucketName, String destKey, MetadataDirective metadataDirective, Map<String, String> metaData, List<Grant> accessControlList, String copyIfMatch, String copyIfNoMatch, Date copyIfUnmodifiedSince, Date copyIfModifiedSince) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -360,7 +361,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<S3Object> getObject(String bucketName, String key, String ifMatch, String ifNoMatch, Date ifUnmodifiedSince, Date ifModifiedSince) throws S3Exception
+    public FutureResult<S3Object> getObject(String bucketName, String key, String ifMatch, String ifNoMatch, Date ifUnmodifiedSince, Date ifModifiedSince) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -368,10 +369,10 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<InputStream> getObjectData(String bucketName, String key, long start, long end, String ifMatch, String ifNoMatch, Date ifUnmodifiedSince, Date ifModifiedSince, boolean returnCompleteObjectOnConditionFailure) throws S3Exception
+    public FutureResult<InputStream> getObjectData(String bucketName, String key, long start, long end, String ifMatch, String ifNoMatch, Date ifUnmodifiedSince, Date ifModifiedSince, boolean returnCompleteObjectOnConditionFailure) throws S3Exception
     {
         if (bucketName == null) throw new IllegalArgumentException("Bucket name cannot be null");
-        if (key == null || key.trim().length() == 0) key = "/";
+        if (key == null || key.trim().length() == 0) throw new IllegalArgumentException("Key cannot be null");
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -386,7 +387,7 @@ public final class RestS3API implements S3API
 
         headers.put("Authorization", "AWS " + AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.GET, key));
 
-        FutureResult<HttpResponse> response = call(headers, HttpVerb.GET, key);
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.GET, key);
 
         return new FutureResultAdapter<InputStream>(response)
         {
@@ -401,7 +402,27 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<Void> deleteObject(String bucketName, String key) throws S3Exception
+    public FutureResult<Void> deleteObject(String bucketName, String key) throws S3Exception
+    {
+        if (bucketName == null) throw new IllegalArgumentException("Bucket name cannot be null");
+        if (key == null || key.trim().length() == 0) throw new IllegalArgumentException("Key cannot be null");
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.put("Host", bucketName + ".s3.amazonaws.com");
+        headers.put("Date", Util.rfc822Format(new Date()));
+
+        headers.put("Authorization", "AWS " + AWSAccessKeyId + ":" + RestUtil.sign(headers, secretAccessKey, HttpVerb.DELETE, key));
+
+        HttpClientFuture<HttpResponse> response = call(headers, HttpVerb.DELETE, key);
+
+        return new FutureResultAdapter<Void>(response);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public FutureResult<AccessControlPolicy> getObjectAccessControlPolicy(String bucketName, String key) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -409,15 +430,7 @@ public final class RestS3API implements S3API
     /**
      * {@inheritDoc}
      */
-    public org.livetribe.s3.api.FutureResult<AccessControlPolicy> getObjectAccessControlPolicy(String bucketName, String key) throws S3Exception
-    {
-        return null;  //Todo change body of implemented methods use File | Settings | File Templates.
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public org.livetribe.s3.api.FutureResult<Void> setObjectAccessControlPolicy(String bucketName, String key, AccessControlPolicy accessControlPolicy) throws S3Exception
+    public FutureResult<Void> setObjectAccessControlPolicy(String bucketName, String key, AccessControlPolicy accessControlPolicy) throws S3Exception
     {
         return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
@@ -433,7 +446,7 @@ public final class RestS3API implements S3API
      * @return the resulting JAXB Element of the HTTP request to Amazon S3
      * @throws S3Exception if something goes wrong with the request or Amazon S3 returns an error
      */
-    private FutureResult<HttpResponse> call(HttpHeaders headers, HttpVerb verb, String path, MimeContent... content) throws S3Exception
+    private HttpClientFuture<HttpResponse> call(HttpHeaders headers, HttpVerb verb, String path, MimeContent... content) throws S3Exception
     {
         assert !headers.containsKey("Authorization");
         assert verb != null;

@@ -95,7 +95,7 @@ import org.livetribe.s3.api.v20080201.UnresolvableGrantByEmailAddressException;
 import org.livetribe.s3.api.v20080201.UserKeyMustBeSpecifiedException;
 
 import org.apache.ahc.api.FutureListener;
-import org.apache.ahc.api.FutureResult;
+import org.apache.ahc.api.HttpClientFuture;
 import org.apache.ahc.api.HttpResponse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -111,9 +111,9 @@ public class FutureResultAdapter<V> implements org.livetribe.s3.api.FutureResult
     private final List<org.livetribe.s3.api.FutureListener<V>> listeners = new ArrayList<org.livetribe.s3.api.FutureListener<V>>();
     private final AtomicReference<Object> result = new AtomicReference<Object>();
     private volatile boolean canceled;
-    private final FutureResult<HttpResponse> futureResult;
+    private final HttpClientFuture<HttpResponse> futureResult;
 
-    public FutureResultAdapter(FutureResult<HttpResponse> futureResult)
+    public FutureResultAdapter(HttpClientFuture<HttpResponse> futureResult)
     {
         this.futureResult = futureResult;
 
