@@ -21,6 +21,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class SimpleScriptContext implements ScriptContext
 {
-    private static final Integer[] SCOPES = {ENGINE_SCOPE, GLOBAL_SCOPE};
+    private static final List<Integer> SCOPES = Collections.unmodifiableList(Arrays.asList(ENGINE_SCOPE, GLOBAL_SCOPE));
 
     protected Bindings globalScope;
     protected Bindings engineScope;
@@ -58,7 +59,7 @@ public class SimpleScriptContext implements ScriptContext
                 globalScope = bindings;
                 break;
             default:
-                throw new IllegalArgumentException("Invaild scope");
+                throw new IllegalArgumentException("Invalid scope");
         }
     }
 
@@ -71,7 +72,7 @@ public class SimpleScriptContext implements ScriptContext
             case GLOBAL_SCOPE:
                 return globalScope;
             default:
-                throw new IllegalArgumentException("Invaild scope");
+                throw new IllegalArgumentException("Invalid scope");
         }
     }
 
@@ -89,7 +90,7 @@ public class SimpleScriptContext implements ScriptContext
                 bindings = globalScope;
                 break;
             default:
-                throw new IllegalArgumentException("Invaild scope");
+                throw new IllegalArgumentException("Invalid scope");
         }
         if (bindings != null) {
             bindings.put(name, value);
@@ -110,7 +111,7 @@ public class SimpleScriptContext implements ScriptContext
                 bindings = globalScope;
                 break;
             default:
-                throw new IllegalArgumentException("Invaild scope");
+                throw new IllegalArgumentException("Invalid scope");
         }
 
         return (bindings != null) ? bindings.get(name) : null;
@@ -162,7 +163,7 @@ public class SimpleScriptContext implements ScriptContext
 
     public List<Integer> getScopes()
     {
-        return Arrays.asList(SCOPES);
+        return SCOPES;
     }
 
     public Writer getWriter()
