@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007-2009 (C) The original author or authors
+ * Copyright 2007-2010 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,26 +29,26 @@ package org.livetribe.boot.client;
 public interface Listener
 {
     /**
-     * A problem of some sort occured.
+     * A problem of some sort occurred.
      * @param message an explanation as to what happened
      */
     public void warning(String message);
 
     /**
-     * A problem of some sort occured.
+     * A problem of some sort occurred.
      * @param message an explanation as to what happened
      * @param throwable the exception that caused the problem
      */
     public void warning(String message, Throwable throwable);
 
     /**
-     * An unrecoverable problem occured.
+     * An unrecoverable problem occurred.
      * @param message an explanation as to what happened
      */
     public void error(String message);
 
     /**
-     * An unrecoverable problem occured.
+     * An unrecoverable problem occurred.
      * @param message an explanation as to what happened
      * @param throwable the exception that caused the problem
      */
