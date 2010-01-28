@@ -19,15 +19,12 @@ package org.livetribe.boot.client;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import net.jcip.annotations.ThreadSafe;
-
 import org.livetribe.boot.protocol.ProvisionDirective;
 
 
 /**
  * @version $Revision$ $Date$
  */
-@ThreadSafe
 public class ClientListenerHelper implements ClientListener
 {
     private final List<ClientListener> listeners = new CopyOnWriteArrayList<ClientListener>();

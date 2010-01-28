@@ -20,8 +20,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.jcip.annotations.Immutable;
-
 
 /**
  * This provision directive directs what version the client should be at.  The
@@ -29,7 +27,6 @@ import net.jcip.annotations.Immutable;
  *
  * @version $Revision$ $Date$
  */
-@Immutable
 public class YouShould extends ProvisionDirective
 {
     private final long version;

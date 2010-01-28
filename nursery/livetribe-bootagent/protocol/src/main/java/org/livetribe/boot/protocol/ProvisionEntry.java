@@ -16,8 +16,6 @@
  */
 package org.livetribe.boot.protocol;
 
-import net.jcip.annotations.Immutable;
-
 
 /**
  * A provision entry describes the name of the content and its version.  It
@@ -27,7 +25,6 @@ import net.jcip.annotations.Immutable;
  * @version $Revision$ $Date$
  * @see ContentProvider
  */
-@Immutable
 public final class ProvisionEntry
 {
     private final String name;

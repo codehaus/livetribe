@@ -33,6 +33,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
+import org.livetribe.boot.protocol.BootException;
+import org.livetribe.boot.protocol.DoNothing;
+import org.livetribe.boot.protocol.ProvisionDirective;
 import org.livetribe.boot.protocol.ProvisionEntry;
 import org.livetribe.boot.protocol.YouMust;
 import org.livetribe.boot.protocol.YouShould;
@@ -45,7 +48,8 @@ import org.livetribe.test.AbstractHttpTest;
 public class HttpClientTest extends AbstractHttpTest
 {
     private static final String UUID_1 = "1234-5678-9abc";
-    private static final String UUID_2 = "e9d8-309a-3fe86";
+    private static final String UUID_2 = "e9d8-309a-3fe6";
+    private static final String UUID_3 = "43e0-a936-0ef5";
     private static final String UUID_EMPTY_RESULTS = "UUID_EMPTY_RESULTS";
     private static final String UUID_MISSING_VERSION = "UUID_MISSING_VERSION";
     private static final String UUID_MISSING_ENTRIES_COUNT = "UUID_MISSING_ENTRIES_COUNT";
@@ -70,9 +74,9 @@ public class HttpClientTest extends AbstractHttpTest
                     {
                         if (UUID_1.equals(tokens[2]))
                         {
-                            if (!"1".equals(tokens[3]))
+                            if (!"current".equals(tokens[3]))
                             {
-                                response.setStatus(400);
+                                response.setStatus(404);
                             }
                             else
                             {
@@ -87,9 +91,26 @@ public class HttpClientTest extends AbstractHttpTest
                         }
                         else if (UUID_2.equals(tokens[2]))
                         {
-                            if (!"5".equals(tokens[3]))
+                            if (!"current".equals(tokens[3]))
                             {
-                                response.setStatus(400);
+                                response.setStatus(404);
+                            }
+                            else
+                            {
+                                PrintWriter writer = response.getWriter();
+
+                                writer.println("MUST com.acme.Boot 37 2 true");
+                                writer.println("com.acme.service.Foo 15");
+                                writer.println("com.acme.service.Bar 1");
+
+                                response.setStatus(200);
+                            }
+                        }
+                        else if (UUID_3.equals(tokens[2]))
+                        {
+                            if (!"current".equals(tokens[3]))
+                            {
+                                response.setStatus(404);
                             }
                             else
                             {
@@ -123,12 +144,12 @@ public class HttpClientTest extends AbstractHttpTest
                         }
                         else
                         {
-                            response.setStatus(400);
+                            response.setStatus(404);
                         }
                     }
                     else
                     {
-                        response.setStatus(400);
+                        response.setStatus(404);
                     }
                 }
             }
@@ -174,6 +195,16 @@ public class HttpClientTest extends AbstractHttpTest
             }
             else if ("com.acme.service.Bar".equals(entry.getName())) assertEquals("THE RAIN IN SPAIN", bin.readLine());
         }
+
+        try
+        {
+            contentProvider.pleaseProvide("BOGUS", 1);
+            fail("Should not have loaded bogus entry");
+        }
+        catch (BootException ignore)
+        {
+        }
+
     }
 
     @Test
@@ -216,6 +247,17 @@ public class HttpClientTest extends AbstractHttpTest
             }
             else if ("com.acme.service.Bar".equals(entry.getName())) assertEquals("THE RAIN IN SPAIN", bin.readLine());
         }
+    }
+
+    @Test
+    public void testDoNothing() throws Exception
+    {
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
+
+        ProvisionDirective directive = provisionProvider.hello(UUID_3, 1000);
+
+        assertNotNull(directive);
+        assertTrue(directive instanceof DoNothing);
     }
 
 }

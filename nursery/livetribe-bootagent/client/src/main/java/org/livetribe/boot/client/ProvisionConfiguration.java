@@ -20,15 +20,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.jcip.annotations.Immutable;
-
 import org.livetribe.boot.protocol.ProvisionEntry;
 
 
 /**
  * @version $Revision$ $Date$
  */
-@Immutable
 public class ProvisionConfiguration
 {
     private final long version;

@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>org.livetribe.boot</groupId>
-        <artifactId>livetribe-boot-root</artifactId>
+        <artifactId>livetribe-boot-mock-root</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007-2009 (C) The original author or authors
+ * Copyright 2007-2010 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
-import net.jcip.annotations.ThreadSafe;
 
 import org.livetribe.boot.LifeCycle;
 import org.livetribe.boot.protocol.BootException;
@@ -72,7 +70,6 @@ import org.livetribe.boot.protocol.YouShould;
  * @see ProvisionStore
  * @see ClientListener
  */
-@ThreadSafe
 public class Client
 {
     public final static long DEFAULT_PERIOD = 900;
@@ -106,7 +103,7 @@ public class Client
      * @param provisionProvider           provisioning queries are made against this provider
      * @param contentProvider             content listed by the provisioning provider are obtained from this provider
      * @param scheduledThreadPoolExecutor periodic queries are scheduled in this pool
-     * @param provisionStore              the current provisioning cirective is stored in this store
+     * @param provisionStore              the current provisioning directive is stored in this store
      * @see #start()
      */
     public Client(ProvisionProvider provisionProvider, ContentProvider contentProvider, ScheduledThreadPoolExecutor scheduledThreadPoolExecutor, ProvisionStore provisionStore)
@@ -123,7 +120,7 @@ public class Client
      * @param provisionProvider           provisioning queries are made against this provider
      * @param contentProvider             content listed by the provisioning provider are obtained from this provider
      * @param scheduledThreadPoolExecutor periodic queries are scheduled in this pool
-     * @param provisionStore              the current provisioning cirective is stored in this store
+     * @param provisionStore              the current provisioning directive is stored in this store
      * @param parentClassLoader           the classloader to use as the parent classloader when constructing the provisioning classloader
      * @see #start()
      */

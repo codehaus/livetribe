@@ -25,8 +25,6 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.jcip.annotations.ThreadSafe;
-
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ContentProvider;
 
@@ -36,7 +34,6 @@ import org.livetribe.boot.protocol.ContentProvider;
  *
  * @version $Revision: $ $Date: $
  */
-@ThreadSafe
 public class HttpContentProvider implements ContentProvider
 {
     public final static int DEFAULT_TIMEOUT = 60 * 1000;
@@ -99,18 +96,15 @@ public class HttpContentProvider implements ContentProvider
         }
         catch (MalformedURLException mue)
         {
-            LOGGER.log(Level.WARNING, "Unable to form URL for hello", mue);
             throw new BootException("Unable to form URL for hello", mue);
         }
         catch (SocketTimeoutException ste)
         {
-            LOGGER.log(Level.WARNING, "Hello timed out", ste);
             throw new BootException("Hello timed out", ste);
         }
         catch (IOException ioe)
         {
-            LOGGER.log(Level.WARNING, "Hello experience an IO exception", ioe);
-            throw new BootException("Hello experience an IO exception", ioe);
+            throw new BootException("Hello experienced an IO exception", ioe);
         }
     }
 }

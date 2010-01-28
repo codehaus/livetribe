@@ -18,8 +18,6 @@ package org.livetribe.boot.protocol;
 
 import java.util.Set;
 
-import net.jcip.annotations.Immutable;
-
 
 /**
  * This provision directive directs what version the client must be at.  The
@@ -27,7 +25,6 @@ import net.jcip.annotations.Immutable;
  *
  * @version $Revision$ $Date$
  */
-@Immutable
 public final class YouMust extends YouShould
 {
     private final boolean restart;

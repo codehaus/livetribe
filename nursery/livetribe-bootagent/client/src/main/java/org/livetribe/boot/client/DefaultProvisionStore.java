@@ -33,15 +33,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
 import org.livetribe.boot.protocol.ProvisionEntry;
 
 
 /**
  * @version $Revision$ $Date$
  */
-@NotThreadSafe
 public class DefaultProvisionStore implements ProvisionStore
 {
     private final static String DEFAULT_UUID = "org.livetribe.boot.uuid.unset";

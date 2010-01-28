@@ -16,15 +16,12 @@
  */
 package org.livetribe.boot.protocol;
 
-import net.jcip.annotations.Immutable;
-
 
 /**
  * This directive is returned if the client is at an adequate version.
  *
  * @version $Revision$ $Date$
  */
-@Immutable
 public final class DoNothing extends ProvisionDirective
 {
     @Override

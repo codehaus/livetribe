@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2007-2009 (C) The original author or authors
+ * Copyright 2007-2010 (C) The original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.jcip.annotations.ThreadSafe;
-
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.DoNothing;
 import org.livetribe.boot.protocol.ProvisionDirective;
@@ -47,7 +45,6 @@ import org.livetribe.boot.protocol.YouShould;
  *
  * @version $Revision: $ $Date: $
  */
-@ThreadSafe
 public class HttpProvisionProvider implements ProvisionProvider
 {
     public final static int DEFAULT_TIMEOUT = 60 * 1000;
@@ -93,9 +90,30 @@ public class HttpProvisionProvider implements ProvisionProvider
 
         if (uuid == null) throw new IllegalArgumentException("uuid cannot be null");
 
+        ProvisionDirective directive;
         try
         {
-            URL hello = new URL(url, "hello/" + uuid + "/" + version);
+            directive = doHello(uuid + "/current", version);
+        }
+        catch (BootException be)
+        {
+            directive = doHello("current", version);
+        }
+
+        LOGGER.exiting(CLASS_NAME, "hello", directive);
+
+        return directive;
+    }
+
+    private ProvisionDirective doHello(String path, long version) throws BootException
+    {
+        LOGGER.entering(CLASS_NAME, "doHello", new Object[]{path, version});
+
+        if (path == null) throw new IllegalArgumentException("path cannot be null");
+
+        try
+        {
+            URL hello = new URL(url, "hello/" + path);
 
             HttpURLConnection connection = (HttpURLConnection)hello.openConnection();
 
@@ -108,8 +126,19 @@ public class HttpProvisionProvider implements ProvisionProvider
 
             if (line.length() == 0) throw new BootException("Empty message");
 
+            ProvisionDirective directive;
             String[] tokens = line.split(" ");
             long directedVersion = Long.parseLong(tokens[2]);
+
+            if (directedVersion <= version)
+            {
+                directive = new DoNothing();
+
+                LOGGER.exiting(CLASS_NAME, "doHello", directive);
+
+                return directive;
+            }
+
             String bootClass = tokens[1];
 
             Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
@@ -122,7 +151,6 @@ public class HttpProvisionProvider implements ProvisionProvider
                 entries.add(new ProvisionEntry(t[0], Long.parseLong(t[1])));
             }
 
-            ProvisionDirective directive;
             if ("MUST".equals(tokens[0]))
             {
                 directive = new YouMust(directedVersion, bootClass, entries, Boolean.parseBoolean(tokens[4]));
@@ -141,33 +169,28 @@ public class HttpProvisionProvider implements ProvisionProvider
                 throw new BootException("Unable to recognize directive " + tokens[0]);
             }
 
-            LOGGER.exiting(CLASS_NAME, "hello", directive);
+            LOGGER.exiting(CLASS_NAME, "doHello", directive);
 
             return directive;
         }
         catch (MalformedURLException mue)
         {
-            LOGGER.log(Level.WARNING, "Unable to form URL for hello", mue);
             throw new BootException("Unable to form URL for hello", mue);
         }
         catch (SocketTimeoutException ste)
         {
-            LOGGER.log(Level.WARNING, "Hello timed out", ste);
             throw new BootException("Hello timed out", ste);
         }
         catch (NumberFormatException nfe)
         {
-            LOGGER.log(Level.WARNING, "Number could not be parsed", nfe);
             throw new BootException("Number could not be parsed", nfe);
         }
         catch (IOException ioe)
         {
-            LOGGER.log(Level.WARNING, "Hello experience an IO exception", ioe);
-            throw new BootException("Hello experience an IO exception", ioe);
+            throw new BootException("Hello experienced an IO exception", ioe);
         }
         catch (ArrayIndexOutOfBoundsException aioobe)
         {
-            LOGGER.log(Level.WARNING, "Hello response was malformed", aioobe);
             throw new BootException("Hello response was malformed", aioobe);
         }
     }

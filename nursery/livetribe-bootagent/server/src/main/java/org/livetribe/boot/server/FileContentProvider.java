@@ -22,8 +22,6 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.jcip.annotations.ThreadSafe;
-
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ContentProvider;
 
@@ -50,7 +48,6 @@ import org.livetribe.boot.protocol.ContentProvider;
  *
  * @version $Revision$ $Date$
  */
-@ThreadSafe
 public class FileContentProvider implements ContentProvider
 {
     private final static String CLASS_NAME = FileContentProvider.class.getName();
