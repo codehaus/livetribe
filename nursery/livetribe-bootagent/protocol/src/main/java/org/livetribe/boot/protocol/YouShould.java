@@ -25,7 +25,7 @@ import net.jcip.annotations.Immutable;
 
 /**
  * This provision directive directs what version the client should be at.  The
- * client may update at its own descresion.
+ * client may update at its own discretion.
  *
  * @version $Revision$ $Date$
  */
