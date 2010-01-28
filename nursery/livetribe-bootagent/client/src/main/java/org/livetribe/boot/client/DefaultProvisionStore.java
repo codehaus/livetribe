@@ -67,7 +67,7 @@ public class DefaultProvisionStore implements ProvisionStore
 
         if (!resources.exists() && !resources.mkdirs())
         {
-            throw new IllegalArgumentException("Unable to creare provision store root directory");
+            throw new IllegalArgumentException("Unable to create provision store root directory");
         }
         else if (!resources.isDirectory()) throw new IllegalArgumentException("Resources in root is not a directory");
     }
