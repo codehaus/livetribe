@@ -18,6 +18,8 @@ package org.livetribe.boot;
 
 /**
  * A simple lifecycle interface that must be implemented by boot classes.
+ * Instances of this interface should have light constructors since they will
+ * be, at times, instantiated and thrown away as part of a consistency check.
  * <p/>
  * This interface contains no dependencies and belongs in its own jar so that
  * boot classes have no additional dependencies.
