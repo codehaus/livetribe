@@ -32,7 +32,7 @@ import org.livetribe.boot.protocol.ContentProvider;
  * <p/>
  * The first level of directories correspond to the names of the content and so
  * the directory names match the content names that they represent.  Within
- * those directies are the collection of versions of that content.  They are of
+ * those directories are the collection of versions of that content.  They are of
  * the format <code><i>version</i>.jar</code>.  For example, content with the
  * name bar has three versions and the content named foo has two:
  * <p/>

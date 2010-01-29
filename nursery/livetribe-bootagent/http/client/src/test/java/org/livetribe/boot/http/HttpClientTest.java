@@ -50,14 +50,7 @@ public class HttpClientTest extends AbstractHttpTest
     private static final String UUID_1 = "1234-5678-9abc";
     private static final String UUID_2 = "e9d8-309a-3fe6";
     private static final String UUID_3 = "43e0-a936-0ef5";
-    private static final String UUID_EMPTY_RESULTS = "UUID_EMPTY_RESULTS";
-    private static final String UUID_MISSING_VERSION = "UUID_MISSING_VERSION";
-    private static final String UUID_MISSING_ENTRIES_COUNT = "UUID_MISSING_ENTRIES_COUNT";
-    private static final String UUID_MALFORMED_VERSION = "UUID_MALFORMED_VERSION";
-    private static final String UUID_MALFORMED_ENTRIES_COUNT = "UUID_MALFORMED_ENTRIES_COUNT";
-    private static final String UUID_SHORT_ENTRIES = "UUID_SHORT_ENTRIES";
-    private static final String UUID_MISSING_RESTART = "UUID_MISSING_RESTART";
-    private static final String UUID_MALFORMED_RESTART = "UUID_MALFORMED_RESTART";
+    private static final String UUID_4 = "73da-328d-b031";
 
     public HttpClientTest()
     {
@@ -122,6 +115,21 @@ public class HttpClientTest extends AbstractHttpTest
 
                                 response.setStatus(200);
                             }
+                        }
+                        else if ("current".equals(tokens[2]))
+                        {
+                            PrintWriter writer = response.getWriter();
+
+                            writer.println("MUST com.acme.BootDefault 37 2 true");
+                            writer.println("com.acme.service.FooDefault 15");
+                            writer.println("com.acme.service.BarDefault 1");
+
+                            response.setStatus(200);
+                        }
+                        else
+                        {
+                            response.setStatus(404);
+
                         }
                     }
                     else if ("provide".equals(tokens[1]))
@@ -204,7 +212,35 @@ public class HttpClientTest extends AbstractHttpTest
         catch (BootException ignore)
         {
         }
+    }
 
+    @Test
+    public void testDefault() throws Exception
+    {
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
+
+        YouShould directive = (YouShould)provisionProvider.hello(UUID_4, 1);
+
+        assertNotNull(directive);
+        assertEquals("com.acme.BootDefault", directive.getBootClass());
+        assertEquals(37, directive.getVersion());
+        assertEquals(2, directive.getEntries().size());
+
+        for (ProvisionEntry entry : directive.getEntries())
+        {
+            if ("com.acme.service.FooDefault".equals(entry.getName()))
+            {
+                assertEquals(15, entry.getVersion());
+            }
+            else if ("com.acme.service.BarDefault".equals(entry.getName()))
+            {
+                assertEquals(1, entry.getVersion());
+            }
+            else
+            {
+                fail();
+            }
+        }
     }
 
     @Test

@@ -24,6 +24,8 @@ import org.livetribe.boot.protocol.ProvisionEntry;
 
 
 /**
+ * Represents a provision configuration for a particular version.
+ *
  * @version $Revision$ $Date$
  */
 public class ProvisionConfiguration
@@ -32,30 +34,57 @@ public class ProvisionConfiguration
     private final String bootClass;
     private final Set<ProvisionEntry> entries;
 
+    /**
+     * Construct an "empty" instance whose version is zero, has no boot class
+     * specified, and has an empty set of provisioning entries.
+     */
     public ProvisionConfiguration()
     {
         this(0, "", Collections.<ProvisionEntry>emptySet());
     }
 
+    /**
+     * Construct an instance with a particular version, boot class, and entries.
+     *
+     * @param version   the version of this provision configuration
+     * @param bootClass the boot class of this provision configuration
+     * @param entries   tne provision entries of this provision configuration
+     */
     public ProvisionConfiguration(long version, String bootClass, Set<ProvisionEntry> entries)
     {
         if (bootClass == null) throw new IllegalArgumentException("Boot class cannot be null");
+        if (entries == null) throw new IllegalArgumentException("Provision entries cannot be null");
 
         this.version = version;
         this.bootClass = bootClass;
         this.entries = Collections.unmodifiableSet(new HashSet<ProvisionEntry>(entries));
     }
 
+    /**
+     * Obtain the version of this provision configuration
+     *
+     * @return the version of this provision configuration
+     */
     public long getVersion()
     {
         return version;
     }
 
+    /**
+     * Obtain the boot class of this provision configuration
+     *
+     * @return the boot class of this provision configuration
+     */
     public String getBootClass()
     {
         return bootClass;
     }
 
+    /**
+     * Obtain tne provision entries of this provision configuration
+     *
+     * @return tne provision entries of this provision configuration
+     */
     public Set<ProvisionEntry> getEntries()
     {
         return entries;

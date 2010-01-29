@@ -19,7 +19,7 @@ package org.livetribe.boot.protocol;
 /**
  * Provision provider interface.
  * <p/>
- * An inteface is used to decouple the higher level protocol from the lower
+ * An interface is used to decouple the higher level protocol from the lower
  * level wire protocol.  For example wire protocol implementations could
  * include HTTP, BEEP, ASN1, etc.
  * <p/>

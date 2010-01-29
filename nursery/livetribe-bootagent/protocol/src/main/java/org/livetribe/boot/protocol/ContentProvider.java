@@ -20,6 +20,9 @@ import java.io.InputStream;
 
 
 /**
+ * An instance of a <code>ContentProvider</code> provides content for a
+ * provision entry when the entry's name and version is supplied.
+ *
  * @version $Revision$ $Date$
  */
 public interface ContentProvider

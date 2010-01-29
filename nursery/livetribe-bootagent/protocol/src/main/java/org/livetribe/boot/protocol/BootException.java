@@ -17,24 +17,39 @@
 package org.livetribe.boot.protocol;
 
 /**
+ * An exception use to indicate a problem with interacting with provision or
+ * content providers.
+ *
  * @version $Revision$ $Date$
  */
 public final class BootException extends Exception
 {
+    /**
+     * {@inheritDoc}
+     */
     public BootException()
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public BootException(String message)
     {
         super(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public BootException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public BootException(Throwable cause)
     {
         super(cause);
