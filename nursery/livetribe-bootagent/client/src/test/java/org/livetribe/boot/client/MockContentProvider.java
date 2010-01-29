@@ -30,6 +30,6 @@ public class MockContentProvider implements ContentProvider
 {
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
-        return new ByteArrayInputStream(new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe});
+        return new ByteArrayInputStream(new byte[]{(byte)0xca, (byte)0xfe, (byte)0xba, (byte)0xbe});
     }
 }

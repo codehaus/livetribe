@@ -55,6 +55,11 @@ public class DefaultProvisionStore implements ProvisionStore
     private volatile ProvisionConfiguration nextProvisionConfiguration;
     private volatile ProvisionConfiguration previousProvisionConfiguration;
 
+    /**
+     * Class constructor specifying the file location of the provision store.
+     *
+     * @param root the file location of the provision store
+     */
     public DefaultProvisionStore(File root)
     {
         if (root == null) throw new IllegalArgumentException("File root must not be null");
@@ -72,33 +77,51 @@ public class DefaultProvisionStore implements ProvisionStore
         else if (!resources.isDirectory()) throw new IllegalArgumentException("Resources in root is not a directory");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getUuid()
     {
         return uuid;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setUuid(String uuid) throws ProvisionStoreException
     {
         this.uuid = uuid;
         saveUuid(uuid);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionConfiguration getCurrentProvisionDirective()
     {
         return currentProvisionConfiguration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionConfiguration getNextProvisionDirective()
     {
         return nextProvisionConfiguration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setNextProvisionDirective(ProvisionConfiguration provisionConfiguration) throws ProvisionStoreException
     {
         nextProvisionConfiguration = provisionConfiguration;
         saveNextProvisionDirective(nextProvisionConfiguration);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void store(ProvisionEntry provisionEntry, InputStream inputStream) throws ProvisionStoreException
     {
         File directory = new File(resources, provisionEntry.getName());
@@ -124,6 +147,9 @@ public class DefaultProvisionStore implements ProvisionStore
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void prepareNext() throws ProvisionStoreException
     {
         long currentVersion = currentProvisionConfiguration.getVersion();
@@ -154,6 +180,9 @@ public class DefaultProvisionStore implements ProvisionStore
         currentProvisionConfiguration = nextProvisionConfiguration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void commitNext() throws ProvisionStoreException
     {
         Set<ProvisionEntry> removeSet = new HashSet<ProvisionEntry>(currentProvisionConfiguration.getEntries());
@@ -170,12 +199,18 @@ public class DefaultProvisionStore implements ProvisionStore
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void rollbackNext() throws ProvisionStoreException
     {
         nextProvisionConfiguration = currentProvisionConfiguration;
         currentProvisionConfiguration = previousProvisionConfiguration;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public URL[] getClasspath() throws ProvisionStoreException
     {
         List<URL> classpath = new ArrayList<URL>(currentProvisionConfiguration.getEntries().size());
@@ -198,6 +233,11 @@ public class DefaultProvisionStore implements ProvisionStore
         return classpath.toArray(new URL[classpath.size()]);
     }
 
+    /**
+     * Load and return the uuid for this provision store instance.
+     *
+     * @return the uuid for this provision store instance
+     */
     private String loadUuid()
     {
         File file = new File(root, UUID_FILE);
@@ -216,6 +256,12 @@ public class DefaultProvisionStore implements ProvisionStore
         return DEFAULT_UUID;
     }
 
+    /**
+     * Save the uuid for this provision store instance.
+     *
+     * @param uuid the uuid for this provision store instance
+     * @throws ProvisionStoreException if an error occurs saving the uuid
+     */
     private void saveUuid(String uuid) throws ProvisionStoreException
     {
         File file = new File(root, UUID_FILE);
@@ -235,21 +281,43 @@ public class DefaultProvisionStore implements ProvisionStore
         }
     }
 
+    /**
+     * Load the current provision directive of this provision store instance.
+     *
+     * @return the current provision directive of this provision store instance
+     */
     private ProvisionConfiguration loadCurrentProvisionDirective()
     {
         return loadProvisionDirective(CURRENT_FILE);
     }
 
+    /**
+     * Load the next tentative provision directive of this provision store instance.
+     *
+     * @return the next tentative provision directive of this provision store instance
+     */
     private ProvisionConfiguration loadNextProvisionDirective()
     {
         return loadProvisionDirective(NEXT_FILE);
     }
 
-    private void saveCurrentProvisionDirective(ProvisionConfiguration nextProvisionConfiguration) throws ProvisionStoreException
+    /**
+     * Save the current provision directive of this provision store instance.
+     *
+     * @param provisionConfiguration the current provision directive of this provision store instance
+     * @throws ProvisionStoreException if an error occurs saving the current provision directive
+     */
+    private void saveCurrentProvisionDirective(ProvisionConfiguration provisionConfiguration) throws ProvisionStoreException
     {
-        saveProvisionDirective(nextProvisionConfiguration, CURRENT_FILE);
+        saveProvisionDirective(provisionConfiguration, CURRENT_FILE);
     }
 
+    /**
+     * Save the next tentative provision directive of this provision store instance.
+     *
+     * @param provisionConfiguration the next tentative provision directive of this provision store instance
+     * @throws ProvisionStoreException if an error occurs saving the next tentative provision directive
+     */
     private void saveNextProvisionDirective(ProvisionConfiguration provisionConfiguration) throws ProvisionStoreException
     {
         saveProvisionDirective(provisionConfiguration, NEXT_FILE);
@@ -275,10 +343,10 @@ public class DefaultProvisionStore implements ProvisionStore
             {
                 properties.load(new FileInputStream(file));
 
-                long version = Long.valueOf((String) properties.get(VERSION_KEY));
+                long version = Long.valueOf((String)properties.get(VERSION_KEY));
 
                 if (!properties.contains(BOOT_CLASS_KEY)) return new ProvisionConfiguration();
-                String bootClass = (String) properties.get(BOOT_CLASS_KEY);
+                String bootClass = (String)properties.get(BOOT_CLASS_KEY);
 
                 Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
                 int count = 0;
@@ -288,7 +356,7 @@ public class DefaultProvisionStore implements ProvisionStore
 
                     if (!properties.contains(key)) break;
 
-                    String[] tokens = ((String) properties.get(key)).split(":");
+                    String[] tokens = ((String)properties.get(key)).split(":");
 
                     if (tokens.length != 2) return new ProvisionConfiguration();
 
@@ -308,6 +376,13 @@ public class DefaultProvisionStore implements ProvisionStore
         return new ProvisionConfiguration();
     }
 
+    /**
+     * Save the <code>ProvisionDirective</code> to a properties file.
+     *
+     * @param configuration the provision configuration to be saved
+     * @param name          the name of the properties file
+     * @throws ProvisionStoreException if there was an error saving the provision configuration
+     */
     private void saveProvisionDirective(ProvisionConfiguration configuration, String name) throws ProvisionStoreException
     {
         File file = new File(root, name);

@@ -17,24 +17,39 @@
 package org.livetribe.boot.client;
 
 /**
+ * A <code>ProvisionStoreException</code> is thrown to indicate that an error
+ * occurred when interacting with a provision store.
+ *
  * @version $Revision$ $Date$
  */
 public class ProvisionStoreException extends Exception
 {
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionStoreException()
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionStoreException(String message)
     {
         super(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionStoreException(String message, Throwable cause)
     {
         super(message, cause);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ProvisionStoreException(Throwable cause)
     {
         super(cause);

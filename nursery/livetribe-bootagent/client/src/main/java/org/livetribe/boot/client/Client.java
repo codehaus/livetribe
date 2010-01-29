@@ -190,7 +190,7 @@ public class Client
             {
                 if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
 
-                handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
+                handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
 
                 this.period = period;
             }
@@ -258,7 +258,7 @@ public class Client
 
                 provisionCheck.run();
 
-                handle = (Runnable) scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
+                handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
 
                 setState(State.RUNNING);
             }
@@ -330,7 +330,7 @@ public class Client
 
             Thread.currentThread().setContextClassLoader(classLoader);
 
-            @SuppressWarnings({"unchecked"}) Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
+            @SuppressWarnings({"unchecked"}) Class<LifeCycle> bootClass = (Class<LifeCycle>)classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
 
             lifeCycleInstance = bootClass.newInstance();
 
@@ -415,7 +415,7 @@ public class Client
 
                 if (response instanceof DoNothing) return;
 
-                YouShould should = (YouShould) response;
+                YouShould should = (YouShould)response;
 
                 if (should.getVersion() == currentVersion) return;
 
@@ -442,7 +442,7 @@ public class Client
                     URL[] urls = provisionStore.getClasspath();
                     URLClassLoader classLoader = new URLClassLoader(urls, parentClassLoader);
 
-                    @SuppressWarnings({"unchecked"}) Class<LifeCycle> bootClass = (Class<LifeCycle>) classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
+                    @SuppressWarnings({"unchecked"}) Class<LifeCycle> bootClass = (Class<LifeCycle>)classLoader.loadClass(provisionStore.getCurrentProvisionDirective().getBootClass());
 
                     bootClass.newInstance();
 
@@ -451,7 +451,7 @@ public class Client
                      */
                     if (response instanceof YouMust)
                     {
-                        YouMust must = (YouMust) response;
+                        YouMust must = (YouMust)response;
 
                         if (must.isRestart())
                         {

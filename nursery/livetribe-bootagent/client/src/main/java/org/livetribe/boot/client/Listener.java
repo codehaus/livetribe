@@ -30,26 +30,30 @@ public interface Listener
 {
     /**
      * A problem of some sort occurred.
+     *
      * @param message an explanation as to what happened
      */
     public void warning(String message);
 
     /**
      * A problem of some sort occurred.
-     * @param message an explanation as to what happened
+     *
+     * @param message   an explanation as to what happened
      * @param throwable the exception that caused the problem
      */
     public void warning(String message, Throwable throwable);
 
     /**
      * An unrecoverable problem occurred.
+     *
      * @param message an explanation as to what happened
      */
     public void error(String message);
 
     /**
      * An unrecoverable problem occurred.
-     * @param message an explanation as to what happened
+     *
+     * @param message   an explanation as to what happened
      * @param throwable the exception that caused the problem
      */
     public void error(String message, Throwable throwable);

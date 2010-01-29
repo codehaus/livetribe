@@ -42,7 +42,7 @@ public class PropertiesBootServerTest extends TestCase
         ProvisionProvider provisionProvider = new PropertiesProvisionProvider(new File(bootDirectory, "directives.properties"));
         ContentProvider contentProvider = new FileContentProvider(new File(bootDirectory, "resources"));
 
-        YouShould directive = (YouShould) provisionProvider.hello("", 6);
+        YouShould directive = (YouShould)provisionProvider.hello("", 6);
 
         assertNotNull(directive);
         assertEquals(10, directive.getVersion());
@@ -61,7 +61,7 @@ public class PropertiesBootServerTest extends TestCase
             assertTrue(count > 0);
         }
 
-        directive = (YouShould) provisionProvider.hello("special", 2);
+        directive = (YouShould)provisionProvider.hello("special", 2);
 
         assertNotNull(directive);
         assertEquals(5, directive.getVersion());

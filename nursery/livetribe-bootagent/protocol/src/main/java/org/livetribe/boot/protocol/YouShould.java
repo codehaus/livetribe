@@ -80,7 +80,7 @@ public class YouShould extends ProvisionDirective
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        YouShould youShould = (YouShould) o;
+        YouShould youShould = (YouShould)o;
 
         return version == youShould.version && bootClass.equals(youShould.bootClass);
     }
@@ -89,7 +89,7 @@ public class YouShould extends ProvisionDirective
     public int hashCode()
     {
         int result;
-        result = (int) (version ^ (version >>> 32));
+        result = (int)(version ^ (version >>> 32));
         result = 31 * result + bootClass.hashCode();
         return result;
     }

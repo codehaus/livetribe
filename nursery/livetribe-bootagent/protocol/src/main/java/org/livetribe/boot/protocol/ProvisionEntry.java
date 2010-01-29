@@ -64,7 +64,7 @@ public final class ProvisionEntry
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProvisionEntry that = (ProvisionEntry) o;
+        ProvisionEntry that = (ProvisionEntry)o;
 
         return name.equals(that.name) && version == that.version;
     }
@@ -74,7 +74,7 @@ public final class ProvisionEntry
     {
         int result;
         result = name.hashCode();
-        result = 31 * result + (int) (version ^ (version >>> 32));
+        result = 31 * result + (int)(version ^ (version >>> 32));
         return result;
     }
 

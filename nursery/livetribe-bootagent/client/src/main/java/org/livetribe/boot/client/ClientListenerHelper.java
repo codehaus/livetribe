@@ -23,22 +23,37 @@ import org.livetribe.boot.protocol.ProvisionDirective;
 
 
 /**
+ * A helper class to manage listeners and event delivery.
+ *
  * @version $Revision$ $Date$
  */
 public class ClientListenerHelper implements ClientListener
 {
     private final List<ClientListener> listeners = new CopyOnWriteArrayList<ClientListener>();
 
+    /**
+     * Add a listener to the collection of mangaged listeners
+     *
+     * @param listener the listener to be added
+     */
     public void addListener(ClientListener listener)
     {
         listeners.add(listener);
     }
 
+    /**
+     * Remove a listener from the collection of managed listeners
+     *
+     * @param listener the listener to be removed
+     */
     public void removeListener(ClientListener listener)
     {
         listeners.remove(listener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stateChange(State oldState, State newState)
     {
         for (ClientListener listener : listeners)
@@ -53,6 +68,9 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void provisionCheck(String uuid, long version)
     {
         for (ClientListener listener : listeners)
@@ -67,6 +85,9 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void provisionDirective(ProvisionDirective directive)
     {
         for (ClientListener listener : listeners)
@@ -81,6 +102,9 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void warning(String message)
     {
         for (ClientListener listener : listeners)
@@ -95,6 +119,9 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void warning(String message, Throwable throwable)
     {
         for (ClientListener listener : listeners)
@@ -109,6 +136,9 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void error(String message)
     {
         for (ClientListener listener : listeners)
@@ -123,6 +153,9 @@ public class ClientListenerHelper implements ClientListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void error(String message, Throwable throwable)
     {
         for (ClientListener listener : listeners)

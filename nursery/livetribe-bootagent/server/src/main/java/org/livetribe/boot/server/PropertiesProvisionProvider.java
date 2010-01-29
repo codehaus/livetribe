@@ -133,7 +133,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
 
         if (LOGGER.isLoggable(Level.FINEST))
         {
-            @SuppressWarnings({"unchecked"}) Enumeration<String> keys = (Enumeration<String>) properties.propertyNames();
+            @SuppressWarnings({"unchecked"}) Enumeration<String> keys = (Enumeration<String>)properties.propertyNames();
             while (keys.hasMoreElements())
             {
                 String key = keys.nextElement();
@@ -168,11 +168,11 @@ public class PropertiesProvisionProvider implements ProvisionProvider
 
         assert Thread.holdsLock(this);
 
-        final long v = Long.valueOf((String) properties.get(prefix + VERSION_KEY));
+        final long v = Long.valueOf((String)properties.get(prefix + VERSION_KEY));
 
         if (v == version) return new DoNothing();
 
-        String bootClass = (String) properties.get(prefix + BOOT_CLASS_KEY);
+        String bootClass = (String)properties.get(prefix + BOOT_CLASS_KEY);
         Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
         int count = 0;
         while (true)
@@ -181,7 +181,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
 
             if (!properties.containsKey(key)) break;
 
-            String[] tokens = ((String) properties.get(key)).split(":");
+            String[] tokens = ((String)properties.get(key)).split(":");
 
             if (tokens.length != 2) throw new BootException("Malformed entry for " + key);
 

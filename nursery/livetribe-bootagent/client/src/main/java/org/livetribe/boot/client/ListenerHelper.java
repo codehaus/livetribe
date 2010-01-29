@@ -21,28 +21,37 @@ import java.util.List;
 
 
 /**
+ * A helper class to manage listeners and event delivery.
+ *
  * @version $Revision$ $Date$
  */
 public class ListenerHelper implements Listener
 {
     private final List<Listener> listeners = new ArrayList<Listener>();
 
-    protected List<Listener> getListeners()
-    {
-        return listeners;
-    }
-
+    /**
+     * Add a listener to the collection of mangaged listeners
+     *
+     * @param listener the listener to be added
+     */
     public synchronized void addListener(Listener listener)
     {
         listeners.add(listener);
     }
 
+    /**
+     * Remove a listener from the collection of managed listeners
+     *
+     * @param listener the listener to be removed
+     */
     public synchronized void removeListener(Listener listener)
     {
         listeners.remove(listener);
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void warning(String message)
     {
         for (Listener listener : listeners)
@@ -57,7 +66,9 @@ public class ListenerHelper implements Listener
         }
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void warning(String message, Throwable throwable)
     {
         for (Listener listener : listeners)
@@ -72,7 +83,9 @@ public class ListenerHelper implements Listener
         }
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void error(String message)
     {
         for (Listener listener : listeners)
@@ -87,7 +100,9 @@ public class ListenerHelper implements Listener
         }
     }
 
-    @SuppressWarnings({"EmptyCatchBlock"})
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void error(String message, Throwable throwable)
     {
         for (Listener listener : listeners)

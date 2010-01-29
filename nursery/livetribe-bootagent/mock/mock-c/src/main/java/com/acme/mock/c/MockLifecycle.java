@@ -47,7 +47,7 @@ public class MockLifecycle implements LifeCycle
 
         try
         {
-            service = (Service) Class.forName("com.acme.mock.b.MockService").newInstance();
+            service = (Service)Class.forName("com.acme.mock.b.MockService").newInstance();
             started = "test mocked by B".equals(service.test("test"));
         }
         catch (InstantiationException ie)

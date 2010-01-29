@@ -93,7 +93,7 @@ public class DefaultProvisionStoreTest extends TestCase
         {
         }
 
-        store.store(new ProvisionEntry("missing", 32), new ByteArrayInputStream(new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe}));
+        store.store(new ProvisionEntry("missing", 32), new ByteArrayInputStream(new byte[]{(byte)0xca, (byte)0xfe, (byte)0xba, (byte)0xbe}));
 
         store.prepareNext();
         store.commitNext();
@@ -106,17 +106,17 @@ public class DefaultProvisionStoreTest extends TestCase
         byte[] buffer = new byte[1024];
 
         assertEquals(4, inputStream.read(buffer));
-        assertEquals((byte) 0xca, buffer[0]);
-        assertEquals((byte) 0xfe, buffer[1]);
-        assertEquals((byte) 0xba, buffer[2]);
-        assertEquals((byte) 0xbe, buffer[3]);
+        assertEquals((byte)0xca, buffer[0]);
+        assertEquals((byte)0xfe, buffer[1]);
+        assertEquals((byte)0xba, buffer[2]);
+        assertEquals((byte)0xbe, buffer[3]);
 
         entries = new HashSet<ProvisionEntry>();
         entries.add(new ProvisionEntry("nextgen", 21));
 
         store.setNextProvisionDirective(new ProvisionConfiguration(456, "com.acme.boot.ServiceLifeCycle", entries));
 
-        store.store(new ProvisionEntry("nextgen", 21), new ByteArrayInputStream(new byte[]{(byte) 0xba, (byte) 0xbe, (byte) 0xca, (byte) 0xfe}));
+        store.store(new ProvisionEntry("nextgen", 21), new ByteArrayInputStream(new byte[]{(byte)0xba, (byte)0xbe, (byte)0xca, (byte)0xfe}));
 
         store.prepareNext();
 
@@ -127,10 +127,10 @@ public class DefaultProvisionStoreTest extends TestCase
         inputStream = classpath[0].openConnection().getInputStream();
 
         assertEquals(4, inputStream.read(buffer));
-        assertEquals((byte) 0xba, buffer[0]);
-        assertEquals((byte) 0xbe, buffer[1]);
-        assertEquals((byte) 0xca, buffer[2]);
-        assertEquals((byte) 0xfe, buffer[3]);
+        assertEquals((byte)0xba, buffer[0]);
+        assertEquals((byte)0xbe, buffer[1]);
+        assertEquals((byte)0xca, buffer[2]);
+        assertEquals((byte)0xfe, buffer[3]);
     }
 
     public void setUp()
