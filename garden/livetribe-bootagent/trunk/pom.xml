@@ -56,6 +56,7 @@
         <module>http</module>
         <module>protocol</module>
         <module>server</module>
+        <module>startup</module>
     </modules>
 
     <properties>
@@ -77,6 +78,12 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>commons-daemon</groupId>
+                <artifactId>commons-daemon</artifactId>
+                <version>1.0.1</version>
+            </dependency>
 
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -155,6 +162,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-web</artifactId>
                 <version>${springVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>tanukisoft</groupId>
+                <artifactId>wrapper</artifactId>
+                <version>3.2.3</version>
             </dependency>
 
         </dependencies>
