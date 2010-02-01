@@ -54,9 +54,9 @@
         <module>api</module>
         <module>client</module>
         <module>http</module>
-        <module>mock</module>
         <module>protocol</module>
         <module>server</module>
+        <module>tests</module>
     </modules>
 
     <properties>

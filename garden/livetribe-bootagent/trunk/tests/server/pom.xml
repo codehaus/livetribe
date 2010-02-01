@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.livetribe.boot</groupId>
+        <artifactId>livetribe-boot-project</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>livetribe-boot-server</artifactId>
+    <name>LiveTribe :: Boot Agent :: Server</name>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.livetribe.boot</groupId>
+                                    <artifactId>livetribe-boot-mock-a</artifactId>
+                                    <version>${bootAgentVersion}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/test-classes/boot/resources/mock-a</outputDirectory>
+                                    <destFileName>1.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.livetribe.boot</groupId>
+                                    <artifactId>livetribe-boot-mock-b</artifactId>
+                                    <version>${bootAgentVersion}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/test-classes/boot/resources/mock-b</outputDirectory>
+                                    <destFileName>1.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.livetribe.boot</groupId>
+                                    <artifactId>livetribe-boot-mock-c</artifactId>
+                                    <version>${bootAgentVersion}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/test-classes/boot/resources/mock-c</outputDirectory>
+                                    <destFileName>1.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock-a</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock-b</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-mock-c</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-protocol</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
