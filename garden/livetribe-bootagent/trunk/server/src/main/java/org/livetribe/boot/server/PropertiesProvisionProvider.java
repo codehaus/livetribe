@@ -23,8 +23,9 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.DoNothing;
@@ -45,7 +46,7 @@ import org.livetribe.boot.protocol.YouShould;
  * <dd>the boot class to instantiate and make lifecycle calls to</dd>
  * <dt>directive.x</dt>
  * <dd>a provisioning entry in the format of &lt;name&gt;:&lt;version&gt;.  The order of
- * these entries, specified by the conscutive numbers ".x" indicate the order
+ * these entries, specified by the consecutive numbers ".x" indicate the order
  * to be used when constructing the classpath when the boot class is
  * instantiated and started.</dd>
  * <dt>required</dt>
@@ -96,8 +97,7 @@ import org.livetribe.boot.protocol.YouShould;
  */
 public class PropertiesProvisionProvider implements ProvisionProvider
 {
-    private final static String CLASS_NAME = PropertiesProvisionProvider.class.getName();
-    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesProvisionProvider.class);
     private final static String REQUIRED_KEY = "required";
     private final static String RESTART_KEY = "restart";
     private final static String VERSION_KEY = "version";
@@ -114,7 +114,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
 
         this.file = file;
 
-        if (LOGGER.isLoggable(Level.CONFIG)) LOGGER.config("file: " + file);
+        LOGGER.trace("file: {}", file);
 
         reload();
     }
@@ -126,22 +126,19 @@ public class PropertiesProvisionProvider implements ProvisionProvider
      */
     public synchronized void reload() throws IOException
     {
-        LOGGER.entering(CLASS_NAME, "reload");
-
         properties.clear();
         properties.load(new FileInputStream(file));
 
-        if (LOGGER.isLoggable(Level.FINEST))
+        if (LOGGER.isTraceEnabled())
         {
+            LOGGER.trace("reload");
             @SuppressWarnings({"unchecked"}) Enumeration<String> keys = (Enumeration<String>)properties.propertyNames();
             while (keys.hasMoreElements())
             {
                 String key = keys.nextElement();
-                LOGGER.finest(key + " = " + properties.getProperty(key));
+                LOGGER.trace("{} = {}", key, properties.getProperty(key));
             }
         }
-
-        LOGGER.exiting(CLASS_NAME, "reload");
     }
 
     /**
@@ -149,7 +146,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
      */
     public synchronized ProvisionDirective hello(String uuid, long version) throws BootException
     {
-        LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
+        LOGGER.trace("hello({}, {})", uuid, version);
 
         ProvisionDirective directive;
 
@@ -157,14 +154,14 @@ public class PropertiesProvisionProvider implements ProvisionProvider
         else if (properties.containsKey(VERSION_KEY)) directive = load("", version);
         else throw new BootException("No directives found for " + uuid);
 
-        LOGGER.exiting(CLASS_NAME, "hello", directive);
+        LOGGER.trace("hello = {}", directive);
 
         return directive;
     }
 
     protected ProvisionDirective load(String prefix, long version) throws BootException
     {
-        LOGGER.entering(CLASS_NAME, "load", new Object[]{prefix, version});
+        LOGGER.trace("load({}, {})", prefix, version);
 
         assert Thread.holdsLock(this);
 
@@ -192,7 +189,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
         if (properties.containsKey(prefix + REQUIRED_KEY)) directive = new YouMust(v, bootClass, entries, properties.containsKey(prefix + RESTART_KEY));
         else directive = new YouShould(v, bootClass, entries);
 
-        LOGGER.exiting(CLASS_NAME, "load", directive);
+        LOGGER.trace("load = {}", directive);
 
         return directive;
     }

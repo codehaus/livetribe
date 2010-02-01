@@ -61,7 +61,7 @@
 
     <properties>
         <jettyVersion>6.1.7</jettyVersion>
-        <slf4jVersion>1.4.3</slf4jVersion>
+        <slf4jVersion>1.5.8</slf4jVersion>
         <springVersion>2.5.1</springVersion>
     </properties>
 
