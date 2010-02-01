@@ -56,7 +56,6 @@
         <module>http</module>
         <module>protocol</module>
         <module>server</module>
-        <module>tests</module>
     </modules>
 
     <properties>
@@ -173,5 +172,17 @@
             <url>http://dist.codehaus.org/livetribe/maven/m2-snapshots</url>
         </repository>
     </repositories>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <modules>
+                <module>tests</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>

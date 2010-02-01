@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>livetribe-boot-mock-a</artifactId>
-    <name>LiveTribe :: Boot Agent :: Mock :: Provision A</name>
+    <name>LiveTribe :: Boot Agent :: Tests :: Mock :: Provision A</name>
     <packaging>jar</packaging>
 
     <build/>
