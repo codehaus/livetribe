@@ -105,6 +105,12 @@
 
             <dependency>
                 <groupId>org.livetribe.boot</groupId>
+                <artifactId>livetribe-boot-http-client</artifactId>
+                <version>${pom.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.livetribe.boot</groupId>
                 <artifactId>livetribe-boot-mock</artifactId>
                 <version>${pom.version}</version>
             </dependency>
