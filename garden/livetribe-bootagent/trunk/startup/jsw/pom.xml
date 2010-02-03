@@ -18,8 +18,14 @@
 
         <dependency>
             <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-protocol</artifactId>
+            <artifactId>livetribe-boot-client</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-http-client</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>tanukisoft</groupId>

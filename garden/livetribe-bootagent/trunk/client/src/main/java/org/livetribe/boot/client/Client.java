@@ -246,6 +246,20 @@ public class Client
      */
     public void start()
     {
+        start(true);
+    }
+
+    /**
+     * Start the Boot Agent Provisioning Client.
+     * <p/>
+     * A provisioning check is immediately run, if <var>runCheck</var> is
+     * <code>true</code>, which results in the provisioned entries being
+     * started.  This method can potentially take a very long time to complete.
+     *
+     * @param runCheck a provisioning check is immediately if true
+     */
+    public void start(boolean runCheck)
+    {
         synchronized (lock)
         {
             if (state == State.STARTING || state == State.RUNNING) return;
@@ -256,7 +270,7 @@ public class Client
             {
                 ProvisionCheck provisionCheck = new ProvisionCheck();
 
-                provisionCheck.run();
+                if (runCheck) provisionCheck.run();
 
                 handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
 
