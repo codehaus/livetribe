@@ -86,6 +86,11 @@
             <artifactId>livetribe-boot-protocol</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.livetribe.boot</groupId>
+            <artifactId>livetribe-boot-server</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
