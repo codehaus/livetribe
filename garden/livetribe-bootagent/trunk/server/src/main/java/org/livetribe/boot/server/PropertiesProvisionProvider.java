@@ -23,9 +23,8 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.DoNothing;
@@ -97,7 +96,8 @@ import org.livetribe.boot.protocol.YouShould;
  */
 public class PropertiesProvisionProvider implements ProvisionProvider
 {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesProvisionProvider.class);
+    private final static String CLASS_NAME = PropertiesProvisionProvider.class.getName();
+    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private final static String REQUIRED_KEY = "required";
     private final static String RESTART_KEY = "restart";
     private final static String VERSION_KEY = "version";
@@ -114,7 +114,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
 
         this.file = file;
 
-        LOGGER.trace("file: {}", file);
+        if (LOGGER.isLoggable(Level.CONFIG)) LOGGER.config("file: " + file);
 
         reload();
     }
@@ -126,19 +126,22 @@ public class PropertiesProvisionProvider implements ProvisionProvider
      */
     public synchronized void reload() throws IOException
     {
+        LOGGER.entering(CLASS_NAME, "reload");
+
         properties.clear();
         properties.load(new FileInputStream(file));
 
-        if (LOGGER.isTraceEnabled())
+        if (LOGGER.isLoggable(Level.FINEST))
         {
-            LOGGER.trace("reload");
             @SuppressWarnings({"unchecked"}) Enumeration<String> keys = (Enumeration<String>)properties.propertyNames();
             while (keys.hasMoreElements())
             {
                 String key = keys.nextElement();
-                LOGGER.trace("{} = {}", key, properties.getProperty(key));
+                LOGGER.finest(key + " = " + properties.getProperty(key));
             }
         }
+
+        LOGGER.exiting(CLASS_NAME, "reload");
     }
 
     /**
@@ -146,7 +149,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
      */
     public synchronized ProvisionDirective hello(String uuid, long version) throws BootException
     {
-        LOGGER.trace("hello({}, {})", uuid, version);
+        LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
 
         ProvisionDirective directive;
 
@@ -154,14 +157,14 @@ public class PropertiesProvisionProvider implements ProvisionProvider
         else if (properties.containsKey(VERSION_KEY)) directive = load("", version);
         else throw new BootException("No directives found for " + uuid);
 
-        LOGGER.trace("hello = {}", directive);
+        LOGGER.exiting(CLASS_NAME, "hello", directive);
 
         return directive;
     }
 
     protected ProvisionDirective load(String prefix, long version) throws BootException
     {
-        LOGGER.trace("load({}, {})", prefix, version);
+        LOGGER.entering(CLASS_NAME, "load", new Object[]{prefix, version});
 
         assert Thread.holdsLock(this);
 
@@ -189,7 +192,7 @@ public class PropertiesProvisionProvider implements ProvisionProvider
         if (properties.containsKey(prefix + REQUIRED_KEY)) directive = new YouMust(v, bootClass, entries, properties.containsKey(prefix + RESTART_KEY));
         else directive = new YouShould(v, bootClass, entries);
 
-        LOGGER.trace("load = {}", directive);
+        LOGGER.exiting(CLASS_NAME, "load", directive);
 
         return directive;
     }

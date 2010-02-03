@@ -19,9 +19,8 @@ package org.livetribe.boot.server;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.livetribe.boot.protocol.BootException;
 import org.livetribe.boot.protocol.ContentProvider;
@@ -51,7 +50,8 @@ import org.livetribe.boot.protocol.ContentProvider;
  */
 public class FileContentProvider implements ContentProvider
 {
-    private final static Logger LOGGER = LoggerFactory.getLogger(FileContentProvider.class);
+    private final static String CLASS_NAME = FileContentProvider.class.getName();
+    private final static Logger LOGGER = Logger.getLogger(CLASS_NAME);
     private final File resources;
 
     /**
@@ -65,7 +65,7 @@ public class FileContentProvider implements ContentProvider
         if (resources == null) throw new IllegalArgumentException("Directory cannot be null");
         if (!resources.exists() || !resources.isDirectory()) throw new IllegalArgumentException("Directory does not exist or is a file");
 
-        LOGGER.trace("resources: {}", resources);
+        if (LOGGER.isLoggable(Level.CONFIG)) LOGGER.config("resources: " + resources);
 
         this.resources = resources;
     }
@@ -75,7 +75,7 @@ public class FileContentProvider implements ContentProvider
      */
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
-        LOGGER.trace("pleaseProvide({}, {})", name, version);
+        LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
 
         if (name == null) throw new BootException("Content name cannot be null");
         if (version < 0) throw new BootException("Content version cannot be negative");
@@ -90,7 +90,7 @@ public class FileContentProvider implements ContentProvider
 
         try
         {
-            LOGGER.trace("pleaseProvide = {}", resource.toURL());
+            LOGGER.exiting(CLASS_NAME, "pleaseProvide", resource.toURL());
 
             return resource.toURL().openStream();
         }
