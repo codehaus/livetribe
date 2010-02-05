@@ -27,6 +27,15 @@ import org.livetribe.boot.protocol.ProvisionProvider;
 
 
 /**
+ * Instances of <code>OverrideProvider</code> provide a mechanism to override
+ * a base provision and content provider.  This is usually done in an emergency
+ * situation, e.g. the original base providers have been compromised.
+ * <p/>
+ * When the override provision provider supplies a provision directive that is
+ * not an instance of <code>DoNothing</code> then the override providers are
+ * consulted until the override provision provider supplies an instance of
+ * <code>DoNothing</code>.
+ *
  * @version $Revision$ $Date$
  */
 public class OverrideProvider implements ProvisionProvider, ContentProvider
@@ -39,6 +48,15 @@ public class OverrideProvider implements ProvisionProvider, ContentProvider
     private final ContentProvider overrideContentProvider;
     private volatile boolean override = false;
 
+    /**
+     * Create an instance of <code>OverrideProvider</code> using a set of base
+     * providers and override providers.
+     *
+     * @param provisionProvider         the base provision provider
+     * @param contentProvider           the base content provider
+     * @param overrideProvisionProvider the override provision provider
+     * @param overrideContentProvider   the override content provider
+     */
     public OverrideProvider(ProvisionProvider provisionProvider, ContentProvider contentProvider, ProvisionProvider overrideProvisionProvider, ContentProvider overrideContentProvider)
     {
         if (provisionProvider == null) throw new IllegalArgumentException("Provision provider is null");
@@ -52,6 +70,26 @@ public class OverrideProvider implements ProvisionProvider, ContentProvider
         this.overrideContentProvider = overrideContentProvider;
     }
 
+    /**
+     * The client introduces itself to the server, identifying itself by using
+     * a UUID.  The client also provides the version of its currently accepted
+     * provision directive.
+     * <p/>
+     * When the override provision provider supplies a provision directive that is
+     * not an instance of <code>DoNothing</code> then the override providers are
+     * consulted until the override provision provider supplies an instance of
+     * <code>DoNothing</code>.
+     * <p/>
+     * Note: this class assumes that <code> #hello(String, long)</code> will be
+     * called first to place this provider into an override state;  It also
+     * assumes that ta call to <code> #hello(String, long)</code> will take
+     * this instance out of an override state.
+     *
+     * @param uuid    the UUID that should uniquely identify the client
+     * @param version the last version that the client was provisioned with
+     * @return a provisioning directive
+     * @throws BootException if there is a problem obtaining the provisioning directive
+     */
     public ProvisionDirective hello(String uuid, long version) throws BootException
     {
         LOGGER.entering(CLASS_NAME, "hello", new Object[]{uuid, version});
@@ -75,6 +113,25 @@ public class OverrideProvider implements ProvisionProvider, ContentProvider
         return directive;
     }
 
+    /**
+     * Obtain a specific version of content with a given name.  This name
+     * and version were obtained from a provision directive.
+     * <p/>
+     * When the override provision provider supplies a provision directive that is
+     * not an instance of <code>DoNothing</code> then the override providers are
+     * consulted until the override provision provider supplies an instance of
+     * <code>DoNothing</code>.
+     * <p/>
+     * Note: this class assumes that {@link #hello(String, long)} will be
+     * called first to place this provider into an override state;  It also
+     * assumes that ta call to {@link #hello(String, long)} will take this
+     * instance out of an override state.
+     *
+     * @param name    the name of the content
+     * @param version the version of the content
+     * @return an input stream of the content's contents
+     * @throws BootException if there is a problem obtaining the content
+     */
     public InputStream pleaseProvide(String name, long version) throws BootException
     {
         LOGGER.entering(CLASS_NAME, "pleaseProvide", new Object[]{name, version});
