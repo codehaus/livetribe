@@ -48,20 +48,20 @@ public class OverrideProviderTest
         assertTrue(overrideProvider.hello("", 0) == base);
         assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'b');
         assertTrue(overrideProvider.hello("", 0) == base);
-        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'b');
+        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'a');
 
         overrideProvisionProvider.setDirective(override);
 
         assertTrue(overrideProvider.hello("", 0) == override);
         assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'o');
         assertTrue(overrideProvider.hello("", 0) == override);
-        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'o');
+        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'v');
 
         overrideProvisionProvider.setDirective(new DoNothing());
 
         assertTrue(overrideProvider.hello("", 0) == base);
-        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'b');
+        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 's');
         assertTrue(overrideProvider.hello("", 0) == base);
-        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'b');
+        assertTrue(overrideProvider.pleaseProvide("", 0).read() == 'e');
     }
 }
