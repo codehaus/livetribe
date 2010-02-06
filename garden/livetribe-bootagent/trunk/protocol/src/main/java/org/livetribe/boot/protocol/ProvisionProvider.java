@@ -34,7 +34,8 @@ public interface ProvisionProvider
 {
     /**
      * The client introduces itself to the server, identifying itself by using
-     * a UUID.  The client also provides the version of its current
+     * a UUID.  The client also provides the version of its currently accepted
+     * provision directive.
      *
      * @param uuid    the UUID that should uniquely identify the client
      * @param version the last version that the client was provisioned with
