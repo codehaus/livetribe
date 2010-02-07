@@ -254,9 +254,10 @@ public class Client
      * <p/>
      * A provisioning check is immediately run, if <var>runCheck</var> is
      * <code>true</code>, which results in the provisioned entries being
-     * started.  This method can potentially take a very long time to complete.
+     * started.  When <var>runCheck</var> is <code>true</code>, this method
+     * can potentially take a very long time to complete.
      *
-     * @param runCheck a provisioning check is immediately if true
+     * @param runCheck a provisioning check is performed immediately if <code>true</code>
      */
     public void start(boolean runCheck)
     {
