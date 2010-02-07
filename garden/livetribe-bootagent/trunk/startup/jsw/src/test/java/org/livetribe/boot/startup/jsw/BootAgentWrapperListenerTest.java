@@ -28,7 +28,7 @@ public class BootAgentWrapperListenerTest
     @Test
     public void test() throws Exception
     {
-        BootAgentWrapperListener.main(new String[]{"-url", "http://livetribe.s3.amazonaws.com/boot/",
+        BootAgentWrapperListener.main(new String[]{"-url", "http://boot.livetribe.org/boot/",
                                                    "-root", "./target",
                                                    "-period", "1"});
 

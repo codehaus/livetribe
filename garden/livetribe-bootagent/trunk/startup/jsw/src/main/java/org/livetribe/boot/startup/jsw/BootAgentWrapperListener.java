@@ -19,6 +19,7 @@ package org.livetribe.boot.startup.jsw;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ import org.livetribe.boot.client.Client;
 import org.livetribe.boot.client.ClientListener;
 import org.livetribe.boot.client.DefaultProvisionStore;
 import org.livetribe.boot.client.ProvisionStore;
+import org.livetribe.boot.client.ProvisionStoreException;
 import org.livetribe.boot.client.State;
 import org.livetribe.boot.http.HttpContentProvider;
 import org.livetribe.boot.http.HttpProvisionProvider;
@@ -80,6 +82,13 @@ public class BootAgentWrapperListener implements WrapperListener
             ContentProvider contentProvider = new HttpContentProvider(new URL(url, "content/"));
             ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(threadPoolSize);
             ProvisionStore provisionStore = new DefaultProvisionStore(storeRoot);
+
+            String uuid = provisionStore.getUuid();
+            if (DefaultProvisionStore.DEFAULT_UUID.equals(uuid))
+            {
+                provisionStore.setUuid(UUID.randomUUID().toString());
+                LOGGER.info("Setting UUID to " + provisionStore.getUuid());
+            }
 
             client = new Client(provisionProvider, contentProvider, pool, provisionStore);
 
@@ -133,7 +142,12 @@ public class BootAgentWrapperListener implements WrapperListener
                 }
             });
 
-            client.start(true);
+            client.start();
+        }
+        catch (ProvisionStoreException pse)
+        {
+            result = 1;
+            LOGGER.log(Level.SEVERE, "Could not interact with provision store at '" + storeRoot + "'", pse);
         }
         catch (MalformedURLException mue)
         {

@@ -41,7 +41,7 @@ import org.livetribe.boot.protocol.ProvisionEntry;
  */
 public class DefaultProvisionStore implements ProvisionStore
 {
-    private final static String DEFAULT_UUID = "org.livetribe.boot.uuid.unset";
+    public final static String DEFAULT_UUID = "org.livetribe.boot.uuid.unset";
     private final static String UUID_FILE = "uuid";
     private final static String CURRENT_FILE = "current.properties";
     private final static String NEXT_FILE = "next.properties";
@@ -208,6 +208,7 @@ public class DefaultProvisionStore implements ProvisionStore
     {
         nextProvisionConfiguration = currentProvisionConfiguration;
         currentProvisionConfiguration = previousProvisionConfiguration;
+        new File(root, NEXT_FILE).delete();
     }
 
     /**

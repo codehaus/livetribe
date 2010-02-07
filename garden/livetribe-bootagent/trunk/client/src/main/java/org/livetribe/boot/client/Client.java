@@ -157,8 +157,6 @@ public class Client
      */
     protected void setState(State state)
     {
-        assert Thread.holdsLock(lock);
-
         listeners.stateChange(this.state, state);
         this.state = state;
     }
@@ -210,16 +208,6 @@ public class Client
     }
 
     /**
-     * Protected access to the client's internal lock for client extensions
-     *
-     * @return the lock
-     */
-    protected Object getLock()
-    {
-        return lock;
-    }
-
-    /**
      * Add a client listener which monitors changes in this client.
      *
      * @param listener the client listener to added
@@ -241,27 +229,8 @@ public class Client
 
     /**
      * Start the Boot Agent Provisioning Client.
-     * <p/>
-     * A provisioning check is immediately run which results in the provisioned
-     * entries being started.  This method can potentially take a very long
-     * time to complete.
      */
     public void start()
-    {
-        start(true);
-    }
-
-    /**
-     * Start the Boot Agent Provisioning Client.
-     * <p/>
-     * A provisioning check is immediately run, if <var>runCheck</var> is
-     * <code>true</code>, which results in the provisioned entries being
-     * started.  When <var>runCheck</var> is <code>true</code>, this method
-     * can potentially take a very long time to complete.
-     *
-     * @param runCheck a provisioning check is performed immediately if <code>true</code>
-     */
-    public void start(boolean runCheck)
     {
         synchronized (lock)
         {
@@ -271,19 +240,9 @@ public class Client
 
             try
             {
-                if (provisionStore.getClasspath().length != 0)
-                {
-                    startup();
-                    setState(State.RUNNING);
-                }
-
                 ProvisionCheck provisionCheck = new ProvisionCheck();
 
-                if (runCheck) provisionCheck.run();
-
-                handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, period, period, TimeUnit.SECONDS);
-
-                setState(State.RUNNING);
+                handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(provisionCheck, 0, period, TimeUnit.SECONDS);
             }
             catch (Throwable throwable)
             {
@@ -349,6 +308,9 @@ public class Client
         try
         {
             URL[] urls = provisionStore.getClasspath();
+
+            if (urls.length == 0) return;
+
             URLClassLoader classLoader = new URLClassLoader(urls, parentClassLoader);
 
             Thread.currentThread().setContextClassLoader(classLoader);
@@ -358,6 +320,8 @@ public class Client
             lifeCycleInstance = bootClass.newInstance();
 
             lifeCycleInstance.start();
+
+            setState(State.RUNNING);
         }
         catch (ProvisionStoreException pse)
         {
@@ -440,11 +404,13 @@ public class Client
 
                 listeners.provisionDirective(response);
 
-                if (response instanceof DoNothing) return;
+                if (response instanceof DoNothing)
+                {
+                    if (getState() == State.STARTING) startup();
+                    return;
+                }
 
                 YouShould should = (YouShould)response;
-
-                if (should.getVersion() == currentVersion) return;
 
                 Set<ProvisionEntry> currentEntries = provisionStore.getCurrentProvisionDirective().getEntries();
                 for (ProvisionEntry entry : should.getEntries())

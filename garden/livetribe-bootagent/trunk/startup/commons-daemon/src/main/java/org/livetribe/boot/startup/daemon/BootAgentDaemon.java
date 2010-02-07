@@ -18,7 +18,9 @@ package org.livetribe.boot.startup.daemon;
 
 import java.io.File;
 import java.net.URL;
+import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.daemon.Daemon;
@@ -55,22 +57,45 @@ public class BootAgentDaemon implements Daemon
         URL url = null;
         int threadPoolSize = 5;
         File storeRoot = new File(".");
+        String period = null;
 
         for (int i = 0; i < arguments.length; i++)
         {
             if ("-url".equals(arguments[i])) url = new URL(arguments[++i]);
             if ("-pool".equals(arguments[i])) threadPoolSize = Integer.getInteger(arguments[++i]);
             if ("-root".equals(arguments[i])) storeRoot = new File(arguments[++i]);
+            if ("-period".equals(arguments[i])) period = arguments[++i];
         }
 
         if (url == null) throw new IllegalArgumentException("URL is missing");
 
-        ProvisionProvider provisionProvider = new HttpProvisionProvider(url);
-        ContentProvider contentProvider = new HttpContentProvider(url);
+        if (!storeRoot.exists()) throw new IllegalArgumentException("Store root does not exist");
+
+        ProvisionProvider provisionProvider = new HttpProvisionProvider(new URL(url, "provision/"));
+        ContentProvider contentProvider = new HttpContentProvider(new URL(url, "content/"));
         ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(threadPoolSize);
         ProvisionStore provisionStore = new DefaultProvisionStore(storeRoot);
 
+        String uuid = provisionStore.getUuid();
+        if (DefaultProvisionStore.DEFAULT_UUID.equals(uuid))
+        {
+            provisionStore.setUuid(UUID.randomUUID().toString());
+            LOGGER.info("Setting UUID to " + provisionStore.getUuid());
+        }
+
         client = new Client(provisionProvider, contentProvider, pool, provisionStore);
+
+        if (period != null)
+        {
+            try
+            {
+                client.setPeriod(Long.parseLong(period));
+            }
+            catch (NumberFormatException nfe)
+            {
+                LOGGER.log(Level.WARNING, "Could not parse period '" + period + "'", nfe);
+            }
+        }
 
         final DaemonController controller = context.getController();
 
