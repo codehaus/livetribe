@@ -188,10 +188,12 @@ public class Client
         {
             if (this.period != period)
             {
-                if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
+                if (handle != null)
+                {
+                    if (!scheduledThreadPoolExecutor.remove(handle)) listeners.warning("Was unable to remove task");
 
-                handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
-
+                    handle = (Runnable)scheduledThreadPoolExecutor.scheduleWithFixedDelay(new ProvisionCheck(), period, period, TimeUnit.SECONDS);
+                }
                 this.period = period;
             }
         }
@@ -417,7 +419,11 @@ public class Client
         {
             try
             {
-                semaphore.acquire();
+                if (!semaphore.tryAcquire())
+                {
+                    listeners.warning("Attempted to run a provision check when one was already in play");
+                    return;
+                }
 
                 final long currentVersion = provisionStore.getCurrentProvisionDirective().getVersion();
                 final String uuid = provisionStore.getUuid();
@@ -521,11 +527,6 @@ public class Client
             catch (ProvisionStoreException pse)
             {
                 listeners.error("Provision check error", pse);
-            }
-            catch (InterruptedException ie)
-            {
-                listeners.warning("Provision check interrupted");
-                Thread.currentThread().interrupt();
             }
             finally
             {
