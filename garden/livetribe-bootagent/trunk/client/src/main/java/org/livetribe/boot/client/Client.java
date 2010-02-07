@@ -49,7 +49,7 @@ import org.livetribe.boot.protocol.YouShould;
  * <p/>
  * The BAPC is supplied with a provision provider, from which it it makes
  * provisioning queries, a content provider, from which it obtains provision
- * enties, a scheduled thread pool, to schedule and execute its provisioning
+ * entries, a scheduled thread pool, to schedule and execute its provisioning
  * queries, and the provisioning store, to store its current provisioning
  * directive.
  * <p/>
@@ -271,6 +271,12 @@ public class Client
 
             try
             {
+                if (provisionStore.getClasspath().length != 0)
+                {
+                    startup();
+                    setState(State.RUNNING);
+                }
+
                 ProvisionCheck provisionCheck = new ProvisionCheck();
 
                 if (runCheck) provisionCheck.run();
@@ -380,7 +386,7 @@ public class Client
     }
 
     /**
-     * Internal startup method which calls the stop method of the loaded
+     * Internal shutdown method which calls the stop method of the loaded
      * lifecycle instance.
      */
     private void shutdown()

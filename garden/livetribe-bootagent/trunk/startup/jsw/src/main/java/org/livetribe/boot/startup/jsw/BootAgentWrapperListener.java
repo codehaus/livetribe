@@ -27,11 +27,14 @@ import org.tanukisoftware.wrapper.WrapperListener;
 import org.tanukisoftware.wrapper.WrapperManager;
 
 import org.livetribe.boot.client.Client;
+import org.livetribe.boot.client.ClientListener;
 import org.livetribe.boot.client.DefaultProvisionStore;
 import org.livetribe.boot.client.ProvisionStore;
+import org.livetribe.boot.client.State;
 import org.livetribe.boot.http.HttpContentProvider;
 import org.livetribe.boot.http.HttpProvisionProvider;
 import org.livetribe.boot.protocol.ContentProvider;
+import org.livetribe.boot.protocol.ProvisionDirective;
 import org.livetribe.boot.protocol.ProvisionProvider;
 
 
@@ -56,6 +59,7 @@ public class BootAgentWrapperListener implements WrapperListener
         URL url = null;
         int threadPoolSize = 5;
         File storeRoot = new File(".");
+        String period = null;
 
         Integer result = null;
         try
@@ -65,23 +69,76 @@ public class BootAgentWrapperListener implements WrapperListener
                 if ("-url".equals(arguments[i])) url = new URL(arguments[++i]);
                 if ("-pool".equals(arguments[i])) threadPoolSize = Integer.getInteger(arguments[++i]);
                 if ("-root".equals(arguments[i])) storeRoot = new File(arguments[++i]);
+                if ("-period".equals(arguments[i])) period = arguments[++i];
             }
 
             if (url == null) throw new IllegalArgumentException("URL is missing");
 
-            ProvisionProvider provisionProvider = new HttpProvisionProvider(url);
-            ContentProvider contentProvider = new HttpContentProvider(url);
+            if (!storeRoot.exists()) throw new IllegalArgumentException("Store root does not exist");
+
+            ProvisionProvider provisionProvider = new HttpProvisionProvider(new URL(url, "provision/"));
+            ContentProvider contentProvider = new HttpContentProvider(new URL(url, "content/"));
             ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(threadPoolSize);
             ProvisionStore provisionStore = new DefaultProvisionStore(storeRoot);
 
             client = new Client(provisionProvider, contentProvider, pool, provisionStore);
 
-            client.start(false);
+            if (period != null)
+            {
+                try
+                {
+                    client.setPeriod(Long.parseLong(period));
+                }
+                catch (NumberFormatException nfe)
+                {
+                    LOGGER.log(Level.WARNING, "Could not parse period '" + period + "'", nfe);
+                }
+            }
+
+            client.addListener(new ClientListener()
+            {
+                public void stateChange(State oldState, State newState)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_STATUS, "Changing State from " + oldState + " to " + newState);
+                }
+
+                public void provisionCheck(String uuid, long version)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_DEBUG, "Provision check uuid: " + uuid + " version: " + version);
+                }
+
+                public void provisionDirective(ProvisionDirective directive)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_DEBUG, "Provision directive: " + directive);
+                }
+
+                public void warning(String message)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_WARN, message);
+                }
+
+                public void warning(String message, Throwable throwable)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_WARN, message + " " + throwable);
+                }
+
+                public void error(String message)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_ERROR, message);
+                }
+
+                public void error(String message, Throwable throwable)
+                {
+                    WrapperManager.log(WrapperManager.WRAPPER_LOG_LEVEL_ERROR, message + " " + throwable);
+                }
+            });
+
+            client.start(true);
         }
         catch (MalformedURLException mue)
         {
             result = 1;
-            LOGGER.log(Level.SEVERE, "", mue);
+            LOGGER.log(Level.SEVERE, "Could not parse url '" + url + "'", mue);
         }
 
         LOGGER.exiting(CLASS_NAME, "start", result);

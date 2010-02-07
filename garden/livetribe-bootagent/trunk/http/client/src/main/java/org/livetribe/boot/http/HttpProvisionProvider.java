@@ -113,7 +113,7 @@ public class HttpProvisionProvider implements ProvisionProvider
 
         try
         {
-            URL hello = new URL(url, "hello/" + path);
+            URL hello = new URL(url, path);
 
             HttpURLConnection connection = (HttpURLConnection)hello.openConnection();
 

@@ -63,7 +63,7 @@ public class HttpClientTest extends AbstractHttpTest
                 {
                     String[] tokens = request.getPathInfo().split("/");
 
-                    if ("hello".equals(tokens[1]))
+                    if ("provision".equals(tokens[1]))
                     {
                         if (UUID_1.equals(tokens[2]))
                         {
@@ -132,7 +132,7 @@ public class HttpClientTest extends AbstractHttpTest
 
                         }
                     }
-                    else if ("provide".equals(tokens[1]))
+                    else if ("content".equals(tokens[1]))
                     {
                         if ("com.acme.service.Foo".equals(tokens[2]) && "15".equals(tokens[3]))
                         {
@@ -167,8 +167,8 @@ public class HttpClientTest extends AbstractHttpTest
     @Test
     public void testShould() throws Exception
     {
-        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
-        HttpContentProvider contentProvider = new HttpContentProvider(new URL("http://localhost:8085/test/"));
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/provision/"));
+        HttpContentProvider contentProvider = new HttpContentProvider(new URL("http://localhost:8085/test/content/"));
 
         YouShould directive = (YouShould)provisionProvider.hello(UUID_1, 1);
 
@@ -217,7 +217,7 @@ public class HttpClientTest extends AbstractHttpTest
     @Test
     public void testDefault() throws Exception
     {
-        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/provision/"));
 
         YouShould directive = (YouShould)provisionProvider.hello(UUID_4, 1);
 
@@ -246,8 +246,8 @@ public class HttpClientTest extends AbstractHttpTest
     @Test
     public void testMust() throws Exception
     {
-        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
-        HttpContentProvider contentProvider = new HttpContentProvider(new URL("http://localhost:8085/test/"));
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/provision/"));
+        HttpContentProvider contentProvider = new HttpContentProvider(new URL("http://localhost:8085/test/content/"));
 
         YouMust directive = (YouMust)provisionProvider.hello(UUID_2, 5);
 
@@ -288,7 +288,7 @@ public class HttpClientTest extends AbstractHttpTest
     @Test
     public void testDoNothing() throws Exception
     {
-        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/"));
+        HttpProvisionProvider provisionProvider = new HttpProvisionProvider(new URL("http://localhost:8085/test/provision/"));
 
         ProvisionDirective directive = provisionProvider.hello(UUID_3, 1000);
 

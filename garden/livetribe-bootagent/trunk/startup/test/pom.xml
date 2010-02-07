@@ -8,8 +8,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>livetribe-boot-jsw</artifactId>
-    <name>LiveTribe :: Boot Agent :: Startup Wrappers :: JSW</name>
+    <artifactId>livetribe-boot-test</artifactId>
+    <name>LiveTribe :: Boot Agent :: Startup Wrappers :: Test</name>
     <packaging>jar</packaging>
 
     <build/>
@@ -18,17 +18,7 @@
 
         <dependency>
             <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.livetribe.boot</groupId>
-            <artifactId>livetribe-boot-http-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>tanukisoft</groupId>
-            <artifactId>wrapper</artifactId>
+            <artifactId>livetribe-boot-api</artifactId>
             <scope>provided</scope>
         </dependency>
 

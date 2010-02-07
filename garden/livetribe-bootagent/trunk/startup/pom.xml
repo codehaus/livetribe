@@ -15,6 +15,7 @@
     <modules>
       <module>commons-daemon</module>
       <module>jsw</module>
+      <module>test</module>
     </modules>
 
 </project>

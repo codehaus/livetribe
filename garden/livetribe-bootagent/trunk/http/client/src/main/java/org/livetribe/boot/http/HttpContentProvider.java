@@ -81,7 +81,7 @@ public class HttpContentProvider implements ContentProvider
 
         try
         {
-            URL hello = new URL(url, "provide/" + name + "/" + version);
+            URL hello = new URL(url, name + "/" + version);
 
             HttpURLConnection connection = (HttpURLConnection)hello.openConnection();
 

@@ -197,6 +197,8 @@ public class DefaultProvisionStore implements ProvisionStore
 
             if (!resource.delete()) throw new ProvisionStoreException("Unable to delete version " + entry.getVersion() + " for " + directory);
         }
+
+        new File(root, NEXT_FILE).delete();
     }
 
     /**
@@ -345,7 +347,7 @@ public class DefaultProvisionStore implements ProvisionStore
 
                 long version = Long.valueOf((String)properties.get(VERSION_KEY));
 
-                if (!properties.contains(BOOT_CLASS_KEY)) return new ProvisionConfiguration();
+                if (!properties.containsKey(BOOT_CLASS_KEY)) return new ProvisionConfiguration();
                 String bootClass = (String)properties.get(BOOT_CLASS_KEY);
 
                 Set<ProvisionEntry> entries = new HashSet<ProvisionEntry>();
@@ -354,7 +356,7 @@ public class DefaultProvisionStore implements ProvisionStore
                 {
                     String key = DIRECTIVE_BASE_KEY + count++;
 
-                    if (!properties.contains(key)) break;
+                    if (!properties.containsKey(key)) break;
 
                     String[] tokens = ((String)properties.get(key)).split(":");
 
