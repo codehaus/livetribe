@@ -2,10 +2,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+ 
+    <parent>
+		<groupId>org.codehaus</groupId> 
+		<artifactId>codehaus-parent</artifactId> 
+		<version>2</version> 
+    </parent>
+
     <groupId>org.livetribe</groupId>
     <artifactId>livetribe</artifactId>
     <name>LiveTribe</name>
-    <version>1.6-SNAPSHOT</version>
+    <version>6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>LiveTribe Systems Management Project</description>
     <url>http://livetribe.codehaus.org</url>
@@ -236,76 +243,11 @@
     <dependencyManagement/>
 
     <distributionManagement>
-        <repository>
-            <id>livetribe-repo</id>
-            <name>LiveTribe Central Repository</name>
-            <url>dav:https://dav.codehaus.org/repository/livetribe/</url>
-        </repository>
-        <snapshotRepository>
-            <id>livetribe-snapshots</id>
-            <name>LiveTribe Central Snapshots Repository</name>
-            <url>dav:https://dav.codehaus.org/snapshots.repository/livetribe/</url>
-        </snapshotRepository>
         <site>
             <id>livetribe-website</id>
             <name>LiveTribe Web Site</name>
             <url>dav:https://dav.codehaus.org/livetribe/</url>
         </site>
     </distributionManagement>
-
-    <profiles>
-
-        <profile>
-            <id>deploy</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.0.4</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-
-            </build>
-        </profile>
-
-    </profiles>
 
 </project>
