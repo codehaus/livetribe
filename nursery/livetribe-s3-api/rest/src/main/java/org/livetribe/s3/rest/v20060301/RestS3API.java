@@ -38,8 +38,7 @@ import org.apache.ahc.api.HttpRequest;
 import org.apache.ahc.api.HttpResponse;
 import org.apache.ahc.api.HttpVerb;
 import org.apache.ahc.api.MimeContent;
-import org.apache.ahc.client.AsyncHttpConfig;
-import org.apache.ahc.client.ByteArrayBasedMimeContent;
+import org.apache.ahc.common.ByteArrayBasedMimeContent;
 
 import org.livetribe.s3.api.FutureResult;
 import org.livetribe.s3.api.S3Exception;
@@ -434,7 +433,7 @@ public final class RestS3API implements S3API
      * Send the HTTP request to Amazon S3.  Read the results using our JAXB
      * context and return the resulting JAXB Element.
      *
-     * @param headers the parameters to be signed and appened to the URL parameters
+     * @param headers the parameters to be signed and appended to the URL parameters
      * @param verb    the HTTP verb to use when making the S3 call
      * @param path    the path to append to the URL
      * @param content MimeContent that will get sent to the S3 server, e.g. XML or files
@@ -449,7 +448,7 @@ public final class RestS3API implements S3API
 
         try
         {
-            HttpRequest request = new HttpRequest(new URL(url.getProtocol(), url.getHost(), url.getPort(), path));
+            HttpRequest request = ahc.allocateHttpRequest(new URL(url.getProtocol(), url.getHost(), url.getPort(), path));
 
             request.setHeaders(headers);
             request.setVerb(verb);
