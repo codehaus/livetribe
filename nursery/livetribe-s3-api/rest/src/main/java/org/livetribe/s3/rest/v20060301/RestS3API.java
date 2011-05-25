@@ -42,7 +42,7 @@ import org.apache.ahc.common.ByteArrayBasedMimeContent;
 
 import org.livetribe.s3.api.FutureResult;
 import org.livetribe.s3.api.S3Exception;
-import org.livetribe.s3.api.v20080201.S3API;
+import org.livetribe.s3.api.v20060301.S3API;
 import org.livetribe.s3.jaxb.v20060301.ObjectFactory;
 import org.livetribe.s3.model.AccessControlPolicy;
 import org.livetribe.s3.model.BucketListing;

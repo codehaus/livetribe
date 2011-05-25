@@ -21,7 +21,7 @@ import java.net.URL;
 import org.apache.ahc.mina3.AsyncHttpClient;
 
 import org.junit.Test;
-import org.livetribe.s3.api.v20080201.S3API;
+import org.livetribe.s3.api.v20060301.S3API;
 import org.livetribe.s3.model.AccessControlPolicy;
 import org.livetribe.s3.model.Grant;
 import org.livetribe.s3.model.GranteeLogDeliveryGroup;
